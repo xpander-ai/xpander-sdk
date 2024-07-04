@@ -157,6 +157,7 @@ public readonly toolsCache: any;
 | --- | --- |
 | <code><a href="#xpander-sdk.Plugin.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain' plugin. |
 | <code><a href="#xpander-sdk.Plugin.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' plugin. |
+| <code><a href="#xpander-sdk.Plugin.ANTHROPIC">ANTHROPIC</a></code> | Represents the 'anthropic' plugin. |
 
 ---
 
@@ -170,6 +171,13 @@ Represents the 'langchain' plugin.
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.Plugin.OPEN_AI"></a>
 
 Represents the 'openai' plugin.
+
+---
+
+
+##### `ANTHROPIC` <a name="ANTHROPIC" id="xpander-sdk.Plugin.ANTHROPIC"></a>
+
+Represents the 'anthropic' plugin.
 
 ---
 

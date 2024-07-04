@@ -9,5 +9,10 @@ export enum Plugin {
   /**
      * Represents the 'openai' plugin.
      */
-  OPEN_AI = 'openai'
+  OPEN_AI = 'openai',
+
+  /**
+     * Represents the 'anthropic' plugin.
+     */
+  ANTHROPIC= 'anthropic'
 }

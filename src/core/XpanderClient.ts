@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { Plugin } from '../constants/plugins';
-import { OpenAI } from '../plugins/openaiPlugin';
+import { OpenAI, LangChain } from '../plugins';
 
-const PLUGIN_HANDLERS: PluginHandler[] = [OpenAI];
+const PLUGIN_HANDLERS: PluginHandler[] = [OpenAI, LangChain];
 
 interface PluginHandler {
   new(client: XpanderClient): any;
