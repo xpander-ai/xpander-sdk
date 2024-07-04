@@ -8,6 +8,7 @@ var project = new projen_1.cdk.JsiiProject({
     jsiiVersion: '~5.4.0',
     name: 'xpander-sdk',
     projenrcTs: true,
+    publishDryRun: true,
     repositoryUrl: 'https://github.com/xpander-ai/xpander-sdk.git',
     // publishToPypi: {
     //   distName: 'xpander-sdk',

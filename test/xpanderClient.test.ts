@@ -9,26 +9,19 @@ const xpanderAPIKey = '45C5SMkWBy879rS8kYXyea1gAoazuDTIaHn2gtYq';
 const agentUrl = 'https://inbound.xpander.ai/agent/e4ae74cf-e31c-450b-97f2-51f1734d0377';
 const openAPIKey = process.env.OPENAI_API_KEY;
 
-function printPrettyString(inputString: string) {
-  const lines = inputString.split('\n');
-  for (const line of lines) {
-    console.log(line);
+test('openAIClient', async () => {
+  const xpanderClient = new XpanderClient(xpanderAPIKey, agentUrl, LLMProvider.OPEN_AI);
+
+  try {
+    await xpanderClient.retrieveAgentTools();
+    const xpanderToolsForOpenAI = await xpanderClient.tools(LLMProvider.OPEN_AI);
+
+    expect(xpanderToolsForOpenAI.length).toBeGreaterThan(0);
+  } catch (error) {
+    console.error('Failed to retrieve tools:', error);
+    throw error;
   }
-}
-
-// test('openAIClient', async () => {
-//   const xpanderClient = new XpanderClient(xpanderAPIKey, agentUrl, LLMProvider.OPEN_AI);
-
-//   try {
-//     await xpanderClient.retrieveAgentTools();
-//     const xpanderToolsForOpenAI = await xpanderClient.tools(LLMProvider.OPEN_AI);
-
-//     expect(xpanderToolsForOpenAI.length).toBeGreaterThan(0);
-//   } catch (error) {
-//     console.error('Failed to retrieve tools:', error);
-//     throw error;
-//   }
-// }, 30000);
+}, 30000);
 
 // test('anthropicAIClient', async () => {
 //   const xpanderClient = new XpanderClient(xpanderAPIKey, agentUrl, LLMProvider.ANTHROPIC);
@@ -81,7 +74,7 @@ test('openAI_Function_calling', async () => {
     });
 
     const toolResponse = await xpanderClient.xpanderToolCall(response);
-    printPrettyString(JSON.stringify(toolResponse, null, 2));
+    console.log(JSON.stringify(toolResponse, null, 2));
 
     expect(toolResponse.length).toBeGreaterThan(0);
   } catch (error) {
