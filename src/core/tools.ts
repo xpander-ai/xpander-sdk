@@ -1,13 +1,8 @@
 // src/core/tools.ts
 
 import axios from 'axios';
+import { XpanderClient } from './XpanderClient';
 import { RequestPayload } from '../models/payloads';
-
-interface Client {
-  agent_url: string;
-  agent_key: string;
-  getAgentTools: () => any[];
-}
 
 interface ToolInstructions {
   id: string;
@@ -22,7 +17,11 @@ interface Tool {
   func?: Function;
 }
 
-export function createTool(client: Client, toolInstructions: ToolInstructions, functionize: boolean = true): Tool {
+export function createTool(client: XpanderClient, toolInstructions: ToolInstructions, functionize: boolean = true): Tool {
+  if (!client || !client.agentKey || !client.agentUrl) {
+    throw new Error('Client object or its properties are not properly initialized.');
+  }
+
   const tool: Tool = {
     name: toolInstructions.id,
     description: toolInstructions.function_description.split(' - Valid')[0]
@@ -35,19 +34,31 @@ export function createTool(client: Client, toolInstructions: ToolInstructions, f
 
   if (functionize) {
     const toolInvocationFunction = async (payload: RequestPayload): Promise<any> => {
-      const url = `${client.agent_url}/operations/${toolInstructions.id}`;
-      const response = await axios.post(url, payload, {
-        headers: { 'x-api-key': client.agent_key },
-      });
+      const url = `${client.agentUrl}/operations/${toolInstructions.id}`;
+      const jsonPayload = payload instanceof Object ? payload : {};
 
-      if (response.status !== 200) {
-        throw new Error(response.statusText);
-      }
+      // // Debug logs for troubleshooting
+      // console.log('Client agent_url:', client.agentUrl);
+      // console.log('Client agent_key:', client.agentKey);
+      // console.log('Invoking tool with URL:', url);
+      // console.log('Payload:', jsonPayload);
+      // console.log('Headers:', { 'x-api-key': client.agentKey });
 
       try {
+        const response = await axios.post(url, jsonPayload, {
+          headers: { 'x-api-key': client.agentKey },
+        });
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText);
+        }
+
         return response.data;
-      } catch {
-        return response.statusText;
+      } catch (err) {
+        // Ensure 'err' is typed as 'any' to access its properties
+        const error = err as any;
+        console.error('Error invoking tool:', error.response?.data || error.message);
+        throw error;
       }
     };
 

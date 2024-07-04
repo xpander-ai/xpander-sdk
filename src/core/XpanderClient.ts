@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { LLMProvider } from '../constants/llmProvider';
-import { OpenAI, LangChain, Anthropic } from '../llmProviders';
+import { OpenAI } from '../llmProviders';
 
-const LLMProvider_HANDLERS: LLMProviderHandler[] = [OpenAI, LangChain, Anthropic];
+const LLMProvider_HANDLERS: LLMProviderHandler[] = [OpenAI];
 
 interface LLMProviderHandler {
   new(client: XpanderClient): any;
@@ -13,10 +13,12 @@ export class XpanderClient {
   agentKey: string;
   agentUrl: string;
   toolsCache: any;
+  llmProviderHandler: any;
 
-  constructor(agentKey: string, agentUrl: string) {
+  constructor(agentKey: string, agentUrl: string, llmProvider: LLMProvider) {
     this.agentKey = agentKey;
     this.agentUrl = agentUrl;
+    this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
   }
 
   async retrieveAgentTools(): Promise<any> {
@@ -45,9 +47,27 @@ export class XpanderClient {
     return this.toolsCache;
   }
 
-  tools(llmProvider: LLMProvider): any {
-    const handler = this.getLLMProviderHandler(llmProvider);
-    return handler.getTools();
+  tools(llmProvider?: LLMProvider): any {
+    if (llmProvider) {
+      this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
+    }
+    return this.llmProviderHandler.getTools();
+  }
+
+  initLLMProviderHandler(llmProvider: LLMProvider): any {
+    for (const LLMProviderHandler of LLMProvider_HANDLERS) {
+      if (LLMProviderHandler.shouldHandle(llmProvider)) {
+        return new LLMProviderHandler(this);
+      }
+    }
+    throw new Error(`LLMProvider ${llmProvider} handler not found`);
+  }
+
+  xpanderToolCall(toolSelectorResponse: any, llmProvider?: LLMProvider): any {
+    if (llmProvider) {
+      this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
+    }
+    return this.llmProviderHandler.invokeTools(toolSelectorResponse);
   }
 
   getLLMProviderHandler(llmProvider: LLMProvider): any {
@@ -57,18 +77,5 @@ export class XpanderClient {
       }
     }
     throw new Error(`LLMProvider ${llmProvider} handler not found`);
-  }
-
-  processChatResponse(messages: any[], llmProvider: LLMProvider, chatCompletionResponse: any, aiClient: any): any {
-    try {
-      const handler = this.getLLMProviderHandler(llmProvider);
-      if (handler.processChatResponse) {
-        return handler.processChatResponse(messages, chatCompletionResponse, aiClient);
-      } else {
-        throw new Error('Handler implementation issue - ChatCompletion');
-      }
-    } catch (e) {
-      throw new Error(`Failed to handle chat completion - ${(e as Error).message}`);
-    }
   }
 }

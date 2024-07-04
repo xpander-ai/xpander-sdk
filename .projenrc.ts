@@ -21,7 +21,8 @@ const project = new cdk.JsiiProject({
   //   packageId: 'Xpander.AI.Sdk',
   // },
   deps: [] /* Runtime dependencies of this module. */,
-  bundledDeps: ['axios'],
+  bundledDeps: ['axios', 'openai', 'dotenv'],
+  gitignore: ['.env'],
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   // devDeps: [],             /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */

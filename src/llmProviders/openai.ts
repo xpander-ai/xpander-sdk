@@ -1,7 +1,6 @@
-// src/LLMProviders/openaiLLMProvider.ts
-
 import { LLMProvider } from '../constants/llmProvider';
 import { createTool } from '../core/tools';
+import { XpanderClient } from '../core/XpanderClient';
 import { RequestPayload } from '../models/payloads';
 
 interface Tool {
@@ -11,7 +10,7 @@ interface Tool {
   func?: Function;
 }
 
-interface StructuredTool {
+export interface OpenAIStructuredTool {
   type: string;
   function: {
     name: string;
@@ -21,38 +20,24 @@ interface StructuredTool {
   };
 }
 
-interface ChatCompletionResponse {
-  choices: Array<{
-    message: {
-      tool_calls?: Array<{
-        function: {
-          name: string;
-          arguments: string;
-        };
-        id: string;
-      }>;
-    };
-  }>;
-}
-
 export class OpenAI {
   static shouldHandle(llmProvider: LLMProvider): boolean {
     return llmProvider === LLMProvider.OPEN_AI;
   }
 
-  client: any;
+  client: XpanderClient;
 
   constructor(xpanderClient: any) {
     this.client = xpanderClient;
   }
 
-  async getTools(functionize: boolean = false): Promise<StructuredTool[]> {
+  async getTools(functionize: boolean = false): Promise<OpenAIStructuredTool[]> {
     const agentTools = await this.client.retrieveAgentTools();
-    const tools: StructuredTool[] = [];
+    const tools: OpenAIStructuredTool[] = [];
 
     for (const toolInstructions of agentTools) {
       const createdTool: Tool = createTool(this.client, toolInstructions, functionize);
-      const toolDeclaration: StructuredTool = {
+      const toolDeclaration: OpenAIStructuredTool = {
         type: 'function',
         function: {
           name: createdTool.name,
@@ -67,8 +52,13 @@ export class OpenAI {
         toolDeclaration.function.execute = createdTool.func;
       }
 
+      if (!toolDeclaration.function.name) {
+        throw new Error(`Tool is missing required 'name' property: ${JSON.stringify(toolDeclaration)}`);
+      }
+
       tools.push(toolDeclaration);
     }
+    // console.log('Retrieved tools:', JSON.stringify(tools, null, 2));
     return tools;
   }
 
@@ -82,14 +72,16 @@ export class OpenAI {
     }
   }
 
-  async processChatResponse(messages: any[], chatCompletionResponse: ChatCompletionResponse, aiClient: any): Promise<any> {
-    if (chatCompletionResponse.choices && Array.isArray(chatCompletionResponse.choices)) {
-      for (const chatChoice of chatCompletionResponse.choices) {
+  async invokeTools(toolSelectorResponse: any): Promise<any[]> {
+    const outputMessages: any[] = [];
+
+    for (const chatChoice of toolSelectorResponse.choices) {
+      if (chatChoice.message) {
         const responseMessage = chatChoice.message;
 
-        if (responseMessage.tool_calls) {
-          messages.push(responseMessage);
-          for (const toolCall of responseMessage.tool_calls) {
+        const toolCalls = responseMessage.tool_calls;
+        if (toolCalls) {
+          for (const toolCall of toolCalls) {
             const functionName = toolCall.function.name;
 
             let payload: any;
@@ -100,24 +92,16 @@ export class OpenAI {
             }
 
             const functionResponse = await this.invokeTool(functionName, payload);
-            messages.push({
+            outputMessages.push({
               tool_call_id: toolCall.id,
               role: 'tool',
               name: functionName,
               content: functionResponse,
             });
           }
-          return this.processChatResponse(
-            messages,
-            await aiClient.chat.completions.create({
-              model: 'gpt-4o',
-              messages: messages,
-            }),
-            aiClient,
-          );
         }
       }
     }
-    return chatCompletionResponse;
+    return outputMessages;
   }
 }
