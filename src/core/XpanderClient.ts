@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { Plugin } from '../constants/plugins';
-import { OpenAI, LangChain } from '../plugins';
+import { LLMProvider } from '../constants/llmProvider';
+import { OpenAI, LangChain, Anthropic } from '../llmProviders';
 
-const PLUGIN_HANDLERS: PluginHandler[] = [OpenAI, LangChain];
+const LLMProvider_HANDLERS: LLMProviderHandler[] = [OpenAI, LangChain, Anthropic];
 
-interface PluginHandler {
+interface LLMProviderHandler {
   new(client: XpanderClient): any;
-  shouldHandle(plugin: Plugin): boolean;
+  shouldHandle(llmProvider: LLMProvider): boolean;
 }
 
 export class XpanderClient {
@@ -45,23 +45,23 @@ export class XpanderClient {
     return this.toolsCache;
   }
 
-  tools(plugin: Plugin): any {
-    const handler = this.getPluginHandler(plugin);
+  tools(llmProvider: LLMProvider): any {
+    const handler = this.getLLMProviderHandler(llmProvider);
     return handler.getTools();
   }
 
-  getPluginHandler(plugin: Plugin): any {
-    for (const PluginHandler of PLUGIN_HANDLERS) {
-      if (PluginHandler.shouldHandle(plugin)) {
-        return new PluginHandler(this);
+  getLLMProviderHandler(llmProvider: LLMProvider): any {
+    for (const LLMProviderHandler of LLMProvider_HANDLERS) {
+      if (LLMProviderHandler.shouldHandle(llmProvider)) {
+        return new LLMProviderHandler(this);
       }
     }
-    throw new Error(`Plugin ${plugin} handler not found`);
+    throw new Error(`LLMProvider ${llmProvider} handler not found`);
   }
 
-  processChatResponse(messages: any[], plugin: Plugin, chatCompletionResponse: any, aiClient: any): any {
+  processChatResponse(messages: any[], llmProvider: LLMProvider, chatCompletionResponse: any, aiClient: any): any {
     try {
-      const handler = this.getPluginHandler(plugin);
+      const handler = this.getLLMProviderHandler(llmProvider);
       if (handler.processChatResponse) {
         return handler.processChatResponse(messages, chatCompletionResponse, aiClient);
       } else {

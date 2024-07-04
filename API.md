@@ -37,29 +37,29 @@ new XpanderClient(agentKey: string, agentUrl: string)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.getPluginHandler">getPluginHandler</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.getLLMProviderHandler">getLLMProviderHandler</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.processChatResponse">processChatResponse</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.retrieveAgentTools">retrieveAgentTools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | *No description.* |
 
 ---
 
-##### `getPluginHandler` <a name="getPluginHandler" id="xpander-sdk.XpanderClient.getPluginHandler"></a>
+##### `getLLMProviderHandler` <a name="getLLMProviderHandler" id="xpander-sdk.XpanderClient.getLLMProviderHandler"></a>
 
 ```typescript
-public getPluginHandler(plugin: Plugin): any
+public getLLMProviderHandler(llmProvider: LLMProvider): any
 ```
 
-###### `plugin`<sup>Required</sup> <a name="plugin" id="xpander-sdk.XpanderClient.getPluginHandler.parameter.plugin"></a>
+###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.getLLMProviderHandler.parameter.llmProvider"></a>
 
-- *Type:* <a href="#xpander-sdk.Plugin">Plugin</a>
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
 
 ##### `processChatResponse` <a name="processChatResponse" id="xpander-sdk.XpanderClient.processChatResponse"></a>
 
 ```typescript
-public processChatResponse(messages: any[], plugin: Plugin, chatCompletionResponse: any, aiClient: any): any
+public processChatResponse(messages: any[], llmProvider: LLMProvider, chatCompletionResponse: any, aiClient: any): any
 ```
 
 ###### `messages`<sup>Required</sup> <a name="messages" id="xpander-sdk.XpanderClient.processChatResponse.parameter.messages"></a>
@@ -68,9 +68,9 @@ public processChatResponse(messages: any[], plugin: Plugin, chatCompletionRespon
 
 ---
 
-###### `plugin`<sup>Required</sup> <a name="plugin" id="xpander-sdk.XpanderClient.processChatResponse.parameter.plugin"></a>
+###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.processChatResponse.parameter.llmProvider"></a>
 
-- *Type:* <a href="#xpander-sdk.Plugin">Plugin</a>
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
 
@@ -95,12 +95,12 @@ public retrieveAgentTools(): any
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```typescript
-public tools(plugin: Plugin): any
+public tools(llmProvider: LLMProvider): any
 ```
 
-###### `plugin`<sup>Required</sup> <a name="plugin" id="xpander-sdk.XpanderClient.tools.parameter.plugin"></a>
+###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
 
-- *Type:* <a href="#xpander-sdk.Plugin">Plugin</a>
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
 
@@ -149,35 +149,35 @@ public readonly toolsCache: any;
 
 ## Enums <a name="Enums" id="Enums"></a>
 
-### Plugin <a name="Plugin" id="xpander-sdk.Plugin"></a>
+### LLMProvider <a name="LLMProvider" id="xpander-sdk.LLMProvider"></a>
 
 #### Members <a name="Members" id="Members"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.Plugin.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain' plugin. |
-| <code><a href="#xpander-sdk.Plugin.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' plugin. |
-| <code><a href="#xpander-sdk.Plugin.ANTHROPIC">ANTHROPIC</a></code> | Represents the 'anthropic' plugin. |
+| <code><a href="#xpander-sdk.LLMProvider.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain'. |
+| <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai'. |
+| <code><a href="#xpander-sdk.LLMProvider.ANTHROPIC">ANTHROPIC</a></code> | Represents the 'anthropic'. |
 
 ---
 
-##### `LANG_CHAIN` <a name="LANG_CHAIN" id="xpander-sdk.Plugin.LANG_CHAIN"></a>
+##### `LANG_CHAIN` <a name="LANG_CHAIN" id="xpander-sdk.LLMProvider.LANG_CHAIN"></a>
 
-Represents the 'langchain' plugin.
-
----
-
-
-##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.Plugin.OPEN_AI"></a>
-
-Represents the 'openai' plugin.
+Represents the 'langchain'.
 
 ---
 
 
-##### `ANTHROPIC` <a name="ANTHROPIC" id="xpander-sdk.Plugin.ANTHROPIC"></a>
+##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
-Represents the 'anthropic' plugin.
+Represents the 'openai'.
+
+---
+
+
+##### `ANTHROPIC` <a name="ANTHROPIC" id="xpander-sdk.LLMProvider.ANTHROPIC"></a>
+
+Represents the 'anthropic'.
 
 ---
 
