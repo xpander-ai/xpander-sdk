@@ -16,9 +16,9 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agentKey</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agentKey</a></code> | <code>string</code> | - Your API key for authenticating with the agent. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agentUrl</a></code> | <code>string</code> | - The base URL of your agent. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 
 ---
 
@@ -26,11 +26,15 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider)
 
 - *Type:* string
 
+Your API key for authenticating with the agent.
+
 ---
 
 ##### `agentUrl`<sup>Required</sup> <a name="agentUrl" id="xpander-sdk.XpanderClient.Initializer.parameter.agentUrl"></a>
 
 - *Type:* string
+
+The base URL of your agent.
 
 ---
 
@@ -38,17 +42,19 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider)
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
+The LLM provider to use.
+
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.getLLMProviderHandler">getLLMProviderHandler</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.initLLMProviderHandler">initLLMProviderHandler</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.retrieveAgentTools">retrieveAgentTools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.getLLMProviderHandler">getLLMProviderHandler</a></code> | Retrieves the LLM provider handler based on the provided LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.initLLMProviderHandler">initLLMProviderHandler</a></code> | Initializes the LLM provider handler based on the provided LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.retrieveAgentTools">retrieveAgentTools</a></code> | Retrieves tools from the agent. |
+| <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves tools based on the provided LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes tools based on the provided tool selector response and LLM provider. |
 
 ---
 
@@ -58,9 +64,13 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider)
 public getLLMProviderHandler(llmProvider: LLMProvider): any
 ```
 
+Retrieves the LLM provider handler based on the provided LLM provider.
+
 ###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.getLLMProviderHandler.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+The LLM provider to use.
 
 ---
 
@@ -70,9 +80,13 @@ public getLLMProviderHandler(llmProvider: LLMProvider): any
 public initLLMProviderHandler(llmProvider: LLMProvider): any
 ```
 
+Initializes the LLM provider handler based on the provided LLM provider.
+
 ###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.initLLMProviderHandler.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+The LLM provider to use.
 
 ---
 
@@ -82,15 +96,23 @@ public initLLMProviderHandler(llmProvider: LLMProvider): any
 public retrieveAgentTools(): any
 ```
 
+Retrieves tools from the agent.
+
+Caches the tools for future use.
+
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```typescript
 public tools(llmProvider?: LLMProvider): any
 ```
 
+Retrieves tools based on the provided LLM provider.
+
 ###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+(Optional) The LLM provider to use.
 
 ---
 
@@ -100,15 +122,21 @@ public tools(llmProvider?: LLMProvider): any
 public xpanderToolCall(toolSelectorResponse: any, llmProvider?: LLMProvider): any
 ```
 
+Invokes tools based on the provided tool selector response and LLM provider.
+
 ###### `toolSelectorResponse`<sup>Required</sup> <a name="toolSelectorResponse" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.toolSelectorResponse"></a>
 
 - *Type:* any
+
+The response from the tool selector.
 
 ---
 
 ###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+(Optional) The LLM provider to use.
 
 ---
 
@@ -170,33 +198,35 @@ public readonly toolsCache: any;
 
 ### LLMProvider <a name="LLMProvider" id="xpander-sdk.LLMProvider"></a>
 
+Enum representing different Large Language Model (LLM) providers.
+
 #### Members <a name="Members" id="Members"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.LLMProvider.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain'. |
-| <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai'. |
-| <code><a href="#xpander-sdk.LLMProvider.ANTHROPIC">ANTHROPIC</a></code> | Represents the 'anthropic'. |
+| <code><a href="#xpander-sdk.LLMProvider.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.ANTHROPIC">ANTHROPIC</a></code> | Represents the 'anthropic' provider. |
 
 ---
 
 ##### `LANG_CHAIN` <a name="LANG_CHAIN" id="xpander-sdk.LLMProvider.LANG_CHAIN"></a>
 
-Represents the 'langchain'.
+Represents the 'langchain' provider.
 
 ---
 
 
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
-Represents the 'openai'.
+Represents the 'openai' provider.
 
 ---
 
 
 ##### `ANTHROPIC` <a name="ANTHROPIC" id="xpander-sdk.LLMProvider.ANTHROPIC"></a>
 
-Represents the 'anthropic'.
+Represents the 'anthropic' provider.
 
 ---
 

@@ -8,7 +8,6 @@ var project = new projen_1.cdk.JsiiProject({
     jsiiVersion: '~5.4.0',
     name: 'xpander-sdk',
     projenrcTs: true,
-    publishDryRun: true,
     repositoryUrl: 'https://github.com/xpander-ai/xpander-sdk.git',
     // publishToPypi: {
     //   distName: 'xpander-sdk',
@@ -24,7 +23,8 @@ var project = new projen_1.cdk.JsiiProject({
     //   packageId: 'Xpander.AI.Sdk',
     // },
     deps: [] /* Runtime dependencies of this module. */,
-    bundledDeps: ['axios', "openai", "dotenv"],
+    bundledDeps: ['axios', 'openai', 'dotenv'],
+    gitignore: ['.env'],
     // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
     // devDeps: [],             /* Build dependencies for this module. */
     // packageName: undefined,  /* The "name" in package.json. */

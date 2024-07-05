@@ -4,12 +4,18 @@ import axios from 'axios';
 import { XpanderClient } from './XpanderClient';
 import { RequestPayload } from '../models/payloads';
 
+/**
+ * Interface representing the instructions for creating a tool.
+ */
 interface ToolInstructions {
   id: string;
   function_description: string;
   parameters?: any;
 }
 
+/**
+ * Interface representing a tool with its details and optional invocation function.
+ */
 interface Tool {
   name: string;
   description: string;
@@ -17,6 +23,14 @@ interface Tool {
   func?: Function;
 }
 
+/**
+ * Creates a tool based on the provided client and tool instructions.
+ * @param client - The XpanderClient instance.
+ * @param toolInstructions - Instructions for creating the tool.
+ * @param functionize - (Optional) Whether to include an invocation function for the tool. Default is true.
+ * @returns The created Tool object.
+ * @throws Will throw an error if the client object or its properties are not properly initialized.
+ */
 export function createTool(client: XpanderClient, toolInstructions: ToolInstructions, functionize: boolean = true): Tool {
   if (!client || !client.agentKey || !client.agentUrl) {
     throw new Error('Client object or its properties are not properly initialized.');
@@ -36,13 +50,6 @@ export function createTool(client: XpanderClient, toolInstructions: ToolInstruct
     const toolInvocationFunction = async (payload: RequestPayload): Promise<any> => {
       const url = `${client.agentUrl}/operations/${toolInstructions.id}`;
       const jsonPayload = payload instanceof Object ? payload : {};
-
-      // // Debug logs for troubleshooting
-      // console.log('Client agent_url:', client.agentUrl);
-      // console.log('Client agent_key:', client.agentKey);
-      // console.log('Invoking tool with URL:', url);
-      // console.log('Payload:', jsonPayload);
-      // console.log('Headers:', { 'x-api-key': client.agentKey });
 
       try {
         const response = await axios.post(url, jsonPayload, {
