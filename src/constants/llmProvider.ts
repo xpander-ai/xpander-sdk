@@ -7,7 +7,7 @@ export enum LLMProvider {
   /**
    * Represents the 'langchain' provider.
    */
-  LANG_CHAIN = 'langchain',
+  // LANG_CHAIN = 'langchain',
 
   /**
    * Represents the 'openai' provider.
@@ -17,5 +17,5 @@ export enum LLMProvider {
   /**
    * Represents the 'anthropic' provider.
    */
-  ANTHROPIC = 'anthropic'
+  // ANTHROPIC = 'anthropic'
 }

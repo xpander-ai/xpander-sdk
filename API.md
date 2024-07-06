@@ -50,93 +50,41 @@ The LLM provider to use.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.getLLMProviderHandler">getLLMProviderHandler</a></code> | Retrieves the LLM provider handler based on the provided LLM provider. |
-| <code><a href="#xpander-sdk.XpanderClient.initLLMProviderHandler">initLLMProviderHandler</a></code> | Initializes the LLM provider handler based on the provided LLM provider. |
-| <code><a href="#xpander-sdk.XpanderClient.retrieveAgentTools">retrieveAgentTools</a></code> | Retrieves tools from the agent. |
+| <code><a href="#xpander-sdk.XpanderClient.retrieveAgentTools">retrieveAgentTools</a></code> | Retrieves tools from the agent and caches them. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves tools based on the provided LLM provider. |
-| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes tools based on the provided tool selector response and LLM provider. |
-
----
-
-##### `getLLMProviderHandler` <a name="getLLMProviderHandler" id="xpander-sdk.XpanderClient.getLLMProviderHandler"></a>
-
-```typescript
-public getLLMProviderHandler(llmProvider: LLMProvider): any
-```
-
-Retrieves the LLM provider handler based on the provided LLM provider.
-
-###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.getLLMProviderHandler.parameter.llmProvider"></a>
-
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
-
-The LLM provider to use.
-
----
-
-##### `initLLMProviderHandler` <a name="initLLMProviderHandler" id="xpander-sdk.XpanderClient.initLLMProviderHandler"></a>
-
-```typescript
-public initLLMProviderHandler(llmProvider: LLMProvider): any
-```
-
-Initializes the LLM provider handler based on the provided LLM provider.
-
-###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.initLLMProviderHandler.parameter.llmProvider"></a>
-
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
-
-The LLM provider to use.
+| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes tools based on the provided tool selector response. |
 
 ---
 
 ##### `retrieveAgentTools` <a name="retrieveAgentTools" id="xpander-sdk.XpanderClient.retrieveAgentTools"></a>
 
 ```typescript
-public retrieveAgentTools(): any
+public retrieveAgentTools(): void
 ```
 
-Retrieves tools from the agent.
-
-Caches the tools for future use.
+Retrieves tools from the agent and caches them.
 
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```typescript
-public tools(llmProvider?: LLMProvider): any
+public tools(): any
 ```
 
 Retrieves tools based on the provided LLM provider.
 
-###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
-
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
-
-(Optional) The LLM provider to use.
-
----
-
 ##### `xpanderToolCall` <a name="xpanderToolCall" id="xpander-sdk.XpanderClient.xpanderToolCall"></a>
 
 ```typescript
-public xpanderToolCall(toolSelectorResponse: any, llmProvider?: LLMProvider): any
+public xpanderToolCall(toolSelectorResponse: any): any
 ```
 
-Invokes tools based on the provided tool selector response and LLM provider.
+Invokes tools based on the provided tool selector response.
 
 ###### `toolSelectorResponse`<sup>Required</sup> <a name="toolSelectorResponse" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.toolSelectorResponse"></a>
 
 - *Type:* any
 
 The response from the tool selector.
-
----
-
-###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.llmProvider"></a>
-
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
-
-(Optional) The LLM provider to use.
 
 ---
 
@@ -147,7 +95,6 @@ The response from the tool selector.
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agentKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.llmProviderHandler">llmProviderHandler</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">toolsCache</a></code> | <code>any</code> | *No description.* |
 
 ---
@@ -169,16 +116,6 @@ public readonly agentUrl: string;
 ```
 
 - *Type:* string
-
----
-
-##### `llmProviderHandler`<sup>Required</sup> <a name="llmProviderHandler" id="xpander-sdk.XpanderClient.property.llmProviderHandler"></a>
-
-```typescript
-public readonly llmProviderHandler: any;
-```
-
-- *Type:* any
 
 ---
 
@@ -204,29 +141,13 @@ Enum representing different Large Language Model (LLM) providers.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.LLMProvider.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
-| <code><a href="#xpander-sdk.LLMProvider.ANTHROPIC">ANTHROPIC</a></code> | Represents the 'anthropic' provider. |
 
 ---
-
-##### `LANG_CHAIN` <a name="LANG_CHAIN" id="xpander-sdk.LLMProvider.LANG_CHAIN"></a>
-
-Represents the 'langchain' provider.
-
----
-
 
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
 Represents the 'openai' provider.
-
----
-
-
-##### `ANTHROPIC` <a name="ANTHROPIC" id="xpander-sdk.LLMProvider.ANTHROPIC"></a>
-
-Represents the 'anthropic' provider.
 
 ---
 

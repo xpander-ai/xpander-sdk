@@ -16,7 +16,10 @@
     "eslint": "npx projen eslint",
     "package": "npx projen package",
     "package-all": "npx projen package-all",
+    "package:dotnet": "npx projen package:dotnet",
+    "package:java": "npx projen package:java",
     "package:js": "npx projen package:js",
+    "package:python": "npx projen package:python",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
@@ -56,14 +59,14 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "axios": "^1.7.2",
     "dotenv": "^16.4.5",
-    "openai": "^4.52.3"
+    "openai": "^4.52.3",
+    "sync-request": "^6.1.0"
   },
   "bundledDependencies": [
-    "axios",
     "dotenv",
-    "openai"
+    "openai",
+    "sync-request"
   ],
   "main": "lib/index.js",
   "license": "Apache-2.0",
@@ -118,7 +121,23 @@
   "stability": "stable",
   "jsii": {
     "outdir": "dist",
-    "targets": {},
+    "targets": {
+      "java": {
+        "package": "ai.xpander.sdk",
+        "maven": {
+          "groupId": "ai.xpander",
+          "artifactId": "sdk"
+        }
+      },
+      "python": {
+        "distName": "xpander-sdk",
+        "module": "xpander_sdk"
+      },
+      "dotnet": {
+        "namespace": "Xpander.AI.Sdk",
+        "packageId": "Xpander.AI.Sdk"
+      }
+    },
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"

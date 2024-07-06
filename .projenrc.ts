@@ -7,24 +7,24 @@ const project = new cdk.JsiiProject({
   name: 'xpander-sdk',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/xpander-ai/xpander-sdk.git',
-  // publishToPypi: {
-  //   distName: 'xpander-sdk',
-  //   module: 'xpander_sdk',
-  // },
-  // publishToMaven: {
-  //   javaPackage: 'ai.xpander.sdk',
-  //   mavenGroupId: 'ai.xpander',
-  //   mavenArtifactId: 'sdk',
-  // },
-  // publishToNuget: {
-  //   dotNetNamespace: 'Xpander.AI.Sdk',
-  //   packageId: 'Xpander.AI.Sdk',
-  // },
+  publishToPypi: {
+    distName: 'xpander-sdk',
+    module: 'xpander_sdk',
+  },
+  publishToMaven: {
+    javaPackage: 'ai.xpander.sdk',
+    mavenGroupId: 'ai.xpander',
+    mavenArtifactId: 'sdk',
+  },
+  publishToNuget: {
+    dotNetNamespace: 'Xpander.AI.Sdk',
+    packageId: 'Xpander.AI.Sdk',
+  },
   deps: [] /* Runtime dependencies of this module. */,
-  bundledDeps: ['axios', 'openai', 'dotenv'],
+  bundledDeps: ['sync-request', 'openai', 'dotenv'],
   gitignore: ['.env'],
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // devDeps: [],             /* Build dependencies for this module. */
+  // devDeps: [''],             /* Build dependencies for this module. */
   // packageName: undefined,  /* The "name" in package.json. */
 });
 project.synth();

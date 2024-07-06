@@ -90,15 +90,15 @@
       "type": "build"
     },
     {
-      "name": "axios",
-      "type": "bundled"
-    },
-    {
       "name": "dotenv",
       "type": "bundled"
     },
     {
       "name": "openai",
+      "type": "bundled"
+    },
+    {
+      "name": "sync-request",
       "type": "bundled"
     }
   ],

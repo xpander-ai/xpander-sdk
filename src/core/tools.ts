@@ -1,6 +1,4 @@
-// src/core/tools.ts
-
-import axios from 'axios';
+import request, { HttpVerb } from 'sync-request';
 import { XpanderClient } from './XpanderClient';
 import { RequestPayload } from '../models/payloads';
 
@@ -47,24 +45,25 @@ export function createTool(client: XpanderClient, toolInstructions: ToolInstruct
   }
 
   if (functionize) {
-    const toolInvocationFunction = async (payload: RequestPayload): Promise<any> => {
+    const toolInvocationFunction = (payload: RequestPayload): any => {
       const url = `${client.agentUrl}/operations/${toolInstructions.id}`;
       const jsonPayload = payload instanceof Object ? payload : {};
 
       try {
-        const response = await axios.post(url, jsonPayload, {
+        const response = request('POST' as HttpVerb, url, {
+          json: jsonPayload,
           headers: { 'x-api-key': client.agentKey },
         });
 
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
+        if (response.statusCode !== 200) {
+          throw new Error(response.body.toString());
         }
 
-        return response.data;
+        return JSON.parse(response.getBody('utf8'));
       } catch (err) {
         // Ensure 'err' is typed as 'any' to access its properties
         const error = err as any;
-        console.error('Error invoking tool:', error.response?.data || error.message);
+        console.error('Error invoking tool:', error.message);
         throw error;
       }
     };
