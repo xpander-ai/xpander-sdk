@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
-import { LLMProvider, XpanderClient } from '../src';
+import { XpanderClient } from '../src';
 
 dotenv.config();
 const xpanderAPIKey = process.env.XPANDER_API_KEY || '';
 const agentUrl = 'https://inbound.xpander.ai/agent/e4ae74cf-e31c-450b-97f2-51f1734d0377';
 const openAPIKey = process.env.OPENAI_API_KEY || '';
-const xpanderClient = new XpanderClient(xpanderAPIKey, agentUrl, LLMProvider.OPEN_AI);
+const xpanderClient = new XpanderClient(xpanderAPIKey, agentUrl, 'openai');
 
 test('openAIClient', () => {
   try {

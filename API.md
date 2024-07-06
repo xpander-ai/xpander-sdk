@@ -11,14 +11,14 @@
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider)
+new XpanderClient(agentKey: string, agentUrl: string, llmProvider: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agentKey</a></code> | <code>string</code> | - Your API key for authenticating with the agent. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agentUrl</a></code> | <code>string</code> | - The base URL of your agent. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agentKey</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -26,23 +26,17 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider)
 
 - *Type:* string
 
-Your API key for authenticating with the agent.
-
 ---
 
 ##### `agentUrl`<sup>Required</sup> <a name="agentUrl" id="xpander-sdk.XpanderClient.Initializer.parameter.agentUrl"></a>
 
 - *Type:* string
 
-The base URL of your agent.
-
 ---
 
 ##### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.Initializer.parameter.llmProvider"></a>
 
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
-
-The LLM provider to use.
+- *Type:* string
 
 ---
 
@@ -50,19 +44,10 @@ The LLM provider to use.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.retrieveAgentTools">retrieveAgentTools</a></code> | Retrieves tools from the agent and caches them. |
-| <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves tools based on the provided LLM provider. |
-| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes tools based on the provided tool selector response. |
+| <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | *No description.* |
 
 ---
-
-##### `retrieveAgentTools` <a name="retrieveAgentTools" id="xpander-sdk.XpanderClient.retrieveAgentTools"></a>
-
-```typescript
-public retrieveAgentTools(): void
-```
-
-Retrieves tools from the agent and caches them.
 
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
@@ -70,21 +55,15 @@ Retrieves tools from the agent and caches them.
 public tools(): any
 ```
 
-Retrieves tools based on the provided LLM provider.
-
 ##### `xpanderToolCall` <a name="xpanderToolCall" id="xpander-sdk.XpanderClient.xpanderToolCall"></a>
 
 ```typescript
 public xpanderToolCall(toolSelectorResponse: any): any
 ```
 
-Invokes tools based on the provided tool selector response.
-
 ###### `toolSelectorResponse`<sup>Required</sup> <a name="toolSelectorResponse" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.toolSelectorResponse"></a>
 
 - *Type:* any
-
-The response from the tool selector.
 
 ---
 
@@ -93,9 +72,20 @@ The response from the tool selector.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#xpander-sdk.XpanderClient.property.validProviders">validProviders</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agentKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">toolsCache</a></code> | <code>any</code> | *No description.* |
+
+---
+
+##### `validProviders`<sup>Required</sup> <a name="validProviders" id="xpander-sdk.XpanderClient.property.validProviders"></a>
+
+```typescript
+public readonly validProviders: string[];
+```
+
+- *Type:* string[]
 
 ---
 
