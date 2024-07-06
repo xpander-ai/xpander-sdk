@@ -1,8 +1,9 @@
 import request, { HttpVerb } from 'sync-request';
 import { OpenAI } from '../llmProviders/openai';
+import { ToolResponse } from '../models/toolResponse';
 
 interface LLMProviderHandler {
-  getTools(): any;
+  getTools(functionize?: boolean): any;
   invokeTools(toolSelectorResponse: any): any;
 }
 
@@ -30,12 +31,12 @@ export class XpanderClient {
     this.agentUrl = agentUrl;
     this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     this.toolsCache = null;
-    this.retrieveAgentTools();
+    this.loadXpanderTools();
   }
 
-  private retrieveAgentTools(): void {
+  loadXpanderTools(): any[] {
     if (this.toolsCache) {
-      return;
+      return this.toolsCache;
     }
 
     try {
@@ -51,13 +52,21 @@ export class XpanderClient {
     } catch (e) {
       throw new Error(`Failed to get agent's spec - ${(e as Error).message}`);
     }
+
+    return this.toolsCache;
   }
 
-  tools(): any {
+  tools(llmProvider?: string): any {
+    if (llmProvider) {
+      this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
+    }
     return this.llmProviderHandler.getTools();
   }
 
-  xpanderToolCall(toolSelectorResponse: any): any {
+  xpanderToolCall(toolSelectorResponse: any, llmProvider?: string): ToolResponse[] {
+    if (llmProvider) {
+      this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
+    }
     return this.llmProviderHandler.invokeTools(toolSelectorResponse);
   }
 
