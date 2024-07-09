@@ -20,6 +20,14 @@ const project = new cdk.JsiiProject({
     dotNetNamespace: 'Xpander.AI.Sdk',
     packageId: 'Xpander.AI.Sdk',
   },
+  publishDryRun: true,
+  prettier: true,
+  prettierOptions: {
+    settings: {
+      singleQuote: true,
+    },
+  },
+  dependabot: true,
   deps: [] /* Runtime dependencies of this module. */,
   bundledDeps: ['sync-request', 'openai', 'dotenv'],
   gitignore: ['.env'],

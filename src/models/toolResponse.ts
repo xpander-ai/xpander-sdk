@@ -55,7 +55,6 @@ export class ToolResponse implements IToolResponse {
     this.filteredTool = filteredTool;
   }
 
-
   toJSON(): object {
     return {
       toolCallId: this.toolCallId,
