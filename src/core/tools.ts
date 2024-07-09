@@ -29,15 +29,22 @@ interface Tool {
  * @returns The created Tool object.
  * @throws Will throw an error if the client object or its properties are not properly initialized.
  */
-export function createTool(client: XpanderClient, toolInstructions: ToolInstructions, functionize: boolean = true): Tool {
+export function createTool(
+  client: XpanderClient,
+  toolInstructions: ToolInstructions,
+  functionize: boolean = true,
+): Tool {
   if (!client || !client.agentKey || !client.agentUrl) {
-    throw new Error('Client object or its properties are not properly initialized.');
+    throw new Error(
+      'Client object or its properties are not properly initialized.',
+    );
   }
 
   const tool: Tool = {
     name: toolInstructions.id,
-    description: toolInstructions.function_description.split(' - Valid')[0]
-            + ' IMPORTANT! make sure to use body_params, query_params, path_params. these are crucial for ensuring function calling works!',
+    description:
+      toolInstructions.function_description.split(' - Valid')[0] +
+      ' IMPORTANT! make sure to use body_params, query_params, path_params. these are crucial for ensuring function calling works!',
   };
 
   if (toolInstructions.parameters) {

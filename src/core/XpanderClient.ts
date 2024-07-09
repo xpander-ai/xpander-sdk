@@ -7,7 +7,9 @@ interface LLMProviderHandler {
   invokeTools(toolSelectorResponse: any): any;
 }
 
-const LLMProvider_HANDLERS: { [key: string]: new (client: XpanderClient) => LLMProviderHandler } = {
+const LLMProvider_HANDLERS: {
+  [key: string]: new (client: XpanderClient) => LLMProviderHandler;
+} = {
   openai: OpenAI,
   // Add other LLM providers here
 };
@@ -25,7 +27,9 @@ export class XpanderClient {
 
   constructor(agentKey: string, agentUrl: string, llmProvider: string) {
     if (!XpanderClient.validProviders.includes(llmProvider)) {
-      throw new Error(`Invalid LLMProvider. Valid providers are: ${XpanderClient.validProviders.join(', ')}`);
+      throw new Error(
+        `Invalid LLMProvider. Valid providers are: ${XpanderClient.validProviders.join(', ')}`,
+      );
     }
     this.agentKey = agentKey;
     this.agentUrl = agentUrl;
@@ -47,7 +51,9 @@ export class XpanderClient {
 
       this.toolsCache = JSON.parse(response.getBody('utf8'));
       if (!Array.isArray(this.toolsCache)) {
-        throw new Error(`Returned tools are malformed - ${JSON.stringify(this.toolsCache)}`);
+        throw new Error(
+          `Returned tools are malformed - ${JSON.stringify(this.toolsCache)}`,
+        );
       }
     } catch (e) {
       throw new Error(`Failed to get agent's spec - ${(e as Error).message}`);
@@ -63,7 +69,10 @@ export class XpanderClient {
     return this.llmProviderHandler.getTools();
   }
 
-  xpanderToolCall(toolSelectorResponse: any, llmProvider?: string): ToolResponse[] {
+  xpanderToolCall(
+    toolSelectorResponse: any,
+    llmProvider?: string,
+  ): ToolResponse[] {
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     }

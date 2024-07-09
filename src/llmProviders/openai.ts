@@ -27,7 +27,11 @@ export class OpenAI {
     const tools: any[] = [];
 
     for (const toolInstructions of agentTools) {
-      const createdTool: Tool = createTool(this.client, toolInstructions, functionize);
+      const createdTool: Tool = createTool(
+        this.client,
+        toolInstructions,
+        functionize,
+      );
       const toolDeclaration: any = {
         type: 'function',
         function: {
@@ -51,7 +55,7 @@ export class OpenAI {
 
   singleToolInvoke(toolId: string, payload: RequestPayload): string {
     const tools = this.getTools(true);
-    const toolToInvoke = tools.find(tool => tool.function.name === toolId);
+    const toolToInvoke = tools.find((tool) => tool.function.name === toolId);
 
     if (toolToInvoke) {
       return JSON.stringify(toolToInvoke.function.execute(payload));
@@ -82,9 +86,20 @@ export class OpenAI {
               payload = null;
             }
 
-            const functionResponse = this.singleToolInvoke(functionName, payload);
+            const functionResponse = this.singleToolInvoke(
+              functionName,
+              payload,
+            );
             const filteredTool = this.filterTool(functionName);
-            outputMessages.push(new ToolResponse(toolCalls, payload, 'tool', functionResponse, filteredTool));
+            outputMessages.push(
+              new ToolResponse(
+                toolCalls,
+                payload,
+                'tool',
+                functionResponse,
+                filteredTool,
+              ),
+            );
           }
         }
       }
@@ -94,7 +109,7 @@ export class OpenAI {
 
   filterTool(toolId: string): any[] {
     const tools = this.getTools(false);
-    const filteredTool = tools.find(tool => tool.function.name === toolId);
+    const filteredTool = tools.find((tool) => tool.function.name === toolId);
     return filteredTool ? [filteredTool] : [];
   }
 }

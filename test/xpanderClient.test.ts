@@ -4,14 +4,18 @@ import { XpanderClient } from '../src';
 
 dotenv.config();
 const xpanderAPIKey = process.env.XPANDER_API_KEY || '';
-const agentUrl = 'https://inbound.xpander.ai/agent/e4ae74cf-e31c-450b-97f2-51f1734d0377';
+const agentUrl =
+  'https://inbound.xpander.ai/agent/e4ae74cf-e31c-450b-97f2-51f1734d0377';
 const openAPIKey = process.env.OPENAI_API_KEY || '';
 const xpanderClient = new XpanderClient(xpanderAPIKey, agentUrl, 'openai');
 
 test('openAIClient', () => {
   try {
     const xpanderToolsForOpenAI = xpanderClient.tools();
-    console.log('Retrieved tools:', JSON.stringify(xpanderToolsForOpenAI, null, 2));
+    console.log(
+      'Retrieved tools:',
+      JSON.stringify(xpanderToolsForOpenAI, null, 2),
+    );
     expect(xpanderToolsForOpenAI.length).toBeGreaterThan(0);
   } catch (error) {
     console.error('Failed to retrieve tools:', error);
@@ -22,7 +26,10 @@ test('openAIClient', () => {
 test('openAI_Function_calling', () => {
   try {
     const xpanderToolsForOpenAI = xpanderClient.tools();
-    console.log('Retrieved tools for function calling:', JSON.stringify(xpanderToolsForOpenAI, null, 2));
+    console.log(
+      'Retrieved tools for function calling:',
+      JSON.stringify(xpanderToolsForOpenAI, null, 2),
+    );
 
     const messages = [
       {
