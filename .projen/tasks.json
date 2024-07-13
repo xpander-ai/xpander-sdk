@@ -131,6 +131,46 @@
         }
       ]
     },
+    "generate-docs": {
+      "name": "generate-docs",
+      "steps": [
+        {
+          "exec": "jsii-docgen -o API.md"
+        }
+      ]
+    },
+    "generate-docs-dotnet": {
+      "name": "generate-docs-dotnet",
+      "steps": [
+        {
+          "exec": "jsii-docgen -o API_dotnet.md --language csharp"
+        }
+      ]
+    },
+    "generate-docs-java": {
+      "name": "generate-docs-java",
+      "steps": [
+        {
+          "exec": "jsii-docgen -o API_java.md --language java"
+        }
+      ]
+    },
+    "generate-docs-node": {
+      "name": "generate-docs-node",
+      "steps": [
+        {
+          "exec": "jsii-docgen -o API_node.md --language typescript"
+        }
+      ]
+    },
+    "generate-docs-python": {
+      "name": "generate-docs-python",
+      "steps": [
+        {
+          "exec": "jsii-docgen -o API_python.md --language python"
+        }
+      ]
+    },
     "install": {
       "name": "install",
       "description": "Install project dependencies and update lockfile (non-frozen)",
@@ -218,6 +258,24 @@
       "steps": [
         {
           "spawn": "docgen"
+        },
+        {
+          "spawn": "generate-docs"
+        },
+        {
+          "spawn": "generate-docs-python"
+        },
+        {
+          "spawn": "generate-docs-node"
+        },
+        {
+          "spawn": "generate-docs-dotnet"
+        },
+        {
+          "spawn": "generate-docs-java"
+        },
+        {
+          "spawn": "upload-docs"
         }
       ]
     },
@@ -284,6 +342,14 @@
       "steps": [
         {
           "builtin": "release/reset-version"
+        }
+      ]
+    },
+    "upload-docs": {
+      "name": "upload-docs",
+      "steps": [
+        {
+          "exec": "node uploadDocs.js"
         }
       ]
     },
