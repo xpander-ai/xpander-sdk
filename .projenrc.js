@@ -13,15 +13,23 @@ var project = new projen_1.cdk.JsiiProject({
         distName: 'xpander-sdk',
         module: 'xpander_sdk',
     },
-    publishToMaven: {
-        javaPackage: 'ai.xpander.sdk',
-        mavenGroupId: 'ai.xpander',
-        mavenArtifactId: 'sdk',
-    },
+    // publishToMaven: {
+    //   javaPackage: 'ai.xpander.sdk',
+    //   mavenGroupId: 'ai.xpander',
+    //   mavenArtifactId: 'sdk',
+    // },
     publishToNuget: {
         dotNetNamespace: 'Xpander.AI.Sdk',
         packageId: 'Xpander.AI.Sdk',
     },
+    publishDryRun: true,
+    prettier: true,
+    prettierOptions: {
+        settings: {
+            singleQuote: true,
+        },
+    },
+    dependabot: true,
     deps: [] /* Runtime dependencies of this module. */,
     bundledDeps: ['sync-request', 'openai', 'dotenv'],
     gitignore: ['.env'],
