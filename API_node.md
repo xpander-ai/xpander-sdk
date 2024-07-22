@@ -253,7 +253,7 @@ public loadXpanderTools(): any[]
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```typescript
-public tools(llmProvider?: string): any
+public tools(llmProvider?: string): ITool[]
 ```
 
 ###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
@@ -334,6 +334,145 @@ public readonly toolsCache: any;
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### ILLMProviderHandler <a name="ILLMProviderHandler" id="xpander-sdk.ILLMProviderHandler"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ILLMProviderHandler">ILLMProviderHandler</a>
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">getTools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">invokeTools</a></code> | *No description.* |
+
+---
+
+##### `getTools` <a name="getTools" id="xpander-sdk.ILLMProviderHandler.getTools"></a>
+
+```typescript
+public getTools(functionize?: boolean): ITool[]
+```
+
+###### `functionize`<sup>Optional</sup> <a name="functionize" id="xpander-sdk.ILLMProviderHandler.getTools.parameter.functionize"></a>
+
+- *Type:* boolean
+
+---
+
+##### `invokeTools` <a name="invokeTools" id="xpander-sdk.ILLMProviderHandler.invokeTools"></a>
+
+```typescript
+public invokeTools(toolSelectorResponse: any): any
+```
+
+###### `toolSelectorResponse`<sup>Required</sup> <a name="toolSelectorResponse" id="xpander-sdk.ILLMProviderHandler.invokeTools.parameter.toolSelectorResponse"></a>
+
+- *Type:* any
+
+---
+
+
+### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ITool.property.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.func">func</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.parameters">parameters</a></code> | <code>{[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}</code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.ITool.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ITool.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `func`<sup>Optional</sup> <a name="func" id="xpander-sdk.ITool.property.func"></a>
+
+```typescript
+public readonly func: any;
+```
+
+- *Type:* any
+
+---
+
+##### `parameters`<sup>Optional</sup> <a name="parameters" id="xpander-sdk.ITool.property.parameters"></a>
+
+```typescript
+public readonly parameters: {[ key: string ]: IToolParameter};
+```
+
+- *Type:* {[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}
+
+---
+
+### IToolParameter <a name="IToolParameter" id="xpander-sdk.IToolParameter"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolParameter.property.properties">properties</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolParameter.property.type">type</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolParameter.property.required">required</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `properties`<sup>Required</sup> <a name="properties" id="xpander-sdk.IToolParameter.property.properties"></a>
+
+```typescript
+public readonly properties: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.IToolParameter.property.type"></a>
+
+```typescript
+public readonly type: string;
+```
+
+- *Type:* string
+
+---
+
+##### `required`<sup>Optional</sup> <a name="required" id="xpander-sdk.IToolParameter.property.required"></a>
+
+```typescript
+public readonly required: string[];
+```
+
+- *Type:* string[]
+
+---
 
 ### IToolResponse <a name="IToolResponse" id="xpander-sdk.IToolResponse"></a>
 
@@ -469,12 +608,20 @@ Enum representing different Large Language Model (LLM) providers.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 
 ---
 
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
 Represents the 'openai' provider.
+
+---
+
+
+##### `NVIDIA_NIM` <a name="NVIDIA_NIM" id="xpander-sdk.LLMProvider.NVIDIA_NIM"></a>
+
+Represents the 'nvidiaNim' provider.
 
 ---
 

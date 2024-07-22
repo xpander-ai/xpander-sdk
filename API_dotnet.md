@@ -253,7 +253,7 @@ private object[] LoadXpanderTools()
 ##### `Tools` <a name="Tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```csharp
-private object Tools(string LlmProvider = null)
+private ITool[] Tools(string LlmProvider = null)
 ```
 
 ###### `LlmProvider`<sup>Optional</sup> <a name="LlmProvider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
@@ -334,6 +334,145 @@ public object ToolsCache { get; }
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### ILLMProviderHandler <a name="ILLMProviderHandler" id="xpander-sdk.ILLMProviderHandler"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ILLMProviderHandler">ILLMProviderHandler</a>
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">GetTools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">InvokeTools</a></code> | *No description.* |
+
+---
+
+##### `GetTools` <a name="GetTools" id="xpander-sdk.ILLMProviderHandler.getTools"></a>
+
+```csharp
+private ITool[] GetTools(bool Functionize = null)
+```
+
+###### `Functionize`<sup>Optional</sup> <a name="Functionize" id="xpander-sdk.ILLMProviderHandler.getTools.parameter.functionize"></a>
+
+- *Type:* bool
+
+---
+
+##### `InvokeTools` <a name="InvokeTools" id="xpander-sdk.ILLMProviderHandler.invokeTools"></a>
+
+```csharp
+private object InvokeTools(object ToolSelectorResponse)
+```
+
+###### `ToolSelectorResponse`<sup>Required</sup> <a name="ToolSelectorResponse" id="xpander-sdk.ILLMProviderHandler.invokeTools.parameter.toolSelectorResponse"></a>
+
+- *Type:* object
+
+---
+
+
+### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ITool.property.description">Description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.name">Name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.func">Func</a></code> | <code>object</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.parameters">Parameters</a></code> | <code>System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>></code> | *No description.* |
+
+---
+
+##### `Description`<sup>Required</sup> <a name="Description" id="xpander-sdk.ITool.property.description"></a>
+
+```csharp
+public string Description { get; set; }
+```
+
+- *Type:* string
+
+---
+
+##### `Name`<sup>Required</sup> <a name="Name" id="xpander-sdk.ITool.property.name"></a>
+
+```csharp
+public string Name { get; set; }
+```
+
+- *Type:* string
+
+---
+
+##### `Func`<sup>Optional</sup> <a name="Func" id="xpander-sdk.ITool.property.func"></a>
+
+```csharp
+public object Func { get; set; }
+```
+
+- *Type:* object
+
+---
+
+##### `Parameters`<sup>Optional</sup> <a name="Parameters" id="xpander-sdk.ITool.property.parameters"></a>
+
+```csharp
+public System.Collections.Generic.IDictionary<string, IToolParameter> Parameters { get; set; }
+```
+
+- *Type:* System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>>
+
+---
+
+### IToolParameter <a name="IToolParameter" id="xpander-sdk.IToolParameter"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolParameter.property.properties">Properties</a></code> | <code>System.Collections.Generic.IDictionary<string, object></code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolParameter.property.type">Type</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolParameter.property.required">Required</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `Properties`<sup>Required</sup> <a name="Properties" id="xpander-sdk.IToolParameter.property.properties"></a>
+
+```csharp
+public System.Collections.Generic.IDictionary<string, object> Properties { get; set; }
+```
+
+- *Type:* System.Collections.Generic.IDictionary<string, object>
+
+---
+
+##### `Type`<sup>Required</sup> <a name="Type" id="xpander-sdk.IToolParameter.property.type"></a>
+
+```csharp
+public string Type { get; set; }
+```
+
+- *Type:* string
+
+---
+
+##### `Required`<sup>Optional</sup> <a name="Required" id="xpander-sdk.IToolParameter.property.required"></a>
+
+```csharp
+public string[] Required { get; set; }
+```
+
+- *Type:* string[]
+
+---
 
 ### IToolResponse <a name="IToolResponse" id="xpander-sdk.IToolResponse"></a>
 
@@ -469,12 +608,20 @@ Enum representing different Large Language Model (LLM) providers.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 
 ---
 
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
 Represents the 'openai' provider.
+
+---
+
+
+##### `NVIDIA_NIM` <a name="NVIDIA_NIM" id="xpander-sdk.LLMProvider.NVIDIA_NIM"></a>
+
+Represents the 'nvidiaNim' provider.
 
 ---
 

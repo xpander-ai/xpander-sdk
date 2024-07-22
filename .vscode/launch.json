@@ -16,7 +16,7 @@
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["projen", "test", "--detectOpenHandles"],
+      "runtimeArgs": ["projen", "test"],
       "envFile": "${workspaceFolder}/.env"
     }
   ]

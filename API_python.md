@@ -269,7 +269,7 @@ def load_xpander_tools() -> typing.List[typing.Any]
 ```python
 def tools(
   llm_provider: str = None
-) -> typing.Any
+) -> typing.List[ITool]
 ```
 
 ###### `llm_provider`<sup>Optional</sup> <a name="llm_provider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
@@ -353,6 +353,149 @@ tools_cache: typing.Any
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### ILLMProviderHandler <a name="ILLMProviderHandler" id="xpander-sdk.ILLMProviderHandler"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ILLMProviderHandler">ILLMProviderHandler</a>
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">get_tools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">invoke_tools</a></code> | *No description.* |
+
+---
+
+##### `get_tools` <a name="get_tools" id="xpander-sdk.ILLMProviderHandler.getTools"></a>
+
+```python
+def get_tools(
+  functionize: bool = None
+) -> typing.List[ITool]
+```
+
+###### `functionize`<sup>Optional</sup> <a name="functionize" id="xpander-sdk.ILLMProviderHandler.getTools.parameter.functionize"></a>
+
+- *Type:* bool
+
+---
+
+##### `invoke_tools` <a name="invoke_tools" id="xpander-sdk.ILLMProviderHandler.invokeTools"></a>
+
+```python
+def invoke_tools(
+  tool_selector_response: typing.Any
+) -> typing.Any
+```
+
+###### `tool_selector_response`<sup>Required</sup> <a name="tool_selector_response" id="xpander-sdk.ILLMProviderHandler.invokeTools.parameter.toolSelectorResponse"></a>
+
+- *Type:* typing.Any
+
+---
+
+
+### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ITool.property.description">description</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.name">name</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.func">func</a></code> | <code>typing.Any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ITool.property.parameters">parameters</a></code> | <code>typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]</code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.ITool.property.description"></a>
+
+```python
+description: str
+```
+
+- *Type:* str
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ITool.property.name"></a>
+
+```python
+name: str
+```
+
+- *Type:* str
+
+---
+
+##### `func`<sup>Optional</sup> <a name="func" id="xpander-sdk.ITool.property.func"></a>
+
+```python
+func: typing.Any
+```
+
+- *Type:* typing.Any
+
+---
+
+##### `parameters`<sup>Optional</sup> <a name="parameters" id="xpander-sdk.ITool.property.parameters"></a>
+
+```python
+parameters: typing.Mapping[IToolParameter]
+```
+
+- *Type:* typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]
+
+---
+
+### IToolParameter <a name="IToolParameter" id="xpander-sdk.IToolParameter"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolParameter.property.properties">properties</a></code> | <code>typing.Mapping[typing.Any]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolParameter.property.type">type</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolParameter.property.required">required</a></code> | <code>typing.List[str]</code> | *No description.* |
+
+---
+
+##### `properties`<sup>Required</sup> <a name="properties" id="xpander-sdk.IToolParameter.property.properties"></a>
+
+```python
+properties: typing.Mapping[typing.Any]
+```
+
+- *Type:* typing.Mapping[typing.Any]
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.IToolParameter.property.type"></a>
+
+```python
+type: str
+```
+
+- *Type:* str
+
+---
+
+##### `required`<sup>Optional</sup> <a name="required" id="xpander-sdk.IToolParameter.property.required"></a>
+
+```python
+required: typing.List[str]
+```
+
+- *Type:* typing.List[str]
+
+---
 
 ### IToolResponse <a name="IToolResponse" id="xpander-sdk.IToolResponse"></a>
 
@@ -488,12 +631,20 @@ Enum representing different Large Language Model (LLM) providers.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 
 ---
 
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
 Represents the 'openai' provider.
+
+---
+
+
+##### `NVIDIA_NIM` <a name="NVIDIA_NIM" id="xpander-sdk.LLMProvider.NVIDIA_NIM"></a>
+
+Represents the 'nvidiaNim' provider.
 
 ---
 

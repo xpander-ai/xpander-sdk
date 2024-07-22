@@ -147,14 +147,6 @@
         }
       ]
     },
-    "generate-docs-java": {
-      "name": "generate-docs-java",
-      "steps": [
-        {
-          "exec": "jsii-docgen -o API_java.md --language java"
-        }
-      ]
-    },
     "generate-docs-node": {
       "name": "generate-docs-node",
       "steps": [
@@ -258,12 +250,6 @@
         },
         {
           "spawn": "generate-docs-dotnet"
-        },
-        {
-          "spawn": "generate-docs-java"
-        },
-        {
-          "spawn": "upload-docs"
         }
       ]
     },
@@ -330,14 +316,6 @@
       "steps": [
         {
           "builtin": "release/reset-version"
-        }
-      ]
-    },
-    "upload-docs": {
-      "name": "upload-docs",
-      "steps": [
-        {
-          "exec": "node uploadDocs.js"
         }
       ]
     },

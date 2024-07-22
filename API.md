@@ -608,12 +608,20 @@ Enum representing different Large Language Model (LLM) providers.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 
 ---
 
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
 Represents the 'openai' provider.
+
+---
+
+
+##### `NVIDIA_NIM` <a name="NVIDIA_NIM" id="xpander-sdk.LLMProvider.NVIDIA_NIM"></a>
+
+Represents the 'nvidiaNim' provider.
 
 ---
 
