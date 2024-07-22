@@ -1,6 +1,7 @@
 import request, { HttpVerb } from 'sync-request';
 import { LLMProvider } from '../constants/llmProvider';
 import { OpenAI, NvidiaNIM } from '../llmProviders';
+import { RequestPayload } from '../models/payloads';
 import { ToolResponse } from '../models/toolResponse';
 import { ILLMProviderHandler, ITool } from '../types';
 
@@ -67,11 +68,55 @@ export class XpanderClient {
     return this.llmProviderHandler.getTools();
   }
 
+  stringifiedTools(llmProvider?: string): string {
+    if (llmProvider) {
+      this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
+    }
+    return JSON.stringify(this.llmProviderHandler.getTools());
+  }
+
+  getLLMMessagesPayload(
+    stringifiedTools: string,
+    prompt: string,
+  ): { role: 'user'; content: string }[] {
+    const handlerStatic = this.llmProviderHandler?.constructor as any;
+    return [
+      {
+        role: 'user',
+        content: [
+          handlerStatic?.promptPrefix || '',
+          stringifiedTools,
+          prompt,
+          handlerStatic?.promptSuffix || '',
+        ].join(''),
+      },
+    ];
+  }
+
+  getToolFromLLMResponse(
+    response: any,
+  ): { toolId: string; payload?: RequestPayload }[] | null {
+    try {
+      const toolChoices = JSON.parse(
+        response?.choices?.[0]?.message?.content || {},
+      );
+      if (toolChoices?.[0]?.toolId) {
+        return toolChoices;
+      }
+    } catch (err: any) {
+      throw new Error(`llm tool selection failure - ${err.message}`);
+    }
+    return null;
+  }
+
   xpanderToolCall(
     toolSelectorResponse: any,
     llmProvider?: string,
   ): ToolResponse[] {
-    if (!Array.isArray(toolSelectorResponse.choices)) {
+    if (
+      !Array.isArray(toolSelectorResponse.choices) &&
+      !toolSelectorResponse?.[0]?.toolId
+    ) {
       return [];
     }
     if (llmProvider) {

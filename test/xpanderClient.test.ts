@@ -1,10 +1,14 @@
 import dotenv from 'dotenv';
-import { ITool, XpanderClient } from '../src';
+import { ITool, LLMProvider, XpanderClient } from '../src';
 
 dotenv.config();
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const agentUrl = process.env.XPANDER_AGENT_URL || '';
-const xpanderClient = new XpanderClient(xpanderAPIKey, agentUrl, 'openai');
+const xpanderClient = new XpanderClient(
+  xpanderAPIKey,
+  agentUrl,
+  LLMProvider.OPEN_AI,
+);
 
 describe('Test XPander Client', () => {
   let tools: ITool[] = xpanderClient.tools();
