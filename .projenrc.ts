@@ -56,9 +56,9 @@ project.addTask('generate-docs-dotnet', {
   exec: 'jsii-docgen -o API_dotnet.md --language csharp',
 });
 
-// project.addTask('generate-docs-java', {
-//   exec: 'jsii-docgen -o API_java.md --language java',
-// });
+project.addTask('generate-docs-java', {
+  exec: 'jsii-docgen -o API_java.md --language java',
+});
 
 // Helper function to safely spawn tasks
 function safeSpawn(taskName: string) {
@@ -75,7 +75,7 @@ safeSpawn('generate-docs');
 safeSpawn('generate-docs-python');
 safeSpawn('generate-docs-node');
 safeSpawn('generate-docs-dotnet');
-// safeSpawn('generate-docs-java');
+safeSpawn('generate-docs-java');
 
 // run node uploadDocs.js manually
 project.synth();

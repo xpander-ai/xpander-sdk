@@ -12,10 +12,7 @@ jobs:
     outputs:
       self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
     env:
-      CI: 'true'
-      OPENAI_API_KEY: '${{ secrets.OPENAI_API_KEY }}'
-      XPANDER_AGENT_API_KEY: '${{ secrets.XPANDER_AGENT_API_KEY }}'
-      XPANDER_AGENT_URL: '${{ secrets.XPANDER_AGENT_URL }}'
+      CI: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -89,7 +86,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions: {}
-    if: '! needs.build.outputs.self_mutation_happened'
+    if: "! needs.build.outputs.self_mutation_happened"
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -114,7 +111,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions: {}
-    if: '! needs.build.outputs.self_mutation_happened'
+    if: "! needs.build.outputs.self_mutation_happened"
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -142,7 +139,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions: {}
-    if: '! needs.build.outputs.self_mutation_happened'
+    if: "! needs.build.outputs.self_mutation_happened"
     steps:
       - uses: actions/setup-node@v4
         with:
