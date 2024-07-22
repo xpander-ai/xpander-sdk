@@ -32,6 +32,11 @@ const project = new cdk.JsiiProject({
   deps: [] /* Runtime dependencies of this module. */,
   bundledDeps: ['sync-request', 'openai', 'dotenv', 'axios'],
   gitignore: ['.env'],
+  jestOptions: {
+    jestConfig: {
+      detectOpenHandles: true,
+    },
+  },
 });
 
 // Adding custom tasks to generate documentation for each language
