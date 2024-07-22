@@ -2,4 +2,5 @@
 
 export { XpanderClient } from './core/XpanderClient';
 export { LLMProvider } from './constants/llmProvider';
+export * from './types';
 export * from './models/toolResponse';
