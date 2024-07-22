@@ -1,9 +1,8 @@
 import request, { HttpVerb } from 'sync-request';
 import { LLMProvider } from '../constants/llmProvider';
 import { OpenAI, NvidiaNIM } from '../llmProviders';
-import { RequestPayload } from '../models/payloads';
 import { ToolResponse } from '../models/toolResponse';
-import { ILLMProviderHandler, ITool } from '../types';
+import { ILLMProviderHandler, ITool, IMessage } from '../types';
 
 const LLMProviderHandlers: {
   [key: string]: new (client: XpanderClient) => ILLMProviderHandler;
@@ -75,10 +74,7 @@ export class XpanderClient {
     return JSON.stringify(this.llmProviderHandler.getTools());
   }
 
-  getLLMMessagesPayload(
-    stringifiedTools: string,
-    prompt: string,
-  ): { role: 'user'; content: string }[] {
+  getLLMMessagesPayload(stringifiedTools: string, prompt: string): IMessage[] {
     const handlerStatic = this.llmProviderHandler?.constructor as any;
     return [
       {
@@ -93,9 +89,7 @@ export class XpanderClient {
     ];
   }
 
-  getToolFromLLMResponse(
-    response: any,
-  ): { toolId: string; payload?: RequestPayload }[] | null {
+  getToolFromLLMResponse(response: any): any[] {
     try {
       const toolChoices = JSON.parse(
         response?.choices?.[0]?.message?.content || {},
@@ -106,7 +100,7 @@ export class XpanderClient {
     } catch (err: any) {
       throw new Error(`llm tool selection failure - ${err.message}`);
     }
-    return null;
+    throw new Error(`no tool selection`);
   }
 
   xpanderToolCall(

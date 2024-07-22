@@ -238,9 +238,42 @@ new XpanderClient(string AgentKey, string AgentUrl, string LlmProvider);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#xpander-sdk.XpanderClient.getLLMMessagesPayload">GetLLMMessagesPayload</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.getToolFromLLMResponse">GetToolFromLLMResponse</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">LoadXpanderTools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.stringifiedTools">StringifiedTools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.tools">Tools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">XpanderToolCall</a></code> | *No description.* |
+
+---
+
+##### `GetLLMMessagesPayload` <a name="GetLLMMessagesPayload" id="xpander-sdk.XpanderClient.getLLMMessagesPayload"></a>
+
+```csharp
+private IMessage[] GetLLMMessagesPayload(string StringifiedTools, string Prompt)
+```
+
+###### `StringifiedTools`<sup>Required</sup> <a name="StringifiedTools" id="xpander-sdk.XpanderClient.getLLMMessagesPayload.parameter.stringifiedTools"></a>
+
+- *Type:* string
+
+---
+
+###### `Prompt`<sup>Required</sup> <a name="Prompt" id="xpander-sdk.XpanderClient.getLLMMessagesPayload.parameter.prompt"></a>
+
+- *Type:* string
+
+---
+
+##### `GetToolFromLLMResponse` <a name="GetToolFromLLMResponse" id="xpander-sdk.XpanderClient.getToolFromLLMResponse"></a>
+
+```csharp
+private object[] GetToolFromLLMResponse(object Response)
+```
+
+###### `Response`<sup>Required</sup> <a name="Response" id="xpander-sdk.XpanderClient.getToolFromLLMResponse.parameter.response"></a>
+
+- *Type:* object
 
 ---
 
@@ -249,6 +282,18 @@ new XpanderClient(string AgentKey, string AgentUrl, string LlmProvider);
 ```csharp
 private object[] LoadXpanderTools()
 ```
+
+##### `StringifiedTools` <a name="StringifiedTools" id="xpander-sdk.XpanderClient.stringifiedTools"></a>
+
+```csharp
+private string StringifiedTools(string LlmProvider = null)
+```
+
+###### `LlmProvider`<sup>Optional</sup> <a name="LlmProvider" id="xpander-sdk.XpanderClient.stringifiedTools.parameter.llmProvider"></a>
+
+- *Type:* string
+
+---
 
 ##### `Tools` <a name="Tools" id="xpander-sdk.XpanderClient.tools"></a>
 
@@ -372,6 +417,40 @@ private object InvokeTools(object ToolSelectorResponse)
 
 ---
 
+
+### IMessage <a name="IMessage" id="xpander-sdk.IMessage"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IMessage">IMessage</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IMessage.property.content">Content</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMessage.property.role">Role</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `Content`<sup>Required</sup> <a name="Content" id="xpander-sdk.IMessage.property.content"></a>
+
+```csharp
+public string Content { get; set; }
+```
+
+- *Type:* string
+
+---
+
+##### `Role`<sup>Required</sup> <a name="Role" id="xpander-sdk.IMessage.property.role"></a>
+
+```csharp
+public string Role { get; set; }
+```
+
+- *Type:* string
+
+---
 
 ### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
 
