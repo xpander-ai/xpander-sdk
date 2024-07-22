@@ -11,7 +11,8 @@ const xpanderClient = new XpanderClient(xpanderAPIKey, agentUrl, 'openai');
 describe('Testing OpenAI Function Calling', () => {
   const xpanderToolsForOpenAI = xpanderClient.tools();
 
-  it('tool selection is correct', () => {
+  it('tool selection is correct', async () => {
+    const TOOL_NAME = 'Conduit-article-management-getAllTagsForArticles';
     const messages = [
       {
         role: 'user',
@@ -23,33 +24,18 @@ describe('Testing OpenAI Function Calling', () => {
       apiKey: openAIKey,
     });
 
-    const response = openaiClient.chat.completions.create({
-      model: 'gpt-4-turbo',
+    const response: any = await openaiClient.chat.completions.create({
+      model: 'gpt-4o',
       messages: messages as any,
       tools: xpanderToolsForOpenAI as any,
       tool_choice: 'required',
     });
 
-    // Simulate the response format
-    const simulatedResponse = {
-      choices: [
-        {
-          message: {
-            tool_calls: [
-              {
-                function: {
-                  name: 'social-blogging-platform-Conduit-listTags',
-                  arguments: '{}',
-                },
-                id: 'tool_call_id_1',
-              },
-            ],
-          },
-        },
-      ],
-    };
+    expect(response.choices[0].message.tool_calls[0].function.name).toEqual(
+      TOOL_NAME,
+    );
 
-    const toolResponse = xpanderClient.xpanderToolCall(simulatedResponse);
+    const toolResponse = xpanderClient.xpanderToolCall(response);
 
     expect(toolResponse.length).toBeGreaterThan(0);
   });
