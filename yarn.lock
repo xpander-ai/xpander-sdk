@@ -617,14 +617,6 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
-"@jsii/check-node@1.100.0":
-  version "1.100.0"
-  resolved "https://registry.npmjs.org/@jsii/check-node/-/check-node-1.100.0.tgz"
-  integrity sha512-4bsO7Y6YyekBk4v4iatAl5E7QQs2UUPtHoP9gfT3UnpbKzyMjH8XholSVCjfcNSKBwFobPMb8iA7NCMIMqFKsQ==
-  dependencies:
-    chalk "^4.1.2"
-    semver "^7.6.0"
-
 "@jsii/check-node@1.101.0":
   version "1.101.0"
   resolved "https://registry.npmjs.org/@jsii/check-node/-/check-node-1.101.0.tgz"
@@ -633,7 +625,7 @@
     chalk "^4.1.2"
     semver "^7.6.0"
 
-"@jsii/spec@^1.100.0", "@jsii/spec@^1.101.0":
+"@jsii/spec@^1.101.0":
   version "1.101.0"
   resolved "https://registry.npmjs.org/@jsii/spec/-/spec-1.101.0.tgz"
   integrity sha512-855OnjKm4RTzRA78GGTNBG/GLe6X/vHJYD58zg7Rw8rWS7sU6iB65TM/7P7R3cufVew8umjjPjvW7ygS6ZqITQ==
@@ -3511,12 +3503,12 @@ jsii-reflect@^1.101.0:
     yargs "^16.2.0"
 
 jsii-rosetta@~5.4.0:
-  version "5.4.23"
-  resolved "https://registry.npmjs.org/jsii-rosetta/-/jsii-rosetta-5.4.23.tgz"
-  integrity sha512-QOObTPIWIwc+q4dvXgRXptdEtkcCb6uQO93sHlz5f3SBJ/E/LdLaIVCqPqZmojkGr+5OnVrU4h58okPFOo4c4w==
+  version "5.4.25"
+  resolved "https://registry.yarnpkg.com/jsii-rosetta/-/jsii-rosetta-5.4.25.tgz#77df5ffae3b97c4f2e56d31383f6a4cb38ed1133"
+  integrity sha512-tXVABsWJMknMNhUpGkbOWaqHYv45vRSxO2ZLY+s+Eiti1R/G2XeGWJd/a9MJDauLaOVODpzN6z1GQ+WYZjZlIw==
   dependencies:
-    "@jsii/check-node" "1.100.0"
-    "@jsii/spec" "^1.100.0"
+    "@jsii/check-node" "1.101.0"
+    "@jsii/spec" "^1.101.0"
     "@xmldom/xmldom" "^0.8.10"
     chalk "^4"
     commonmark "^0.31.0"
