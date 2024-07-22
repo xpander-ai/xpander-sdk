@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Build (Projen)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["projen", "build"],
+      "envFile": "${workspaceFolder}/.env"
+    },
+    {
+      "name": "Test (Projen)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["projen", "test"],
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

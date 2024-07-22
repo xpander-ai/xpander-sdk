@@ -1,14 +1,10 @@
 import request, { HttpVerb } from 'sync-request';
 import { OpenAI } from '../llmProviders/openai';
 import { ToolResponse } from '../models/toolResponse';
-
-interface LLMProviderHandler {
-  getTools(functionize?: boolean): any;
-  invokeTools(toolSelectorResponse: any): any;
-}
+import { ILLMProviderHandler, ITool } from '../types';
 
 const LLMProvider_HANDLERS: {
-  [key: string]: new (client: XpanderClient) => LLMProviderHandler;
+  [key: string]: new (client: XpanderClient) => ILLMProviderHandler;
 } = {
   openai: OpenAI,
   // Add other LLM providers here
@@ -18,7 +14,7 @@ export class XpanderClient {
   agentKey: string;
   agentUrl: string;
   toolsCache: any;
-  private llmProviderHandler: LLMProviderHandler;
+  private llmProviderHandler: ILLMProviderHandler;
 
   // Providing a public static method to list valid LLM providers
   static get validProviders(): string[] {
@@ -62,7 +58,7 @@ export class XpanderClient {
     return this.toolsCache;
   }
 
-  tools(llmProvider?: string): any {
+  tools(llmProvider?: string): ITool[] {
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     }
@@ -82,7 +78,7 @@ export class XpanderClient {
     return this.llmProviderHandler.invokeTools(toolSelectorResponse);
   }
 
-  private initLLMProviderHandler(llmProvider: string): LLMProviderHandler {
+  private initLLMProviderHandler(llmProvider: string): ILLMProviderHandler {
     const HandlerClass = LLMProvider_HANDLERS[llmProvider];
     if (!HandlerClass) {
       throw new Error(`LLMProvider ${llmProvider} handler not found`);

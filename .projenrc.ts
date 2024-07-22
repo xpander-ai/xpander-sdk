@@ -1,4 +1,5 @@
 import { cdk } from 'projen';
+
 const project = new cdk.JsiiProject({
   author: 'xpander AI',
   authorAddress: 'opensource@xpander.ai',
@@ -29,10 +30,52 @@ const project = new cdk.JsiiProject({
   },
   dependabot: true,
   deps: [] /* Runtime dependencies of this module. */,
-  bundledDeps: ['sync-request', 'openai', 'dotenv'],
+  bundledDeps: ['sync-request', 'openai', 'dotenv', 'axios'],
   gitignore: ['.env'],
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // devDeps: [''],             /* Build dependencies for this module. */
-  // packageName: undefined,  /* The "name" in package.json. */
+  jestOptions: {
+    jestConfig: {
+      detectOpenHandles: true,
+    },
+  },
 });
+
+// Adding custom tasks to generate documentation for each language
+project.addTask('generate-docs', {
+  exec: 'jsii-docgen -o API.md',
+});
+
+project.addTask('generate-docs-python', {
+  exec: 'jsii-docgen -o API_python.md --language python',
+});
+
+project.addTask('generate-docs-node', {
+  exec: 'jsii-docgen -o API_node.md --language typescript',
+});
+
+project.addTask('generate-docs-dotnet', {
+  exec: 'jsii-docgen -o API_dotnet.md --language csharp',
+});
+
+// project.addTask('generate-docs-java', {
+//   exec: 'jsii-docgen -o API_java.md --language java',
+// });
+
+// Helper function to safely spawn tasks
+function safeSpawn(taskName: string) {
+  const task = project.tasks.tryFind(taskName);
+  if (task) {
+    project.postCompileTask.spawn(task);
+  } else {
+    console.error(`Task ${taskName} not found`);
+  }
+}
+
+// Extend the default build task to include generating and uploading docs
+safeSpawn('generate-docs');
+safeSpawn('generate-docs-python');
+safeSpawn('generate-docs-node');
+safeSpawn('generate-docs-dotnet');
+// safeSpawn('generate-docs-java');
+
+// run node uploadDocs.js manually
 project.synth();

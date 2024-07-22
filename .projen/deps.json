@@ -102,6 +102,10 @@
       "type": "build"
     },
     {
+      "name": "axios",
+      "type": "bundled"
+    },
+    {
       "name": "dotenv",
       "type": "bundled"
     },
