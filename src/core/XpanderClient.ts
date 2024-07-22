@@ -69,6 +69,9 @@ export class XpanderClient {
     toolSelectorResponse: any,
     llmProvider?: string,
   ): ToolResponse[] {
+    if (!Array.isArray(toolSelectorResponse.choices)) {
+      return [];
+    }
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     }
