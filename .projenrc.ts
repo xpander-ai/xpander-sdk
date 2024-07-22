@@ -70,7 +70,7 @@ function safeSpawn(taskName: string) {
   }
 }
 
-// Extend the default build task to include generating and uploading docs
+//  Extend the default build task to include generating and uploading docs
 safeSpawn('generate-docs');
 safeSpawn('generate-docs-python');
 safeSpawn('generate-docs-node');
