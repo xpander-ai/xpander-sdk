@@ -1,24 +1,12 @@
 import request, { HttpVerb } from 'sync-request';
 import { XpanderClient } from './XpanderClient';
 import { RequestPayload } from '../models/payloads';
+import { ITool } from '../types';
 
-/**
- * Interface representing the instructions for creating a tool.
- */
-interface ToolInstructions {
+interface IToolInstructions {
   id: string;
   function_description: string;
   parameters?: any;
-}
-
-/**
- * Interface representing a tool with its details and optional invocation function.
- */
-interface Tool {
-  name: string;
-  description: string;
-  parameters?: any;
-  func?: Function;
 }
 
 /**
@@ -31,16 +19,16 @@ interface Tool {
  */
 export function createTool(
   client: XpanderClient,
-  toolInstructions: ToolInstructions,
+  toolInstructions: IToolInstructions,
   functionize: boolean = true,
-): Tool {
+): ITool {
   if (!client || !client.agentKey || !client.agentUrl) {
     throw new Error(
       'Client object or its properties are not properly initialized.',
     );
   }
 
-  const tool: Tool = {
+  const tool: ITool = {
     name: toolInstructions.id,
     description:
       toolInstructions.function_description.split(' - Valid')[0] +

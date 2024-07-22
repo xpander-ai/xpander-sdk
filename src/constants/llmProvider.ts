@@ -15,6 +15,11 @@ export enum LLMProvider {
   OPEN_AI = 'openai',
 
   /**
+   * Represents the 'nvidiaNim' provider.
+   */
+  NVIDIA_NIM = 'nvidiaNim',
+
+  /**
    * Represents the 'anthropic' provider.
    */
   // ANTHROPIC = 'anthropic'
