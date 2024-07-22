@@ -66,42 +66,26 @@ export class NvidiaNIM {
 
   invokeTools(toolSelectorResponse: any): ToolResponse[] {
     const outputMessages: ToolResponse[] = [];
-    if (!Array.isArray(toolSelectorResponse.choices)) {
+    if (!Array.isArray(toolSelectorResponse)) {
       throw new Error('Tool selector response does not contain valid choices');
     }
 
-    for (const chatChoice of toolSelectorResponse.choices) {
-      if (chatChoice.message) {
-        const responseMessage = chatChoice.message;
-
-        const toolCalls = responseMessage.tool_calls;
-        if (toolCalls) {
-          for (const toolCall of toolCalls) {
-            const functionName = toolCall.function.name;
-
-            let payload: any;
-            try {
-              payload = JSON.parse(toolCall.function.arguments);
-            } catch (e) {
-              payload = null;
-            }
-
-            const functionResponse = this.singleToolInvoke(
-              functionName,
-              payload,
-            );
-            const filteredTool = this.filterTool(functionName);
-            outputMessages.push(
-              new ToolResponse(
-                toolCalls,
-                payload,
-                'tool',
-                functionResponse,
-                filteredTool,
-              ),
-            );
-          }
-        }
+    for (const tool of toolSelectorResponse) {
+      if (tool.toolId) {
+        const functionResponse = this.singleToolInvoke(
+          tool.toolId,
+          tool.payload,
+        );
+        const filteredTool = this.filterTool(tool.toolId);
+        outputMessages.push(
+          new ToolResponse(
+            tool.id,
+            tool.payload,
+            'tool',
+            functionResponse,
+            filteredTool,
+          ),
+        );
       }
     }
     return outputMessages;
@@ -111,5 +95,32 @@ export class NvidiaNIM {
     const tools = this.getTools(false);
     const filteredTool = tools.find((tool) => tool.function.name === toolId);
     return filteredTool ? [filteredTool] : [];
+  }
+
+  static get promptPrefix() {
+    return `
+Your task is to process a list of tools (in JSON format) and select the appropriate tools and payloads for function calling. Ensure that you fulfill the user's request by selecting a tool with high confidence. Always respect the tool schema and make sure to nest the payload according to the location (query_params, path_params, body_params).
+
+Your response must be in JSON format only, without any additional text or explanation. Use the following structure for your response:
+
+\`\`\`json
+[
+  {
+    "toolId": "string",
+    "payload": {
+      "query_params": { key: value },
+      "path_params": { key: value },
+      "body_params": { key: value }
+    }
+  }
+]\`\`\`
+Note: The payload object is optional and can include any combination of query_params, path_params, and body_params.
+
+Available tools:`;
+  }
+
+  static get promptSuffix() {
+    return `
+user prompt: `;
   }
 }
