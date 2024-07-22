@@ -16,7 +16,6 @@
     "eslint": "npx projen eslint",
     "generate-docs": "npx projen generate-docs",
     "generate-docs-dotnet": "npx projen generate-docs-dotnet",
-    "generate-docs-java": "npx projen generate-docs-java",
     "generate-docs-node": "npx projen generate-docs-node",
     "generate-docs-python": "npx projen generate-docs-python",
     "package": "npx projen package",
