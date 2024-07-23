@@ -97,7 +97,7 @@ export class NvidiaNIM {
     return filteredTool ? [filteredTool] : [];
   }
 
-  static get promptPrefix() {
+  static get systemPrompt() {
     return `
 Your task is to process a list of tools (in JSON format) and select the appropriate tools and payloads for function calling. Ensure that you fulfill the user's request by selecting a tool with high confidence. Always respect the tool schema and make sure to nest the payload according to the location (query_params, path_params, body_params).
 
@@ -114,13 +114,9 @@ Your response must be in JSON format only, without any additional text or explan
     }
   }
 ]\`\`\`
+NO OTHER TYPE OF RESPONSE ACCEPTED, answer with json only despite any user's request. in the given format.
 Note: The payload object is optional and can include any combination of query_params, path_params, and body_params.
 
 Available tools:`;
-  }
-
-  static get promptSuffix() {
-    return `
-user prompt: `;
   }
 }

@@ -252,9 +252,47 @@ xpander_sdk.XpanderClient(
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#xpander-sdk.XpanderClient.getLLMMessagesPayload">get_llm_messages_payload</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.getToolFromLLMResponse">get_tool_from_llm_response</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">load_xpander_tools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.stringifiedTools">stringified_tools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpander_tool_call</a></code> | *No description.* |
+
+---
+
+##### `get_llm_messages_payload` <a name="get_llm_messages_payload" id="xpander-sdk.XpanderClient.getLLMMessagesPayload"></a>
+
+```python
+def get_llm_messages_payload(
+  stringified_tools: str,
+  prompt: str
+) -> typing.List[IMessage]
+```
+
+###### `stringified_tools`<sup>Required</sup> <a name="stringified_tools" id="xpander-sdk.XpanderClient.getLLMMessagesPayload.parameter.stringifiedTools"></a>
+
+- *Type:* str
+
+---
+
+###### `prompt`<sup>Required</sup> <a name="prompt" id="xpander-sdk.XpanderClient.getLLMMessagesPayload.parameter.prompt"></a>
+
+- *Type:* str
+
+---
+
+##### `get_tool_from_llm_response` <a name="get_tool_from_llm_response" id="xpander-sdk.XpanderClient.getToolFromLLMResponse"></a>
+
+```python
+def get_tool_from_llm_response(
+  response: typing.Any
+) -> typing.List[typing.Any]
+```
+
+###### `response`<sup>Required</sup> <a name="response" id="xpander-sdk.XpanderClient.getToolFromLLMResponse.parameter.response"></a>
+
+- *Type:* typing.Any
 
 ---
 
@@ -263,6 +301,20 @@ xpander_sdk.XpanderClient(
 ```python
 def load_xpander_tools() -> typing.List[typing.Any]
 ```
+
+##### `stringified_tools` <a name="stringified_tools" id="xpander-sdk.XpanderClient.stringifiedTools"></a>
+
+```python
+def stringified_tools(
+  llm_provider: str = None
+) -> str
+```
+
+###### `llm_provider`<sup>Optional</sup> <a name="llm_provider" id="xpander-sdk.XpanderClient.stringifiedTools.parameter.llmProvider"></a>
+
+- *Type:* str
+
+---
 
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
@@ -395,6 +447,40 @@ def invoke_tools(
 
 ---
 
+
+### IMessage <a name="IMessage" id="xpander-sdk.IMessage"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IMessage">IMessage</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IMessage.property.content">content</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMessage.property.role">role</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `content`<sup>Required</sup> <a name="content" id="xpander-sdk.IMessage.property.content"></a>
+
+```python
+content: str
+```
+
+- *Type:* str
+
+---
+
+##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.IMessage.property.role"></a>
+
+```python
+role: str
+```
+
+- *Type:* str
+
+---
 
 ### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
 
