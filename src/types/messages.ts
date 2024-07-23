@@ -1,4 +1,4 @@
 export interface IMessage {
-  role: 'user';
+  role: 'user' | 'system';
   content: string;
 }

@@ -46,6 +46,7 @@ describe('Testing Nvidia NIM Function Calling', () => {
   it('2nd tool selection is correct', async () => {
     const TOOL_NAME = 'Conduit-article-management-createNewArticleWithTags';
 
+    // TODO SET THE TOOLS AS SYSTEM
     const messages = xpanderClient.getLLMMessagesPayload(
       xpanderToolsForNvidiaNim,
       'create dummy article',

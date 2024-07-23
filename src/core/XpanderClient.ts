@@ -76,17 +76,20 @@ export class XpanderClient {
 
   getLLMMessagesPayload(stringifiedTools: string, prompt: string): IMessage[] {
     const handlerStatic = this.llmProviderHandler?.constructor as any;
-    return [
-      {
-        role: 'user',
-        content: [
-          handlerStatic?.promptPrefix || '',
-          stringifiedTools,
-          prompt,
-          handlerStatic?.promptSuffix || '',
-        ].join(''),
-      },
-    ];
+    const messages: IMessage[] = [];
+    if (!!handlerStatic?.systemPrompt) {
+      messages.push({
+        role: 'system',
+        content: [handlerStatic.systemPrompt, stringifiedTools].join(''),
+      });
+    }
+
+    messages.push({
+      role: 'user',
+      content: prompt,
+    });
+
+    return messages;
   }
 
   getToolFromLLMResponse(response: any): any[] {
