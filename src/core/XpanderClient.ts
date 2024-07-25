@@ -92,28 +92,11 @@ export class XpanderClient {
     return messages;
   }
 
-  getToolFromLLMResponse(response: any): any[] {
-    try {
-      const toolChoices = JSON.parse(
-        response?.choices?.[0]?.message?.content || {},
-      );
-      if (toolChoices?.[0]?.toolId) {
-        return toolChoices;
-      }
-    } catch (err: any) {
-      throw new Error(`llm tool selection failure - ${err.message}`);
-    }
-    throw new Error(`no tool selection`);
-  }
-
   xpanderToolCall(
     toolSelectorResponse: any,
     llmProvider?: string,
   ): ToolResponse[] {
-    if (
-      !Array.isArray(toolSelectorResponse.choices) &&
-      !toolSelectorResponse?.[0]?.toolId
-    ) {
+    if (!Array.isArray(toolSelectorResponse.choices)) {
       return [];
     }
     if (llmProvider) {
