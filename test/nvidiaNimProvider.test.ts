@@ -9,7 +9,7 @@ const nvidiaNIMKey = process.env.NVIDIA_NIM_API_KEY || '';
 const xpanderClient = new XpanderClient(
   xpanderAPIKey,
   agentUrl,
-  LLMProvider.OPEN_AI,
+  LLMProvider.NVIDIA_NIM,
 );
 
 describe('Testing NvidiaNIM Function Calling', () => {
@@ -30,7 +30,7 @@ describe('Testing NvidiaNIM Function Calling', () => {
     });
 
     const response: any = await openaiClient.chat.completions.create({
-      model: 'meta/llama-3.1-405b-instruct',
+      model: 'meta/llama-3.1-70b-instruct',
       messages: messages as any,
       tools: xpanderToolsForNvidiaNIM as any,
       tool_choice: 'required',

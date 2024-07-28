@@ -21,6 +21,10 @@ export class BaseOpenAISDKHandler {
     this.client = xpanderClient;
   }
 
+  postProcessTools(tools: any[]): any[] {
+    return tools;
+  }
+
   getTools(functionize: boolean = false): any[] {
     const agentTools = this.client.loadXpanderTools();
     const tools: any[] = [];
@@ -49,7 +53,9 @@ export class BaseOpenAISDKHandler {
 
       tools.push(toolDeclaration);
     }
-    return tools;
+    return typeof this.postProcessTools === 'function'
+      ? this.postProcessTools(tools)
+      : tools;
   }
 
   singleToolInvoke(toolId: string, payload: RequestPayload): string {
