@@ -30,7 +30,7 @@ describe('Testing NvidiaNIM Function Calling', () => {
     });
 
     const response: any = await openaiClient.chat.completions.create({
-      model: 'meta/llama-3.1-70b-instruct',
+      model: xpanderClient.supportedModels.LLAMA_3_1_70B_Instruct,
       messages: messages as any,
       tools: xpanderToolsForNvidiaNIM as any,
       tool_choice: 'required',

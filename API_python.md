@@ -252,47 +252,9 @@ xpander_sdk.XpanderClient(
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.getLLMMessagesPayload">get_llm_messages_payload</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.getToolFromLLMResponse">get_tool_from_llm_response</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">load_xpander_tools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.stringifiedTools">stringified_tools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpander_tool_call</a></code> | *No description.* |
-
----
-
-##### `get_llm_messages_payload` <a name="get_llm_messages_payload" id="xpander-sdk.XpanderClient.getLLMMessagesPayload"></a>
-
-```python
-def get_llm_messages_payload(
-  stringified_tools: str,
-  prompt: str
-) -> typing.List[IMessage]
-```
-
-###### `stringified_tools`<sup>Required</sup> <a name="stringified_tools" id="xpander-sdk.XpanderClient.getLLMMessagesPayload.parameter.stringifiedTools"></a>
-
-- *Type:* str
-
----
-
-###### `prompt`<sup>Required</sup> <a name="prompt" id="xpander-sdk.XpanderClient.getLLMMessagesPayload.parameter.prompt"></a>
-
-- *Type:* str
-
----
-
-##### `get_tool_from_llm_response` <a name="get_tool_from_llm_response" id="xpander-sdk.XpanderClient.getToolFromLLMResponse"></a>
-
-```python
-def get_tool_from_llm_response(
-  response: typing.Any
-) -> typing.List[typing.Any]
-```
-
-###### `response`<sup>Required</sup> <a name="response" id="xpander-sdk.XpanderClient.getToolFromLLMResponse.parameter.response"></a>
-
-- *Type:* typing.Any
 
 ---
 
@@ -301,20 +263,6 @@ def get_tool_from_llm_response(
 ```python
 def load_xpander_tools() -> typing.List[typing.Any]
 ```
-
-##### `stringified_tools` <a name="stringified_tools" id="xpander-sdk.XpanderClient.stringifiedTools"></a>
-
-```python
-def stringified_tools(
-  llm_provider: str = None
-) -> str
-```
-
-###### `llm_provider`<sup>Optional</sup> <a name="llm_provider" id="xpander-sdk.XpanderClient.stringifiedTools.parameter.llmProvider"></a>
-
-- *Type:* str
-
----
 
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
@@ -357,6 +305,7 @@ def xpander_tool_call(
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.property.validProviders">valid_providers</a></code> | <code>typing.List[str]</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.supportedModels">supported_models</a></code> | <code>typing.Mapping[str]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agent_key</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agent_url</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">tools_cache</a></code> | <code>typing.Any</code> | *No description.* |
@@ -370,6 +319,16 @@ valid_providers: typing.List[str]
 ```
 
 - *Type:* typing.List[str]
+
+---
+
+##### `supported_models`<sup>Required</sup> <a name="supported_models" id="xpander-sdk.XpanderClient.property.supportedModels"></a>
+
+```python
+supported_models: typing.Mapping[str]
+```
+
+- *Type:* typing.Mapping[str]
 
 ---
 

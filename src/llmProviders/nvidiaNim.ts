@@ -35,4 +35,10 @@ export class NvidiaNIM extends BaseOpenAISDKHandler {
       return tool;
     });
   }
+
+  static get supportedModels() {
+    return {
+      LLAMA_3_1_70B_Instruct: 'meta/llama-3.1-70b-instruct',
+    };
+  }
 }

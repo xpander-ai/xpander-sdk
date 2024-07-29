@@ -1,3 +1,4 @@
+import { BaseLLMProvider } from './baseProvider';
 import { LLMProvider } from '../../constants/llmProvider';
 import { createTool } from '../../core/tools';
 import { XpanderClient } from '../../core/XpanderClient';
@@ -11,13 +12,14 @@ interface Tool {
   func?: Function;
 }
 
-export class BaseOpenAISDKHandler {
+export class BaseOpenAISDKHandler extends BaseLLMProvider {
   static shouldHandle(llmProvider: LLMProvider): boolean {
     return llmProvider === LLMProvider.OPEN_AI;
   }
 
   client: XpanderClient;
   constructor(xpanderClient: XpanderClient) {
+    super();
     this.client = xpanderClient;
   }
 

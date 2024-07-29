@@ -29,7 +29,7 @@ describe('Testing OpenAI Function Calling', () => {
     });
 
     const response: any = await openaiClient.chat.completions.create({
-      model: 'gpt-4o',
+      model: xpanderClient.supportedModels.GPT_4o,
       messages: messages as any,
       tools: xpanderToolsForOpenAI as any,
       tool_choice: 'required',
