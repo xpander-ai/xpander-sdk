@@ -253,7 +253,7 @@ private object[] LoadXpanderTools()
 ##### `Tools` <a name="Tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```csharp
-private ITool[] Tools(string LlmProvider = null)
+private object Tools(string LlmProvider = null)
 ```
 
 ###### `LlmProvider`<sup>Optional</sup> <a name="LlmProvider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
@@ -287,6 +287,7 @@ private ToolResponse[] XpanderToolCall(object ToolSelectorResponse, string LlmPr
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.property.validProviders">ValidProviders</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.supportedModels">SupportedModels</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">ToolsNamesMapping</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">AgentKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">AgentUrl</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">ToolsCache</a></code> | <code>object</code> | *No description.* |
@@ -307,6 +308,16 @@ public string[] ValidProviders { get; }
 
 ```csharp
 public System.Collections.Generic.IDictionary<string, string> SupportedModels { get; }
+```
+
+- *Type:* System.Collections.Generic.IDictionary<string, string>
+
+---
+
+##### `ToolsNamesMapping`<sup>Required</sup> <a name="ToolsNamesMapping" id="xpander-sdk.XpanderClient.property.toolsNamesMapping"></a>
+
+```csharp
+public System.Collections.Generic.IDictionary<string, string> ToolsNamesMapping { get; }
 ```
 
 - *Type:* System.Collections.Generic.IDictionary<string, string>
@@ -346,6 +357,108 @@ public object ToolsCache { get; }
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
+### IBedrockTool <a name="IBedrockTool" id="xpander-sdk.IBedrockTool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IBedrockTool">IBedrockTool</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IBedrockTool.property.toolSpec">ToolSpec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockTool.property.execute">Execute</a></code> | <code>object</code> | *No description.* |
+
+---
+
+##### `ToolSpec`<sup>Required</sup> <a name="ToolSpec" id="xpander-sdk.IBedrockTool.property.toolSpec"></a>
+
+```csharp
+public IBedrockToolSpec ToolSpec { get; set; }
+```
+
+- *Type:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+
+---
+
+##### `Execute`<sup>Optional</sup> <a name="Execute" id="xpander-sdk.IBedrockTool.property.execute"></a>
+
+```csharp
+public object Execute { get; set; }
+```
+
+- *Type:* object
+
+---
+
+### IBedrockToolSpec <a name="IBedrockToolSpec" id="xpander-sdk.IBedrockToolSpec"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.description">Description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.inputSchema">InputSchema</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.name">Name</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `Description`<sup>Required</sup> <a name="Description" id="xpander-sdk.IBedrockToolSpec.property.description"></a>
+
+```csharp
+public string Description { get; set; }
+```
+
+- *Type:* string
+
+---
+
+##### `InputSchema`<sup>Required</sup> <a name="InputSchema" id="xpander-sdk.IBedrockToolSpec.property.inputSchema"></a>
+
+```csharp
+public IBedrockToolSpecInputSchema InputSchema { get; set; }
+```
+
+- *Type:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
+
+---
+
+##### `Name`<sup>Required</sup> <a name="Name" id="xpander-sdk.IBedrockToolSpec.property.name"></a>
+
+```csharp
+public string Name { get; set; }
+```
+
+- *Type:* string
+
+---
+
+### IBedrockToolSpecInputSchema <a name="IBedrockToolSpecInputSchema" id="xpander-sdk.IBedrockToolSpecInputSchema"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema.property.json">Json</a></code> | <code>System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>></code> | *No description.* |
+
+---
+
+##### `Json`<sup>Required</sup> <a name="Json" id="xpander-sdk.IBedrockToolSpecInputSchema.property.json"></a>
+
+```csharp
+public System.Collections.Generic.IDictionary<string, IToolParameter> Json { get; set; }
+```
+
+- *Type:* System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>>
+
+---
+
 ### ILLMProviderHandler <a name="ILLMProviderHandler" id="xpander-sdk.ILLMProviderHandler"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.ILLMProviderHandler">ILLMProviderHandler</a>
@@ -383,6 +496,23 @@ private object InvokeTools(object ToolSelectorResponse)
 
 ---
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping">ToolsNamesMapping</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | *No description.* |
+
+---
+
+##### `ToolsNamesMapping`<sup>Optional</sup> <a name="ToolsNamesMapping" id="xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping"></a>
+
+```csharp
+public System.Collections.Generic.IDictionary<string, string> ToolsNamesMapping { get; set; }
+```
+
+- *Type:* System.Collections.Generic.IDictionary<string, string>
+
+---
 
 ### IMessage <a name="IMessage" id="xpander-sdk.IMessage"></a>
 
@@ -654,6 +784,7 @@ Enum representing different Large Language Model (LLM) providers.
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.AMAZON_BEDROCK">AMAZON_BEDROCK</a></code> | Represents the 'amazonBedrock' provider. |
 
 ---
 
@@ -667,6 +798,13 @@ Represents the 'openai' provider.
 ##### `NVIDIA_NIM` <a name="NVIDIA_NIM" id="xpander-sdk.LLMProvider.NVIDIA_NIM"></a>
 
 Represents the 'nvidiaNim' provider.
+
+---
+
+
+##### `AMAZON_BEDROCK` <a name="AMAZON_BEDROCK" id="xpander-sdk.LLMProvider.AMAZON_BEDROCK"></a>
+
+Represents the 'amazonBedrock' provider.
 
 ---
 

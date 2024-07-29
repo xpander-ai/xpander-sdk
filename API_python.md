@@ -269,7 +269,7 @@ def load_xpander_tools() -> typing.List[typing.Any]
 ```python
 def tools(
   llm_provider: str = None
-) -> typing.List[ITool]
+) -> typing.Union[typing.List[ITool], typing.List[IBedrockTool]]
 ```
 
 ###### `llm_provider`<sup>Optional</sup> <a name="llm_provider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
@@ -306,6 +306,7 @@ def xpander_tool_call(
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.property.validProviders">valid_providers</a></code> | <code>typing.List[str]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.supportedModels">supported_models</a></code> | <code>typing.Mapping[str]</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agent_key</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agent_url</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">tools_cache</a></code> | <code>typing.Any</code> | *No description.* |
@@ -326,6 +327,16 @@ valid_providers: typing.List[str]
 
 ```python
 supported_models: typing.Mapping[str]
+```
+
+- *Type:* typing.Mapping[str]
+
+---
+
+##### `tools_names_mapping`<sup>Required</sup> <a name="tools_names_mapping" id="xpander-sdk.XpanderClient.property.toolsNamesMapping"></a>
+
+```python
+tools_names_mapping: typing.Mapping[str]
 ```
 
 - *Type:* typing.Mapping[str]
@@ -364,6 +375,108 @@ tools_cache: typing.Any
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IBedrockTool <a name="IBedrockTool" id="xpander-sdk.IBedrockTool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IBedrockTool">IBedrockTool</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IBedrockTool.property.toolSpec">tool_spec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockTool.property.execute">execute</a></code> | <code>typing.Any</code> | *No description.* |
+
+---
+
+##### `tool_spec`<sup>Required</sup> <a name="tool_spec" id="xpander-sdk.IBedrockTool.property.toolSpec"></a>
+
+```python
+tool_spec: IBedrockToolSpec
+```
+
+- *Type:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+
+---
+
+##### `execute`<sup>Optional</sup> <a name="execute" id="xpander-sdk.IBedrockTool.property.execute"></a>
+
+```python
+execute: typing.Any
+```
+
+- *Type:* typing.Any
+
+---
+
+### IBedrockToolSpec <a name="IBedrockToolSpec" id="xpander-sdk.IBedrockToolSpec"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.description">description</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.inputSchema">input_schema</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.name">name</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.IBedrockToolSpec.property.description"></a>
+
+```python
+description: str
+```
+
+- *Type:* str
+
+---
+
+##### `input_schema`<sup>Required</sup> <a name="input_schema" id="xpander-sdk.IBedrockToolSpec.property.inputSchema"></a>
+
+```python
+input_schema: IBedrockToolSpecInputSchema
+```
+
+- *Type:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IBedrockToolSpec.property.name"></a>
+
+```python
+name: str
+```
+
+- *Type:* str
+
+---
+
+### IBedrockToolSpecInputSchema <a name="IBedrockToolSpecInputSchema" id="xpander-sdk.IBedrockToolSpecInputSchema"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema.property.json">json</a></code> | <code>typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]</code> | *No description.* |
+
+---
+
+##### `json`<sup>Required</sup> <a name="json" id="xpander-sdk.IBedrockToolSpecInputSchema.property.json"></a>
+
+```python
+json: typing.Mapping[IToolParameter]
+```
+
+- *Type:* typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]
+
+---
 
 ### ILLMProviderHandler <a name="ILLMProviderHandler" id="xpander-sdk.ILLMProviderHandler"></a>
 
@@ -406,6 +519,23 @@ def invoke_tools(
 
 ---
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | *No description.* |
+
+---
+
+##### `tools_names_mapping`<sup>Optional</sup> <a name="tools_names_mapping" id="xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping"></a>
+
+```python
+tools_names_mapping: typing.Mapping[str]
+```
+
+- *Type:* typing.Mapping[str]
+
+---
 
 ### IMessage <a name="IMessage" id="xpander-sdk.IMessage"></a>
 
@@ -677,6 +807,7 @@ Enum representing different Large Language Model (LLM) providers.
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.AMAZON_BEDROCK">AMAZON_BEDROCK</a></code> | Represents the 'amazonBedrock' provider. |
 
 ---
 
@@ -690,6 +821,13 @@ Represents the 'openai' provider.
 ##### `NVIDIA_NIM` <a name="NVIDIA_NIM" id="xpander-sdk.LLMProvider.NVIDIA_NIM"></a>
 
 Represents the 'nvidiaNim' provider.
+
+---
+
+
+##### `AMAZON_BEDROCK` <a name="AMAZON_BEDROCK" id="xpander-sdk.LLMProvider.AMAZON_BEDROCK"></a>
+
+Represents the 'amazonBedrock' provider.
 
 ---
 
