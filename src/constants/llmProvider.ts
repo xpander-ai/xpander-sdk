@@ -20,6 +20,11 @@ export enum LLMProvider {
   NVIDIA_NIM = 'nvidiaNim',
 
   /**
+   * Represents the 'amazonBedrock' provider.
+   */
+  AMAZON_BEDROCK = 'amazonBedrock',
+
+  /**
    * Represents the 'anthropic' provider.
    */
   // ANTHROPIC = 'anthropic'

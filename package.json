@@ -63,12 +63,14 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.620.0",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
     "openai": "^4.52.3",
     "sync-request": "^6.1.0"
   },
   "bundledDependencies": [
+    "@aws-sdk/client-bedrock-runtime",
     "axios",
     "dotenv",
     "openai",

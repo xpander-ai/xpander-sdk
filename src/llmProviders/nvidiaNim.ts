@@ -1,5 +1,6 @@
 import { BaseOpenAISDKHandler } from './shared/baseOpenAI';
 import { LLMProvider } from '../constants/llmProvider';
+import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
 
 export class NvidiaNIM extends BaseOpenAISDKHandler {
   static shouldHandle(llmProvider: LLMProvider): boolean {
@@ -10,27 +11,7 @@ export class NvidiaNIM extends BaseOpenAISDKHandler {
   postProcessTools(tools: any[]): any[] {
     return tools.map((tool: any) => {
       if (!('parameters' in tool.function)) {
-        tool.function.parameters = {
-          type: 'object',
-          required: [],
-          properties: {
-            query_params: {
-              type: 'object',
-              properties: {},
-              required: [],
-            },
-            path_params: {
-              type: 'object',
-              properties: {},
-              required: [],
-            },
-            body_params: {
-              type: 'object',
-              properties: {},
-              required: [],
-            },
-          },
-        };
+        tool.function.parameters = DEFAULT_TOOL_PARAMETERS;
       }
       return tool;
     });

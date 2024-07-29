@@ -3,9 +3,11 @@ import { OpenAI } from 'openai'; // Assuming OpenAI is an external library insta
 import { LLMProvider, XpanderClient } from '../src';
 
 dotenv.config();
+
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const agentUrl = process.env.XPANDER_AGENT_URL || '';
 const nvidiaNIMKey = process.env.NVIDIA_NIM_API_KEY || '';
+
 const xpanderClient = new XpanderClient(
   xpanderAPIKey,
   agentUrl,

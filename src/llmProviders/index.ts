@@ -2,4 +2,4 @@
 
 export { OpenAI } from './openai';
 export { NvidiaNIM } from './nvidiaNim';
-// export { Anthropic } from './anthropic';
+export { AmazonBedrock } from './amazonBedrock';

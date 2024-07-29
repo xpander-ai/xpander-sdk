@@ -30,7 +30,13 @@ const project = new cdk.JsiiProject({
   },
   dependabot: true,
   deps: [] /* Runtime dependencies of this module. */,
-  bundledDeps: ['sync-request', 'openai', 'dotenv', 'axios'],
+  bundledDeps: [
+    'sync-request',
+    'openai',
+    'dotenv',
+    'axios',
+    '@aws-sdk/client-bedrock-runtime',
+  ],
   gitignore: ['.env'],
   jestOptions: {
     jestConfig: {

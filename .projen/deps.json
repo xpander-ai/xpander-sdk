@@ -102,6 +102,10 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/client-bedrock-runtime",
+      "type": "bundled"
+    },
+    {
       "name": "axios",
       "type": "bundled"
     },
