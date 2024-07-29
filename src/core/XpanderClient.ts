@@ -1,15 +1,16 @@
 import request, { HttpVerb } from 'sync-request';
 import { LLMProvider } from '../constants/llmProvider';
-import { OpenAI, NvidiaNIM } from '../llmProviders';
+import { OpenAI, NvidiaNIM, AmazonBedrock } from '../llmProviders';
 import { BaseLLMProvider } from '../llmProviders/shared/baseProvider';
 import { ToolResponse } from '../models/toolResponse';
-import { ILLMProviderHandler, ITool } from '../types';
+import { IBedrockTool, ILLMProviderHandler, ITool } from '../types';
 
 const LLMProviderHandlers: {
   [key: string]: new (client: XpanderClient) => ILLMProviderHandler;
 } = {
   [LLMProvider.OPEN_AI]: OpenAI,
   [LLMProvider.NVIDIA_NIM]: NvidiaNIM,
+  [LLMProvider.AMAZON_BEDROCK]: AmazonBedrock,
   // Add other LLM providers here
 };
 
@@ -61,7 +62,7 @@ export class XpanderClient {
     return this.toolsCache;
   }
 
-  public tools(llmProvider?: string): ITool[] {
+  public tools(llmProvider?: string): ITool[] | IBedrockTool[] {
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     }
@@ -72,7 +73,10 @@ export class XpanderClient {
     toolSelectorResponse: any,
     llmProvider?: string,
   ): ToolResponse[] {
-    if (!Array.isArray(toolSelectorResponse.choices)) {
+    if (
+      !Array.isArray(toolSelectorResponse.choices) &&
+      !Array.isArray(toolSelectorResponse?.output?.message?.content)
+    ) {
       return [];
     }
     if (llmProvider) {
@@ -104,5 +108,9 @@ export class XpanderClient {
   public get supportedModels(): Record<string, string> {
     return (this.llmProviderHandler.constructor as typeof BaseLLMProvider)
       .supportedModels;
+  }
+
+  public get toolsNamesMapping(): Record<string, string> {
+    return this.llmProviderHandler.toolsNamesMapping || {};
   }
 }
