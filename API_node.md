@@ -238,42 +238,9 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: string)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.getLLMMessagesPayload">getLLMMessagesPayload</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.getToolFromLLMResponse">getToolFromLLMResponse</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">loadXpanderTools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.stringifiedTools">stringifiedTools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | *No description.* |
-
----
-
-##### `getLLMMessagesPayload` <a name="getLLMMessagesPayload" id="xpander-sdk.XpanderClient.getLLMMessagesPayload"></a>
-
-```typescript
-public getLLMMessagesPayload(stringifiedTools: string, prompt: string): IMessage[]
-```
-
-###### `stringifiedTools`<sup>Required</sup> <a name="stringifiedTools" id="xpander-sdk.XpanderClient.getLLMMessagesPayload.parameter.stringifiedTools"></a>
-
-- *Type:* string
-
----
-
-###### `prompt`<sup>Required</sup> <a name="prompt" id="xpander-sdk.XpanderClient.getLLMMessagesPayload.parameter.prompt"></a>
-
-- *Type:* string
-
----
-
-##### `getToolFromLLMResponse` <a name="getToolFromLLMResponse" id="xpander-sdk.XpanderClient.getToolFromLLMResponse"></a>
-
-```typescript
-public getToolFromLLMResponse(response: any): any[]
-```
-
-###### `response`<sup>Required</sup> <a name="response" id="xpander-sdk.XpanderClient.getToolFromLLMResponse.parameter.response"></a>
-
-- *Type:* any
 
 ---
 
@@ -282,18 +249,6 @@ public getToolFromLLMResponse(response: any): any[]
 ```typescript
 public loadXpanderTools(): any[]
 ```
-
-##### `stringifiedTools` <a name="stringifiedTools" id="xpander-sdk.XpanderClient.stringifiedTools"></a>
-
-```typescript
-public stringifiedTools(llmProvider?: string): string
-```
-
-###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.stringifiedTools.parameter.llmProvider"></a>
-
-- *Type:* string
-
----
 
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
@@ -331,6 +286,7 @@ public xpanderToolCall(toolSelectorResponse: any, llmProvider?: string): ToolRes
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.property.validProviders">validProviders</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.supportedModels">supportedModels</a></code> | <code>{[ key: string ]: string}</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agentKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">toolsCache</a></code> | <code>any</code> | *No description.* |
@@ -344,6 +300,16 @@ public readonly validProviders: string[];
 ```
 
 - *Type:* string[]
+
+---
+
+##### `supportedModels`<sup>Required</sup> <a name="supportedModels" id="xpander-sdk.XpanderClient.property.supportedModels"></a>
+
+```typescript
+public readonly supportedModels: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
 
 ---
 

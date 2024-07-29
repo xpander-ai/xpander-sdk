@@ -1,8 +1,9 @@
 import request, { HttpVerb } from 'sync-request';
 import { LLMProvider } from '../constants/llmProvider';
 import { OpenAI, NvidiaNIM } from '../llmProviders';
+import { BaseLLMProvider } from '../llmProviders/shared/baseProvider';
 import { ToolResponse } from '../models/toolResponse';
-import { ILLMProviderHandler, ITool, IMessage } from '../types';
+import { ILLMProviderHandler, ITool } from '../types';
 
 const LLMProviderHandlers: {
   [key: string]: new (client: XpanderClient) => ILLMProviderHandler;
@@ -16,7 +17,7 @@ export class XpanderClient {
   agentKey: string;
   agentUrl: string;
   toolsCache: any;
-  private llmProviderHandler: ILLMProviderHandler;
+  protected llmProviderHandler: ILLMProviderHandler;
 
   // Providing a public static method to list valid LLM providers
   static get validProviders(): string[] {
@@ -36,7 +37,7 @@ export class XpanderClient {
     this.loadXpanderTools();
   }
 
-  loadXpanderTools(): any[] {
+  public loadXpanderTools(): any[] {
     if (this.toolsCache) {
       return this.toolsCache;
     }
@@ -60,60 +61,18 @@ export class XpanderClient {
     return this.toolsCache;
   }
 
-  tools(llmProvider?: string): ITool[] {
+  public tools(llmProvider?: string): ITool[] {
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     }
     return this.llmProviderHandler.getTools();
   }
 
-  stringifiedTools(llmProvider?: string): string {
-    if (llmProvider) {
-      this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
-    }
-    return JSON.stringify(this.llmProviderHandler.getTools());
-  }
-
-  getLLMMessagesPayload(stringifiedTools: string, prompt: string): IMessage[] {
-    const handlerStatic = this.llmProviderHandler?.constructor as any;
-    const messages: IMessage[] = [];
-    if (!!handlerStatic?.systemPrompt) {
-      messages.push({
-        role: 'system',
-        content: [handlerStatic.systemPrompt, stringifiedTools].join(''),
-      });
-    }
-
-    messages.push({
-      role: 'user',
-      content: prompt,
-    });
-
-    return messages;
-  }
-
-  getToolFromLLMResponse(response: any): any[] {
-    try {
-      const toolChoices = JSON.parse(
-        response?.choices?.[0]?.message?.content || {},
-      );
-      if (toolChoices?.[0]?.toolId) {
-        return toolChoices;
-      }
-    } catch (err: any) {
-      throw new Error(`llm tool selection failure - ${err.message}`);
-    }
-    throw new Error(`no tool selection`);
-  }
-
-  xpanderToolCall(
+  public xpanderToolCall(
     toolSelectorResponse: any,
     llmProvider?: string,
   ): ToolResponse[] {
-    if (
-      !Array.isArray(toolSelectorResponse.choices) &&
-      !toolSelectorResponse?.[0]?.toolId
-    ) {
+    if (!Array.isArray(toolSelectorResponse.choices)) {
       return [];
     }
     if (llmProvider) {
@@ -140,5 +99,10 @@ export class XpanderClient {
     } catch (error) {
       throw new Error(`Request failed: ${error}`);
     }
+  }
+
+  public get supportedModels(): Record<string, string> {
+    return (this.llmProviderHandler.constructor as typeof BaseLLMProvider)
+      .supportedModels;
   }
 }
