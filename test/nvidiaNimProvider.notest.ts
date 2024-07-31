@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
-import { LLMProvider, XpanderClient } from '../src';
+import { LLMProvider, NvidiaNIMSupportedModels, XpanderClient } from '../src';
 
 dotenv.config();
 
@@ -32,7 +32,7 @@ describe('Testing NvidiaNIM Function Calling', () => {
     });
 
     const response: any = await openaiClient.chat.completions.create({
-      model: xpanderClient.supportedModels.LLAMA_3_1_70B_Instruct,
+      model: NvidiaNIMSupportedModels.LLAMA_3_1_70B_INSTRUCT,
       messages: messages as any,
       tools: xpanderToolsForNvidiaNIM as any,
       tool_choice: 'required',
@@ -45,5 +45,5 @@ describe('Testing NvidiaNIM Function Calling', () => {
     const toolResponse = xpanderClient.xpanderToolCall(response);
 
     expect(toolResponse.length).toBeGreaterThan(0);
-  });
+  }, 15000);
 });

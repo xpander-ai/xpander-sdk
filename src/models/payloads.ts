@@ -1,5 +1,8 @@
 // models/payloads.ts
 
+/**
+ * Class representing the request payload.
+ */
 export class RequestPayload {
   /**
    * The body parameters of the request.
@@ -21,6 +24,13 @@ export class RequestPayload {
    */
   headers: any;
 
+  /**
+   * Constructs a new RequestPayload instance.
+   * @param body_params - The body parameters of the request.
+   * @param query_params - The query parameters of the request.
+   * @param path_params - The path parameters of the request.
+   * @param headers - The headers of the request.
+   */
   constructor(
     body_params: any,
     query_params: any,

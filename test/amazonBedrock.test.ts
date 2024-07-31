@@ -4,7 +4,11 @@ import {
   Tool,
 } from '@aws-sdk/client-bedrock-runtime';
 import dotenv from 'dotenv';
-import { LLMProvider, XpanderClient } from '../src';
+import {
+  AmazonBedrockSupportedModels,
+  LLMProvider,
+  XpanderClient,
+} from '../src';
 
 dotenv.config();
 
@@ -43,7 +47,7 @@ describe('Testing Amazon Bedrock (Converse) Runtime Function Calling', () => {
     });
 
     const command = new ConverseCommand({
-      modelId: xpanderClient.supportedModels.Anthropic_Claude_3_Haiku_20240307,
+      modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
       messages,
       inferenceConfig: { temperature: 0.0 },
       toolConfig: { tools: xpanderToolsForAmazonBedrock },

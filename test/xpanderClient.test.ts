@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { ITool, LLMProvider, XpanderClient } from '../src';
+import { IOpenAIToolOutput, LLMProvider, XpanderClient } from '../src';
 
 dotenv.config();
 
@@ -13,10 +13,10 @@ const xpanderClient = new XpanderClient(
 );
 
 describe('Test XPander Client', () => {
-  let tools: ITool[] = xpanderClient.tools() as ITool[];
+  let tools: IOpenAIToolOutput[] = xpanderClient.tools() as IOpenAIToolOutput[];
 
   beforeAll(() => {
-    tools = xpanderClient.tools() as ITool[];
+    tools = xpanderClient.tools() as IOpenAIToolOutput[];
   });
 
   it('tools are not empty', () => {

@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
-import { LLMProvider, XpanderClient } from '../src';
+import { LLMProvider, OpenAISupportedModels, XpanderClient } from '../src';
 
 dotenv.config();
 
@@ -31,7 +31,7 @@ describe('Testing OpenAI Function Calling', () => {
     });
 
     const response: any = await openaiClient.chat.completions.create({
-      model: xpanderClient.supportedModels.GPT_4o,
+      model: OpenAISupportedModels.GPT_4_O,
       messages: messages as any,
       tools: xpanderToolsForOpenAI as any,
       tool_choice: 'required',
