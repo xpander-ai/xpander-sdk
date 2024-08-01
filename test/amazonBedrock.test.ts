@@ -10,7 +10,7 @@ import {
   XpanderClient,
 } from '../src';
 
-dotenv.config();
+dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const agentUrl = process.env.XPANDER_AGENT_URL || '';
