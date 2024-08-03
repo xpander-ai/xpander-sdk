@@ -4,6 +4,235 @@
 
 ## Classes <a name="Classes" id="Classes"></a>
 
+### AmazonBedrockSupportedModels <a name="AmazonBedrockSupportedModels" id="xpander-sdk.AmazonBedrockSupportedModels"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.AmazonBedrockSupportedModels.Initializer"></a>
+
+```csharp
+using Xpander.AI.Sdk;
+
+new AmazonBedrockSupportedModels();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_5_SONNET_20240620">AnthropicClaude35Sonnet20240620</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307">AnthropicClaude3Haiku20240307</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R">CohereCommandR</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS">CohereCommandRPlus</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_405B_INSTRUCT">MetaLlama31405bInstruct</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT">MetaLlama3170bInstruct</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_8B_INSTRUCT">MetaLlama318bInstruct</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402">MistralMistralLarge2402</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2407">MistralMistralLarge2407</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402">MistralMistralSmall2402</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `AnthropicClaude35Sonnet20240620`<sup>Required</sup> <a name="AnthropicClaude35Sonnet20240620" id="xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_5_SONNET_20240620"></a>
+
+```csharp
+public string AnthropicClaude35Sonnet20240620 { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `AnthropicClaude3Haiku20240307`<sup>Required</sup> <a name="AnthropicClaude3Haiku20240307" id="xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307"></a>
+
+```csharp
+public string AnthropicClaude3Haiku20240307 { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `CohereCommandR`<sup>Required</sup> <a name="CohereCommandR" id="xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R"></a>
+
+```csharp
+public string CohereCommandR { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `CohereCommandRPlus`<sup>Required</sup> <a name="CohereCommandRPlus" id="xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS"></a>
+
+```csharp
+public string CohereCommandRPlus { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `MetaLlama31405bInstruct`<sup>Required</sup> <a name="MetaLlama31405bInstruct" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_405B_INSTRUCT"></a>
+
+```csharp
+public string MetaLlama31405bInstruct { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `MetaLlama3170bInstruct`<sup>Required</sup> <a name="MetaLlama3170bInstruct" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT"></a>
+
+```csharp
+public string MetaLlama3170bInstruct { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `MetaLlama318bInstruct`<sup>Required</sup> <a name="MetaLlama318bInstruct" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_8B_INSTRUCT"></a>
+
+```csharp
+public string MetaLlama318bInstruct { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `MistralMistralLarge2402`<sup>Required</sup> <a name="MistralMistralLarge2402" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402"></a>
+
+```csharp
+public string MistralMistralLarge2402 { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `MistralMistralLarge2407`<sup>Required</sup> <a name="MistralMistralLarge2407" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2407"></a>
+
+```csharp
+public string MistralMistralLarge2407 { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `MistralMistralSmall2402`<sup>Required</sup> <a name="MistralMistralSmall2402" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402"></a>
+
+```csharp
+public string MistralMistralSmall2402 { get; }
+```
+
+- *Type:* string
+
+---
+
+### NvidiaNIMSupportedModels <a name="NvidiaNIMSupportedModels" id="xpander-sdk.NvidiaNIMSupportedModels"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.NvidiaNIMSupportedModels.Initializer"></a>
+
+```csharp
+using Xpander.AI.Sdk;
+
+new NvidiaNIMSupportedModels();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.NvidiaNIMSupportedModels.property.LLAMA_3_1_70B_INSTRUCT">Llama3170bInstruct</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `Llama3170bInstruct`<sup>Required</sup> <a name="Llama3170bInstruct" id="xpander-sdk.NvidiaNIMSupportedModels.property.LLAMA_3_1_70B_INSTRUCT"></a>
+
+```csharp
+public string Llama3170bInstruct { get; }
+```
+
+- *Type:* string
+
+---
+
+### OpenAISupportedModels <a name="OpenAISupportedModels" id="xpander-sdk.OpenAISupportedModels"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.OpenAISupportedModels.Initializer"></a>
+
+```csharp
+using Xpander.AI.Sdk;
+
+new OpenAISupportedModels();
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4">Gpt4</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O">Gpt4O</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O_MINI">Gpt4OMini</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `Gpt4`<sup>Required</sup> <a name="Gpt4" id="xpander-sdk.OpenAISupportedModels.property.GPT_4"></a>
+
+```csharp
+public string Gpt4 { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `Gpt4O`<sup>Required</sup> <a name="Gpt4O" id="xpander-sdk.OpenAISupportedModels.property.GPT_4_O"></a>
+
+```csharp
+public string Gpt4O { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `Gpt4OMini`<sup>Required</sup> <a name="Gpt4OMini" id="xpander-sdk.OpenAISupportedModels.property.GPT_4_O_MINI"></a>
+
+```csharp
+public string Gpt4OMini { get; }
+```
+
+- *Type:* string
+
+---
+
 ### ToolResponse <a name="ToolResponse" id="xpander-sdk.ToolResponse"></a>
 
 - *Implements:* <a href="#xpander-sdk.IToolResponse">IToolResponse</a>
@@ -18,13 +247,13 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.toolCallId">ToolCallId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.role">Role</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.name">Name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">ResponseMessage</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.toolCallId">ToolCallId</a></code> | <code>string</code> | - The ID of the tool call. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.role">Role</a></code> | <code>string</code> | - The role in the response. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.name">Name</a></code> | <code>string</code> | - The name of the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">ResponseMessage</a></code> | <code>string</code> | - The response message from the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | - The filtered tool object. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | - An optional string property for the payload. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | - An optional numeric property for the payload. |
 
 ---
 
@@ -32,11 +261,15 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 
 - *Type:* string
 
+The ID of the tool call.
+
 ---
 
 ##### `Role`<sup>Required</sup> <a name="Role" id="xpander-sdk.ToolResponse.Initializer.parameter.role"></a>
 
 - *Type:* string
+
+The role in the response.
 
 ---
 
@@ -44,11 +277,15 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 
 - *Type:* string
 
+The name of the tool.
+
 ---
 
 ##### `ResponseMessage`<sup>Required</sup> <a name="ResponseMessage" id="xpander-sdk.ToolResponse.Initializer.parameter.responseMessage"></a>
 
 - *Type:* string
+
+The response message from the tool.
 
 ---
 
@@ -56,11 +293,15 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 
 - *Type:* Newtonsoft.Json.Linq.JObject
 
+The filtered tool object.
+
 ---
 
 ##### `PayloadProperty1`<sup>Optional</sup> <a name="PayloadProperty1" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1"></a>
 
 - *Type:* string
+
+An optional string property for the payload.
 
 ---
 
@@ -68,14 +309,16 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 
 - *Type:* double
 
+An optional numeric property for the payload.
+
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.buildMessage">BuildMessage</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.toJSON">ToJSON</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolResponse.buildMessage">BuildMessage</a></code> | Builds a message string from the tool response. |
+| <code><a href="#xpander-sdk.ToolResponse.toJSON">ToJSON</a></code> | Converts the ToolResponse instance to a JSON object. |
 
 ---
 
@@ -85,17 +328,21 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 private string BuildMessage()
 ```
 
+Builds a message string from the tool response.
+
 ##### `ToJSON` <a name="ToJSON" id="xpander-sdk.ToolResponse.toJSON"></a>
 
 ```csharp
 private Newtonsoft.Json.Linq.JObject ToJSON()
 ```
 
+Converts the ToolResponse instance to a JSON object.
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.fromJSON">FromJSON</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolResponse.fromJSON">FromJSON</a></code> | Creates a ToolResponse instance from a JSON object. |
 
 ---
 
@@ -107,9 +354,13 @@ using Xpander.AI.Sdk;
 ToolResponse.FromJSON(object Json);
 ```
 
+Creates a ToolResponse instance from a JSON object.
+
 ###### `Json`<sup>Required</sup> <a name="Json" id="xpander-sdk.ToolResponse.fromJSON.parameter.json"></a>
 
 - *Type:* object
+
+The JSON object to create the instance from.
 
 ---
 
@@ -117,13 +368,26 @@ ToolResponse.FromJSON(object Json);
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.property.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.name">Name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">ResponseMessage</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.role">Role</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolResponse.property.rawResponse">RawResponse</a></code> | <code>object</code> | Gets the response message. |
+| <code><a href="#xpander-sdk.ToolResponse.property.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | The filtered tool object. |
+| <code><a href="#xpander-sdk.ToolResponse.property.name">Name</a></code> | <code>string</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">ResponseMessage</a></code> | <code>string</code> | The response message from the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.property.role">Role</a></code> | <code>string</code> | The role in the response. |
+| <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | The ID of the tool call. |
+| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | An optional string property for the payload. |
+| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | An optional numeric property for the payload. |
+
+---
+
+##### `RawResponse`<sup>Required</sup> <a name="RawResponse" id="xpander-sdk.ToolResponse.property.rawResponse"></a>
+
+```csharp
+public object RawResponse { get; }
+```
+
+- *Type:* object
+
+Gets the response message.
 
 ---
 
@@ -135,6 +399,8 @@ public Newtonsoft.Json.Linq.JObject FilteredTool { get; }
 
 - *Type:* Newtonsoft.Json.Linq.JObject
 
+The filtered tool object.
+
 ---
 
 ##### `Name`<sup>Required</sup> <a name="Name" id="xpander-sdk.ToolResponse.property.name"></a>
@@ -144,6 +410,8 @@ public string Name { get; }
 ```
 
 - *Type:* string
+
+The name of the tool.
 
 ---
 
@@ -155,6 +423,8 @@ public string ResponseMessage { get; }
 
 - *Type:* string
 
+The response message from the tool.
+
 ---
 
 ##### `Role`<sup>Required</sup> <a name="Role" id="xpander-sdk.ToolResponse.property.role"></a>
@@ -164,6 +434,8 @@ public string Role { get; }
 ```
 
 - *Type:* string
+
+The role in the response.
 
 ---
 
@@ -175,6 +447,8 @@ public string ToolCallId { get; }
 
 - *Type:* string
 
+The ID of the tool call.
+
 ---
 
 ##### `PayloadProperty1`<sup>Optional</sup> <a name="PayloadProperty1" id="xpander-sdk.ToolResponse.property.payloadProperty1"></a>
@@ -184,6 +458,8 @@ public string PayloadProperty1 { get; }
 ```
 
 - *Type:* string
+
+An optional string property for the payload.
 
 ---
 
@@ -195,24 +471,28 @@ public double PayloadProperty2 { get; }
 
 - *Type:* double
 
+An optional numeric property for the payload.
+
 ---
 
 
 ### XpanderClient <a name="XpanderClient" id="xpander-sdk.XpanderClient"></a>
+
+Class representing the Xpander client.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.XpanderClient.Initializer"></a>
 
 ```csharp
 using Xpander.AI.Sdk;
 
-new XpanderClient(string AgentKey, string AgentUrl, string LlmProvider);
+new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">AgentKey</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">AgentUrl</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">LlmProvider</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">AgentKey</a></code> | <code>string</code> | - The API key for the agent. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">AgentUrl</a></code> | <code>string</code> | - The URL for the agent. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">LlmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 
 ---
 
@@ -220,17 +500,23 @@ new XpanderClient(string AgentKey, string AgentUrl, string LlmProvider);
 
 - *Type:* string
 
+The API key for the agent.
+
 ---
 
 ##### `AgentUrl`<sup>Required</sup> <a name="AgentUrl" id="xpander-sdk.XpanderClient.Initializer.parameter.agentUrl"></a>
 
 - *Type:* string
 
+The URL for the agent.
+
 ---
 
 ##### `LlmProvider`<sup>Required</sup> <a name="LlmProvider" id="xpander-sdk.XpanderClient.Initializer.parameter.llmProvider"></a>
 
-- *Type:* string
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+The LLM provider to use.
 
 ---
 
@@ -238,9 +524,9 @@ new XpanderClient(string AgentKey, string AgentUrl, string LlmProvider);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">LoadXpanderTools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.tools">Tools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">XpanderToolCall</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">LoadXpanderTools</a></code> | Loads the tools available from the Xpander agent. |
+| <code><a href="#xpander-sdk.XpanderClient.tools">Tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">XpanderToolCall</a></code> | Invokes the tools based on the tool selector response. |
 
 ---
 
@@ -250,15 +536,21 @@ new XpanderClient(string AgentKey, string AgentUrl, string LlmProvider);
 private object[] LoadXpanderTools()
 ```
 
+Loads the tools available from the Xpander agent.
+
 ##### `Tools` <a name="Tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```csharp
-private object Tools(string LlmProvider = null)
+private object Tools(LLMProvider LlmProvider = null)
 ```
+
+Retrieves the tools for the current or specified LLM provider.
 
 ###### `LlmProvider`<sup>Optional</sup> <a name="LlmProvider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
 
-- *Type:* string
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+(Optional) The LLM provider to use.
 
 ---
 
@@ -268,15 +560,21 @@ private object Tools(string LlmProvider = null)
 private ToolResponse[] XpanderToolCall(object ToolSelectorResponse, string LlmProvider = null)
 ```
 
+Invokes the tools based on the tool selector response.
+
 ###### `ToolSelectorResponse`<sup>Required</sup> <a name="ToolSelectorResponse" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.toolSelectorResponse"></a>
 
 - *Type:* object
+
+The response from the tool selector.
 
 ---
 
 ###### `LlmProvider`<sup>Optional</sup> <a name="LlmProvider" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.llmProvider"></a>
 
 - *Type:* string
+
+(Optional) The LLM provider to use.
 
 ---
 
@@ -285,9 +583,8 @@ private ToolResponse[] XpanderToolCall(object ToolSelectorResponse, string LlmPr
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.property.validProviders">ValidProviders</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.supportedModels">SupportedModels</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">ToolsNamesMapping</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.validProviders">ValidProviders</a></code> | <code>string[]</code> | Provides a list of valid LLM providers. |
+| <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">ToolsNamesMapping</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | Retrieves the tool names mapping for the current LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">AgentKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">AgentUrl</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">ToolsCache</a></code> | <code>object</code> | *No description.* |
@@ -302,15 +599,7 @@ public string[] ValidProviders { get; }
 
 - *Type:* string[]
 
----
-
-##### `SupportedModels`<sup>Required</sup> <a name="SupportedModels" id="xpander-sdk.XpanderClient.property.supportedModels"></a>
-
-```csharp
-public System.Collections.Generic.IDictionary<string, string> SupportedModels { get; }
-```
-
-- *Type:* System.Collections.Generic.IDictionary<string, string>
+Provides a list of valid LLM providers.
 
 ---
 
@@ -321,6 +610,8 @@ public System.Collections.Generic.IDictionary<string, string> ToolsNamesMapping 
 ```
 
 - *Type:* System.Collections.Generic.IDictionary<string, string>
+
+Retrieves the tool names mapping for the current LLM provider.
 
 ---
 
@@ -361,13 +652,15 @@ public object ToolsCache { get; }
 
 - *Implemented By:* <a href="#xpander-sdk.IBedrockTool">IBedrockTool</a>
 
+Interface representing a Bedrock tool.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockTool.property.toolSpec">ToolSpec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.IBedrockTool.property.execute">Execute</a></code> | <code>object</code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockTool.property.toolSpec">ToolSpec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | The tool specification of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockTool.property.execute">Execute</a></code> | <code>object</code> | Function to execute the Bedrock tool. |
 
 ---
 
@@ -379,6 +672,8 @@ public IBedrockToolSpec ToolSpec { get; set; }
 
 - *Type:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
 
+The tool specification of the Bedrock tool.
+
 ---
 
 ##### `Execute`<sup>Optional</sup> <a name="Execute" id="xpander-sdk.IBedrockTool.property.execute"></a>
@@ -389,20 +684,62 @@ public object Execute { get; set; }
 
 - *Type:* object
 
+Function to execute the Bedrock tool.
+
 ---
 
-### IBedrockToolSpec <a name="IBedrockToolSpec" id="xpander-sdk.IBedrockToolSpec"></a>
+### IBedrockToolOutput <a name="IBedrockToolOutput" id="xpander-sdk.IBedrockToolOutput"></a>
 
-- *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+- *Implemented By:* <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockToolSpec.property.description">Description</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IBedrockToolSpec.property.inputSchema">InputSchema</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.IBedrockToolSpec.property.name">Name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockToolOutput.property.toolSpec">ToolSpec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | The tool specification of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockToolOutput.property.execute">Execute</a></code> | <code>object</code> | Function to execute the Bedrock tool. |
+
+---
+
+##### `ToolSpec`<sup>Required</sup> <a name="ToolSpec" id="xpander-sdk.IBedrockToolOutput.property.toolSpec"></a>
+
+```csharp
+public IBedrockToolSpec ToolSpec { get; }
+```
+
+- *Type:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+
+The tool specification of the Bedrock tool.
+
+---
+
+##### `Execute`<sup>Optional</sup> <a name="Execute" id="xpander-sdk.IBedrockToolOutput.property.execute"></a>
+
+```csharp
+public object Execute { get; }
+```
+
+- *Type:* object
+
+Function to execute the Bedrock tool.
+
+---
+
+### IBedrockToolSpec <a name="IBedrockToolSpec" id="xpander-sdk.IBedrockToolSpec"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+
+Interface representing a Bedrock tool specification.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.description">Description</a></code> | <code>string</code> | The description of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.inputSchema">InputSchema</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a></code> | Input schema of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.name">Name</a></code> | <code>string</code> | The name of the Bedrock tool. |
 
 ---
 
@@ -414,6 +751,8 @@ public string Description { get; set; }
 
 - *Type:* string
 
+The description of the Bedrock tool.
+
 ---
 
 ##### `InputSchema`<sup>Required</sup> <a name="InputSchema" id="xpander-sdk.IBedrockToolSpec.property.inputSchema"></a>
@@ -423,6 +762,8 @@ public IBedrockToolSpecInputSchema InputSchema { get; set; }
 ```
 
 - *Type:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
+
+Input schema of the Bedrock tool.
 
 ---
 
@@ -434,18 +775,22 @@ public string Name { get; set; }
 
 - *Type:* string
 
+The name of the Bedrock tool.
+
 ---
 
 ### IBedrockToolSpecInputSchema <a name="IBedrockToolSpecInputSchema" id="xpander-sdk.IBedrockToolSpecInputSchema"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
 
+Interface representing the input schema for a Bedrock tool specification.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema.property.json">Json</a></code> | <code>System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>></code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema.property.json">Json</a></code> | <code>System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>></code> | JSON schema of the tool parameters. |
 
 ---
 
@@ -457,30 +802,38 @@ public System.Collections.Generic.IDictionary<string, IToolParameter> Json { get
 
 - *Type:* System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>>
 
+JSON schema of the tool parameters.
+
 ---
 
 ### ILLMProviderHandler <a name="ILLMProviderHandler" id="xpander-sdk.ILLMProviderHandler"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.ILLMProviderHandler">ILLMProviderHandler</a>
 
+Interface representing a LLM (Large Language Model) provider handler.
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">GetTools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">InvokeTools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">GetTools</a></code> | Retrieves tools. |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">InvokeTools</a></code> | Invokes tools based on the tool selector response. |
 
 ---
 
 ##### `GetTools` <a name="GetTools" id="xpander-sdk.ILLMProviderHandler.getTools"></a>
 
 ```csharp
-private ITool[] GetTools(bool Functionize = null)
+private object[] GetTools(bool Functionize = null)
 ```
+
+Retrieves tools.
 
 ###### `Functionize`<sup>Optional</sup> <a name="Functionize" id="xpander-sdk.ILLMProviderHandler.getTools.parameter.functionize"></a>
 
 - *Type:* bool
+
+Whether to functionize the tools.
 
 ---
 
@@ -490,9 +843,13 @@ private ITool[] GetTools(bool Functionize = null)
 private object InvokeTools(object ToolSelectorResponse)
 ```
 
+Invokes tools based on the tool selector response.
+
 ###### `ToolSelectorResponse`<sup>Required</sup> <a name="ToolSelectorResponse" id="xpander-sdk.ILLMProviderHandler.invokeTools.parameter.toolSelectorResponse"></a>
 
 - *Type:* object
+
+The response from the tool selector.
 
 ---
 
@@ -500,7 +857,7 @@ private object InvokeTools(object ToolSelectorResponse)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping">ToolsNamesMapping</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | *No description.* |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping">ToolsNamesMapping</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | Mapping of tool names. |
 
 ---
 
@@ -512,19 +869,23 @@ public System.Collections.Generic.IDictionary<string, string> ToolsNamesMapping 
 
 - *Type:* System.Collections.Generic.IDictionary<string, string>
 
+Mapping of tool names.
+
 ---
 
 ### IMessage <a name="IMessage" id="xpander-sdk.IMessage"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IMessage">IMessage</a>
 
+Interface representing a message.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IMessage.property.content">Content</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IMessage.property.role">Role</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMessage.property.content">Content</a></code> | <code>string</code> | The content of the message. |
+| <code><a href="#xpander-sdk.IMessage.property.role">Role</a></code> | <code>string</code> | The role of the message sender. |
 
 ---
 
@@ -536,6 +897,8 @@ public string Content { get; set; }
 
 - *Type:* string
 
+The content of the message.
+
 ---
 
 ##### `Role`<sup>Required</sup> <a name="Role" id="xpander-sdk.IMessage.property.role"></a>
@@ -546,21 +909,136 @@ public string Role { get; set; }
 
 - *Type:* string
 
+The role of the message sender.
+
 ---
 
-### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+### IOpenAIToolFunctionOutput <a name="IOpenAIToolFunctionOutput" id="xpander-sdk.IOpenAIToolFunctionOutput"></a>
 
-- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
+- *Implemented By:* <a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a>
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ITool.property.description">Description</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ITool.property.name">Name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ITool.property.func">Func</a></code> | <code>object</code> | *No description.* |
-| <code><a href="#xpander-sdk.ITool.property.parameters">Parameters</a></code> | <code>System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>></code> | *No description.* |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.description">Description</a></code> | <code>string</code> | The description of the tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.name">Name</a></code> | <code>string</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.execute">Execute</a></code> | <code>object</code> | Function to execute the Bedrock tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.func">Func</a></code> | <code>object</code> | Function to execute the tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.parameters">Parameters</a></code> | <code><a href="#xpander-sdk.IToolParameter">IToolParameter</a></code> | Parameters of the tool. |
+
+---
+
+##### `Description`<sup>Required</sup> <a name="Description" id="xpander-sdk.IOpenAIToolFunctionOutput.property.description"></a>
+
+```csharp
+public string Description { get; }
+```
+
+- *Type:* string
+
+The description of the tool.
+
+---
+
+##### `Name`<sup>Required</sup> <a name="Name" id="xpander-sdk.IOpenAIToolFunctionOutput.property.name"></a>
+
+```csharp
+public string Name { get; }
+```
+
+- *Type:* string
+
+The name of the tool.
+
+---
+
+##### `Execute`<sup>Optional</sup> <a name="Execute" id="xpander-sdk.IOpenAIToolFunctionOutput.property.execute"></a>
+
+```csharp
+public object Execute { get; }
+```
+
+- *Type:* object
+
+Function to execute the Bedrock tool.
+
+---
+
+##### `Func`<sup>Optional</sup> <a name="Func" id="xpander-sdk.IOpenAIToolFunctionOutput.property.func"></a>
+
+```csharp
+public object Func { get; }
+```
+
+- *Type:* object
+
+Function to execute the tool.
+
+---
+
+##### `Parameters`<sup>Optional</sup> <a name="Parameters" id="xpander-sdk.IOpenAIToolFunctionOutput.property.parameters"></a>
+
+```csharp
+public IToolParameter Parameters { get; }
+```
+
+- *Type:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
+
+Parameters of the tool.
+
+---
+
+### IOpenAIToolOutput <a name="IOpenAIToolOutput" id="xpander-sdk.IOpenAIToolOutput"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IOpenAIToolOutput.property.function">Function</a></code> | <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IOpenAIToolOutput.property.type">Type</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `Function`<sup>Required</sup> <a name="Function" id="xpander-sdk.IOpenAIToolOutput.property.function"></a>
+
+```csharp
+public IOpenAIToolFunctionOutput Function { get; }
+```
+
+- *Type:* <a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a>
+
+---
+
+##### `Type`<sup>Required</sup> <a name="Type" id="xpander-sdk.IOpenAIToolOutput.property.type"></a>
+
+```csharp
+public string Type { get; }
+```
+
+- *Type:* string
+
+---
+
+### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
+
+Interface representing a tool.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ITool.property.description">Description</a></code> | <code>string</code> | The description of the tool. |
+| <code><a href="#xpander-sdk.ITool.property.name">Name</a></code> | <code>string</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.ITool.property.func">Func</a></code> | <code>object</code> | Function to execute the tool. |
+| <code><a href="#xpander-sdk.ITool.property.parameters">Parameters</a></code> | <code>System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>></code> | Parameters of the tool. |
 
 ---
 
@@ -572,6 +1050,8 @@ public string Description { get; set; }
 
 - *Type:* string
 
+The description of the tool.
+
 ---
 
 ##### `Name`<sup>Required</sup> <a name="Name" id="xpander-sdk.ITool.property.name"></a>
@@ -581,6 +1061,8 @@ public string Name { get; set; }
 ```
 
 - *Type:* string
+
+The name of the tool.
 
 ---
 
@@ -592,6 +1074,8 @@ public object Func { get; set; }
 
 - *Type:* object
 
+Function to execute the tool.
+
 ---
 
 ##### `Parameters`<sup>Optional</sup> <a name="Parameters" id="xpander-sdk.ITool.property.parameters"></a>
@@ -602,30 +1086,36 @@ public System.Collections.Generic.IDictionary<string, IToolParameter> Parameters
 
 - *Type:* System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>>
 
+Parameters of the tool.
+
 ---
 
 ### IToolParameter <a name="IToolParameter" id="xpander-sdk.IToolParameter"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
 
+Interface representing a tool parameter.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolParameter.property.properties">Properties</a></code> | <code>System.Collections.Generic.IDictionary<string, object></code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolParameter.property.type">Type</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolParameter.property.required">Required</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolParameter.property.properties">Properties</a></code> | <code>System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>></code> | Properties of the parameter. |
+| <code><a href="#xpander-sdk.IToolParameter.property.type">Type</a></code> | <code>string</code> | The type of the parameter. |
+| <code><a href="#xpander-sdk.IToolParameter.property.required">Required</a></code> | <code>string[]</code> | List of required properties. |
 
 ---
 
 ##### `Properties`<sup>Required</sup> <a name="Properties" id="xpander-sdk.IToolParameter.property.properties"></a>
 
 ```csharp
-public System.Collections.Generic.IDictionary<string, object> Properties { get; set; }
+public System.Collections.Generic.IDictionary<string, IToolParameter> Properties { get; set; }
 ```
 
-- *Type:* System.Collections.Generic.IDictionary<string, object>
+- *Type:* System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>>
+
+Properties of the parameter.
 
 ---
 
@@ -637,6 +1127,8 @@ public string Type { get; set; }
 
 - *Type:* string
 
+The type of the parameter.
+
 ---
 
 ##### `Required`<sup>Optional</sup> <a name="Required" id="xpander-sdk.IToolParameter.property.required"></a>
@@ -646,6 +1138,8 @@ public string[] Required { get; set; }
 ```
 
 - *Type:* string[]
+
+List of required properties.
 
 ---
 
@@ -658,13 +1152,13 @@ public string[] Required { get; set; }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolResponse.property.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.name">Name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">ResponseMessage</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.role">Role</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolResponse.property.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | The filtered tool object. |
+| <code><a href="#xpander-sdk.IToolResponse.property.name">Name</a></code> | <code>string</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">ResponseMessage</a></code> | <code>string</code> | The response message from the tool. |
+| <code><a href="#xpander-sdk.IToolResponse.property.role">Role</a></code> | <code>string</code> | The role in the response. |
+| <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | The ID of the tool call. |
+| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | An optional string property for the payload. |
+| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | An optional numeric property for the payload. |
 
 ---
 
@@ -676,6 +1170,8 @@ public Newtonsoft.Json.Linq.JObject FilteredTool { get; set; }
 
 - *Type:* Newtonsoft.Json.Linq.JObject
 
+The filtered tool object.
+
 ---
 
 ##### `Name`<sup>Required</sup> <a name="Name" id="xpander-sdk.IToolResponse.property.name"></a>
@@ -685,6 +1181,8 @@ public string Name { get; set; }
 ```
 
 - *Type:* string
+
+The name of the tool.
 
 ---
 
@@ -696,6 +1194,8 @@ public string ResponseMessage { get; set; }
 
 - *Type:* string
 
+The response message from the tool.
+
 ---
 
 ##### `Role`<sup>Required</sup> <a name="Role" id="xpander-sdk.IToolResponse.property.role"></a>
@@ -705,6 +1205,8 @@ public string Role { get; set; }
 ```
 
 - *Type:* string
+
+The role in the response.
 
 ---
 
@@ -716,6 +1218,8 @@ public string ToolCallId { get; set; }
 
 - *Type:* string
 
+The ID of the tool call.
+
 ---
 
 ##### `PayloadProperty1`<sup>Optional</sup> <a name="PayloadProperty1" id="xpander-sdk.IToolResponse.property.payloadProperty1"></a>
@@ -726,6 +1230,8 @@ public string PayloadProperty1 { get; set; }
 
 - *Type:* string
 
+An optional string property for the payload.
+
 ---
 
 ##### `PayloadProperty2`<sup>Optional</sup> <a name="PayloadProperty2" id="xpander-sdk.IToolResponse.property.payloadProperty2"></a>
@@ -735,6 +1241,8 @@ public double PayloadProperty2 { get; set; }
 ```
 
 - *Type:* double
+
+An optional numeric property for the payload.
 
 ---
 
@@ -747,8 +1255,8 @@ public double PayloadProperty2 { get; set; }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolResponsePayload.property.property1">Property1</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponsePayload.property.property2">Property2</a></code> | <code>double</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolResponsePayload.property.property1">Property1</a></code> | <code>string</code> | A string property for the tool response payload. |
+| <code><a href="#xpander-sdk.IToolResponsePayload.property.property2">Property2</a></code> | <code>double</code> | A numeric property for the tool response payload. |
 
 ---
 
@@ -760,6 +1268,8 @@ public string Property1 { get; set; }
 
 - *Type:* string
 
+A string property for the tool response payload.
+
 ---
 
 ##### `Property2`<sup>Required</sup> <a name="Property2" id="xpander-sdk.IToolResponsePayload.property.property2"></a>
@@ -769,6 +1279,8 @@ public double Property2 { get; set; }
 ```
 
 - *Type:* double
+
+A numeric property for the tool response payload.
 
 ---
 

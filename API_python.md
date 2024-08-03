@@ -4,6 +4,235 @@
 
 ## Classes <a name="Classes" id="Classes"></a>
 
+### AmazonBedrockSupportedModels <a name="AmazonBedrockSupportedModels" id="xpander-sdk.AmazonBedrockSupportedModels"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.AmazonBedrockSupportedModels.Initializer"></a>
+
+```python
+import xpander_sdk
+
+xpander_sdk.AmazonBedrockSupportedModels()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_5_SONNET_20240620">ANTHROPIC_CLAUDE_3_5_SONNET_20240620</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307">ANTHROPIC_CLAUDE_3_HAIKU_20240307</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R">COHERE_COMMAND_R</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS">COHERE_COMMAND_R_PLUS</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_405B_INSTRUCT">META_LLAMA3_1_405B_INSTRUCT</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT">META_LLAMA3_1_70B_INSTRUCT</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_8B_INSTRUCT">META_LLAMA3_1_8B_INSTRUCT</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402">MISTRAL_MISTRAL_LARGE_2402</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2407">MISTRAL_MISTRAL_LARGE_2407</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402">MISTRAL_MISTRAL_SMALL_2402</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `ANTHROPIC_CLAUDE_3_5_SONNET_20240620`<sup>Required</sup> <a name="ANTHROPIC_CLAUDE_3_5_SONNET_20240620" id="xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_5_SONNET_20240620"></a>
+
+```python
+ANTHROPIC_CLAUDE_3_5_SONNET_20240620: str
+```
+
+- *Type:* str
+
+---
+
+##### `ANTHROPIC_CLAUDE_3_HAIKU_20240307`<sup>Required</sup> <a name="ANTHROPIC_CLAUDE_3_HAIKU_20240307" id="xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307"></a>
+
+```python
+ANTHROPIC_CLAUDE_3_HAIKU_20240307: str
+```
+
+- *Type:* str
+
+---
+
+##### `COHERE_COMMAND_R`<sup>Required</sup> <a name="COHERE_COMMAND_R" id="xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R"></a>
+
+```python
+COHERE_COMMAND_R: str
+```
+
+- *Type:* str
+
+---
+
+##### `COHERE_COMMAND_R_PLUS`<sup>Required</sup> <a name="COHERE_COMMAND_R_PLUS" id="xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS"></a>
+
+```python
+COHERE_COMMAND_R_PLUS: str
+```
+
+- *Type:* str
+
+---
+
+##### `META_LLAMA3_1_405B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA3_1_405B_INSTRUCT" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_405B_INSTRUCT"></a>
+
+```python
+META_LLAMA3_1_405B_INSTRUCT: str
+```
+
+- *Type:* str
+
+---
+
+##### `META_LLAMA3_1_70B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA3_1_70B_INSTRUCT" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT"></a>
+
+```python
+META_LLAMA3_1_70B_INSTRUCT: str
+```
+
+- *Type:* str
+
+---
+
+##### `META_LLAMA3_1_8B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA3_1_8B_INSTRUCT" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_8B_INSTRUCT"></a>
+
+```python
+META_LLAMA3_1_8B_INSTRUCT: str
+```
+
+- *Type:* str
+
+---
+
+##### `MISTRAL_MISTRAL_LARGE_2402`<sup>Required</sup> <a name="MISTRAL_MISTRAL_LARGE_2402" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402"></a>
+
+```python
+MISTRAL_MISTRAL_LARGE_2402: str
+```
+
+- *Type:* str
+
+---
+
+##### `MISTRAL_MISTRAL_LARGE_2407`<sup>Required</sup> <a name="MISTRAL_MISTRAL_LARGE_2407" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2407"></a>
+
+```python
+MISTRAL_MISTRAL_LARGE_2407: str
+```
+
+- *Type:* str
+
+---
+
+##### `MISTRAL_MISTRAL_SMALL_2402`<sup>Required</sup> <a name="MISTRAL_MISTRAL_SMALL_2402" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402"></a>
+
+```python
+MISTRAL_MISTRAL_SMALL_2402: str
+```
+
+- *Type:* str
+
+---
+
+### NvidiaNIMSupportedModels <a name="NvidiaNIMSupportedModels" id="xpander-sdk.NvidiaNIMSupportedModels"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.NvidiaNIMSupportedModels.Initializer"></a>
+
+```python
+import xpander_sdk
+
+xpander_sdk.NvidiaNIMSupportedModels()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.NvidiaNIMSupportedModels.property.LLAMA_3_1_70B_INSTRUCT">LLAMA_3_1_70B_INSTRUCT</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `LLAMA_3_1_70B_INSTRUCT`<sup>Required</sup> <a name="LLAMA_3_1_70B_INSTRUCT" id="xpander-sdk.NvidiaNIMSupportedModels.property.LLAMA_3_1_70B_INSTRUCT"></a>
+
+```python
+LLAMA_3_1_70B_INSTRUCT: str
+```
+
+- *Type:* str
+
+---
+
+### OpenAISupportedModels <a name="OpenAISupportedModels" id="xpander-sdk.OpenAISupportedModels"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.OpenAISupportedModels.Initializer"></a>
+
+```python
+import xpander_sdk
+
+xpander_sdk.OpenAISupportedModels()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4">GPT_4</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O">GPT_4_O</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O_MINI">GPT_4_O_MINI</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `GPT_4`<sup>Required</sup> <a name="GPT_4" id="xpander-sdk.OpenAISupportedModels.property.GPT_4"></a>
+
+```python
+GPT_4: str
+```
+
+- *Type:* str
+
+---
+
+##### `GPT_4_O`<sup>Required</sup> <a name="GPT_4_O" id="xpander-sdk.OpenAISupportedModels.property.GPT_4_O"></a>
+
+```python
+GPT_4_O: str
+```
+
+- *Type:* str
+
+---
+
+##### `GPT_4_O_MINI`<sup>Required</sup> <a name="GPT_4_O_MINI" id="xpander-sdk.OpenAISupportedModels.property.GPT_4_O_MINI"></a>
+
+```python
+GPT_4_O_MINI: str
+```
+
+- *Type:* str
+
+---
+
 ### ToolResponse <a name="ToolResponse" id="xpander-sdk.ToolResponse"></a>
 
 - *Implements:* <a href="#xpander-sdk.IToolResponse">IToolResponse</a>
@@ -26,13 +255,13 @@ xpander_sdk.ToolResponse(
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.toolCallId">tool_call_id</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.role">role</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.name">name</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">response_message</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">filtered_tool</a></code> | <code>any</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">payload_property1</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.toolCallId">tool_call_id</a></code> | <code>str</code> | - The ID of the tool call. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.role">role</a></code> | <code>str</code> | - The role in the response. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.name">name</a></code> | <code>str</code> | - The name of the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">response_message</a></code> | <code>str</code> | - The response message from the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">filtered_tool</a></code> | <code>any</code> | - The filtered tool object. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">payload_property1</a></code> | <code>str</code> | - An optional string property for the payload. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | - An optional numeric property for the payload. |
 
 ---
 
@@ -40,11 +269,15 @@ xpander_sdk.ToolResponse(
 
 - *Type:* str
 
+The ID of the tool call.
+
 ---
 
 ##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.ToolResponse.Initializer.parameter.role"></a>
 
 - *Type:* str
+
+The role in the response.
 
 ---
 
@@ -52,11 +285,15 @@ xpander_sdk.ToolResponse(
 
 - *Type:* str
 
+The name of the tool.
+
 ---
 
 ##### `response_message`<sup>Required</sup> <a name="response_message" id="xpander-sdk.ToolResponse.Initializer.parameter.responseMessage"></a>
 
 - *Type:* str
+
+The response message from the tool.
 
 ---
 
@@ -64,11 +301,15 @@ xpander_sdk.ToolResponse(
 
 - *Type:* any
 
+The filtered tool object.
+
 ---
 
 ##### `payload_property1`<sup>Optional</sup> <a name="payload_property1" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1"></a>
 
 - *Type:* str
+
+An optional string property for the payload.
 
 ---
 
@@ -76,14 +317,16 @@ xpander_sdk.ToolResponse(
 
 - *Type:* typing.Union[int, float]
 
+An optional numeric property for the payload.
+
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.buildMessage">build_message</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.toJSON">to_jso_n</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolResponse.buildMessage">build_message</a></code> | Builds a message string from the tool response. |
+| <code><a href="#xpander-sdk.ToolResponse.toJSON">to_jso_n</a></code> | Converts the ToolResponse instance to a JSON object. |
 
 ---
 
@@ -93,17 +336,21 @@ xpander_sdk.ToolResponse(
 def build_message() -> str
 ```
 
+Builds a message string from the tool response.
+
 ##### `to_jso_n` <a name="to_jso_n" id="xpander-sdk.ToolResponse.toJSON"></a>
 
 ```python
 def to_jso_n() -> any
 ```
 
+Converts the ToolResponse instance to a JSON object.
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.fromJSON">from_jso_n</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolResponse.fromJSON">from_jso_n</a></code> | Creates a ToolResponse instance from a JSON object. |
 
 ---
 
@@ -117,9 +364,13 @@ xpander_sdk.ToolResponse.from_jso_n(
 )
 ```
 
+Creates a ToolResponse instance from a JSON object.
+
 ###### `json`<sup>Required</sup> <a name="json" id="xpander-sdk.ToolResponse.fromJSON.parameter.json"></a>
 
 - *Type:* typing.Any
+
+The JSON object to create the instance from.
 
 ---
 
@@ -127,13 +378,26 @@ xpander_sdk.ToolResponse.from_jso_n(
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.property.filteredTool">filtered_tool</a></code> | <code>any</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.name">name</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">response_message</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.role">role</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">payload_property1</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolResponse.property.rawResponse">raw_response</a></code> | <code>typing.Any</code> | Gets the response message. |
+| <code><a href="#xpander-sdk.ToolResponse.property.filteredTool">filtered_tool</a></code> | <code>any</code> | The filtered tool object. |
+| <code><a href="#xpander-sdk.ToolResponse.property.name">name</a></code> | <code>str</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">response_message</a></code> | <code>str</code> | The response message from the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.property.role">role</a></code> | <code>str</code> | The role in the response. |
+| <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | The ID of the tool call. |
+| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">payload_property1</a></code> | <code>str</code> | An optional string property for the payload. |
+| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | An optional numeric property for the payload. |
+
+---
+
+##### `raw_response`<sup>Required</sup> <a name="raw_response" id="xpander-sdk.ToolResponse.property.rawResponse"></a>
+
+```python
+raw_response: typing.Any
+```
+
+- *Type:* typing.Any
+
+Gets the response message.
 
 ---
 
@@ -145,6 +409,8 @@ filtered_tool: any
 
 - *Type:* any
 
+The filtered tool object.
+
 ---
 
 ##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ToolResponse.property.name"></a>
@@ -154,6 +420,8 @@ name: str
 ```
 
 - *Type:* str
+
+The name of the tool.
 
 ---
 
@@ -165,6 +433,8 @@ response_message: str
 
 - *Type:* str
 
+The response message from the tool.
+
 ---
 
 ##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.ToolResponse.property.role"></a>
@@ -174,6 +444,8 @@ role: str
 ```
 
 - *Type:* str
+
+The role in the response.
 
 ---
 
@@ -185,6 +457,8 @@ tool_call_id: str
 
 - *Type:* str
 
+The ID of the tool call.
+
 ---
 
 ##### `payload_property1`<sup>Optional</sup> <a name="payload_property1" id="xpander-sdk.ToolResponse.property.payloadProperty1"></a>
@@ -194,6 +468,8 @@ payload_property1: str
 ```
 
 - *Type:* str
+
+An optional string property for the payload.
 
 ---
 
@@ -205,10 +481,14 @@ payload_property2: typing.Union[int, float]
 
 - *Type:* typing.Union[int, float]
 
+An optional numeric property for the payload.
+
 ---
 
 
 ### XpanderClient <a name="XpanderClient" id="xpander-sdk.XpanderClient"></a>
+
+Class representing the Xpander client.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.XpanderClient.Initializer"></a>
 
@@ -218,15 +498,15 @@ import xpander_sdk
 xpander_sdk.XpanderClient(
   agent_key: str,
   agent_url: str,
-  llm_provider: str
+  llm_provider: LLMProvider
 )
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agent_key</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agent_url</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llm_provider</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agent_key</a></code> | <code>str</code> | - The API key for the agent. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agent_url</a></code> | <code>str</code> | - The URL for the agent. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llm_provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 
 ---
 
@@ -234,17 +514,23 @@ xpander_sdk.XpanderClient(
 
 - *Type:* str
 
+The API key for the agent.
+
 ---
 
 ##### `agent_url`<sup>Required</sup> <a name="agent_url" id="xpander-sdk.XpanderClient.Initializer.parameter.agentUrl"></a>
 
 - *Type:* str
 
+The URL for the agent.
+
 ---
 
 ##### `llm_provider`<sup>Required</sup> <a name="llm_provider" id="xpander-sdk.XpanderClient.Initializer.parameter.llmProvider"></a>
 
-- *Type:* str
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+The LLM provider to use.
 
 ---
 
@@ -252,9 +538,9 @@ xpander_sdk.XpanderClient(
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">load_xpander_tools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpander_tool_call</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">load_xpander_tools</a></code> | Loads the tools available from the Xpander agent. |
+| <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpander_tool_call</a></code> | Invokes the tools based on the tool selector response. |
 
 ---
 
@@ -264,17 +550,23 @@ xpander_sdk.XpanderClient(
 def load_xpander_tools() -> typing.List[typing.Any]
 ```
 
+Loads the tools available from the Xpander agent.
+
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```python
 def tools(
-  llm_provider: str = None
-) -> typing.Union[typing.List[ITool], typing.List[IBedrockTool]]
+  llm_provider: LLMProvider = None
+) -> typing.Union[typing.List[typing.Any], typing.List[IOpenAIToolOutput], typing.List[IBedrockToolOutput]]
 ```
+
+Retrieves the tools for the current or specified LLM provider.
 
 ###### `llm_provider`<sup>Optional</sup> <a name="llm_provider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
 
-- *Type:* str
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+(Optional) The LLM provider to use.
 
 ---
 
@@ -287,15 +579,21 @@ def xpander_tool_call(
 ) -> typing.List[ToolResponse]
 ```
 
+Invokes the tools based on the tool selector response.
+
 ###### `tool_selector_response`<sup>Required</sup> <a name="tool_selector_response" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.toolSelectorResponse"></a>
 
 - *Type:* typing.Any
+
+The response from the tool selector.
 
 ---
 
 ###### `llm_provider`<sup>Optional</sup> <a name="llm_provider" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.llmProvider"></a>
 
 - *Type:* str
+
+(Optional) The LLM provider to use.
 
 ---
 
@@ -304,9 +602,8 @@ def xpander_tool_call(
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.property.validProviders">valid_providers</a></code> | <code>typing.List[str]</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.supportedModels">supported_models</a></code> | <code>typing.Mapping[str]</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.validProviders">valid_providers</a></code> | <code>typing.List[str]</code> | Provides a list of valid LLM providers. |
+| <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | Retrieves the tool names mapping for the current LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agent_key</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agent_url</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">tools_cache</a></code> | <code>typing.Any</code> | *No description.* |
@@ -321,15 +618,7 @@ valid_providers: typing.List[str]
 
 - *Type:* typing.List[str]
 
----
-
-##### `supported_models`<sup>Required</sup> <a name="supported_models" id="xpander-sdk.XpanderClient.property.supportedModels"></a>
-
-```python
-supported_models: typing.Mapping[str]
-```
-
-- *Type:* typing.Mapping[str]
+Provides a list of valid LLM providers.
 
 ---
 
@@ -340,6 +629,8 @@ tools_names_mapping: typing.Mapping[str]
 ```
 
 - *Type:* typing.Mapping[str]
+
+Retrieves the tool names mapping for the current LLM provider.
 
 ---
 
@@ -380,13 +671,15 @@ tools_cache: typing.Any
 
 - *Implemented By:* <a href="#xpander-sdk.IBedrockTool">IBedrockTool</a>
 
+Interface representing a Bedrock tool.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockTool.property.toolSpec">tool_spec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.IBedrockTool.property.execute">execute</a></code> | <code>typing.Any</code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockTool.property.toolSpec">tool_spec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | The tool specification of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockTool.property.execute">execute</a></code> | <code>typing.Any</code> | Function to execute the Bedrock tool. |
 
 ---
 
@@ -398,6 +691,8 @@ tool_spec: IBedrockToolSpec
 
 - *Type:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
 
+The tool specification of the Bedrock tool.
+
 ---
 
 ##### `execute`<sup>Optional</sup> <a name="execute" id="xpander-sdk.IBedrockTool.property.execute"></a>
@@ -408,20 +703,62 @@ execute: typing.Any
 
 - *Type:* typing.Any
 
+Function to execute the Bedrock tool.
+
 ---
 
-### IBedrockToolSpec <a name="IBedrockToolSpec" id="xpander-sdk.IBedrockToolSpec"></a>
+### IBedrockToolOutput <a name="IBedrockToolOutput" id="xpander-sdk.IBedrockToolOutput"></a>
 
-- *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+- *Implemented By:* <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockToolSpec.property.description">description</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IBedrockToolSpec.property.inputSchema">input_schema</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.IBedrockToolSpec.property.name">name</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockToolOutput.property.toolSpec">tool_spec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | The tool specification of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockToolOutput.property.execute">execute</a></code> | <code>typing.Any</code> | Function to execute the Bedrock tool. |
+
+---
+
+##### `tool_spec`<sup>Required</sup> <a name="tool_spec" id="xpander-sdk.IBedrockToolOutput.property.toolSpec"></a>
+
+```python
+tool_spec: IBedrockToolSpec
+```
+
+- *Type:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+
+The tool specification of the Bedrock tool.
+
+---
+
+##### `execute`<sup>Optional</sup> <a name="execute" id="xpander-sdk.IBedrockToolOutput.property.execute"></a>
+
+```python
+execute: typing.Any
+```
+
+- *Type:* typing.Any
+
+Function to execute the Bedrock tool.
+
+---
+
+### IBedrockToolSpec <a name="IBedrockToolSpec" id="xpander-sdk.IBedrockToolSpec"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
+
+Interface representing a Bedrock tool specification.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.description">description</a></code> | <code>str</code> | The description of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.inputSchema">input_schema</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a></code> | Input schema of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.name">name</a></code> | <code>str</code> | The name of the Bedrock tool. |
 
 ---
 
@@ -433,6 +770,8 @@ description: str
 
 - *Type:* str
 
+The description of the Bedrock tool.
+
 ---
 
 ##### `input_schema`<sup>Required</sup> <a name="input_schema" id="xpander-sdk.IBedrockToolSpec.property.inputSchema"></a>
@@ -442,6 +781,8 @@ input_schema: IBedrockToolSpecInputSchema
 ```
 
 - *Type:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
+
+Input schema of the Bedrock tool.
 
 ---
 
@@ -453,18 +794,22 @@ name: str
 
 - *Type:* str
 
+The name of the Bedrock tool.
+
 ---
 
 ### IBedrockToolSpecInputSchema <a name="IBedrockToolSpecInputSchema" id="xpander-sdk.IBedrockToolSpecInputSchema"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
 
+Interface representing the input schema for a Bedrock tool specification.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema.property.json">json</a></code> | <code>typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema.property.json">json</a></code> | <code>typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]</code> | JSON schema of the tool parameters. |
 
 ---
 
@@ -476,18 +821,22 @@ json: typing.Mapping[IToolParameter]
 
 - *Type:* typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]
 
+JSON schema of the tool parameters.
+
 ---
 
 ### ILLMProviderHandler <a name="ILLMProviderHandler" id="xpander-sdk.ILLMProviderHandler"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.ILLMProviderHandler">ILLMProviderHandler</a>
 
+Interface representing a LLM (Large Language Model) provider handler.
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">get_tools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">invoke_tools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">get_tools</a></code> | Retrieves tools. |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">invoke_tools</a></code> | Invokes tools based on the tool selector response. |
 
 ---
 
@@ -496,12 +845,16 @@ json: typing.Mapping[IToolParameter]
 ```python
 def get_tools(
   functionize: bool = None
-) -> typing.List[ITool]
+) -> typing.List[typing.Any]
 ```
+
+Retrieves tools.
 
 ###### `functionize`<sup>Optional</sup> <a name="functionize" id="xpander-sdk.ILLMProviderHandler.getTools.parameter.functionize"></a>
 
 - *Type:* bool
+
+Whether to functionize the tools.
 
 ---
 
@@ -513,9 +866,13 @@ def invoke_tools(
 ) -> typing.Any
 ```
 
+Invokes tools based on the tool selector response.
+
 ###### `tool_selector_response`<sup>Required</sup> <a name="tool_selector_response" id="xpander-sdk.ILLMProviderHandler.invokeTools.parameter.toolSelectorResponse"></a>
 
 - *Type:* typing.Any
+
+The response from the tool selector.
 
 ---
 
@@ -523,7 +880,7 @@ def invoke_tools(
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | Mapping of tool names. |
 
 ---
 
@@ -535,19 +892,23 @@ tools_names_mapping: typing.Mapping[str]
 
 - *Type:* typing.Mapping[str]
 
+Mapping of tool names.
+
 ---
 
 ### IMessage <a name="IMessage" id="xpander-sdk.IMessage"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IMessage">IMessage</a>
 
+Interface representing a message.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IMessage.property.content">content</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IMessage.property.role">role</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMessage.property.content">content</a></code> | <code>str</code> | The content of the message. |
+| <code><a href="#xpander-sdk.IMessage.property.role">role</a></code> | <code>str</code> | The role of the message sender. |
 
 ---
 
@@ -559,6 +920,8 @@ content: str
 
 - *Type:* str
 
+The content of the message.
+
 ---
 
 ##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.IMessage.property.role"></a>
@@ -569,21 +932,136 @@ role: str
 
 - *Type:* str
 
+The role of the message sender.
+
 ---
 
-### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+### IOpenAIToolFunctionOutput <a name="IOpenAIToolFunctionOutput" id="xpander-sdk.IOpenAIToolFunctionOutput"></a>
 
-- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
+- *Implemented By:* <a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a>
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ITool.property.description">description</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ITool.property.name">name</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.ITool.property.func">func</a></code> | <code>typing.Any</code> | *No description.* |
-| <code><a href="#xpander-sdk.ITool.property.parameters">parameters</a></code> | <code>typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.description">description</a></code> | <code>str</code> | The description of the tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.name">name</a></code> | <code>str</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.execute">execute</a></code> | <code>typing.Any</code> | Function to execute the Bedrock tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.func">func</a></code> | <code>typing.Any</code> | Function to execute the tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.parameters">parameters</a></code> | <code><a href="#xpander-sdk.IToolParameter">IToolParameter</a></code> | Parameters of the tool. |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.IOpenAIToolFunctionOutput.property.description"></a>
+
+```python
+description: str
+```
+
+- *Type:* str
+
+The description of the tool.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IOpenAIToolFunctionOutput.property.name"></a>
+
+```python
+name: str
+```
+
+- *Type:* str
+
+The name of the tool.
+
+---
+
+##### `execute`<sup>Optional</sup> <a name="execute" id="xpander-sdk.IOpenAIToolFunctionOutput.property.execute"></a>
+
+```python
+execute: typing.Any
+```
+
+- *Type:* typing.Any
+
+Function to execute the Bedrock tool.
+
+---
+
+##### `func`<sup>Optional</sup> <a name="func" id="xpander-sdk.IOpenAIToolFunctionOutput.property.func"></a>
+
+```python
+func: typing.Any
+```
+
+- *Type:* typing.Any
+
+Function to execute the tool.
+
+---
+
+##### `parameters`<sup>Optional</sup> <a name="parameters" id="xpander-sdk.IOpenAIToolFunctionOutput.property.parameters"></a>
+
+```python
+parameters: IToolParameter
+```
+
+- *Type:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
+
+Parameters of the tool.
+
+---
+
+### IOpenAIToolOutput <a name="IOpenAIToolOutput" id="xpander-sdk.IOpenAIToolOutput"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IOpenAIToolOutput.property.function">function</a></code> | <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IOpenAIToolOutput.property.type">type</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `function`<sup>Required</sup> <a name="function" id="xpander-sdk.IOpenAIToolOutput.property.function"></a>
+
+```python
+function: IOpenAIToolFunctionOutput
+```
+
+- *Type:* <a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a>
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.IOpenAIToolOutput.property.type"></a>
+
+```python
+type: str
+```
+
+- *Type:* str
+
+---
+
+### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
+
+Interface representing a tool.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ITool.property.description">description</a></code> | <code>str</code> | The description of the tool. |
+| <code><a href="#xpander-sdk.ITool.property.name">name</a></code> | <code>str</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.ITool.property.func">func</a></code> | <code>typing.Any</code> | Function to execute the tool. |
+| <code><a href="#xpander-sdk.ITool.property.parameters">parameters</a></code> | <code>typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]</code> | Parameters of the tool. |
 
 ---
 
@@ -595,6 +1073,8 @@ description: str
 
 - *Type:* str
 
+The description of the tool.
+
 ---
 
 ##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ITool.property.name"></a>
@@ -604,6 +1084,8 @@ name: str
 ```
 
 - *Type:* str
+
+The name of the tool.
 
 ---
 
@@ -615,6 +1097,8 @@ func: typing.Any
 
 - *Type:* typing.Any
 
+Function to execute the tool.
+
 ---
 
 ##### `parameters`<sup>Optional</sup> <a name="parameters" id="xpander-sdk.ITool.property.parameters"></a>
@@ -625,30 +1109,36 @@ parameters: typing.Mapping[IToolParameter]
 
 - *Type:* typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]
 
+Parameters of the tool.
+
 ---
 
 ### IToolParameter <a name="IToolParameter" id="xpander-sdk.IToolParameter"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
 
+Interface representing a tool parameter.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolParameter.property.properties">properties</a></code> | <code>typing.Mapping[typing.Any]</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolParameter.property.type">type</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolParameter.property.required">required</a></code> | <code>typing.List[str]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolParameter.property.properties">properties</a></code> | <code>typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]</code> | Properties of the parameter. |
+| <code><a href="#xpander-sdk.IToolParameter.property.type">type</a></code> | <code>str</code> | The type of the parameter. |
+| <code><a href="#xpander-sdk.IToolParameter.property.required">required</a></code> | <code>typing.List[str]</code> | List of required properties. |
 
 ---
 
 ##### `properties`<sup>Required</sup> <a name="properties" id="xpander-sdk.IToolParameter.property.properties"></a>
 
 ```python
-properties: typing.Mapping[typing.Any]
+properties: typing.Mapping[IToolParameter]
 ```
 
-- *Type:* typing.Mapping[typing.Any]
+- *Type:* typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]
+
+Properties of the parameter.
 
 ---
 
@@ -660,6 +1150,8 @@ type: str
 
 - *Type:* str
 
+The type of the parameter.
+
 ---
 
 ##### `required`<sup>Optional</sup> <a name="required" id="xpander-sdk.IToolParameter.property.required"></a>
@@ -669,6 +1161,8 @@ required: typing.List[str]
 ```
 
 - *Type:* typing.List[str]
+
+List of required properties.
 
 ---
 
@@ -681,13 +1175,13 @@ required: typing.List[str]
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolResponse.property.filteredTool">filtered_tool</a></code> | <code>any</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.name">name</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">response_message</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.role">role</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty1">payload_property1</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolResponse.property.filteredTool">filtered_tool</a></code> | <code>any</code> | The filtered tool object. |
+| <code><a href="#xpander-sdk.IToolResponse.property.name">name</a></code> | <code>str</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">response_message</a></code> | <code>str</code> | The response message from the tool. |
+| <code><a href="#xpander-sdk.IToolResponse.property.role">role</a></code> | <code>str</code> | The role in the response. |
+| <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | The ID of the tool call. |
+| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty1">payload_property1</a></code> | <code>str</code> | An optional string property for the payload. |
+| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | An optional numeric property for the payload. |
 
 ---
 
@@ -699,6 +1193,8 @@ filtered_tool: any
 
 - *Type:* any
 
+The filtered tool object.
+
 ---
 
 ##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IToolResponse.property.name"></a>
@@ -708,6 +1204,8 @@ name: str
 ```
 
 - *Type:* str
+
+The name of the tool.
 
 ---
 
@@ -719,6 +1217,8 @@ response_message: str
 
 - *Type:* str
 
+The response message from the tool.
+
 ---
 
 ##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.IToolResponse.property.role"></a>
@@ -728,6 +1228,8 @@ role: str
 ```
 
 - *Type:* str
+
+The role in the response.
 
 ---
 
@@ -739,6 +1241,8 @@ tool_call_id: str
 
 - *Type:* str
 
+The ID of the tool call.
+
 ---
 
 ##### `payload_property1`<sup>Optional</sup> <a name="payload_property1" id="xpander-sdk.IToolResponse.property.payloadProperty1"></a>
@@ -749,6 +1253,8 @@ payload_property1: str
 
 - *Type:* str
 
+An optional string property for the payload.
+
 ---
 
 ##### `payload_property2`<sup>Optional</sup> <a name="payload_property2" id="xpander-sdk.IToolResponse.property.payloadProperty2"></a>
@@ -758,6 +1264,8 @@ payload_property2: typing.Union[int, float]
 ```
 
 - *Type:* typing.Union[int, float]
+
+An optional numeric property for the payload.
 
 ---
 
@@ -770,8 +1278,8 @@ payload_property2: typing.Union[int, float]
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolResponsePayload.property.property1">property1</a></code> | <code>str</code> | *No description.* |
-| <code><a href="#xpander-sdk.IToolResponsePayload.property.property2">property2</a></code> | <code>typing.Union[int, float]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolResponsePayload.property.property1">property1</a></code> | <code>str</code> | A string property for the tool response payload. |
+| <code><a href="#xpander-sdk.IToolResponsePayload.property.property2">property2</a></code> | <code>typing.Union[int, float]</code> | A numeric property for the tool response payload. |
 
 ---
 
@@ -783,6 +1291,8 @@ property1: str
 
 - *Type:* str
 
+A string property for the tool response payload.
+
 ---
 
 ##### `property2`<sup>Required</sup> <a name="property2" id="xpander-sdk.IToolResponsePayload.property.property2"></a>
@@ -792,6 +1302,8 @@ property2: typing.Union[int, float]
 ```
 
 - *Type:* typing.Union[int, float]
+
+A numeric property for the tool response payload.
 
 ---
 

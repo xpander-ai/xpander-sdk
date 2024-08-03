@@ -3,9 +3,15 @@ import { XpanderClient } from './XpanderClient';
 import { RequestPayload } from '../models/payloads';
 import { ITool } from '../types';
 
+/**
+ * Interface representing tool instructions.
+ */
 interface IToolInstructions {
+  /** The ID of the tool. */
   id: string;
+  /** The description of the tool function. */
   function_description: string;
+  /** The parameters for the tool. */
   parameters?: any;
 }
 
