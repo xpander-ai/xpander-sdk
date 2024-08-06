@@ -242,7 +242,7 @@ public readonly GPT_4_O_MINI: string;
 ```typescript
 import { ToolResponse } from 'xpander-sdk'
 
-new ToolResponse(toolCallId: string, role: string, name: string, responseMessage: string, filteredTool: object, payloadProperty1?: string, payloadProperty2?: number)
+new ToolResponse(toolCallId: string, role: string, name: string, responseMessage: string, filteredTool: object, payloadRequest: string, payloadProperty1?: string, payloadProperty2?: number)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -252,6 +252,7 @@ new ToolResponse(toolCallId: string, role: string, name: string, responseMessage
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.name">name</a></code> | <code>string</code> | - The name of the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">responseMessage</a></code> | <code>string</code> | - The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">filteredTool</a></code> | <code>object</code> | - The filtered tool object. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">payloadRequest</a></code> | <code>string</code> | - The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">payloadProperty1</a></code> | <code>string</code> | - An optional string property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">payloadProperty2</a></code> | <code>number</code> | - An optional numeric property for the payload. |
 
@@ -294,6 +295,14 @@ The response message from the tool.
 - *Type:* object
 
 The filtered tool object.
+
+---
+
+##### `payloadRequest`<sup>Required</sup> <a name="payloadRequest" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest"></a>
+
+- *Type:* string
+
+The request payload that sent to tool.
 
 ---
 
@@ -371,6 +380,7 @@ The JSON object to create the instance from.
 | <code><a href="#xpander-sdk.ToolResponse.property.rawResponse">rawResponse</a></code> | <code>any</code> | Gets the response message. |
 | <code><a href="#xpander-sdk.ToolResponse.property.filteredTool">filteredTool</a></code> | <code>object</code> | The filtered tool object. |
 | <code><a href="#xpander-sdk.ToolResponse.property.name">name</a></code> | <code>string</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.property.payloadRequest">payloadRequest</a></code> | <code>string</code> | The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">responseMessage</a></code> | <code>string</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.property.role">role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">toolCallId</a></code> | <code>string</code> | The ID of the tool call. |
@@ -412,6 +422,18 @@ public readonly name: string;
 - *Type:* string
 
 The name of the tool.
+
+---
+
+##### `payloadRequest`<sup>Required</sup> <a name="payloadRequest" id="xpander-sdk.ToolResponse.property.payloadRequest"></a>
+
+```typescript
+public readonly payloadRequest: string;
+```
+
+- *Type:* string
+
+The request payload that sent to tool.
 
 ---
 
@@ -1154,6 +1176,7 @@ List of required properties.
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.IToolResponse.property.filteredTool">filteredTool</a></code> | <code>object</code> | The filtered tool object. |
 | <code><a href="#xpander-sdk.IToolResponse.property.name">name</a></code> | <code>string</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.IToolResponse.property.payloadRequest">payloadRequest</a></code> | <code>string</code> | The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">responseMessage</a></code> | <code>string</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.role">role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">toolCallId</a></code> | <code>string</code> | The ID of the tool call. |
@@ -1183,6 +1206,18 @@ public readonly name: string;
 - *Type:* string
 
 The name of the tool.
+
+---
+
+##### `payloadRequest`<sup>Required</sup> <a name="payloadRequest" id="xpander-sdk.IToolResponse.property.payloadRequest"></a>
+
+```typescript
+public readonly payloadRequest: string;
+```
+
+- *Type:* string
+
+The request payload that sent to tool.
 
 ---
 

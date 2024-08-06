@@ -242,7 +242,7 @@ public string Gpt4OMini { get; }
 ```csharp
 using Xpander.AI.Sdk;
 
-new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMessage, Newtonsoft.Json.Linq.JObject FilteredTool, string PayloadProperty1 = null, double PayloadProperty2 = null);
+new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMessage, Newtonsoft.Json.Linq.JObject FilteredTool, string PayloadRequest, string PayloadProperty1 = null, double PayloadProperty2 = null);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -252,6 +252,7 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.name">Name</a></code> | <code>string</code> | - The name of the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">ResponseMessage</a></code> | <code>string</code> | - The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | - The filtered tool object. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">PayloadRequest</a></code> | <code>string</code> | - The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | - An optional string property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | - An optional numeric property for the payload. |
 
@@ -294,6 +295,14 @@ The response message from the tool.
 - *Type:* Newtonsoft.Json.Linq.JObject
 
 The filtered tool object.
+
+---
+
+##### `PayloadRequest`<sup>Required</sup> <a name="PayloadRequest" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest"></a>
+
+- *Type:* string
+
+The request payload that sent to tool.
 
 ---
 
@@ -371,6 +380,7 @@ The JSON object to create the instance from.
 | <code><a href="#xpander-sdk.ToolResponse.property.rawResponse">RawResponse</a></code> | <code>object</code> | Gets the response message. |
 | <code><a href="#xpander-sdk.ToolResponse.property.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | The filtered tool object. |
 | <code><a href="#xpander-sdk.ToolResponse.property.name">Name</a></code> | <code>string</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.property.payloadRequest">PayloadRequest</a></code> | <code>string</code> | The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">ResponseMessage</a></code> | <code>string</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.property.role">Role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | The ID of the tool call. |
@@ -412,6 +422,18 @@ public string Name { get; }
 - *Type:* string
 
 The name of the tool.
+
+---
+
+##### `PayloadRequest`<sup>Required</sup> <a name="PayloadRequest" id="xpander-sdk.ToolResponse.property.payloadRequest"></a>
+
+```csharp
+public string PayloadRequest { get; }
+```
+
+- *Type:* string
+
+The request payload that sent to tool.
 
 ---
 
@@ -1154,6 +1176,7 @@ List of required properties.
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.IToolResponse.property.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | The filtered tool object. |
 | <code><a href="#xpander-sdk.IToolResponse.property.name">Name</a></code> | <code>string</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.IToolResponse.property.payloadRequest">PayloadRequest</a></code> | <code>string</code> | The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">ResponseMessage</a></code> | <code>string</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.role">Role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | The ID of the tool call. |
@@ -1183,6 +1206,18 @@ public string Name { get; set; }
 - *Type:* string
 
 The name of the tool.
+
+---
+
+##### `PayloadRequest`<sup>Required</sup> <a name="PayloadRequest" id="xpander-sdk.IToolResponse.property.payloadRequest"></a>
+
+```csharp
+public string PayloadRequest { get; set; }
+```
+
+- *Type:* string
+
+The request payload that sent to tool.
 
 ---
 

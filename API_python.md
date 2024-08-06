@@ -248,6 +248,7 @@ xpander_sdk.ToolResponse(
   name: str,
   response_message: str,
   filtered_tool: any,
+  payload_request: str,
   payload_property1: str = None,
   payload_property2: typing.Union[int, float] = None
 )
@@ -260,6 +261,7 @@ xpander_sdk.ToolResponse(
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.name">name</a></code> | <code>str</code> | - The name of the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">response_message</a></code> | <code>str</code> | - The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">filtered_tool</a></code> | <code>any</code> | - The filtered tool object. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">payload_request</a></code> | <code>str</code> | - The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">payload_property1</a></code> | <code>str</code> | - An optional string property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | - An optional numeric property for the payload. |
 
@@ -302,6 +304,14 @@ The response message from the tool.
 - *Type:* any
 
 The filtered tool object.
+
+---
+
+##### `payload_request`<sup>Required</sup> <a name="payload_request" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest"></a>
+
+- *Type:* str
+
+The request payload that sent to tool.
 
 ---
 
@@ -381,6 +391,7 @@ The JSON object to create the instance from.
 | <code><a href="#xpander-sdk.ToolResponse.property.rawResponse">raw_response</a></code> | <code>typing.Any</code> | Gets the response message. |
 | <code><a href="#xpander-sdk.ToolResponse.property.filteredTool">filtered_tool</a></code> | <code>any</code> | The filtered tool object. |
 | <code><a href="#xpander-sdk.ToolResponse.property.name">name</a></code> | <code>str</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.ToolResponse.property.payloadRequest">payload_request</a></code> | <code>str</code> | The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">response_message</a></code> | <code>str</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.property.role">role</a></code> | <code>str</code> | The role in the response. |
 | <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | The ID of the tool call. |
@@ -422,6 +433,18 @@ name: str
 - *Type:* str
 
 The name of the tool.
+
+---
+
+##### `payload_request`<sup>Required</sup> <a name="payload_request" id="xpander-sdk.ToolResponse.property.payloadRequest"></a>
+
+```python
+payload_request: str
+```
+
+- *Type:* str
+
+The request payload that sent to tool.
 
 ---
 
@@ -1177,6 +1200,7 @@ List of required properties.
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.IToolResponse.property.filteredTool">filtered_tool</a></code> | <code>any</code> | The filtered tool object. |
 | <code><a href="#xpander-sdk.IToolResponse.property.name">name</a></code> | <code>str</code> | The name of the tool. |
+| <code><a href="#xpander-sdk.IToolResponse.property.payloadRequest">payload_request</a></code> | <code>str</code> | The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">response_message</a></code> | <code>str</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.role">role</a></code> | <code>str</code> | The role in the response. |
 | <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | The ID of the tool call. |
@@ -1206,6 +1230,18 @@ name: str
 - *Type:* str
 
 The name of the tool.
+
+---
+
+##### `payload_request`<sup>Required</sup> <a name="payload_request" id="xpander-sdk.IToolResponse.property.payloadRequest"></a>
+
+```python
+payload_request: str
+```
+
+- *Type:* str
+
+The request payload that sent to tool.
 
 ---
 
