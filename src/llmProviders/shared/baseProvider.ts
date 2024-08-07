@@ -124,8 +124,13 @@ export class BaseLLMProvider {
             } catch (e) {
               payload = null;
             }
-            const payloadRequest = JSON.stringify(payload);  // Convert payload to JSON string
 
+            let payloadRequest;
+            try {
+              payloadRequest = JSON.stringify(payload); // Convert payload to JSON string
+            } catch (err) {
+              payloadRequest = String(payload); // Convert payload to JSON string
+            }
 
             const functionResponse = this.singleToolInvoke(
               functionName,
@@ -138,7 +143,8 @@ export class BaseLLMProvider {
                 payload,
                 'tool',
                 functionResponse,
-                filteredTool, payloadRequest,
+                filteredTool,
+                payloadRequest,
               ),
             );
           }

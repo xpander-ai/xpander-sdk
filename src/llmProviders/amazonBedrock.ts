@@ -176,7 +176,13 @@ export class AmazonBedrock extends BaseLLMProvider {
         const functionName = toolUse.name;
         const originalFunctionName = this.toolsNamesMapping[functionName];
         const payload = toolUse?.input || {};
-        const payloadRequest = JSON.stringify(payload);  // Convert payload to JSON string
+
+        let payloadRequest;
+        try {
+          payloadRequest = JSON.stringify(payload); // Convert payload to JSON string
+        } catch (err) {
+          payloadRequest = String(payload); // Convert payload to JSON string
+        }
 
         const functionResponse = this.singleToolInvoke(functionName, payload);
         const filteredTool = this.filterTool(functionName);
@@ -187,7 +193,7 @@ export class AmazonBedrock extends BaseLLMProvider {
             originalFunctionName,
             functionResponse,
             filteredTool,
-              payloadRequest
+            payloadRequest,
           ),
         );
       }
