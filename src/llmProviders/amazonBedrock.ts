@@ -184,6 +184,32 @@ export class AmazonBedrock extends BaseLLMProvider {
           payloadRequest = String(payload); // Convert payload to JSON string
         }
 
+        // support local tools
+        if (
+          Array.isArray(this.client.localTools) &&
+          this.client.localTools.length !== 0
+        ) {
+          const localTool = this.client.localTools.find(
+            (lt: any) => lt.toolSpec.name === functionName,
+          );
+          if (localTool) {
+            outputMessages.push(
+              new ToolResponse(
+                toolUse.toolUseId,
+                '',
+                'tool',
+                '',
+                {},
+                payloadRequest,
+                undefined,
+                undefined,
+                localTool,
+              ),
+            );
+            continue;
+          }
+        }
+
         const functionResponse = this.singleToolInvoke(functionName, payload);
         const filteredTool = this.filterTool(functionName);
         outputMessages.push(

@@ -80,3 +80,14 @@ export interface IOpenAIToolOutput {
 }
 
 export type IToolOutput = IBedrockToolOutput | IOpenAIToolOutput;
+
+export interface ILocalToolFunction {
+  readonly name: string;
+  readonly description: string;
+  readonly parameters: any;
+}
+
+export interface ILocalTool {
+  readonly type: 'function';
+  readonly function: ILocalToolFunction;
+}

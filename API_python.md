@@ -250,7 +250,8 @@ xpander_sdk.ToolResponse(
   filtered_tool: any,
   payload_request: str,
   payload_property1: str = None,
-  payload_property2: typing.Union[int, float] = None
+  payload_property2: typing.Union[int, float] = None,
+  local_tool: typing.Union[IBedrockToolOutput, ILocalTool] = None
 )
 ```
 
@@ -264,6 +265,7 @@ xpander_sdk.ToolResponse(
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">payload_request</a></code> | <code>str</code> | - The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">payload_property1</a></code> | <code>str</code> | - An optional string property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | - An optional numeric property for the payload. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.localTool">local_tool</a></code> | <code>typing.Union[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>, <a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | *No description.* |
 
 ---
 
@@ -331,6 +333,12 @@ An optional numeric property for the payload.
 
 ---
 
+##### `local_tool`<sup>Optional</sup> <a name="local_tool" id="xpander-sdk.ToolResponse.Initializer.parameter.localTool"></a>
+
+- *Type:* typing.Union[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>, <a href="#xpander-sdk.ILocalTool">ILocalTool</a>]
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -395,6 +403,7 @@ The JSON object to create the instance from.
 | <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">response_message</a></code> | <code>str</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.property.role">role</a></code> | <code>str</code> | The role in the response. |
 | <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | The ID of the tool call. |
+| <code><a href="#xpander-sdk.ToolResponse.property.localTool">local_tool</a></code> | <code>typing.Any</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">payload_property1</a></code> | <code>str</code> | An optional string property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | An optional numeric property for the payload. |
 
@@ -484,6 +493,16 @@ The ID of the tool call.
 
 ---
 
+##### `local_tool`<sup>Optional</sup> <a name="local_tool" id="xpander-sdk.ToolResponse.property.localTool"></a>
+
+```python
+local_tool: typing.Any
+```
+
+- *Type:* typing.Any
+
+---
+
 ##### `payload_property1`<sup>Optional</sup> <a name="payload_property1" id="xpander-sdk.ToolResponse.property.payloadProperty1"></a>
 
 ```python
@@ -521,7 +540,8 @@ import xpander_sdk
 xpander_sdk.XpanderClient(
   agent_key: str,
   agent_url: str,
-  llm_provider: LLMProvider
+  llm_provider: LLMProvider,
+  local_tools: typing.List[ILocalTool] = None
 )
 ```
 
@@ -530,6 +550,7 @@ xpander_sdk.XpanderClient(
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agent_key</a></code> | <code>str</code> | - The API key for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agent_url</a></code> | <code>str</code> | - The URL for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llm_provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | *No description.* |
 
 ---
 
@@ -557,13 +578,34 @@ The LLM provider to use.
 
 ---
 
+##### `local_tools`<sup>Optional</sup> <a name="local_tools" id="xpander-sdk.XpanderClient.Initializer.parameter.localTools"></a>
+
+- *Type:* typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#xpander-sdk.XpanderClient.addLocalTools">add_local_tools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">load_xpander_tools</a></code> | Loads the tools available from the Xpander agent. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpander_tool_call</a></code> | Invokes the tools based on the tool selector response. |
+
+---
+
+##### `add_local_tools` <a name="add_local_tools" id="xpander-sdk.XpanderClient.addLocalTools"></a>
+
+```python
+def add_local_tools(
+  tools: typing.List[ILocalTool]
+) -> None
+```
+
+###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.XpanderClient.addLocalTools.parameter.tools"></a>
+
+- *Type:* typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]
 
 ---
 
@@ -629,6 +671,7 @@ The response from the tool selector.
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | Retrieves the tool names mapping for the current LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agent_key</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agent_url</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">tools_cache</a></code> | <code>typing.Any</code> | *No description.* |
 
 ---
@@ -674,6 +717,16 @@ agent_url: str
 ```
 
 - *Type:* str
+
+---
+
+##### `local_tools`<sup>Required</sup> <a name="local_tools" id="xpander-sdk.XpanderClient.property.localTools"></a>
+
+```python
+local_tools: typing.List[ILocalTool]
+```
+
+- *Type:* typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]
 
 ---
 
@@ -916,6 +969,85 @@ tools_names_mapping: typing.Mapping[str]
 - *Type:* typing.Mapping[str]
 
 Mapping of tool names.
+
+---
+
+### ILocalTool <a name="ILocalTool" id="xpander-sdk.ILocalTool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ILocalTool.property.function">function</a></code> | <code><a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ILocalTool.property.type">type</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `function`<sup>Required</sup> <a name="function" id="xpander-sdk.ILocalTool.property.function"></a>
+
+```python
+function: ILocalToolFunction
+```
+
+- *Type:* <a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a>
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.ILocalTool.property.type"></a>
+
+```python
+type: str
+```
+
+- *Type:* str
+
+---
+
+### ILocalToolFunction <a name="ILocalToolFunction" id="xpander-sdk.ILocalToolFunction"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.description">description</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.name">name</a></code> | <code>str</code> | *No description.* |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.parameters">parameters</a></code> | <code>typing.Any</code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.ILocalToolFunction.property.description"></a>
+
+```python
+description: str
+```
+
+- *Type:* str
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ILocalToolFunction.property.name"></a>
+
+```python
+name: str
+```
+
+- *Type:* str
+
+---
+
+##### `parameters`<sup>Required</sup> <a name="parameters" id="xpander-sdk.ILocalToolFunction.property.parameters"></a>
+
+```python
+parameters: typing.Any
+```
+
+- *Type:* typing.Any
 
 ---
 

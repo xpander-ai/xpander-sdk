@@ -74,6 +74,14 @@ export class BaseLLMProvider {
 
       tools.push(toolDeclaration);
     }
+
+    // post process local tools
+    if (typeof this.postProcessTools === 'function') {
+      if (this.client.localTools.length !== 0) {
+        this.client.localTools = this.postProcessTools(this.client.localTools);
+      }
+    }
+
     return typeof this.postProcessTools === 'function'
       ? this.postProcessTools(tools)
       : tools;
@@ -130,6 +138,32 @@ export class BaseLLMProvider {
               payloadRequest = JSON.stringify(payload); // Convert payload to JSON string
             } catch (err) {
               payloadRequest = String(payload); // Convert payload to JSON string
+            }
+
+            // support local tools
+            if (
+              Array.isArray(this.client.localTools) &&
+              this.client.localTools.length !== 0
+            ) {
+              const localTool = this.client.localTools.find(
+                (lt) => lt.function.name === functionName,
+              );
+              if (localTool) {
+                outputMessages.push(
+                  new ToolResponse(
+                    toolCalls,
+                    payload,
+                    'tool',
+                    '',
+                    {},
+                    payloadRequest,
+                    undefined,
+                    undefined,
+                    localTool,
+                  ),
+                );
+                continue;
+              }
             }
 
             const functionResponse = this.singleToolInvoke(
