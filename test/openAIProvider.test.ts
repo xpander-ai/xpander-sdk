@@ -43,6 +43,7 @@ describe('Testing OpenAI Function Calling', () => {
 
     const toolResponse = xpanderClient.xpanderToolCall(response);
 
-    expect(toolResponse.length).toBeGreaterThan(0);
+    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
+    expect(toolResponse[0].payloadRequest).toEqual('{}'); // check payload request stringified
   });
 });

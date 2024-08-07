@@ -22,6 +22,8 @@ export interface IToolResponse {
   responseMessage: string;
   /** The filtered tool object. */
   filteredTool: object;
+  /** The request payload that sent to tool. */
+  payloadRequest: string;
 }
 
 // Tool response class
@@ -38,6 +40,7 @@ export class ToolResponse implements IToolResponse {
       json.name,
       json.responseMessage,
       json.filteredTool,
+      json.payloadRequest,
       json.payloadProperty1,
       json.payloadProperty2,
     );
@@ -50,23 +53,27 @@ export class ToolResponse implements IToolResponse {
   name: string;
   responseMessage: string;
   filteredTool: object;
+  payloadRequest: string;
 
   /**
-   * Constructs a new ToolResponse instance.
-   * @param toolCallId - The ID of the tool call.
-   * @param role - The role in the response.
-   * @param name - The name of the tool.
-   * @param responseMessage - The response message from the tool.
-   * @param filteredTool - The filtered tool object.
-   * @param payloadProperty1 - An optional string property for the payload.
-   * @param payloadProperty2 - An optional numeric property for the payload.
-   */
+     * Constructs a new ToolResponse instance.
+     * @param toolCallId - The ID of the tool call.
+     * @param role - The role in the response.
+     * @param name - The name of the tool.
+     * @param responseMessage - The response message from the tool.
+     * @param filteredTool - The filtered tool object.
+     * @param payloadRequest - The request payload that sent to tool.
+     * @param payloadProperty1 - An optional string property for the payload.
+     * @param payloadProperty2 - An optional numeric property for the payload.
+
+     */
   constructor(
     toolCallId: string,
     role: string,
     name: string,
     responseMessage: string,
     filteredTool: object,
+    payloadRequest: string,
     payloadProperty1?: string,
     payloadProperty2?: number,
   ) {
@@ -77,6 +84,7 @@ export class ToolResponse implements IToolResponse {
     this.name = name;
     this.responseMessage = responseMessage;
     this.filteredTool = filteredTool;
+    this.payloadRequest = payloadRequest;
   }
 
   /**
@@ -92,6 +100,7 @@ export class ToolResponse implements IToolResponse {
       name: this.name,
       responseMessage: this.responseMessage,
       filteredTool: this.filteredTool,
+      payloadRequest: this.payloadRequest,
     };
   }
 
