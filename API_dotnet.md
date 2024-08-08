@@ -242,7 +242,7 @@ public string Gpt4OMini { get; }
 ```csharp
 using Xpander.AI.Sdk;
 
-new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMessage, Newtonsoft.Json.Linq.JObject FilteredTool, string PayloadRequest, string PayloadProperty1 = null, double PayloadProperty2 = null, object LocalTool = null);
+new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMessage, Newtonsoft.Json.Linq.JObject FilteredTool, string PayloadRequest, object LocalTool = null);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -253,8 +253,6 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">ResponseMessage</a></code> | <code>string</code> | - The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">FilteredTool</a></code> | <code>Newtonsoft.Json.Linq.JObject</code> | - The filtered tool object. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">PayloadRequest</a></code> | <code>string</code> | - The request payload that sent to tool. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | - An optional string property for the payload. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | - An optional numeric property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.localTool">LocalTool</a></code> | <code>object</code> | *No description.* |
 
 ---
@@ -307,22 +305,6 @@ The request payload that sent to tool.
 
 ---
 
-##### `PayloadProperty1`<sup>Optional</sup> <a name="PayloadProperty1" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1"></a>
-
-- *Type:* string
-
-An optional string property for the payload.
-
----
-
-##### `PayloadProperty2`<sup>Optional</sup> <a name="PayloadProperty2" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2"></a>
-
-- *Type:* double
-
-An optional numeric property for the payload.
-
----
-
 ##### `LocalTool`<sup>Optional</sup> <a name="LocalTool" id="xpander-sdk.ToolResponse.Initializer.parameter.localTool"></a>
 
 - *Type:* object
@@ -333,18 +315,9 @@ An optional numeric property for the payload.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.buildMessage">BuildMessage</a></code> | Builds a message string from the tool response. |
 | <code><a href="#xpander-sdk.ToolResponse.toJSON">ToJSON</a></code> | Converts the ToolResponse instance to a JSON object. |
 
 ---
-
-##### `BuildMessage` <a name="BuildMessage" id="xpander-sdk.ToolResponse.buildMessage"></a>
-
-```csharp
-private string BuildMessage()
-```
-
-Builds a message string from the tool response.
 
 ##### `ToJSON` <a name="ToJSON" id="xpander-sdk.ToolResponse.toJSON"></a>
 
@@ -392,8 +365,6 @@ The JSON object to create the instance from.
 | <code><a href="#xpander-sdk.ToolResponse.property.role">Role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | The ID of the tool call. |
 | <code><a href="#xpander-sdk.ToolResponse.property.localTool">LocalTool</a></code> | <code>object</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | An optional string property for the payload. |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | An optional numeric property for the payload. |
 
 ---
 
@@ -491,30 +462,6 @@ public object LocalTool { get; }
 
 ---
 
-##### `PayloadProperty1`<sup>Optional</sup> <a name="PayloadProperty1" id="xpander-sdk.ToolResponse.property.payloadProperty1"></a>
-
-```csharp
-public string PayloadProperty1 { get; }
-```
-
-- *Type:* string
-
-An optional string property for the payload.
-
----
-
-##### `PayloadProperty2`<sup>Optional</sup> <a name="PayloadProperty2" id="xpander-sdk.ToolResponse.property.payloadProperty2"></a>
-
-```csharp
-public double PayloadProperty2 { get; }
-```
-
-- *Type:* double
-
-An optional numeric property for the payload.
-
----
-
 
 ### XpanderClient <a name="XpanderClient" id="xpander-sdk.XpanderClient"></a>
 
@@ -574,6 +521,7 @@ The LLM provider to use.
 | <code><a href="#xpander-sdk.XpanderClient.addLocalTools">AddLocalTools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">LoadXpanderTools</a></code> | Loads the tools available from the Xpander agent. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">Tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.xpanderSingleToolInvoke">XpanderSingleToolInvoke</a></code> | Invokes a single tool with the given tool ID and payload. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">XpanderToolCall</a></code> | Invokes the tools based on the tool selector response. |
 
 ---
@@ -611,6 +559,30 @@ Retrieves the tools for the current or specified LLM provider.
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 (Optional) The LLM provider to use.
+
+---
+
+##### `XpanderSingleToolInvoke` <a name="XpanderSingleToolInvoke" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke"></a>
+
+```csharp
+private string XpanderSingleToolInvoke(string ToolId, object Payload = null)
+```
+
+Invokes a single tool with the given tool ID and payload.
+
+###### `ToolId`<sup>Required</sup> <a name="ToolId" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke.parameter.toolId"></a>
+
+- *Type:* string
+
+The ID of the tool to invoke.
+
+---
+
+###### `Payload`<sup>Optional</sup> <a name="Payload" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke.parameter.payload"></a>
+
+- *Type:* object
+
+The payload to pass to the tool.
 
 ---
 
@@ -889,6 +861,7 @@ Interface representing a LLM (Large Language Model) provider handler.
 | --- | --- |
 | <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">GetTools</a></code> | Retrieves tools. |
 | <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">InvokeTools</a></code> | Invokes tools based on the tool selector response. |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.singleToolInvoke">SingleToolInvoke</a></code> | Invokes a single tool with the provided payload. |
 
 ---
 
@@ -921,6 +894,30 @@ Invokes tools based on the tool selector response.
 - *Type:* object
 
 The response from the tool selector.
+
+---
+
+##### `SingleToolInvoke` <a name="SingleToolInvoke" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke"></a>
+
+```csharp
+private string SingleToolInvoke(string ToolId, object Payload)
+```
+
+Invokes a single tool with the provided payload.
+
+###### `ToolId`<sup>Required</sup> <a name="ToolId" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke.parameter.toolId"></a>
+
+- *Type:* string
+
+The ID of the tool to invoke.
+
+---
+
+###### `Payload`<sup>Required</sup> <a name="Payload" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke.parameter.payload"></a>
+
+- *Type:* object
+
+The payload to send to the tool.
 
 ---
 
@@ -1308,8 +1305,6 @@ List of required properties.
 | <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">ResponseMessage</a></code> | <code>string</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.role">Role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | The ID of the tool call. |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | An optional string property for the payload. |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | An optional numeric property for the payload. |
 
 ---
 
@@ -1382,30 +1377,6 @@ public string ToolCallId { get; set; }
 - *Type:* string
 
 The ID of the tool call.
-
----
-
-##### `PayloadProperty1`<sup>Optional</sup> <a name="PayloadProperty1" id="xpander-sdk.IToolResponse.property.payloadProperty1"></a>
-
-```csharp
-public string PayloadProperty1 { get; set; }
-```
-
-- *Type:* string
-
-An optional string property for the payload.
-
----
-
-##### `PayloadProperty2`<sup>Optional</sup> <a name="PayloadProperty2" id="xpander-sdk.IToolResponse.property.payloadProperty2"></a>
-
-```csharp
-public double PayloadProperty2 { get; set; }
-```
-
-- *Type:* double
-
-An optional numeric property for the payload.
 
 ---
 

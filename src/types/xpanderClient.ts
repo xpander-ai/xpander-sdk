@@ -16,4 +16,12 @@ export interface ILLMProviderHandler {
    * @returns Result of the invoked tools.
    */
   invokeTools(toolSelectorResponse: any): any;
+
+  /**
+   * Invokes a single tool with the provided payload.
+   * @param toolId - The ID of the tool to invoke.
+   * @param payload - The payload to send to the tool.
+   * @returns Result of the invoked tool as a string.
+   */
+  singleToolInvoke(toolId: string, payload: any): string;
 }

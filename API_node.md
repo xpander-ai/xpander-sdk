@@ -242,7 +242,7 @@ public readonly GPT_4_O_MINI: string;
 ```typescript
 import { ToolResponse } from 'xpander-sdk'
 
-new ToolResponse(toolCallId: string, role: string, name: string, responseMessage: string, filteredTool: object, payloadRequest: string, payloadProperty1?: string, payloadProperty2?: number, localTool?: IBedrockToolOutput | ILocalTool)
+new ToolResponse(toolCallId: string, role: string, name: string, responseMessage: string, filteredTool: object, payloadRequest: string, localTool?: IBedrockToolOutput | ILocalTool)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -253,8 +253,6 @@ new ToolResponse(toolCallId: string, role: string, name: string, responseMessage
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">responseMessage</a></code> | <code>string</code> | - The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">filteredTool</a></code> | <code>object</code> | - The filtered tool object. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">payloadRequest</a></code> | <code>string</code> | - The request payload that sent to tool. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">payloadProperty1</a></code> | <code>string</code> | - An optional string property for the payload. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">payloadProperty2</a></code> | <code>number</code> | - An optional numeric property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.localTool">localTool</a></code> | <code><a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a> \| <a href="#xpander-sdk.ILocalTool">ILocalTool</a></code> | *No description.* |
 
 ---
@@ -307,22 +305,6 @@ The request payload that sent to tool.
 
 ---
 
-##### `payloadProperty1`<sup>Optional</sup> <a name="payloadProperty1" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1"></a>
-
-- *Type:* string
-
-An optional string property for the payload.
-
----
-
-##### `payloadProperty2`<sup>Optional</sup> <a name="payloadProperty2" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2"></a>
-
-- *Type:* number
-
-An optional numeric property for the payload.
-
----
-
 ##### `localTool`<sup>Optional</sup> <a name="localTool" id="xpander-sdk.ToolResponse.Initializer.parameter.localTool"></a>
 
 - *Type:* <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a> | <a href="#xpander-sdk.ILocalTool">ILocalTool</a>
@@ -333,18 +315,9 @@ An optional numeric property for the payload.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.buildMessage">buildMessage</a></code> | Builds a message string from the tool response. |
 | <code><a href="#xpander-sdk.ToolResponse.toJSON">toJSON</a></code> | Converts the ToolResponse instance to a JSON object. |
 
 ---
-
-##### `buildMessage` <a name="buildMessage" id="xpander-sdk.ToolResponse.buildMessage"></a>
-
-```typescript
-public buildMessage(): string
-```
-
-Builds a message string from the tool response.
 
 ##### `toJSON` <a name="toJSON" id="xpander-sdk.ToolResponse.toJSON"></a>
 
@@ -392,8 +365,6 @@ The JSON object to create the instance from.
 | <code><a href="#xpander-sdk.ToolResponse.property.role">role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">toolCallId</a></code> | <code>string</code> | The ID of the tool call. |
 | <code><a href="#xpander-sdk.ToolResponse.property.localTool">localTool</a></code> | <code>any</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">payloadProperty1</a></code> | <code>string</code> | An optional string property for the payload. |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">payloadProperty2</a></code> | <code>number</code> | An optional numeric property for the payload. |
 
 ---
 
@@ -491,30 +462,6 @@ public readonly localTool: any;
 
 ---
 
-##### `payloadProperty1`<sup>Optional</sup> <a name="payloadProperty1" id="xpander-sdk.ToolResponse.property.payloadProperty1"></a>
-
-```typescript
-public readonly payloadProperty1: string;
-```
-
-- *Type:* string
-
-An optional string property for the payload.
-
----
-
-##### `payloadProperty2`<sup>Optional</sup> <a name="payloadProperty2" id="xpander-sdk.ToolResponse.property.payloadProperty2"></a>
-
-```typescript
-public readonly payloadProperty2: number;
-```
-
-- *Type:* number
-
-An optional numeric property for the payload.
-
----
-
 
 ### XpanderClient <a name="XpanderClient" id="xpander-sdk.XpanderClient"></a>
 
@@ -574,6 +521,7 @@ The LLM provider to use.
 | <code><a href="#xpander-sdk.XpanderClient.addLocalTools">addLocalTools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">loadXpanderTools</a></code> | Loads the tools available from the Xpander agent. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.xpanderSingleToolInvoke">xpanderSingleToolInvoke</a></code> | Invokes a single tool with the given tool ID and payload. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes the tools based on the tool selector response. |
 
 ---
@@ -611,6 +559,30 @@ Retrieves the tools for the current or specified LLM provider.
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 (Optional) The LLM provider to use.
+
+---
+
+##### `xpanderSingleToolInvoke` <a name="xpanderSingleToolInvoke" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke"></a>
+
+```typescript
+public xpanderSingleToolInvoke(toolId: string, payload?: any): string
+```
+
+Invokes a single tool with the given tool ID and payload.
+
+###### `toolId`<sup>Required</sup> <a name="toolId" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke.parameter.toolId"></a>
+
+- *Type:* string
+
+The ID of the tool to invoke.
+
+---
+
+###### `payload`<sup>Optional</sup> <a name="payload" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke.parameter.payload"></a>
+
+- *Type:* any
+
+The payload to pass to the tool.
 
 ---
 
@@ -889,6 +861,7 @@ Interface representing a LLM (Large Language Model) provider handler.
 | --- | --- |
 | <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">getTools</a></code> | Retrieves tools. |
 | <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">invokeTools</a></code> | Invokes tools based on the tool selector response. |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.singleToolInvoke">singleToolInvoke</a></code> | Invokes a single tool with the provided payload. |
 
 ---
 
@@ -921,6 +894,30 @@ Invokes tools based on the tool selector response.
 - *Type:* any
 
 The response from the tool selector.
+
+---
+
+##### `singleToolInvoke` <a name="singleToolInvoke" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke"></a>
+
+```typescript
+public singleToolInvoke(toolId: string, payload: any): string
+```
+
+Invokes a single tool with the provided payload.
+
+###### `toolId`<sup>Required</sup> <a name="toolId" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke.parameter.toolId"></a>
+
+- *Type:* string
+
+The ID of the tool to invoke.
+
+---
+
+###### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke.parameter.payload"></a>
+
+- *Type:* any
+
+The payload to send to the tool.
 
 ---
 
@@ -1308,8 +1305,6 @@ List of required properties.
 | <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">responseMessage</a></code> | <code>string</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.role">role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">toolCallId</a></code> | <code>string</code> | The ID of the tool call. |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty1">payloadProperty1</a></code> | <code>string</code> | An optional string property for the payload. |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty2">payloadProperty2</a></code> | <code>number</code> | An optional numeric property for the payload. |
 
 ---
 
@@ -1382,30 +1377,6 @@ public readonly toolCallId: string;
 - *Type:* string
 
 The ID of the tool call.
-
----
-
-##### `payloadProperty1`<sup>Optional</sup> <a name="payloadProperty1" id="xpander-sdk.IToolResponse.property.payloadProperty1"></a>
-
-```typescript
-public readonly payloadProperty1: string;
-```
-
-- *Type:* string
-
-An optional string property for the payload.
-
----
-
-##### `payloadProperty2`<sup>Optional</sup> <a name="payloadProperty2" id="xpander-sdk.IToolResponse.property.payloadProperty2"></a>
-
-```typescript
-public readonly payloadProperty2: number;
-```
-
-- *Type:* number
-
-An optional numeric property for the payload.
 
 ---
 

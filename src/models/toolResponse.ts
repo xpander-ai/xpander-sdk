@@ -12,10 +12,6 @@ export interface IToolResponsePayload {
 export interface IToolResponse {
   /** The ID of the tool call. */
   toolCallId: string;
-  /** An optional string property for the payload. */
-  payloadProperty1?: string;
-  /** An optional numeric property for the payload. */
-  payloadProperty2?: number;
   /** The role in the response. */
   role: string;
   /** The name of the tool. */
@@ -43,14 +39,10 @@ export class ToolResponse implements IToolResponse {
       json.responseMessage,
       json.filteredTool,
       json.payloadRequest,
-      json.payloadProperty1,
-      json.payloadProperty2,
     );
   }
 
   toolCallId: string;
-  payloadProperty1?: string;
-  payloadProperty2?: number;
   role: string;
   name: string;
   responseMessage: string;
@@ -66,8 +58,6 @@ export class ToolResponse implements IToolResponse {
      * @param responseMessage - The response message from the tool.
      * @param filteredTool - The filtered tool object.
      * @param payloadRequest - The request payload that sent to tool.
-     * @param payloadProperty1 - An optional string property for the payload.
-     * @param payloadProperty2 - An optional numeric property for the payload.
 
      */
   constructor(
@@ -77,13 +67,9 @@ export class ToolResponse implements IToolResponse {
     responseMessage: string,
     filteredTool: object,
     payloadRequest: string,
-    payloadProperty1?: string,
-    payloadProperty2?: number,
     localTool?: IBedrockToolOutput | ILocalTool,
   ) {
     this.toolCallId = toolCallId;
-    this.payloadProperty1 = payloadProperty1;
-    this.payloadProperty2 = payloadProperty2;
     this.role = role;
     this.name = name;
     this.responseMessage = responseMessage;
@@ -99,8 +85,6 @@ export class ToolResponse implements IToolResponse {
   toJSON(): object {
     return {
       toolCallId: this.toolCallId,
-      payloadProperty1: this.payloadProperty1,
-      payloadProperty2: this.payloadProperty2,
       role: this.role,
       name: this.name,
       responseMessage: this.responseMessage,
@@ -115,13 +99,5 @@ export class ToolResponse implements IToolResponse {
    */
   get rawResponse(): any {
     return this.responseMessage;
-  }
-
-  /**
-   * Builds a message string from the tool response.
-   * @returns A formatted message string.
-   */
-  buildMessage(): string {
-    return `Tool call: ${this.name}\nPayload: { property1: ${this.payloadProperty1}, property2: ${this.payloadProperty2} }\nTool response: ${this.responseMessage}`;
   }
 }

@@ -180,6 +180,20 @@ export class XpanderClient {
   }
 
   /**
+   * Invokes a single tool with the given tool ID and payload.
+   * @param toolId - The ID of the tool to invoke.
+   * @param payload - The payload to pass to the tool.
+   * @returns The result of the tool invocation.
+   * @throws Will throw an error if the tool implementation is not found.
+   */
+  public xpanderSingleToolInvoke(toolId: string, payload?: any): string {
+    return this.llmProviderHandler.singleToolInvoke(
+      toolId,
+      payload || ({} as any),
+    );
+  }
+
+  /**
    * Retrieves the tool names mapping for the current LLM provider.
    * @returns A record of tool names mapping.
    */

@@ -200,4 +200,12 @@ describe('Testing OpenAI Function Calling', () => {
       ]),
     );
   });
+
+  it('invoke tool directly', async () => {
+    const TOOL_NAME = 'Conduit-article-management-getAllTagsForArticles';
+
+    const toolResponse = xpanderClient.xpanderSingleToolInvoke(TOOL_NAME);
+
+    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
+  });
 });

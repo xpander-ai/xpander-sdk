@@ -196,13 +196,11 @@ export class AmazonBedrock extends BaseLLMProvider {
             outputMessages.push(
               new ToolResponse(
                 toolUse.toolUseId,
-                '',
                 'tool',
+                originalFunctionName,
                 '',
                 {},
                 payloadRequest,
-                undefined,
-                undefined,
                 localTool,
               ),
             );

@@ -151,14 +151,12 @@ export class BaseLLMProvider {
               if (localTool) {
                 outputMessages.push(
                   new ToolResponse(
-                    toolCalls,
-                    payload,
+                    toolCall,
                     'tool',
+                    functionName,
                     '',
                     {},
                     payloadRequest,
-                    undefined,
-                    undefined,
                     localTool,
                   ),
                 );
@@ -174,8 +172,8 @@ export class BaseLLMProvider {
             outputMessages.push(
               new ToolResponse(
                 toolCalls,
-                payload,
                 'tool',
+                functionName,
                 functionResponse,
                 filteredTool,
                 payloadRequest,

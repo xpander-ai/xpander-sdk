@@ -249,8 +249,6 @@ xpander_sdk.ToolResponse(
   response_message: str,
   filtered_tool: any,
   payload_request: str,
-  payload_property1: str = None,
-  payload_property2: typing.Union[int, float] = None,
   local_tool: typing.Union[IBedrockToolOutput, ILocalTool] = None
 )
 ```
@@ -263,8 +261,6 @@ xpander_sdk.ToolResponse(
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">response_message</a></code> | <code>str</code> | - The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">filtered_tool</a></code> | <code>any</code> | - The filtered tool object. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">payload_request</a></code> | <code>str</code> | - The request payload that sent to tool. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">payload_property1</a></code> | <code>str</code> | - An optional string property for the payload. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | - An optional numeric property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.localTool">local_tool</a></code> | <code>typing.Union[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>, <a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | *No description.* |
 
 ---
@@ -317,22 +313,6 @@ The request payload that sent to tool.
 
 ---
 
-##### `payload_property1`<sup>Optional</sup> <a name="payload_property1" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1"></a>
-
-- *Type:* str
-
-An optional string property for the payload.
-
----
-
-##### `payload_property2`<sup>Optional</sup> <a name="payload_property2" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2"></a>
-
-- *Type:* typing.Union[int, float]
-
-An optional numeric property for the payload.
-
----
-
 ##### `local_tool`<sup>Optional</sup> <a name="local_tool" id="xpander-sdk.ToolResponse.Initializer.parameter.localTool"></a>
 
 - *Type:* typing.Union[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>, <a href="#xpander-sdk.ILocalTool">ILocalTool</a>]
@@ -343,18 +323,9 @@ An optional numeric property for the payload.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.buildMessage">build_message</a></code> | Builds a message string from the tool response. |
 | <code><a href="#xpander-sdk.ToolResponse.toJSON">to_jso_n</a></code> | Converts the ToolResponse instance to a JSON object. |
 
 ---
-
-##### `build_message` <a name="build_message" id="xpander-sdk.ToolResponse.buildMessage"></a>
-
-```python
-def build_message() -> str
-```
-
-Builds a message string from the tool response.
 
 ##### `to_jso_n` <a name="to_jso_n" id="xpander-sdk.ToolResponse.toJSON"></a>
 
@@ -404,8 +375,6 @@ The JSON object to create the instance from.
 | <code><a href="#xpander-sdk.ToolResponse.property.role">role</a></code> | <code>str</code> | The role in the response. |
 | <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | The ID of the tool call. |
 | <code><a href="#xpander-sdk.ToolResponse.property.localTool">local_tool</a></code> | <code>typing.Any</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">payload_property1</a></code> | <code>str</code> | An optional string property for the payload. |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | An optional numeric property for the payload. |
 
 ---
 
@@ -503,30 +472,6 @@ local_tool: typing.Any
 
 ---
 
-##### `payload_property1`<sup>Optional</sup> <a name="payload_property1" id="xpander-sdk.ToolResponse.property.payloadProperty1"></a>
-
-```python
-payload_property1: str
-```
-
-- *Type:* str
-
-An optional string property for the payload.
-
----
-
-##### `payload_property2`<sup>Optional</sup> <a name="payload_property2" id="xpander-sdk.ToolResponse.property.payloadProperty2"></a>
-
-```python
-payload_property2: typing.Union[int, float]
-```
-
-- *Type:* typing.Union[int, float]
-
-An optional numeric property for the payload.
-
----
-
 
 ### XpanderClient <a name="XpanderClient" id="xpander-sdk.XpanderClient"></a>
 
@@ -591,6 +536,7 @@ The LLM provider to use.
 | <code><a href="#xpander-sdk.XpanderClient.addLocalTools">add_local_tools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">load_xpander_tools</a></code> | Loads the tools available from the Xpander agent. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.xpanderSingleToolInvoke">xpander_single_tool_invoke</a></code> | Invokes a single tool with the given tool ID and payload. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpander_tool_call</a></code> | Invokes the tools based on the tool selector response. |
 
 ---
@@ -632,6 +578,33 @@ Retrieves the tools for the current or specified LLM provider.
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 (Optional) The LLM provider to use.
+
+---
+
+##### `xpander_single_tool_invoke` <a name="xpander_single_tool_invoke" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke"></a>
+
+```python
+def xpander_single_tool_invoke(
+  tool_id: str,
+  payload: typing.Any = None
+) -> str
+```
+
+Invokes a single tool with the given tool ID and payload.
+
+###### `tool_id`<sup>Required</sup> <a name="tool_id" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke.parameter.toolId"></a>
+
+- *Type:* str
+
+The ID of the tool to invoke.
+
+---
+
+###### `payload`<sup>Optional</sup> <a name="payload" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke.parameter.payload"></a>
+
+- *Type:* typing.Any
+
+The payload to pass to the tool.
 
 ---
 
@@ -913,6 +886,7 @@ Interface representing a LLM (Large Language Model) provider handler.
 | --- | --- |
 | <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">get_tools</a></code> | Retrieves tools. |
 | <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">invoke_tools</a></code> | Invokes tools based on the tool selector response. |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.singleToolInvoke">single_tool_invoke</a></code> | Invokes a single tool with the provided payload. |
 
 ---
 
@@ -949,6 +923,33 @@ Invokes tools based on the tool selector response.
 - *Type:* typing.Any
 
 The response from the tool selector.
+
+---
+
+##### `single_tool_invoke` <a name="single_tool_invoke" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke"></a>
+
+```python
+def single_tool_invoke(
+  tool_id: str,
+  payload: typing.Any
+) -> str
+```
+
+Invokes a single tool with the provided payload.
+
+###### `tool_id`<sup>Required</sup> <a name="tool_id" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke.parameter.toolId"></a>
+
+- *Type:* str
+
+The ID of the tool to invoke.
+
+---
+
+###### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke.parameter.payload"></a>
+
+- *Type:* typing.Any
+
+The payload to send to the tool.
 
 ---
 
@@ -1336,8 +1337,6 @@ List of required properties.
 | <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">response_message</a></code> | <code>str</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.IToolResponse.property.role">role</a></code> | <code>str</code> | The role in the response. |
 | <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">tool_call_id</a></code> | <code>str</code> | The ID of the tool call. |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty1">payload_property1</a></code> | <code>str</code> | An optional string property for the payload. |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadProperty2">payload_property2</a></code> | <code>typing.Union[int, float]</code> | An optional numeric property for the payload. |
 
 ---
 
@@ -1410,30 +1409,6 @@ tool_call_id: str
 - *Type:* str
 
 The ID of the tool call.
-
----
-
-##### `payload_property1`<sup>Optional</sup> <a name="payload_property1" id="xpander-sdk.IToolResponse.property.payloadProperty1"></a>
-
-```python
-payload_property1: str
-```
-
-- *Type:* str
-
-An optional string property for the payload.
-
----
-
-##### `payload_property2`<sup>Optional</sup> <a name="payload_property2" id="xpander-sdk.IToolResponse.property.payloadProperty2"></a>
-
-```python
-payload_property2: typing.Union[int, float]
-```
-
-- *Type:* typing.Union[int, float]
-
-An optional numeric property for the payload.
 
 ---
 
