@@ -6,6 +6,7 @@ import { ToolResponse } from '../models/toolResponse';
 import {
   IBedrockToolOutput,
   ILLMProviderHandler,
+  ILocalTool,
   IOpenAIToolOutput,
 } from '../types';
 
@@ -28,6 +29,7 @@ export class XpanderClient {
   agentKey: string;
   agentUrl: string;
   toolsCache: any;
+  localTools: ILocalTool[] = [];
   protected llmProviderHandler: ILLMProviderHandler;
 
   /**
@@ -45,7 +47,12 @@ export class XpanderClient {
    * @param llmProvider - The LLM provider to use.
    * @throws Will throw an error if an invalid LLM provider is specified.
    */
-  constructor(agentKey: string, agentUrl: string, llmProvider: LLMProvider) {
+  constructor(
+    agentKey: string,
+    agentUrl: string,
+    llmProvider: LLMProvider,
+    localTools?: ILocalTool[],
+  ) {
     if (!XpanderClient.validProviders.includes(llmProvider)) {
       throw new Error(
         `Invalid LLMProvider. Valid providers are: ${XpanderClient.validProviders.join(', ')}`,
@@ -55,6 +62,7 @@ export class XpanderClient {
     this.agentUrl = agentUrl;
     this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     this.toolsCache = null;
+    this.localTools = localTools || [];
     this.loadXpanderTools();
   }
 
@@ -95,6 +103,7 @@ export class XpanderClient {
   public tools(
     llmProvider?: LLMProvider,
   ): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] {
+    let tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] = [];
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     }
@@ -102,10 +111,12 @@ export class XpanderClient {
       this.llmProviderHandler instanceof BaseOpenAISDKHandler;
 
     if (isOpenAIBasedProvider) {
-      return this.llmProviderHandler.getTools<IOpenAIToolOutput>();
+      tools = this.llmProviderHandler.getTools<IOpenAIToolOutput>();
     } else {
-      return this.llmProviderHandler.getTools<IBedrockToolOutput>();
+      tools = this.llmProviderHandler.getTools<IBedrockToolOutput>();
     }
+
+    return [...tools, ...this.localTools];
   }
 
   /**
@@ -162,6 +173,10 @@ export class XpanderClient {
     } catch (error) {
       throw new Error(`Request failed: ${error}`);
     }
+  }
+
+  public addLocalTools(tools: ILocalTool[]): void {
+    this.localTools = tools;
   }
 
   /**

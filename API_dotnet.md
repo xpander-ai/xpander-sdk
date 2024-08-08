@@ -242,7 +242,7 @@ public string Gpt4OMini { get; }
 ```csharp
 using Xpander.AI.Sdk;
 
-new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMessage, Newtonsoft.Json.Linq.JObject FilteredTool, string PayloadRequest, string PayloadProperty1 = null, double PayloadProperty2 = null);
+new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMessage, Newtonsoft.Json.Linq.JObject FilteredTool, string PayloadRequest, string PayloadProperty1 = null, double PayloadProperty2 = null, object LocalTool = null);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -255,6 +255,7 @@ new ToolResponse(string ToolCallId, string Role, string Name, string ResponseMes
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">PayloadRequest</a></code> | <code>string</code> | - The request payload that sent to tool. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | - An optional string property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | - An optional numeric property for the payload. |
+| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.localTool">LocalTool</a></code> | <code>object</code> | *No description.* |
 
 ---
 
@@ -322,6 +323,12 @@ An optional numeric property for the payload.
 
 ---
 
+##### `LocalTool`<sup>Optional</sup> <a name="LocalTool" id="xpander-sdk.ToolResponse.Initializer.parameter.localTool"></a>
+
+- *Type:* object
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -384,6 +391,7 @@ The JSON object to create the instance from.
 | <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">ResponseMessage</a></code> | <code>string</code> | The response message from the tool. |
 | <code><a href="#xpander-sdk.ToolResponse.property.role">Role</a></code> | <code>string</code> | The role in the response. |
 | <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">ToolCallId</a></code> | <code>string</code> | The ID of the tool call. |
+| <code><a href="#xpander-sdk.ToolResponse.property.localTool">LocalTool</a></code> | <code>object</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty1">PayloadProperty1</a></code> | <code>string</code> | An optional string property for the payload. |
 | <code><a href="#xpander-sdk.ToolResponse.property.payloadProperty2">PayloadProperty2</a></code> | <code>double</code> | An optional numeric property for the payload. |
 
@@ -473,6 +481,16 @@ The ID of the tool call.
 
 ---
 
+##### `LocalTool`<sup>Optional</sup> <a name="LocalTool" id="xpander-sdk.ToolResponse.property.localTool"></a>
+
+```csharp
+public object LocalTool { get; }
+```
+
+- *Type:* object
+
+---
+
 ##### `PayloadProperty1`<sup>Optional</sup> <a name="PayloadProperty1" id="xpander-sdk.ToolResponse.property.payloadProperty1"></a>
 
 ```csharp
@@ -507,7 +525,7 @@ Class representing the Xpander client.
 ```csharp
 using Xpander.AI.Sdk;
 
-new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider);
+new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILocalTool[] LocalTools = null);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -515,6 +533,7 @@ new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider);
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">AgentKey</a></code> | <code>string</code> | - The API key for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">AgentUrl</a></code> | <code>string</code> | - The URL for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">LlmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">LocalTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
 
 ---
 
@@ -542,13 +561,32 @@ The LLM provider to use.
 
 ---
 
+##### `LocalTools`<sup>Optional</sup> <a name="LocalTools" id="xpander-sdk.XpanderClient.Initializer.parameter.localTools"></a>
+
+- *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#xpander-sdk.XpanderClient.addLocalTools">AddLocalTools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">LoadXpanderTools</a></code> | Loads the tools available from the Xpander agent. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">Tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">XpanderToolCall</a></code> | Invokes the tools based on the tool selector response. |
+
+---
+
+##### `AddLocalTools` <a name="AddLocalTools" id="xpander-sdk.XpanderClient.addLocalTools"></a>
+
+```csharp
+private void AddLocalTools(ILocalTool[] Tools)
+```
+
+###### `Tools`<sup>Required</sup> <a name="Tools" id="xpander-sdk.XpanderClient.addLocalTools.parameter.tools"></a>
+
+- *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
 
 ---
 
@@ -609,6 +647,7 @@ The response from the tool selector.
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">ToolsNamesMapping</a></code> | <code>System.Collections.Generic.IDictionary<string, string></code> | Retrieves the tool names mapping for the current LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">AgentKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">AgentUrl</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.localTools">LocalTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">ToolsCache</a></code> | <code>object</code> | *No description.* |
 
 ---
@@ -654,6 +693,16 @@ public string AgentUrl { get; }
 ```
 
 - *Type:* string
+
+---
+
+##### `LocalTools`<sup>Required</sup> <a name="LocalTools" id="xpander-sdk.XpanderClient.property.localTools"></a>
+
+```csharp
+public ILocalTool[] LocalTools { get; }
+```
+
+- *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
 
 ---
 
@@ -892,6 +941,85 @@ public System.Collections.Generic.IDictionary<string, string> ToolsNamesMapping 
 - *Type:* System.Collections.Generic.IDictionary<string, string>
 
 Mapping of tool names.
+
+---
+
+### ILocalTool <a name="ILocalTool" id="xpander-sdk.ILocalTool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ILocalTool.property.function">Function</a></code> | <code><a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ILocalTool.property.type">Type</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `Function`<sup>Required</sup> <a name="Function" id="xpander-sdk.ILocalTool.property.function"></a>
+
+```csharp
+public ILocalToolFunction Function { get; }
+```
+
+- *Type:* <a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a>
+
+---
+
+##### `Type`<sup>Required</sup> <a name="Type" id="xpander-sdk.ILocalTool.property.type"></a>
+
+```csharp
+public string Type { get; }
+```
+
+- *Type:* string
+
+---
+
+### ILocalToolFunction <a name="ILocalToolFunction" id="xpander-sdk.ILocalToolFunction"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.description">Description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.name">Name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.parameters">Parameters</a></code> | <code>object</code> | *No description.* |
+
+---
+
+##### `Description`<sup>Required</sup> <a name="Description" id="xpander-sdk.ILocalToolFunction.property.description"></a>
+
+```csharp
+public string Description { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `Name`<sup>Required</sup> <a name="Name" id="xpander-sdk.ILocalToolFunction.property.name"></a>
+
+```csharp
+public string Name { get; }
+```
+
+- *Type:* string
+
+---
+
+##### `Parameters`<sup>Required</sup> <a name="Parameters" id="xpander-sdk.ILocalToolFunction.property.parameters"></a>
+
+```csharp
+public object Parameters { get; }
+```
+
+- *Type:* object
 
 ---
 

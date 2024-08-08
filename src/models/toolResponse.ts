@@ -1,3 +1,5 @@
+import { IBedrockToolOutput, ILocalTool } from '../types';
+
 // Simplified payload interface
 export interface IToolResponsePayload {
   /** A string property for the tool response payload. */
@@ -54,6 +56,7 @@ export class ToolResponse implements IToolResponse {
   responseMessage: string;
   filteredTool: object;
   payloadRequest: string;
+  localTool?: any;
 
   /**
      * Constructs a new ToolResponse instance.
@@ -76,6 +79,7 @@ export class ToolResponse implements IToolResponse {
     payloadRequest: string,
     payloadProperty1?: string,
     payloadProperty2?: number,
+    localTool?: IBedrockToolOutput | ILocalTool,
   ) {
     this.toolCallId = toolCallId;
     this.payloadProperty1 = payloadProperty1;
@@ -85,6 +89,7 @@ export class ToolResponse implements IToolResponse {
     this.responseMessage = responseMessage;
     this.filteredTool = filteredTool;
     this.payloadRequest = payloadRequest;
+    this.localTool = localTool;
   }
 
   /**

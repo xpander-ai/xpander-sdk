@@ -68,4 +68,68 @@ describe('Testing Amazon Bedrock (Converse) Runtime Function Calling', () => {
 
     expect(toolResponse.length).toBeGreaterThan(0);
   });
+
+  it('local tool selection is correct', async () => {
+    const localTools: any = [
+      {
+        type: 'function',
+        function: {
+          name: 'greet-by-name',
+          description: 'Returns a greet to a user with name',
+          parameters: {
+            type: 'object',
+            properties: {
+              userName: {
+                type: 'string',
+                description: "The user's name",
+              },
+            },
+            required: ['userName'],
+            additionalProperties: false,
+          },
+        },
+      },
+    ];
+
+    xpanderClient.addLocalTools(localTools);
+    const tools = xpanderClient.tools() as unknown as Tool[];
+
+    const messages: any[] = [
+      {
+        role: 'user',
+        content: [{ text: 'Say hello to David' }],
+      },
+    ];
+
+    const bedrockClient = new BedrockRuntimeClient({
+      region: bedrockAWSRegionName,
+      credentials: {
+        accessKeyId: bedrockAWSAccessKeyId,
+        secretAccessKey: bedrockAWSSecretAccessKey,
+      },
+    });
+
+    const command = new ConverseCommand({
+      modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
+      messages,
+      inferenceConfig: { temperature: 0.0 },
+      toolConfig: { tools },
+    });
+
+    const response: any = await bedrockClient.send(command);
+
+    const toolCalls: any[] =
+      response?.output?.message?.content.filter(
+        (msg: any) => msg.toolUse && msg.toolUse.name,
+      ) || [];
+
+    const originalFunctionName =
+      xpanderClient.toolsNamesMapping[toolCalls[0].toolUse.name];
+    expect(originalFunctionName).toEqual(localTools[0].function.name);
+
+    const toolResponse = xpanderClient.xpanderToolCall(response);
+
+    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
+    expect(toolResponse[0].payloadRequest).toEqual('{"userName":"David"}'); // check payload request stringified
+  });
 });
