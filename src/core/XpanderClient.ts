@@ -1,6 +1,6 @@
 import request, { HttpVerb } from 'sync-request';
 import { LLMProvider } from '../constants/llmProvider';
-import { OpenAI, NvidiaNIM, AmazonBedrock } from '../llmProviders';
+import { OpenAI, NvidiaNIM, AmazonBedrock, LangChain } from '../llmProviders';
 import { BaseOpenAISDKHandler } from '../llmProviders/shared/baseOpenAI';
 import { ToolResponse } from '../models/toolResponse';
 import {
@@ -19,6 +19,7 @@ const LLMProviderHandlers: {
   [LLMProvider.OPEN_AI]: OpenAI,
   [LLMProvider.NVIDIA_NIM]: NvidiaNIM,
   [LLMProvider.AMAZON_BEDROCK]: AmazonBedrock,
+  [LLMProvider.LANG_CHAIN]: LangChain,
   // Add other LLM providers here
 };
 
@@ -131,7 +132,8 @@ export class XpanderClient {
   ): ToolResponse[] {
     if (
       !Array.isArray(toolSelectorResponse.choices) &&
-      !Array.isArray(toolSelectorResponse?.output?.message?.content)
+      !Array.isArray(toolSelectorResponse?.output?.message?.content) &&
+      !Array.isArray(toolSelectorResponse?.tool_calls)
     ) {
       return [];
     }

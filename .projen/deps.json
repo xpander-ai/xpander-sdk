@@ -1,6 +1,14 @@
 {
   "dependencies": [
     {
+      "name": "@aws-sdk/client-bedrock-runtime",
+      "type": "build"
+    },
+    {
+      "name": "@langchain/openai",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "type": "build"
     },
@@ -22,6 +30,10 @@
     {
       "name": "constructs",
       "version": "^10.0.0",
+      "type": "build"
+    },
+    {
+      "name": "dotenv",
       "type": "build"
     },
     {
@@ -77,6 +89,10 @@
       "type": "build"
     },
     {
+      "name": "openai",
+      "type": "build"
+    },
+    {
       "name": "prettier",
       "type": "build"
     },
@@ -102,19 +118,7 @@
       "type": "build"
     },
     {
-      "name": "@aws-sdk/client-bedrock-runtime",
-      "type": "bundled"
-    },
-    {
       "name": "axios",
-      "type": "bundled"
-    },
-    {
-      "name": "dotenv",
-      "type": "bundled"
-    },
-    {
-      "name": "openai",
       "type": "bundled"
     },
     {
