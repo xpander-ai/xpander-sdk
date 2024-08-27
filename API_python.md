@@ -486,7 +486,8 @@ xpander_sdk.XpanderClient(
   agent_key: str,
   agent_url: str,
   llm_provider: LLMProvider,
-  local_tools: typing.List[ILocalTool] = None
+  local_tools: typing.List[ILocalTool] = None,
+  tools: typing.Union[typing.List[typing.Any], typing.List[IOpenAIToolOutput], typing.List[IBedrockToolOutput]] = None
 )
 ```
 
@@ -495,7 +496,8 @@ xpander_sdk.XpanderClient(
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agent_key</a></code> | <code>str</code> | - The API key for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agent_url</a></code> | <code>str</code> | - The URL for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llm_provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | - Local tools to append into the tools list. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>typing.Union[typing.List[typing.Any], typing.List[<a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>], typing.List[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>]]</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
 
 ---
 
@@ -526,6 +528,16 @@ The LLM provider to use.
 ##### `local_tools`<sup>Optional</sup> <a name="local_tools" id="xpander-sdk.XpanderClient.Initializer.parameter.localTools"></a>
 
 - *Type:* typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]
+
+Local tools to append into the tools list.
+
+---
+
+##### `tools`<sup>Optional</sup> <a name="tools" id="xpander-sdk.XpanderClient.Initializer.parameter.tools"></a>
+
+- *Type:* typing.Union[typing.List[typing.Any], typing.List[<a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>], typing.List[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>]]
+
+Pass existing xpander.ai tools to the client instead of fetching.
 
 ---
 
@@ -646,6 +658,7 @@ The response from the tool selector.
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agent_url</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">tools_cache</a></code> | <code>typing.Any</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.toolsFromExternal">tools_from_external</a></code> | <code>bool</code> | *No description.* |
 
 ---
 
@@ -710,6 +723,16 @@ tools_cache: typing.Any
 ```
 
 - *Type:* typing.Any
+
+---
+
+##### `tools_from_external`<sup>Required</sup> <a name="tools_from_external" id="xpander-sdk.XpanderClient.property.toolsFromExternal"></a>
+
+```python
+tools_from_external: bool
+```
+
+- *Type:* bool
 
 ---
 

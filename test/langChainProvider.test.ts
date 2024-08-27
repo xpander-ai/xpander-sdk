@@ -23,7 +23,7 @@ describe('Testing LangChain Function Calling', () => {
   });
 
   it('tool selection is correct', async () => {
-    const TOOL_NAME = 'Conduit-article-management-getAllTagsForArticles';
+    const TOOL_NAME = 'Conduit-article-management-getAllTags';
 
     const llm = new ChatOpenAI({
       model: 'gpt-4o',
@@ -43,7 +43,7 @@ describe('Testing LangChain Function Calling', () => {
   });
 
   it('tool selection is correct with payload', async () => {
-    const TOOL_NAME = 'Conduit-article-management-createNewArticleWithTags';
+    const TOOL_NAME = 'Conduit-article-management-createNewArticle';
 
     const llm = new ChatOpenAI({
       model: 'gpt-4o',

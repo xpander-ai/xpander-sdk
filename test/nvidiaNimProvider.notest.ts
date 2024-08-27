@@ -18,7 +18,7 @@ describe('Testing NvidiaNIM Function Calling', () => {
   const xpanderToolsForNvidiaNIM = xpanderClient.tools();
 
   it('tool selection is correct', async () => {
-    const TOOL_NAME = 'Conduit-article-management-getAllTagsForArticles';
+    const TOOL_NAME = 'Conduit-article-management-getAllTags';
     const messages = [
       {
         role: 'user',

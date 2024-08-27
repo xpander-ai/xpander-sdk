@@ -30,6 +30,7 @@ export class XpanderClient {
   agentKey: string;
   agentUrl: string;
   toolsCache: any;
+  toolsFromExternal: boolean = false;
   localTools: ILocalTool[] = [];
   protected llmProviderHandler: ILLMProviderHandler;
 
@@ -46,6 +47,8 @@ export class XpanderClient {
    * @param agentKey - The API key for the agent.
    * @param agentUrl - The URL for the agent.
    * @param llmProvider - The LLM provider to use.
+   * @param localTools - Local tools to append into the tools list.
+   * @param tools - Pass existing xpander.ai tools to the client instead of fetching.
    * @throws Will throw an error if an invalid LLM provider is specified.
    */
   constructor(
@@ -53,6 +56,7 @@ export class XpanderClient {
     agentUrl: string,
     llmProvider: LLMProvider,
     localTools?: ILocalTool[],
+    tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[],
   ) {
     if (!XpanderClient.validProviders.includes(llmProvider)) {
       throw new Error(
@@ -64,6 +68,12 @@ export class XpanderClient {
     this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     this.toolsCache = null;
     this.localTools = localTools || [];
+
+    if (Array.isArray(tools) && tools.length !== 0) {
+      this.toolsCache = tools;
+      this.toolsFromExternal = true;
+    }
+
     this.loadXpanderTools();
   }
 
@@ -104,6 +114,9 @@ export class XpanderClient {
   public tools(
     llmProvider?: LLMProvider,
   ): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] {
+    if (this.toolsFromExternal) {
+      return this.toolsCache;
+    }
     let tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] = [];
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);

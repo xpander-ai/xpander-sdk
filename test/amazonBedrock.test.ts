@@ -30,7 +30,7 @@ describe('Testing Amazon Bedrock (Converse) Runtime Function Calling', () => {
     xpanderClient.tools() as unknown as Tool[];
 
   it('tool selection is correct', async () => {
-    const TOOL_NAME = 'Conduit-article-management-getAllTagsForArticles';
+    const TOOL_NAME = 'Conduit-article-management-getAllTags';
     const messages: any[] = [
       {
         role: 'user',

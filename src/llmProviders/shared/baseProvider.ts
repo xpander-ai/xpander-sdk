@@ -51,6 +51,15 @@ export class BaseLLMProvider {
     const tools: any[] = [];
 
     for (const toolInstructions of agentTools) {
+      if (this.client.toolsFromExternal) {
+        if (functionize) {
+          toolInstructions.func = toolInstructions.function.execute =
+            createTool(this.client, toolInstructions, true, true);
+        }
+        tools.push({ ...toolInstructions });
+        continue;
+      }
+
       const createdTool: Tool = createTool(
         this.client,
         toolInstructions,

@@ -18,7 +18,7 @@ describe('Testing OpenAI Function Calling', () => {
   const xpanderToolsForOpenAI = xpanderClient.tools();
 
   it('tool selection is correct', async () => {
-    const TOOL_NAME = 'Conduit-article-management-getAllTagsForArticles';
+    const TOOL_NAME = 'Conduit-article-management-getAllTags';
     const messages = [
       {
         role: 'user',
@@ -42,6 +42,54 @@ describe('Testing OpenAI Function Calling', () => {
     );
 
     const toolResponse = xpanderClient.xpanderToolCall(response);
+
+    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
+    expect(toolResponse[0].payloadRequest).toEqual('{}'); // check payload request stringified
+  });
+
+  it('tool selection is correct with tools in constructor', async () => {
+    const tools = [
+      {
+        type: 'function',
+        function: {
+          name: 'Conduit-article-management-getAllTags',
+          description:
+            'Retrieves all tags used in articles. No authentication required. Use to display tag clouds or 4 filtering articles by tag in retrieveArticlesWithOptionalFilters. Helps other operations by providing valid tag options. IMPORTANT! make sure to use body_params, query_params, path_params. these are crucial for ensuring function calling works!',
+        },
+      },
+    ];
+
+    const xpanderClient2 = new XpanderClient(
+      xpanderAPIKey,
+      agentUrl,
+      LLMProvider.OPEN_AI,
+      undefined,
+      tools,
+    );
+    const TOOL_NAME = 'Conduit-article-management-getAllTags';
+    const messages = [
+      {
+        role: 'user',
+        content: 'get all tags',
+      },
+    ];
+
+    const openaiClient = new OpenAI({
+      apiKey: openAIKey,
+    });
+
+    const response: any = await openaiClient.chat.completions.create({
+      model: OpenAISupportedModels.GPT_4_O,
+      messages: messages as any,
+      tools: xpanderToolsForOpenAI as any,
+      tool_choice: 'required',
+    });
+
+    expect(response.choices[0].message.tool_calls[0].function.name).toEqual(
+      TOOL_NAME,
+    );
+
+    const toolResponse = xpanderClient2.xpanderToolCall(response);
 
     expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
     expect(toolResponse[0].payloadRequest).toEqual('{}'); // check payload request stringified
@@ -104,8 +152,7 @@ describe('Testing OpenAI Function Calling', () => {
   });
 
   it('local tool & xpander tool selection is correct', async () => {
-    const XPANDER_TOOL_NAME =
-      'Conduit-article-management-getAllTagsForArticles';
+    const XPANDER_TOOL_NAME = 'Conduit-article-management-getAllTags';
 
     const messages = [
       {
@@ -202,7 +249,7 @@ describe('Testing OpenAI Function Calling', () => {
   });
 
   it('invoke tool directly', async () => {
-    const TOOL_NAME = 'Conduit-article-management-getAllTagsForArticles';
+    const TOOL_NAME = 'Conduit-article-management-getAllTags';
 
     const toolResponse = xpanderClient.xpanderSingleToolInvoke(TOOL_NAME);
 

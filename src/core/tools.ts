@@ -27,27 +27,21 @@ export function createTool(
   client: XpanderClient,
   toolInstructions: IToolInstructions,
   functionize: boolean = true,
-): ITool {
+  getFunctionOnly: boolean = false,
+): ITool | any {
   if (!client || !client.agentKey || !client.agentUrl) {
     throw new Error(
       'Client object or its properties are not properly initialized.',
     );
   }
 
-  const tool: ITool = {
-    name: toolInstructions.id,
-    description:
-      toolInstructions.function_description.split(' - Valid')[0] +
-      ' IMPORTANT! make sure to use body_params, query_params, path_params. these are crucial for ensuring function calling works!',
-  };
+  let functionDescription = '';
+  let functionInvocationMethod: any;
 
-  if (toolInstructions.parameters) {
-    tool.parameters = toolInstructions.parameters;
-  }
-
+  const toolData: any = toolInstructions;
   if (functionize) {
     const toolInvocationFunction = (payload: RequestPayload): any => {
-      const url = `${client.agentUrl}/operations/${toolInstructions.id}`;
+      const url = `${client.agentUrl}/operations/${toolData?.id || toolData?.function?.name}`;
       const jsonPayload = payload instanceof Object ? payload : {};
 
       try {
@@ -69,9 +63,31 @@ export function createTool(
       }
     };
 
-    tool.description = tool.description.slice(0, 1024); // max length of 1024
-    tool.func = toolInvocationFunction;
+    if (getFunctionOnly) {
+      return toolInvocationFunction;
+    }
+
+    functionDescription = toolData?.function?.description;
+    functionInvocationMethod = toolInvocationFunction;
   }
+
+  const tool: ITool = {
+    name: toolInstructions.id,
+    description:
+      toolInstructions.function_description.split(' - Valid')[0] +
+      ' IMPORTANT! make sure to use body_params, query_params, path_params. these are crucial for ensuring function calling works!',
+  };
+
+  if (tool?.description) {
+    functionDescription = tool.description;
+  }
+
+  if (toolInstructions.parameters) {
+    tool.parameters = toolInstructions.parameters;
+  }
+
+  tool.description = functionDescription;
+  tool.func = functionInvocationMethod;
 
   return tool;
 }

@@ -472,7 +472,7 @@ Class representing the Xpander client.
 ```csharp
 using Xpander.AI.Sdk;
 
-new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILocalTool[] LocalTools = null);
+new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILocalTool[] LocalTools = null, object Tools = null);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -480,7 +480,8 @@ new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILo
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">AgentKey</a></code> | <code>string</code> | - The API key for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">AgentUrl</a></code> | <code>string</code> | - The URL for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">LlmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">LocalTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">LocalTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | - Local tools to append into the tools list. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">Tools</a></code> | <code>object</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
 
 ---
 
@@ -511,6 +512,16 @@ The LLM provider to use.
 ##### `LocalTools`<sup>Optional</sup> <a name="LocalTools" id="xpander-sdk.XpanderClient.Initializer.parameter.localTools"></a>
 
 - *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
+
+Local tools to append into the tools list.
+
+---
+
+##### `Tools`<sup>Optional</sup> <a name="Tools" id="xpander-sdk.XpanderClient.Initializer.parameter.tools"></a>
+
+- *Type:* object
+
+Pass existing xpander.ai tools to the client instead of fetching.
 
 ---
 
@@ -621,6 +632,7 @@ The response from the tool selector.
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">AgentUrl</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.localTools">LocalTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">ToolsCache</a></code> | <code>object</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.toolsFromExternal">ToolsFromExternal</a></code> | <code>bool</code> | *No description.* |
 
 ---
 
@@ -685,6 +697,16 @@ public object ToolsCache { get; }
 ```
 
 - *Type:* object
+
+---
+
+##### `ToolsFromExternal`<sup>Required</sup> <a name="ToolsFromExternal" id="xpander-sdk.XpanderClient.property.toolsFromExternal"></a>
+
+```csharp
+public bool ToolsFromExternal { get; }
+```
+
+- *Type:* bool
 
 ---
 

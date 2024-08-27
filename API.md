@@ -472,7 +472,7 @@ Class representing the Xpander client.
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, localTools?: ILocalTool[])
+new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, localTools?: ILocalTool[], tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[])
 ```
 
 | **Name** | **Type** | **Description** |
@@ -480,7 +480,8 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, 
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agentKey</a></code> | <code>string</code> | - The API key for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agentUrl</a></code> | <code>string</code> | - The URL for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | - Local tools to append into the tools list. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>any[] \| <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] \| <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
 
 ---
 
@@ -511,6 +512,16 @@ The LLM provider to use.
 ##### `localTools`<sup>Optional</sup> <a name="localTools" id="xpander-sdk.XpanderClient.Initializer.parameter.localTools"></a>
 
 - *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
+
+Local tools to append into the tools list.
+
+---
+
+##### `tools`<sup>Optional</sup> <a name="tools" id="xpander-sdk.XpanderClient.Initializer.parameter.tools"></a>
+
+- *Type:* any[] | <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] | <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]
+
+Pass existing xpander.ai tools to the client instead of fetching.
 
 ---
 
@@ -621,6 +632,7 @@ The response from the tool selector.
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">toolsCache</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.toolsFromExternal">toolsFromExternal</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -685,6 +697,16 @@ public readonly toolsCache: any;
 ```
 
 - *Type:* any
+
+---
+
+##### `toolsFromExternal`<sup>Required</sup> <a name="toolsFromExternal" id="xpander-sdk.XpanderClient.property.toolsFromExternal"></a>
+
+```typescript
+public readonly toolsFromExternal: boolean;
+```
+
+- *Type:* boolean
 
 ---
 
