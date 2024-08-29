@@ -472,7 +472,7 @@ Class representing the Xpander client.
 ```csharp
 using Xpander.AI.Sdk;
 
-new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILocalTool[] LocalTools = null, object Tools = null);
+new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILocalTool[] LocalTools = null, object Tools = null, IXChatParams XchatParams = null);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -482,6 +482,7 @@ new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILo
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">LlmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">LocalTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | - Local tools to append into the tools list. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">Tools</a></code> | <code>object</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter._xchatParams">XchatParams</a></code> | <code><a href="#xpander-sdk.IXChatParams">IXChatParams</a></code> | *No description.* |
 
 ---
 
@@ -522,6 +523,12 @@ Local tools to append into the tools list.
 - *Type:* object
 
 Pass existing xpander.ai tools to the client instead of fetching.
+
+---
+
+##### `XchatParams`<sup>Optional</sup> <a name="XchatParams" id="xpander-sdk.XpanderClient.Initializer.parameter._xchatParams"></a>
+
+- *Type:* <a href="#xpander-sdk.IXChatParams">IXChatParams</a>
 
 ---
 
@@ -868,6 +875,46 @@ public System.Collections.Generic.IDictionary<string, IToolParameter> Json { get
 - *Type:* System.Collections.Generic.IDictionary<string, <a href="#xpander-sdk.IToolParameter">IToolParameter</a>>
 
 JSON schema of the tool parameters.
+
+---
+
+### IConnector <a name="IConnector" id="xpander-sdk.IConnector"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IConnector">IConnector</a>
+
+Interface represting a connector.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IConnector.property.id">Id</a></code> | <code>string</code> | connector id. |
+| <code><a href="#xpander-sdk.IConnector.property.operationIds">OperationIds</a></code> | <code>string[]</code> | operation ids. |
+
+---
+
+##### `Id`<sup>Required</sup> <a name="Id" id="xpander-sdk.IConnector.property.id"></a>
+
+```csharp
+public string Id { get; set; }
+```
+
+- *Type:* string
+
+connector id.
+
+---
+
+##### `OperationIds`<sup>Required</sup> <a name="OperationIds" id="xpander-sdk.IConnector.property.operationIds"></a>
+
+```csharp
+public string[] OperationIds { get; set; }
+```
+
+- *Type:* string[]
+
+operation ids.
 
 ---
 
@@ -1437,6 +1484,42 @@ public double Property2 { get; set; }
 - *Type:* double
 
 A numeric property for the tool response payload.
+
+---
+
+### IXChatParams <a name="IXChatParams" id="xpander-sdk.IXChatParams"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IXChatParams">IXChatParams</a>
+
+Interface represting chat params.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IXChatParams.property.connectors">Connectors</a></code> | <code><a href="#xpander-sdk.IConnector">IConnector</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IXChatParams.property.organizationId">OrganizationId</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `Connectors`<sup>Required</sup> <a name="Connectors" id="xpander-sdk.IXChatParams.property.connectors"></a>
+
+```csharp
+public IConnector[] Connectors { get; set; }
+```
+
+- *Type:* <a href="#xpander-sdk.IConnector">IConnector</a>[]
+
+---
+
+##### `OrganizationId`<sup>Required</sup> <a name="OrganizationId" id="xpander-sdk.IXChatParams.property.organizationId"></a>
+
+```csharp
+public string OrganizationId { get; set; }
+```
+
+- *Type:* string
 
 ---
 

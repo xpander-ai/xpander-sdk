@@ -487,7 +487,8 @@ xpander_sdk.XpanderClient(
   agent_url: str,
   llm_provider: LLMProvider,
   local_tools: typing.List[ILocalTool] = None,
-  tools: typing.Union[typing.List[typing.Any], typing.List[IOpenAIToolOutput], typing.List[IBedrockToolOutput]] = None
+  tools: typing.Union[typing.List[typing.Any], typing.List[IOpenAIToolOutput], typing.List[IBedrockToolOutput]] = None,
+  _xchatparams: IXChatParams = None
 )
 ```
 
@@ -498,6 +499,7 @@ xpander_sdk.XpanderClient(
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llm_provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | - Local tools to append into the tools list. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>typing.Union[typing.List[typing.Any], typing.List[<a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>], typing.List[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>]]</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter._xchatParams">_xchatparams</a></code> | <code><a href="#xpander-sdk.IXChatParams">IXChatParams</a></code> | *No description.* |
 
 ---
 
@@ -538,6 +540,12 @@ Local tools to append into the tools list.
 - *Type:* typing.Union[typing.List[typing.Any], typing.List[<a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>], typing.List[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>]]
 
 Pass existing xpander.ai tools to the client instead of fetching.
+
+---
+
+##### `_xchatparams`<sup>Optional</sup> <a name="_xchatparams" id="xpander-sdk.XpanderClient.Initializer.parameter._xchatParams"></a>
+
+- *Type:* <a href="#xpander-sdk.IXChatParams">IXChatParams</a>
 
 ---
 
@@ -894,6 +902,46 @@ json: typing.Mapping[IToolParameter]
 - *Type:* typing.Mapping[<a href="#xpander-sdk.IToolParameter">IToolParameter</a>]
 
 JSON schema of the tool parameters.
+
+---
+
+### IConnector <a name="IConnector" id="xpander-sdk.IConnector"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IConnector">IConnector</a>
+
+Interface represting a connector.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IConnector.property.id">id</a></code> | <code>str</code> | connector id. |
+| <code><a href="#xpander-sdk.IConnector.property.operationIds">operation_ids</a></code> | <code>typing.List[str]</code> | operation ids. |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.IConnector.property.id"></a>
+
+```python
+id: str
+```
+
+- *Type:* str
+
+connector id.
+
+---
+
+##### `operation_ids`<sup>Required</sup> <a name="operation_ids" id="xpander-sdk.IConnector.property.operationIds"></a>
+
+```python
+operation_ids: typing.List[str]
+```
+
+- *Type:* typing.List[str]
+
+operation ids.
 
 ---
 
@@ -1470,6 +1518,42 @@ property2: typing.Union[int, float]
 - *Type:* typing.Union[int, float]
 
 A numeric property for the tool response payload.
+
+---
+
+### IXChatParams <a name="IXChatParams" id="xpander-sdk.IXChatParams"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IXChatParams">IXChatParams</a>
+
+Interface represting chat params.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IXChatParams.property.connectors">connectors</a></code> | <code>typing.List[<a href="#xpander-sdk.IConnector">IConnector</a>]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IXChatParams.property.organizationId">organization_id</a></code> | <code>str</code> | *No description.* |
+
+---
+
+##### `connectors`<sup>Required</sup> <a name="connectors" id="xpander-sdk.IXChatParams.property.connectors"></a>
+
+```python
+connectors: typing.List[IConnector]
+```
+
+- *Type:* typing.List[<a href="#xpander-sdk.IConnector">IConnector</a>]
+
+---
+
+##### `organization_id`<sup>Required</sup> <a name="organization_id" id="xpander-sdk.IXChatParams.property.organizationId"></a>
+
+```python
+organization_id: str
+```
+
+- *Type:* str
 
 ---
 
