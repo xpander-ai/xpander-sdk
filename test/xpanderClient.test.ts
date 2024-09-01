@@ -5,8 +5,11 @@ dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const agentUrl = process.env.XPANDER_AGENT_URL || '';
+const chatAgentID = process.env.CHAT_AGENT_ID || '';
+const agentsURL = process.env.AGENTS_URL || '';
+const chatAgentKey = process.env.CHAT_AGENT_API_KEY || '';
 
-describe('Test XPander Client', () => {
+describe.only('Test XPander Client', () => {
   it('tools are not empty', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
@@ -68,5 +71,32 @@ describe('Test XPander Client', () => {
       xpanderClient.tools() as IOpenAIToolOutput[];
     expect(tools).toBeInstanceOf(Array);
     expect(tools).not.toHaveLength(0);
+  });
+
+  it('allow xchat params by constructor', () => {
+    const chatParams = {
+      // those are hardcoded for test purpose and would need to change in case these ids change.
+      organizationId: '6f3a8d1a-00e4-4ae7-bb1f-907b8704d4e2',
+      connectors: [
+        {
+          id: '0cf2a84a-b9e8-4c72-aa43-4b39ecf0cd70',
+          operationIds: ['66cdb21ac2d9da6b42de0b0f'],
+        },
+      ],
+    };
+
+    const xpanderClient = new XpanderClient(
+      chatAgentKey,
+      agentsURL + '/' + chatAgentID,
+      LLMProvider.OPEN_AI,
+      undefined,
+      undefined,
+      chatParams,
+    );
+
+    const tools = xpanderClient.tools();
+    expect(tools).toBeInstanceOf(Array);
+    expect(tools).not.toHaveLength(0);
+    console.log(tools);
   });
 });

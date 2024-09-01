@@ -472,7 +472,7 @@ Class representing the Xpander client.
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, localTools?: ILocalTool[], tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[])
+new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, localTools?: ILocalTool[], tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[], _xchatParams?: IXChatParams)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -482,6 +482,7 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, 
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | - Local tools to append into the tools list. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>any[] \| <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] \| <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter._xchatParams">_xchatParams</a></code> | <code><a href="#xpander-sdk.IXChatParams">IXChatParams</a></code> | *No description.* |
 
 ---
 
@@ -522,6 +523,12 @@ Local tools to append into the tools list.
 - *Type:* any[] | <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] | <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]
 
 Pass existing xpander.ai tools to the client instead of fetching.
+
+---
+
+##### `_xchatParams`<sup>Optional</sup> <a name="_xchatParams" id="xpander-sdk.XpanderClient.Initializer.parameter._xchatParams"></a>
+
+- *Type:* <a href="#xpander-sdk.IXChatParams">IXChatParams</a>
 
 ---
 
@@ -868,6 +875,46 @@ public readonly json: {[ key: string ]: IToolParameter};
 - *Type:* {[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}
 
 JSON schema of the tool parameters.
+
+---
+
+### IConnector <a name="IConnector" id="xpander-sdk.IConnector"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IConnector">IConnector</a>
+
+Interface represting a connector.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IConnector.property.id">id</a></code> | <code>string</code> | connector id. |
+| <code><a href="#xpander-sdk.IConnector.property.operationIds">operationIds</a></code> | <code>string[]</code> | operation ids. |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.IConnector.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+connector id.
+
+---
+
+##### `operationIds`<sup>Required</sup> <a name="operationIds" id="xpander-sdk.IConnector.property.operationIds"></a>
+
+```typescript
+public readonly operationIds: string[];
+```
+
+- *Type:* string[]
+
+operation ids.
 
 ---
 
@@ -1437,6 +1484,42 @@ public readonly property2: number;
 - *Type:* number
 
 A numeric property for the tool response payload.
+
+---
+
+### IXChatParams <a name="IXChatParams" id="xpander-sdk.IXChatParams"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IXChatParams">IXChatParams</a>
+
+Interface represting chat params.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IXChatParams.property.connectors">connectors</a></code> | <code><a href="#xpander-sdk.IConnector">IConnector</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IXChatParams.property.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `connectors`<sup>Required</sup> <a name="connectors" id="xpander-sdk.IXChatParams.property.connectors"></a>
+
+```typescript
+public readonly connectors: IConnector[];
+```
+
+- *Type:* <a href="#xpander-sdk.IConnector">IConnector</a>[]
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.IXChatParams.property.organizationId"></a>
+
+```typescript
+public readonly organizationId: string;
+```
+
+- *Type:* string
 
 ---
 

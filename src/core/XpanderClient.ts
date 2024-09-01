@@ -5,6 +5,7 @@ import { BaseOpenAISDKHandler } from '../llmProviders/shared/baseOpenAI';
 import { ToolResponse } from '../models/toolResponse';
 import {
   IBedrockToolOutput,
+  IXChatParams,
   ILLMProviderHandler,
   ILocalTool,
   IOpenAIToolOutput,
@@ -35,6 +36,11 @@ export class XpanderClient {
   protected llmProviderHandler: ILLMProviderHandler;
 
   /**
+   * @internal
+   */
+  _xchatParams: IXChatParams | undefined;
+
+  /**
    * Provides a list of valid LLM providers.
    * @returns Array of valid provider names.
    */
@@ -57,6 +63,7 @@ export class XpanderClient {
     llmProvider: LLMProvider,
     localTools?: ILocalTool[],
     tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[],
+    _xchatParams?: IXChatParams,
   ) {
     if (!XpanderClient.validProviders.includes(llmProvider)) {
       throw new Error(
@@ -68,6 +75,7 @@ export class XpanderClient {
     this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     this.toolsCache = null;
     this.localTools = localTools || [];
+    this._xchatParams = _xchatParams;
 
     if (Array.isArray(tools) && tools.length !== 0) {
       this.toolsCache = tools;
@@ -87,8 +95,31 @@ export class XpanderClient {
       return this.toolsCache;
     }
 
+    const getXChatParamsIfExist = () => {
+      if (this._xchatParams) {
+        return {
+          organization_id: this._xchatParams.organizationId,
+          connectors: this._xchatParams.connectors.map((connector) => {
+            return {
+              id: connector.id,
+              operation_ids: connector.operationIds,
+            };
+          }),
+        };
+      }
+      return {};
+    };
+
     try {
-      const response = this.syncRequest('POST', `${this.agentUrl}/tools`, {});
+      const response = this.syncRequest(
+        'POST',
+        `${this.agentUrl}/tools`,
+        this._xchatParams
+          ? {
+              __xchat__: getXChatParamsIfExist(),
+            }
+          : {},
+      );
       if (response.statusCode !== 200) {
         throw new Error(JSON.stringify(response.getBody('utf8')));
       }
