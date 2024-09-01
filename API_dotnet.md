@@ -897,7 +897,7 @@ Interface represting a connector.
 ##### `Id`<sup>Required</sup> <a name="Id" id="xpander-sdk.IConnector.property.id"></a>
 
 ```csharp
-public string Id { get; set; }
+public string Id { get; }
 ```
 
 - *Type:* string
@@ -909,7 +909,7 @@ connector id.
 ##### `OperationIds`<sup>Required</sup> <a name="OperationIds" id="xpander-sdk.IConnector.property.operationIds"></a>
 
 ```csharp
-public string[] OperationIds { get; set; }
+public string[] OperationIds { get; }
 ```
 
 - *Type:* string[]
@@ -1506,7 +1506,7 @@ Interface represting chat params.
 ##### `Connectors`<sup>Required</sup> <a name="Connectors" id="xpander-sdk.IXChatParams.property.connectors"></a>
 
 ```csharp
-public IConnector[] Connectors { get; set; }
+public IConnector[] Connectors { get; }
 ```
 
 - *Type:* <a href="#xpander-sdk.IConnector">IConnector</a>[]
@@ -1516,7 +1516,7 @@ public IConnector[] Connectors { get; set; }
 ##### `OrganizationId`<sup>Required</sup> <a name="OrganizationId" id="xpander-sdk.IXChatParams.property.organizationId"></a>
 
 ```csharp
-public string OrganizationId { get; set; }
+public string OrganizationId { get; }
 ```
 
 - *Type:* string

@@ -95,7 +95,7 @@ export class XpanderClient {
       return this.toolsCache;
     }
 
-    const featXChatParamsToAgentsApi = () => {
+    const getXChatParamsIfExist = () => {
       if (this._xchatParams) {
         return {
           organization_id: this._xchatParams.organizationId,
@@ -116,7 +116,7 @@ export class XpanderClient {
         `${this.agentUrl}/tools`,
         this._xchatParams
           ? {
-              __xchat__: featXChatParamsToAgentsApi(),
+              __xchat__: getXChatParamsIfExist(),
             }
           : {},
       );

@@ -2,8 +2,8 @@
  * Interface represting chat params.
  */
 export interface IXChatParams {
-  organizationId: string;
-  connectors: IConnector[];
+  readonly organizationId: string;
+  readonly connectors: IConnector[];
 }
 
 /**
@@ -11,7 +11,7 @@ export interface IXChatParams {
  */
 export interface IConnector {
   /** connector id */
-  id: string;
+  readonly id: string;
   /** operation ids */
-  operationIds: string[];
+  readonly operationIds: string[];
 }
