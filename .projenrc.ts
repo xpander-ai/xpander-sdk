@@ -12,7 +12,7 @@ const project = new cdk.JsiiProject({
   projenrcTs: true,
   repositoryUrl: 'https://github.com/xpander-ai/xpander-sdk.git',
   publishToPypi: {
-    distName: 'xpander-sdk',
+    distName: 'xpander-ai',
     module: 'xpander_sdk',
   },
   // publishToMaven: {
@@ -20,11 +20,11 @@ const project = new cdk.JsiiProject({
   //   mavenGroupId: 'ai.xpander',
   //   mavenArtifactId: 'sdk',
   // },
-  publishToNuget: {
-    dotNetNamespace: 'Xpander.AI.Sdk',
-    packageId: 'Xpander.AI.Sdk',
-  },
-  publishDryRun: true,
+  // publishToNuget: {
+  //   dotNetNamespace: 'Xpander.AI.Sdk',
+  //   packageId: 'Xpander.AI.Sdk',
+  // },
+  publishDryRun: false,
   prettier: true,
   prettierOptions: {
     settings: {
@@ -61,9 +61,9 @@ project.addTask('generate-docs-node', {
   exec: 'jsii-docgen -o API_node.md --language typescript',
 });
 
-project.addTask('generate-docs-dotnet', {
-  exec: 'jsii-docgen -o API_dotnet.md --language csharp',
-});
+// project.addTask('generate-docs-dotnet', {
+//   exec: 'jsii-docgen -o API_dotnet.md --language csharp',
+// });
 
 // project.addTask('generate-docs-java', {
 //   exec: 'jsii-docgen -o API_java.md --language java',
@@ -83,7 +83,7 @@ function safeSpawn(taskName: string) {
 safeSpawn('generate-docs');
 safeSpawn('generate-docs-python');
 safeSpawn('generate-docs-node');
-safeSpawn('generate-docs-dotnet');
+// safeSpawn('generate-docs-dotnet');
 // safeSpawn('generate-docs-java');
 
 // run node uploadDocs.js manually
