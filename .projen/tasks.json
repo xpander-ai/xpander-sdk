@@ -139,14 +139,6 @@
         }
       ]
     },
-    "generate-docs-dotnet": {
-      "name": "generate-docs-dotnet",
-      "steps": [
-        {
-          "exec": "jsii-docgen -o API_dotnet.md --language csharp"
-        }
-      ]
-    },
     "generate-docs-node": {
       "name": "generate-docs-node",
       "steps": [
@@ -199,18 +191,6 @@
         },
         {
           "spawn": "package:python"
-        },
-        {
-          "spawn": "package:dotnet"
-        }
-      ]
-    },
-    "package:dotnet": {
-      "name": "package:dotnet",
-      "description": "Create dotnet language bindings",
-      "steps": [
-        {
-          "exec": "jsii-pacmak -v --target dotnet"
         }
       ]
     },
@@ -247,9 +227,6 @@
         },
         {
           "spawn": "generate-docs-node"
-        },
-        {
-          "spawn": "generate-docs-dotnet"
         }
       ]
     },

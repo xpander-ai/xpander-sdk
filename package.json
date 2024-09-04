@@ -15,12 +15,10 @@
     "eject": "npx projen eject",
     "eslint": "npx projen eslint",
     "generate-docs": "npx projen generate-docs",
-    "generate-docs-dotnet": "npx projen generate-docs-dotnet",
     "generate-docs-node": "npx projen generate-docs-node",
     "generate-docs-python": "npx projen generate-docs-python",
     "package": "npx projen package",
     "package-all": "npx projen package-all",
-    "package:dotnet": "npx projen package:dotnet",
     "package:js": "npx projen package:js",
     "package:python": "npx projen package:python",
     "post-compile": "npx projen post-compile",
@@ -130,12 +128,8 @@
     "outdir": "dist",
     "targets": {
       "python": {
-        "distName": "xpander-sdk",
+        "distName": "xpander-ai",
         "module": "xpander_sdk"
-      },
-      "dotnet": {
-        "namespace": "Xpander.AI.Sdk",
-        "packageId": "Xpander.AI.Sdk"
       }
     },
     "tsc": {
