@@ -47,6 +47,7 @@ const project = new cdk.JsiiProject({
       detectOpenHandles: true,
     },
   },
+  tsconfigDev: { include: ['*.ts', '*.json'] },
 });
 
 // Adding custom tasks to generate documentation for each language
