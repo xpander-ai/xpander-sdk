@@ -1,74 +1,43 @@
-# Xpander SDK Documentation
+# xpander SDK Documentation
 
-Welcome to the Xpander SDK documentation. This document will help you get started with using the SDK in various programming languages. Choose your preferred language below for quick start guides and further reading.
+Welcome to the xpander SDK documentation.
+
+This document will help you get started with using the SDK in various programming languages.
 
 ## Overview
 
-Xpander SDK is a powerful tool that allows you to integrate advanced functionalities into your applications seamlessly. Below, you'll find the quick start guides for Python, Node.js, .NET, and Java.
+xpander SDK is a tool designed to work seamlessly with the [app.xpander.ai](http://app.xpander.ai) platform. The xpander platform enables building AI Apps with reliable Agentic tools, allowing you to integrate advanced functionalities into your applications without worrying about the complexities of function calling and system integration. The platform provides Connectors that have been enriched and adjusted for tool calling, and it supports the creation of custom connectors for any target system, such as home-grown systems.
 
-## Language-Specific Quick Start Guides
+### Key Features of xpander platform
 
-### Python
+1. **AI Apps**: AI Apps act as the interface between xpander AI-ready connectors and your AI Agents or Conversational AI solutions. They allow for easy integration with pre-built or custom connectors.
+2. **Connectors**: Pre-built integrations that facilitate communication between xpander AI Apps and third-party systems, including SaaS applications and home-grown systems. Custom connectors can be generated using OpenAPI Specs, Postman collections, or browsing session examples.
+3. **AI App Builder**: A chat interface that lets you interact with your APIs by selecting connectors and operators, and then transform the chat into Agentic automation workflows.
 
-```python
-import xpander_sdk
-client = xpander_sdk.XpanderClient(api_key="your_api_key", agent_url="agent_url")
-client.do_something()
-```
+## Quick Start Guides
 
-For more detailed information, visit the [Python API Reference](docs/python/api-reference).
+Choose your preferred language to get started quickly:
 
-### Node.js
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
+  <a href="https://docs.xpander.ai/reference/getting-started#pre-requisite"><img src="https://files.readme.io/f356d48-python.png" alt="Python" height="80"></a>
+  <a href="https://docs.xpander.ai/reference/getting-started#pre-requisite"><img src="https://files.readme.io/bf25a52-node.png" alt="Node.js" height="80"></a>
+  <a href="https://docs.xpander.ai/reference/getting-started#pre-requisite"><img src="https://files.readme.io/63217d9-c-sharp_dot_net.png" alt=".NET" height="80"></a>
+  <a href="https://docs.xpander.ai/reference/getting-started#pre-requisite"><img src="https://files.readme.io/6426bc7-java.png" alt="Java" height="80"></a>
+</div>
 
-```javascript
-const { XpanderClient } = require('xpander-sdk');
-const client = new XpanderClient('your_api_key', 'agent_url');
-client.doSomething();
-```
-
-For more detailed information, visit the [Node.js API Reference](docs/nodejs/api-reference).
-
-### .NET
-
-```csharp
-using XpanderSdk;
-var client = new XpanderClient("your_api_key", "agent_url");
-client.DoSomething();
-```
-
-For more detailed information, visit the [.NET API Reference](docs/dotnet/api-reference).
-
-### Java
-
-```java
-import com.xpander.sdk.XpanderClient;
-XpanderClient client = new XpanderClient("your_api_key", "agent_url");
-client.doSomething();
-```
-
-For more detailed information, visit the [Java API Reference](docs/java/api-reference).
-
-## Examples
-
-Explore some examples to see how Xpander SDK can be integrated into your projects:
-
-- [Python Examples](docs/python/examples)
-- [Node.js Examples](docs/nodejs/examples)
-- [.NET Examples](docs/dotnet/examples)
-- [Java Examples](docs/java/examples)
 
 ## Further Reading
 
-For more detailed information, please refer to the following:
+For more detailed information, please refer to the following sections:
 
-- [Xpander SDK Overview](docs/overview)
-- [API Reference](docs/api-reference)
-- [Guides](docs/guides)
-- [Troubleshooting](docs/troubleshooting)
+- [Xpander SDK Overview](docs/overview): Learn more about the features and capabilities of the Xpander SDK.
+- [API Reference](docs/api-reference): Detailed documentation of the SDK's API endpoints and usage.
+- [Guides](docs/guides): Step-by-step guides to help you implement specific functionalities.
+- [Troubleshooting](docs/troubleshooting): Solutions to common issues and problems.
 
 ## Contributing
 
-We welcome contributions! Please refer to our [Contributing Guide](docs/contributing) for more information on how to get involved.
+We welcome contributions! Please refer to our [Contributing Guide](docs/contributing) for more information on how to get involved. Whether you want to report a bug, suggest a new feature, or contribute code, your help is greatly appreciated.
 
 ## License
 
@@ -77,3 +46,7 @@ This project is licensed under the terms of the MIT license. See the [LICENSE](L
 ## Contact
 
 For further questions or support, please contact us at [opensource@xpander.ai](mailto:opensource@xpander.ai).
+
+## What's Next?
+
+After finishing this page, explore the Quick Start Guides for your preferred programming language or delve into the API Reference for a comprehensive understanding of the SDK's capabilities. Happy coding with Xpander SDK!
