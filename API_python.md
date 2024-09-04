@@ -475,7 +475,7 @@ local_tool: typing.Any
 
 ### XpanderClient <a name="XpanderClient" id="xpander-sdk.XpanderClient"></a>
 
-Class representing the Xpander client.
+Class representing the XpanderClient used to interact with xpanderAI tools.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.XpanderClient.Initializer"></a>
 
@@ -498,8 +498,8 @@ xpander_sdk.XpanderClient(
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agent_url</a></code> | <code>str</code> | - The URL for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llm_provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | - Local tools to append into the tools list. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>typing.Union[typing.List[typing.Any], typing.List[<a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>], typing.List[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>]]</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.xchatParams">xchat_params</a></code> | <code>typing.Any</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>typing.Union[typing.List[typing.Any], typing.List[<a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>], typing.List[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>]]</code> | - Pass existing xpanderAI tools to the client instead of fetching. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.xchatParams">xchat_params</a></code> | <code>typing.Any</code> | - Optional chat parameters for enhanced context. |
 
 ---
 
@@ -539,7 +539,7 @@ Local tools to append into the tools list.
 
 - *Type:* typing.Union[typing.List[typing.Any], typing.List[<a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>], typing.List[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>]]
 
-Pass existing xpander.ai tools to the client instead of fetching.
+Pass existing xpanderAI tools to the client instead of fetching.
 
 ---
 
@@ -547,14 +547,16 @@ Pass existing xpander.ai tools to the client instead of fetching.
 
 - *Type:* typing.Any
 
+Optional chat parameters for enhanced context.
+
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.addLocalTools">add_local_tools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">load_xpander_tools</a></code> | Loads the tools available from the Xpander agent. |
+| <code><a href="#xpander-sdk.XpanderClient.addLocalTools">add_local_tools</a></code> | Adds local tools to the client. |
+| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">load_xpander_tools</a></code> | Loads the tools available from the xpanderAI agent. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderSingleToolInvoke">xpander_single_tool_invoke</a></code> | Invokes a single tool with the given tool ID and payload. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpander_tool_call</a></code> | Invokes the tools based on the tool selector response. |
@@ -569,9 +571,13 @@ def add_local_tools(
 ) -> None
 ```
 
+Adds local tools to the client.
+
 ###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.XpanderClient.addLocalTools.parameter.tools"></a>
 
 - *Type:* typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]
+
+Array of local tools to add.
 
 ---
 
@@ -581,7 +587,7 @@ def add_local_tools(
 def load_xpander_tools() -> typing.List[typing.Any]
 ```
 
-Loads the tools available from the Xpander agent.
+Loads the tools available from the xpanderAI agent.
 
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 

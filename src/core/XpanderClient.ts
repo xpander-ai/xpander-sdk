@@ -25,7 +25,7 @@ const LLMProviderHandlers: {
 };
 
 /**
- * Class representing the Xpander client.
+ * Class representing the XpanderClient used to interact with xpanderAI tools.
  */
 export class XpanderClient {
   agentKey: string;
@@ -54,7 +54,8 @@ export class XpanderClient {
    * @param agentUrl - The URL for the agent.
    * @param llmProvider - The LLM provider to use.
    * @param localTools - Local tools to append into the tools list.
-   * @param tools - Pass existing xpander.ai tools to the client instead of fetching.
+   * @param tools - Pass existing xpanderAI tools to the client instead of fetching.
+   * @param xchatParams - Optional chat parameters for enhanced context.
    * @throws Will throw an error if an invalid LLM provider is specified.
    */
   constructor(
@@ -86,7 +87,7 @@ export class XpanderClient {
   }
 
   /**
-   * Loads the tools available from the Xpander agent.
+   * Loads the tools available from the xpanderAI agent.
    * @returns Array of tools.
    * @throws Will throw an error if the tools cannot be loaded.
    */
@@ -123,10 +124,10 @@ export class XpanderClient {
   }
 
   /**
-   * Retrieves xchat params the right format for agents service only if thery exist.
+   * Retrieves xchat params in the right format for agents service, only if they exist.
    * For internal use only.
    * @internal
-   * @returns - empty object or formatted xchatParams.
+   * @returns - Empty object or formatted xchatParams.
    */
   public _getXChatParamsIfExist = () => {
     if (this._xchatParams) {
@@ -227,6 +228,10 @@ export class XpanderClient {
     }
   }
 
+  /**
+   * Adds local tools to the client.
+   * @param tools - Array of local tools to add.
+   */
   public addLocalTools(tools: ILocalTool[]): void {
     this.localTools = tools;
   }
