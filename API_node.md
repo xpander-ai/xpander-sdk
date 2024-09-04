@@ -465,7 +465,7 @@ public readonly localTool: any;
 
 ### XpanderClient <a name="XpanderClient" id="xpander-sdk.XpanderClient"></a>
 
-Class representing the Xpander client.
+Class representing the XpanderClient used to interact with xpanderAI tools.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.XpanderClient.Initializer"></a>
 
@@ -481,8 +481,8 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, 
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agentUrl</a></code> | <code>string</code> | - The URL for the agent. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | - Local tools to append into the tools list. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>any[] \| <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] \| <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.xchatParams">xchatParams</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>any[] \| <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] \| <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]</code> | - Pass existing xpanderAI tools to the client instead of fetching. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.xchatParams">xchatParams</a></code> | <code>any</code> | - Optional chat parameters for enhanced context. |
 
 ---
 
@@ -522,7 +522,7 @@ Local tools to append into the tools list.
 
 - *Type:* any[] | <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] | <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]
 
-Pass existing xpander.ai tools to the client instead of fetching.
+Pass existing xpanderAI tools to the client instead of fetching.
 
 ---
 
@@ -530,14 +530,16 @@ Pass existing xpander.ai tools to the client instead of fetching.
 
 - *Type:* any
 
+Optional chat parameters for enhanced context.
+
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.addLocalTools">addLocalTools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">loadXpanderTools</a></code> | Loads the tools available from the Xpander agent. |
+| <code><a href="#xpander-sdk.XpanderClient.addLocalTools">addLocalTools</a></code> | Adds local tools to the client. |
+| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">loadXpanderTools</a></code> | Loads the tools available from the xpanderAI agent. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderSingleToolInvoke">xpanderSingleToolInvoke</a></code> | Invokes a single tool with the given tool ID and payload. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes the tools based on the tool selector response. |
@@ -550,9 +552,13 @@ Pass existing xpander.ai tools to the client instead of fetching.
 public addLocalTools(tools: ILocalTool[]): void
 ```
 
+Adds local tools to the client.
+
 ###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.XpanderClient.addLocalTools.parameter.tools"></a>
 
 - *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
+
+Array of local tools to add.
 
 ---
 
@@ -562,7 +568,7 @@ public addLocalTools(tools: ILocalTool[]): void
 public loadXpanderTools(): any[]
 ```
 
-Loads the tools available from the Xpander agent.
+Loads the tools available from the xpanderAI agent.
 
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
