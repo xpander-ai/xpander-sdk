@@ -45,6 +45,7 @@ describe('Testing OpenAI Function Calling', () => {
 
     expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
     expect(toolResponse[0].payloadRequest).toEqual('{}'); // check payload request stringified
+    expect(typeof toolResponse[0].toolCallId).toBe('string'); // check that response has correct id
   });
 
   it('tool selection is correct with tools in constructor', async () => {
