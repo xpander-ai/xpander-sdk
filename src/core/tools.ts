@@ -46,7 +46,9 @@ export function createTool(
 
       try {
         const response = request('POST' as HttpVerb, url, {
-          json: jsonPayload,
+          json: client._xchatParams
+            ? { __xchat__: client._getXChatParamsIfExist() }
+            : jsonPayload,
           headers: { 'x-api-key': client.agentKey },
         });
 
