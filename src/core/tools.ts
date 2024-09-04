@@ -42,13 +42,17 @@ export function createTool(
   if (functionize) {
     const toolInvocationFunction = (payload: RequestPayload): any => {
       const url = `${client.agentUrl}/operations/${toolData?.id || toolData?.function?.name}`;
-      const jsonPayload = payload instanceof Object ? payload : {};
+      const jsonPayload: any = payload instanceof Object ? payload : {};
 
       try {
+        const xchatParams = client._getXChatParamsIfExist();
+        const hasXChatParams = !!xchatParams.organization_id;
+        if (hasXChatParams) {
+          jsonPayload.__xchat__ = xchatParams;
+        }
+
         const response = request('POST' as HttpVerb, url, {
-          json: client._xchatParams
-            ? { __xchat__: client._getXChatParamsIfExist() }
-            : jsonPayload,
+          json: jsonPayload,
           headers: { 'x-api-key': client.agentKey },
         });
 
