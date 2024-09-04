@@ -472,7 +472,7 @@ Class representing the Xpander client.
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, localTools?: ILocalTool[], tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[], _xchatParams?: any)
+new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, localTools?: ILocalTool[], tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[], xchatParams?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -482,7 +482,7 @@ new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, 
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | - Local tools to append into the tools list. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>any[] \| <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] \| <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter._xchatParams">_xchatParams</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.xchatParams">xchatParams</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -526,7 +526,7 @@ Pass existing xpander.ai tools to the client instead of fetching.
 
 ---
 
-##### `_xchatParams`<sup>Optional</sup> <a name="_xchatParams" id="xpander-sdk.XpanderClient.Initializer.parameter._xchatParams"></a>
+##### `xchatParams`<sup>Optional</sup> <a name="xchatParams" id="xpander-sdk.XpanderClient.Initializer.parameter.xchatParams"></a>
 
 - *Type:* any
 

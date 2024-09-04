@@ -63,7 +63,7 @@ export class XpanderClient {
     llmProvider: LLMProvider,
     localTools?: ILocalTool[],
     tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[],
-    _xchatParams?: any | IXChatParams,
+    xchatParams?: any | IXChatParams,
   ) {
     if (!XpanderClient.validProviders.includes(llmProvider)) {
       throw new Error(
@@ -75,7 +75,7 @@ export class XpanderClient {
     this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     this.toolsCache = null;
     this.localTools = localTools || [];
-    this._xchatParams = _xchatParams;
+    this._xchatParams = xchatParams;
 
     if (Array.isArray(tools) && tools.length !== 0) {
       this.toolsCache = tools;
