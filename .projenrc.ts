@@ -8,6 +8,7 @@ const project = new cdk.JsiiProject({
   tsconfig: {
     exclude: ['.env', '.env.template'],
   },
+  majorVersion: 1,
   name: 'xpander-sdk',
   projenrcTs: true,
   repositoryUrl: 'https://github.com/xpander-ai/xpander-sdk.git',
