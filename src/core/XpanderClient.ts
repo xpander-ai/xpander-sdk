@@ -124,7 +124,7 @@ export class XpanderClient {
   }
 
   /**
-   * Retrieves xchat params in the right format for agents service, only if they exist.
+   * Retrieves xchat params in the right format for agents service, only if they exist (passed by constructor).
    * For internal use only.
    * @internal
    * @returns - Empty object or formatted xchatParams.
