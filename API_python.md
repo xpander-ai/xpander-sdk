@@ -488,7 +488,7 @@ xpander_sdk.XpanderClient(
   llm_provider: LLMProvider,
   local_tools: typing.List[ILocalTool] = None,
   tools: typing.Union[typing.List[typing.Any], typing.List[IOpenAIToolOutput], typing.List[IBedrockToolOutput]] = None,
-  _xchatparams: IXChatParams = None
+  _xchatparams: typing.Any = None
 )
 ```
 
@@ -499,7 +499,7 @@ xpander_sdk.XpanderClient(
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llm_provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | - Local tools to append into the tools list. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>typing.Union[typing.List[typing.Any], typing.List[<a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>], typing.List[<a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>]]</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter._xchatParams">_xchatparams</a></code> | <code><a href="#xpander-sdk.IXChatParams">IXChatParams</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter._xchatParams">_xchatparams</a></code> | <code>typing.Any</code> | *No description.* |
 
 ---
 
@@ -545,7 +545,7 @@ Pass existing xpander.ai tools to the client instead of fetching.
 
 ##### `_xchatparams`<sup>Optional</sup> <a name="_xchatparams" id="xpander-sdk.XpanderClient.Initializer.parameter._xchatParams"></a>
 
-- *Type:* <a href="#xpander-sdk.IXChatParams">IXChatParams</a>
+- *Type:* typing.Any
 
 ---
 

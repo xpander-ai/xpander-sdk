@@ -63,7 +63,7 @@ export class XpanderClient {
     llmProvider: LLMProvider,
     localTools?: ILocalTool[],
     tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[],
-    _xchatParams?: IXChatParams,
+    _xchatParams?: any | IXChatParams,
   ) {
     if (!XpanderClient.validProviders.includes(llmProvider)) {
       throw new Error(
@@ -95,28 +95,13 @@ export class XpanderClient {
       return this.toolsCache;
     }
 
-    const getXChatParamsIfExist = () => {
-      if (this._xchatParams) {
-        return {
-          organization_id: this._xchatParams.organizationId,
-          connectors: this._xchatParams.connectors.map((connector) => {
-            return {
-              id: connector.id,
-              operation_ids: connector.operationIds,
-            };
-          }),
-        };
-      }
-      return {};
-    };
-
     try {
       const response = this.syncRequest(
         'POST',
         `${this.agentUrl}/tools`,
         this._xchatParams
           ? {
-              __xchat__: getXChatParamsIfExist(),
+              __xchat__: this._getXChatParamsIfExist(),
             }
           : {},
       );
@@ -136,6 +121,27 @@ export class XpanderClient {
 
     return this.toolsCache;
   }
+
+  /**
+   * Retrieves xchat params the right format for agents service only if thery exist.
+   * For internal use only.
+   * @internal
+   * @returns - empty object or formatted xchatParams.
+   */
+  public _getXChatParamsIfExist = () => {
+    if (this._xchatParams) {
+      return {
+        organization_id: this._xchatParams.organizationId,
+        connectors: this._xchatParams.connectors.map((connector) => {
+          return {
+            id: connector.id,
+            operation_ids: connector.operationIds,
+          };
+        }),
+      };
+    }
+    return {};
+  };
 
   /**
    * Retrieves the tools for the current or specified LLM provider.

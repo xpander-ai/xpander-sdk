@@ -472,7 +472,7 @@ Class representing the Xpander client.
 ```csharp
 using Xpander.AI.Sdk;
 
-new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILocalTool[] LocalTools = null, object Tools = null, IXChatParams XchatParams = null);
+new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILocalTool[] LocalTools = null, object Tools = null, object XchatParams = null);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -482,7 +482,7 @@ new XpanderClient(string AgentKey, string AgentUrl, LLMProvider LlmProvider, ILo
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">LlmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">LocalTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | - Local tools to append into the tools list. |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">Tools</a></code> | <code>object</code> | - Pass existing xpander.ai tools to the client instead of fetching. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter._xchatParams">XchatParams</a></code> | <code><a href="#xpander-sdk.IXChatParams">IXChatParams</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter._xchatParams">XchatParams</a></code> | <code>object</code> | *No description.* |
 
 ---
 
@@ -528,7 +528,7 @@ Pass existing xpander.ai tools to the client instead of fetching.
 
 ##### `XchatParams`<sup>Optional</sup> <a name="XchatParams" id="xpander-sdk.XpanderClient.Initializer.parameter._xchatParams"></a>
 
-- *Type:* <a href="#xpander-sdk.IXChatParams">IXChatParams</a>
+- *Type:* object
 
 ---
 
