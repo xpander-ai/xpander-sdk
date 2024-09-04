@@ -160,7 +160,7 @@ export class BaseLLMProvider {
               if (localTool) {
                 outputMessages.push(
                   new ToolResponse(
-                    toolCall,
+                    toolCall.id,
                     'tool',
                     functionName,
                     '',
@@ -180,7 +180,7 @@ export class BaseLLMProvider {
             const filteredTool = this.filterTool(functionName);
             outputMessages.push(
               new ToolResponse(
-                toolCalls,
+                toolCall.id,
                 'tool',
                 functionName,
                 functionResponse,
