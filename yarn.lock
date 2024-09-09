@@ -1785,7 +1785,7 @@
   resolved "https://registry.npmjs.org/@types/normalize-package-data/-/normalize-package-data-2.4.4.tgz"
   integrity sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==
 
-"@types/qs@^6.2.31", "@types/qs@^6.9.7":
+"@types/qs@^6.2.31", "@types/qs@^6.9.15":
   version "6.9.15"
   resolved "https://registry.npmjs.org/@types/qs/-/qs-6.9.15.tgz"
   integrity sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==
@@ -5095,13 +5095,13 @@ oo-ascii-tree@^1.103.1:
   integrity sha512-X0nmbb8xUUi637JXzCxY/K4AtO/I0fB5b7iiGaHJHu8IXBWV8TnQ4xqa0Igb/NoAg3OP2uXNhSeiTsErETOA/g==
 
 openai@^4.55.0, openai@^4.55.4:
-  version "4.57.1"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.57.1.tgz#33999ed3e2d92a57a04d83d785a151c3501b4eb6"
-  integrity sha512-7q+4U9A/klaAT40bqL6sPFhIKb4jsUJ8udddCzaf8mdwICYeBG7grps/zDcrOUfkwCxCzR6fxfDDah3WqHoVUA==
+  version "4.58.1"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.58.1.tgz#be3720720e730cd6e14726b346d0bbe8d7983017"
+  integrity sha512-n9fN4RIjbj4PbZU6IN/FOBBbxHbHEcW18rDZ4nW2cDNfZP2+upm/FM20UCmRNMQTvhOvw/2Tw4vgioQyQb5nlA==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
-    "@types/qs" "^6.9.7"
+    "@types/qs" "^6.9.15"
     abort-controller "^3.0.0"
     agentkeepalive "^4.2.1"
     form-data-encoder "1.7.2"
