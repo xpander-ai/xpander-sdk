@@ -96,8 +96,6 @@ jobs:
         with:
           name: build-artifact
           path: dist
-      - name: List dist directory
-        run: ls -la dist
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
