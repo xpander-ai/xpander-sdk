@@ -71,19 +71,19 @@ project.addTask('generate-docs-node', {
 // });
 
 // Helper function to safely spawn tasks
-function safeSpawn(taskName: string) {
-  const task = project.tasks.tryFind(taskName);
-  if (task) {
-    project.postCompileTask.spawn(task);
-  } else {
-    console.error(`Task ${taskName} not found`);
-  }
-}
+// function safeSpawn(taskName: string) {
+//   const task = project.tasks.tryFind(taskName);
+//   if (task) {
+//     project.postCompileTask.spawn(task);
+//   } else {
+//     console.error(`Task ${taskName} not found`);
+//   }
+// }
 
 // Extend the default build task to include generating and uploading docs
-safeSpawn('generate-docs');
-safeSpawn('generate-docs-python');
-safeSpawn('generate-docs-node');
+// safeSpawn('generate-docs');
+// safeSpawn('generate-docs-python');
+// safeSpawn('generate-docs-node');
 // safeSpawn('generate-docs-dotnet');
 // safeSpawn('generate-docs-java');
 
