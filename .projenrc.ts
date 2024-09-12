@@ -41,7 +41,6 @@ const project = new cdk.JsiiProject({
     '@aws-sdk/client-bedrock-runtime',
   ],
   bundledDeps: ['sync-request', 'axios'],
-  gitignore: ['.env'],
   jestOptions: {
     jestConfig: {
       detectOpenHandles: true,
@@ -70,22 +69,4 @@ project.addTask('generate-docs-node', {
 //   exec: 'jsii-docgen -o API_java.md --language java',
 // });
 
-// Helper function to safely spawn tasks
-// function safeSpawn(taskName: string) {
-//   const task = project.tasks.tryFind(taskName);
-//   if (task) {
-//     project.postCompileTask.spawn(task);
-//   } else {
-//     console.error(`Task ${taskName} not found`);
-//   }
-// }
-
-// Extend the default build task to include generating and uploading docs
-// safeSpawn('generate-docs');
-// safeSpawn('generate-docs-python');
-// safeSpawn('generate-docs-node');
-// safeSpawn('generate-docs-dotnet');
-// safeSpawn('generate-docs-java');
-
-// run node uploadDocs.js manually
 project.synth();
