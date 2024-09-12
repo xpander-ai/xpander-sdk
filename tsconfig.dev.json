@@ -7,7 +7,9 @@
     "experimentalDecorators": true,
     "inlineSourceMap": true,
     "inlineSources": true,
-    "lib": ["es2019"],
+    "lib": [
+      "es2019"
+    ],
     "module": "CommonJS",
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
@@ -29,5 +31,9 @@
     ".projenrc.ts",
     "projenrc/**/*.ts"
   ],
-  "exclude": ["node_modules", ".env", ".env.template"]
+  "exclude": [
+    "node_modules",
+    ".env",
+    ".env.template"
+  ]
 }
