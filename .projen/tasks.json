@@ -218,15 +218,6 @@
       "steps": [
         {
           "spawn": "docgen"
-        },
-        {
-          "spawn": "generate-docs"
-        },
-        {
-          "spawn": "generate-docs-python"
-        },
-        {
-          "spawn": "generate-docs-node"
         }
       ]
     },
