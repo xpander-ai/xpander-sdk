@@ -68,5 +68,11 @@ project.addTask('generate-docs-node', {
 // project.addTask('generate-docs-java', {
 //   exec: 'jsii-docgen -o API_java.md --language java',
 // });
+if (project?.github?.actions) {
+  project.github.actions.set(
+    'actions/upload-artifact',
+    'actions/upload-artifact@v4.3.6',
+  );
+}
 
 project.synth();

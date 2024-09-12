@@ -12,7 +12,7 @@ jobs:
     outputs:
       self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
     env:
-      CI: 'true'
+      CI: "true"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
         working-directory: ./
       - name: Upload patch
         if: steps.self_mutation.outputs.self_mutation_happened
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.3.6
         with:
           name: .repo.patch
           path: .repo.patch
@@ -46,7 +46,7 @@ jobs:
         run: cd dist && getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.3.6
         with:
           name: build-artifact
           path: dist
@@ -86,7 +86,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions: {}
-    if: '! needs.build.outputs.self_mutation_happened'
+    if: "! needs.build.outputs.self_mutation_happened"
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -101,8 +101,6 @@ jobs:
         continue-on-error: true
       - name: Prepare Repository
         run: mv dist .repo
-      - name: List dist directory
-        run: ls -la .repo
       - name: Install Dependencies
         run: cd .repo && yarn install --check-files --frozen-lockfile
       - name: Create js artifact
@@ -113,7 +111,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions: {}
-    if: '! needs.build.outputs.self_mutation_happened'
+    if: "! needs.build.outputs.self_mutation_happened"
     steps:
       - uses: actions/setup-node@v4
         with:
