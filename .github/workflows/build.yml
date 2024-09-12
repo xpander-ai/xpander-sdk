@@ -12,7 +12,7 @@ jobs:
     outputs:
       self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
     env:
-      CI: "true"
+      CI: 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -86,7 +86,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions: {}
-    if: "! needs.build.outputs.self_mutation_happened"
+    if: '! needs.build.outputs.self_mutation_happened'
     steps:
       - uses: actions/setup-node@v4
         with:
@@ -96,6 +96,8 @@ jobs:
         with:
           name: build-artifact
           path: dist
+      - name: List dist directory
+        run: ls -la dist
       - name: Restore build artifact permissions
         run: cd dist && setfacl --restore=permissions-backup.acl
         continue-on-error: true
@@ -111,7 +113,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions: {}
-    if: "! needs.build.outputs.self_mutation_happened"
+    if: '! needs.build.outputs.self_mutation_happened'
     steps:
       - uses: actions/setup-node@v4
         with:
