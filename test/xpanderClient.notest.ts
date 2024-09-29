@@ -73,7 +73,7 @@ describe.only('Test XPander Client', () => {
     expect(tools).not.toHaveLength(0);
   });
 
-  it('allow xchat params by constructor', () => {
+  it('allow custom params by constructor', () => {
     const chatParams = {
       // those are hardcoded for test purpose and would need to change in case these ids change.
       organizationId: '6f3a8d1a-00e4-4ae7-bb1f-907b8704d4e2',

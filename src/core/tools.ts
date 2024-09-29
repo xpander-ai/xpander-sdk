@@ -45,10 +45,10 @@ export function createTool(
       const jsonPayload: any = payload instanceof Object ? payload : {};
 
       try {
-        const xchatParams = client._getXChatParamsIfExist();
-        const hasXChatParams = !!xchatParams.organization_id;
-        if (hasXChatParams) {
-          jsonPayload.__xchat__ = xchatParams;
+        const customParams = client._getCustomParamsIfExist();
+        const hasCustomParams = !!customParams.organization_id;
+        if (hasCustomParams) {
+          jsonPayload.__custom__ = customParams;
         }
 
         const response = request('POST' as HttpVerb, url, {

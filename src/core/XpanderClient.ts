@@ -5,7 +5,7 @@ import { BaseOpenAISDKHandler } from '../llmProviders/shared/baseOpenAI';
 import { ToolResponse } from '../models/toolResponse';
 import {
   IBedrockToolOutput,
-  IXChatParams,
+  ICustomParams,
   ILLMProviderHandler,
   ILocalTool,
   IOpenAIToolOutput,
@@ -38,7 +38,7 @@ export class XpanderClient {
   /**
    * @internal
    */
-  _xchatParams: IXChatParams | undefined;
+  _customParams: ICustomParams | undefined;
 
   /**
    * Provides a list of valid LLM providers.
@@ -55,7 +55,7 @@ export class XpanderClient {
    * @param llmProvider - The LLM provider to use.
    * @param localTools - Local tools to append into the tools list.
    * @param tools - Pass existing xpanderAI tools to the client instead of fetching.
-   * @param xchatParams - Optional chat parameters for enhanced context.
+   * @param customParams - Optional custom parameters for enhanced context.
    * @throws Will throw an error if an invalid LLM provider is specified.
    */
   constructor(
@@ -64,7 +64,7 @@ export class XpanderClient {
     llmProvider: LLMProvider,
     localTools?: ILocalTool[],
     tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[],
-    xchatParams?: any | IXChatParams,
+    customParams?: any | ICustomParams,
   ) {
     if (!XpanderClient.validProviders.includes(llmProvider)) {
       throw new Error(
@@ -76,7 +76,7 @@ export class XpanderClient {
     this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     this.toolsCache = null;
     this.localTools = localTools || [];
-    this._xchatParams = xchatParams;
+    this._customParams = customParams;
 
     if (Array.isArray(tools) && tools.length !== 0) {
       this.toolsCache = tools;
@@ -100,9 +100,9 @@ export class XpanderClient {
       const response = this.syncRequest(
         'POST',
         `${this.agentUrl}/tools`,
-        this._xchatParams
+        this._customParams
           ? {
-              __xchat__: this._getXChatParamsIfExist(),
+              __custom__: this._getCustomParamsIfExist(),
             }
           : {},
       );
@@ -124,16 +124,16 @@ export class XpanderClient {
   }
 
   /**
-   * Retrieves xchat params in the right format for agents service, only if they exist (passed by constructor).
+   * Retrieves custom params in the right format for agents service, only if they exist (passed by constructor).
    * For internal use only.
    * @internal
-   * @returns - Empty object or formatted xchatParams.
+   * @returns - Empty object or formatted customParams.
    */
-  public _getXChatParamsIfExist = () => {
-    if (this._xchatParams) {
+  public _getCustomParamsIfExist = () => {
+    if (this._customParams) {
       return {
-        organization_id: this._xchatParams.organizationId,
-        connectors: this._xchatParams.connectors.map((connector) => {
+        organization_id: this._customParams.organizationId,
+        connectors: this._customParams.connectors.map((connector) => {
           return {
             id: connector.id,
             operation_ids: connector.operationIds,
