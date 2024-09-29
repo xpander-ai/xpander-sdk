@@ -46,8 +46,8 @@ export function createTool(
 
       try {
         const customParams = client._getCustomParamsIfExist();
-        const hascustomParams = !!customParams.organization_id;
-        if (hascustomParams) {
+        const hasCustomParams = !!customParams.organization_id;
+        if (hasCustomParams) {
           jsonPayload.__custom__ = customParams;
         }
 

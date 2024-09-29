@@ -6,7 +6,6 @@ import { ToolResponse } from '../models/toolResponse';
 import {
   IBedrockToolOutput,
   ICustomParams,
-  ICustomParams,
   ILLMProviderHandler,
   ILocalTool,
   IOpenAIToolOutput,
@@ -133,11 +132,11 @@ export class XpanderClient {
   public _getCustomParamsIfExist = () => {
     if (this._customParams) {
       return {
-        organization_id: this._customParams.organization_id,
+        organization_id: this._customParams.organizationId,
         connectors: this._customParams.connectors.map((connector) => {
           return {
             id: connector.id,
-            operation_ids: connector.operation_ids,
+            operation_ids: connector.operationIds,
           };
         }),
       };
