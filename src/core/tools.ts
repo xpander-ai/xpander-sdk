@@ -56,7 +56,7 @@ export function createTool(
           headers: { 'x-api-key': client.agentKey },
         });
 
-        if (response.statusCode !== 200) {
+        if (!response.statusCode.toString().startsWith('2')) {
           throw new Error(response.body.toString());
         }
 
