@@ -31,7 +31,7 @@
     "projen": "npx projen"
   },
   "author": {
-    "name": "xpander AI",
+    "name": "xpander.ai",
     "email": "opensource@xpander.ai",
     "organization": false
   },
@@ -130,7 +130,7 @@
     "outdir": "dist",
     "targets": {
       "python": {
-        "distName": "xpander-ai",
+        "distName": "xpander-sdk",
         "module": "xpander_sdk"
       }
     },

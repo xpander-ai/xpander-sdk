@@ -74,7 +74,7 @@ project.addTask('generate-docs-node', {
 if (project?.github?.actions) {
   project.github.actions.set(
     'actions/upload-artifact',
-    'actions/upload-artifact@v4.3.6'
+    'actions/upload-artifact@v4.3.6',
   );
 }
 
