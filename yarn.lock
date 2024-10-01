@@ -1117,13 +1117,13 @@
     zod-to-json-schema "^3.22.3"
 
 "@langchain/openai@^0.2.6":
-  version "0.2.8"
-  resolved "https://registry.npmjs.org/@langchain/openai/-/openai-0.2.8.tgz"
-  integrity sha512-p5fxEAKuR8UV9jWIxkZ6AY/vAPSYxJI0Pf/UM4T3FKk/dn99G/mAEDLhfI4pBf7B8o8TudSVyBW2hRjZqlQu7g==
+  version "0.2.11"
+  resolved "https://registry.yarnpkg.com/@langchain/openai/-/openai-0.2.11.tgz#b1a0403eb5db8133bb4ff41fe0680e727b78ddfc"
+  integrity sha512-Pu8+WfJojCgSf0bAsXb4AjqvcDyAWyoEB1AoCRNACgEnBWZuitz3hLwCo9I+6hAbeg3QJ37g82yKcmvKAg1feg==
   dependencies:
     "@langchain/core" ">=0.2.26 <0.3.0"
     js-tiktoken "^1.0.12"
-    openai "^4.55.0"
+    openai "^4.57.3"
     zod "^3.22.4"
     zod-to-json-schema "^3.22.3"
 
@@ -5100,7 +5100,7 @@ oo-ascii-tree@^1.103.1:
   resolved "https://registry.npmjs.org/oo-ascii-tree/-/oo-ascii-tree-1.103.1.tgz"
   integrity sha512-X0nmbb8xUUi637JXzCxY/K4AtO/I0fB5b7iiGaHJHu8IXBWV8TnQ4xqa0Igb/NoAg3OP2uXNhSeiTsErETOA/g==
 
-openai@^4.55.0, openai@^4.55.4:
+openai@^4.55.4, openai@^4.57.3:
   version "4.66.1"
   resolved "https://registry.yarnpkg.com/openai/-/openai-4.66.1.tgz#07d228cb52d58471e512bad8669e7d001e97791d"
   integrity sha512-+sSyV6VtGHerPb6Kfi76hrEOVt+wayvuw7GX/ky7rAR11kN6JVs4dgbtoaxzDXvAxc5dcQLuXeco54mBfOMoQQ==
