@@ -95,6 +95,11 @@ export class XpanderClient {
     this.loadXpanderGraphs();
   }
 
+  /**
+   * Initializes a new graph session with the provided prompt.
+   * @param {string} [prompt=''] - The prompt to initialize the session with.
+   * @returns {void}
+   */
   public startSession(prompt: string = ''): void {
     this.graphSession = {
       prompt,
@@ -103,15 +108,25 @@ export class XpanderClient {
     };
   }
 
+  /**
+   * Retrieves the appropriate tools for the current graph session.
+   *
+   * @param {any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]} tools - Array of available tools.
+   *
+   * @returns {any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]} A subset of tools based on the graph session and prompt group.
+   * @throws {Error} If graphs are not loaded or the graph session is not initiated properly.
+   */
   public getToolsForGraphsSession(
     tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[],
   ): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] {
     if (!!this._getCustomParamsIfExist()?.organization_id) return tools;
-    // no graphs loaded, error
+
+    // No graphs loaded, error
     if (!this.graphsCache) {
       throw new Error('Graphs not loaded');
     }
-    // no prompt, allow all enabled - return all tools
+
+    // No prompt, allow all enabled - return all tools
     if (!this.graphSession?.prompt) {
       if (this.graphsCache.allowAllOperations) {
         return tools;
@@ -124,27 +139,27 @@ export class XpanderClient {
       this.graphSession.promptGroup ||
       searchGraphByPrompt(this.graphSession?.prompt, this.graphsCache.graphs);
 
-    // set to cache
+    // Set to cache
     if (!this.graphSession.promptGroup && matchedPromptGroup) {
       this.graphSession.promptGroup = matchedPromptGroup;
     }
 
-    // no prompt group but all allowed so return all
+    // No prompt group but all allowed, so return all
     if (!matchedPromptGroup && this.graphsCache.allowAllOperations) {
       return tools;
     }
 
     const pg = matchedPromptGroup as IGraphItem;
 
-    // we have prompt group, lets return subset of tools
+    // We have a prompt group, let's return a subset of tools
     let subset = pg.graph[this.graphSession.previousNode] || [];
 
-    // first iteration
+    // First iteration
     if (!this.graphSession.previousNode) {
       if (pg?.startingNode) {
-        subset = [pg.startingNode]; // starting node
+        subset = [pg.startingNode]; // Starting node
       } else {
-        subset = [Object.keys(pg?.graph)[0]]; // first node in graph
+        subset = [Object.keys(pg?.graph)[0]]; // First node in graph
       }
     }
 
@@ -197,9 +212,10 @@ export class XpanderClient {
   }
 
   /**
-   * Loads the graphs associated with the agent.
-   * @returns Array of graphs.
-   * @throws Will throw an error if the graphs cannot be loaded.
+   * Loads the graphs associated with the agent from the server.
+   *
+   * @returns {IGraph} The loaded graphs, cached if previously loaded.
+   * @throws {Error} If the graphs cannot be loaded or are malformed.
    */
   private loadXpanderGraphs(): IGraph {
     if (this.graphsCache) {
@@ -216,6 +232,7 @@ export class XpanderClient {
             }
           : {},
       );
+
       if (response.statusCode !== 200) {
         throw new Error(JSON.stringify(response.getBody('utf8')));
       }
@@ -364,6 +381,12 @@ export class XpanderClient {
     );
   }
 
+  /**
+   * Sets a parameter in the current graph session.
+   * @param {'previousNode' | 'prompt'} param - The parameter to set, either 'previousNode' or 'prompt'.
+   * @param {any} value - The value to assign to the specified parameter.
+   * @returns {void}
+   */
   public setGraphSessionParam(
     param: 'previousNode' | 'prompt',
     value: any,
