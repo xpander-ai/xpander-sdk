@@ -539,10 +539,10 @@ Optional custom parameters for enhanced context.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.addLocalTools">addLocalTools</a></code> | Adds local tools to the client. |
-| <code><a href="#xpander-sdk.XpanderClient.getToolsForGraphsSession">getToolsForGraphsSession</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.getToolsForGraphsSession">getToolsForGraphsSession</a></code> | Retrieves the appropriate tools for the current graph session. |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">loadXpanderTools</a></code> | Loads the tools available from the xpanderAI agent. |
-| <code><a href="#xpander-sdk.XpanderClient.setGraphSessionParam">setGraphSessionParam</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.startSession">startSession</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.setGraphSessionParam">setGraphSessionParam</a></code> | Sets a parameter in the current graph session. |
+| <code><a href="#xpander-sdk.XpanderClient.startSession">startSession</a></code> | Initializes a new graph session with the provided prompt. |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderSingleToolInvoke">xpanderSingleToolInvoke</a></code> | Invokes a single tool with the given tool ID and payload. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes the tools based on the tool selector response. |
@@ -571,9 +571,13 @@ Array of local tools to add.
 public getToolsForGraphsSession(tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]
 ```
 
+Retrieves the appropriate tools for the current graph session.
+
 ###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.XpanderClient.getToolsForGraphsSession.parameter.tools"></a>
 
 - *Type:* any[] | <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] | <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]
+
+Array of available tools.
 
 ---
 
@@ -591,15 +595,21 @@ Loads the tools available from the xpanderAI agent.
 public setGraphSessionParam(param: string, value: any): void
 ```
 
+Sets a parameter in the current graph session.
+
 ###### `param`<sup>Required</sup> <a name="param" id="xpander-sdk.XpanderClient.setGraphSessionParam.parameter.param"></a>
 
 - *Type:* string
+
+The parameter to set, either 'previousNode' or 'prompt'.
 
 ---
 
 ###### `value`<sup>Required</sup> <a name="value" id="xpander-sdk.XpanderClient.setGraphSessionParam.parameter.value"></a>
 
 - *Type:* any
+
+The value to assign to the specified parameter.
 
 ---
 
@@ -609,9 +619,13 @@ public setGraphSessionParam(param: string, value: any): void
 public startSession(prompt?: string): void
 ```
 
+Initializes a new graph session with the provided prompt.
+
 ###### `prompt`<sup>Optional</sup> <a name="prompt" id="xpander-sdk.XpanderClient.startSession.parameter.prompt"></a>
 
 - *Type:* string
+
+The prompt to initialize the session with.
 
 ---
 
