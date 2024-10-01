@@ -1,7 +1,7 @@
 import { cdk } from 'projen';
 
 const project = new cdk.JsiiProject({
-  author: 'xpander AI',
+  author: 'xpander.ai',
   authorAddress: 'opensource@xpander.ai',
   defaultReleaseBranch: 'main',
   jsiiVersion: '~5.4.0',
