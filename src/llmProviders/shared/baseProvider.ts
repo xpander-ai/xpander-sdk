@@ -94,6 +94,19 @@ export class BaseLLMProvider {
     // filter tools according to graph's sessions
     tools = this.client.getToolsForGraphsSession(tools);
 
+    // LLMs with function calling but no tools to workaround issue with empty tools array returned to LLMs
+    if (tools == null || tools.length == 0) {
+      tools = [
+        {
+          type: 'function',
+          function: {
+            name: 'EmptyFunction',
+            description: 'Empty function with no parameters',
+          },
+        },
+      ];
+    }
+
     return typeof this.postProcessTools === 'function'
       ? this.postProcessTools(tools)
       : tools;
