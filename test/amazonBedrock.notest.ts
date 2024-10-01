@@ -132,4 +132,61 @@ describe('Testing Amazon Bedrock (Converse) Runtime Function Calling', () => {
     expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
     expect(toolResponse[0].payloadRequest).toEqual('{"userName":"David"}'); // check payload request stringified
   });
+
+  it('tool selection is correct - with graphs', async () => {
+    const userPrompt = 'get all tags';
+    const messages: any[] = [
+      {
+        role: 'user',
+        content: [{ text: userPrompt }],
+      },
+    ];
+
+    const client = new XpanderClient(
+      xpanderAPIKey,
+      agentUrl,
+      LLMProvider.AMAZON_BEDROCK,
+    );
+
+    client.startSession(userPrompt);
+
+    const bedrockClient = new BedrockRuntimeClient({
+      region: bedrockAWSRegionName,
+      credentials: {
+        accessKeyId: bedrockAWSAccessKeyId,
+        secretAccessKey: bedrockAWSSecretAccessKey,
+      },
+    });
+
+    const iterations = ['Conduit_article_management_getAllTags'];
+
+    // test single graph iteration
+    for (const requiredTool of iterations) {
+      const tools = client.tools() as unknown as Tool[];
+      // required tool exists
+      expect(tools.some((tool) => tool.toolSpec?.name === requiredTool)).toBe(
+        true,
+      );
+
+      const command = new ConverseCommand({
+        modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
+        messages,
+        inferenceConfig: { temperature: 0.0 },
+        toolConfig: { tools },
+      });
+
+      const response: any = await bedrockClient.send(command);
+      const toolCalls: any[] =
+        response?.output?.message?.content.filter(
+          (msg: any) => msg.toolUse && msg.toolUse.name,
+        ) || [];
+      const originalFunctionName =
+        client.toolsNamesMapping[toolCalls[0].toolUse.name];
+      expect(originalFunctionName).toEqual(requiredTool.replace(/\_/g, '-'));
+
+      const toolResponse = client.xpanderToolCall(response);
+
+      expect(toolResponse.length).toBeGreaterThan(0);
+    }
+  }, 20000);
 });

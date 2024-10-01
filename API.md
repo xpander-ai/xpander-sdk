@@ -539,7 +539,10 @@ Optional custom parameters for enhanced context.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.addLocalTools">addLocalTools</a></code> | Adds local tools to the client. |
+| <code><a href="#xpander-sdk.XpanderClient.getToolsForGraphsSession">getToolsForGraphsSession</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">loadXpanderTools</a></code> | Loads the tools available from the xpanderAI agent. |
+| <code><a href="#xpander-sdk.XpanderClient.setGraphSessionParam">setGraphSessionParam</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.startSession">startSession</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderSingleToolInvoke">xpanderSingleToolInvoke</a></code> | Invokes a single tool with the given tool ID and payload. |
 | <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes the tools based on the tool selector response. |
@@ -562,6 +565,18 @@ Array of local tools to add.
 
 ---
 
+##### `getToolsForGraphsSession` <a name="getToolsForGraphsSession" id="xpander-sdk.XpanderClient.getToolsForGraphsSession"></a>
+
+```typescript
+public getToolsForGraphsSession(tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]
+```
+
+###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.XpanderClient.getToolsForGraphsSession.parameter.tools"></a>
+
+- *Type:* any[] | <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] | <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]
+
+---
+
 ##### `loadXpanderTools` <a name="loadXpanderTools" id="xpander-sdk.XpanderClient.loadXpanderTools"></a>
 
 ```typescript
@@ -569,6 +584,36 @@ public loadXpanderTools(): any[]
 ```
 
 Loads the tools available from the xpanderAI agent.
+
+##### `setGraphSessionParam` <a name="setGraphSessionParam" id="xpander-sdk.XpanderClient.setGraphSessionParam"></a>
+
+```typescript
+public setGraphSessionParam(param: string, value: any): void
+```
+
+###### `param`<sup>Required</sup> <a name="param" id="xpander-sdk.XpanderClient.setGraphSessionParam.parameter.param"></a>
+
+- *Type:* string
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="xpander-sdk.XpanderClient.setGraphSessionParam.parameter.value"></a>
+
+- *Type:* any
+
+---
+
+##### `startSession` <a name="startSession" id="xpander-sdk.XpanderClient.startSession"></a>
+
+```typescript
+public startSession(prompt?: string): void
+```
+
+###### `prompt`<sup>Optional</sup> <a name="prompt" id="xpander-sdk.XpanderClient.startSession.parameter.prompt"></a>
+
+- *Type:* string
+
+---
 
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
@@ -643,6 +688,7 @@ The response from the tool selector.
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">toolsNamesMapping</a></code> | <code>{[ key: string ]: string}</code> | Retrieves the tool names mapping for the current LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agentKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.graphsCache">graphsCache</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">toolsCache</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.toolsFromExternal">toolsFromExternal</a></code> | <code>boolean</code> | *No description.* |
@@ -690,6 +736,16 @@ public readonly agentUrl: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `graphsCache`<sup>Required</sup> <a name="graphsCache" id="xpander-sdk.XpanderClient.property.graphsCache"></a>
+
+```typescript
+public readonly graphsCache: any;
+```
+
+- *Type:* any
 
 ---
 
@@ -961,6 +1017,152 @@ public readonly organizationId: string;
 - *Type:* string
 
 Organization ID associated with the custom.
+
+---
+
+### IGraph <a name="IGraph" id="xpander-sdk.IGraph"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IGraph">IGraph</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IGraph.property.allowAllOperations">allowAllOperations</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraph.property.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraph.property.organizationId">organizationId</a></code> | <code>boolean</code> | *No description.* |
+
+---
+
+##### `allowAllOperations`<sup>Required</sup> <a name="allowAllOperations" id="xpander-sdk.IGraph.property.allowAllOperations"></a>
+
+```typescript
+public readonly allowAllOperations: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `graphs`<sup>Required</sup> <a name="graphs" id="xpander-sdk.IGraph.property.graphs"></a>
+
+```typescript
+public readonly graphs: IGraphItem[];
+```
+
+- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.IGraph.property.organizationId"></a>
+
+```typescript
+public readonly organizationId: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+### IGraphItem <a name="IGraphItem" id="xpander-sdk.IGraphItem"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IGraphItem.property.enrichedPrompts">enrichedPrompts</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraphItem.property.graph">graph</a></code> | <code>{[ key: string ]: string[]}</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraphItem.property.prompts">prompts</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraphItem.property.startingNode">startingNode</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `enrichedPrompts`<sup>Required</sup> <a name="enrichedPrompts" id="xpander-sdk.IGraphItem.property.enrichedPrompts"></a>
+
+```typescript
+public readonly enrichedPrompts: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `graph`<sup>Required</sup> <a name="graph" id="xpander-sdk.IGraphItem.property.graph"></a>
+
+```typescript
+public readonly graph: {[ key: string ]: string[]};
+```
+
+- *Type:* {[ key: string ]: string[]}
+
+---
+
+##### `prompts`<sup>Required</sup> <a name="prompts" id="xpander-sdk.IGraphItem.property.prompts"></a>
+
+```typescript
+public readonly prompts: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `startingNode`<sup>Required</sup> <a name="startingNode" id="xpander-sdk.IGraphItem.property.startingNode"></a>
+
+```typescript
+public readonly startingNode: string;
+```
+
+- *Type:* string
+
+---
+
+### IGraphSession <a name="IGraphSession" id="xpander-sdk.IGraphSession"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IGraphSession">IGraphSession</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IGraphSession.property.previousNode">previousNode</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraphSession.property.prompt">prompt</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraphSession.property.promptGroup">promptGroup</a></code> | <code>any</code> | *No description.* |
+
+---
+
+##### `previousNode`<sup>Required</sup> <a name="previousNode" id="xpander-sdk.IGraphSession.property.previousNode"></a>
+
+```typescript
+public readonly previousNode: string;
+```
+
+- *Type:* string
+
+---
+
+##### `prompt`<sup>Required</sup> <a name="prompt" id="xpander-sdk.IGraphSession.property.prompt"></a>
+
+```typescript
+public readonly prompt: string;
+```
+
+- *Type:* string
+
+---
+
+##### `promptGroup`<sup>Required</sup> <a name="promptGroup" id="xpander-sdk.IGraphSession.property.promptGroup"></a>
+
+```typescript
+public readonly promptGroup: any;
+```
+
+- *Type:* any
 
 ---
 
