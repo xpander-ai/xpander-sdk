@@ -7,6 +7,9 @@ const project = new cdk.JsiiProject({
   jsiiVersion: '~5.4.0',
   tsconfig: {
     exclude: ['.env', '.env.template'],
+    compilerOptions: {
+      typeRoots: ['./node_modules/@types', './src/@types'],
+    },
   },
   majorVersion: 1,
   name: 'xpander-sdk',
@@ -40,7 +43,7 @@ const project = new cdk.JsiiProject({
     'dotenv',
     '@aws-sdk/client-bedrock-runtime',
   ],
-  bundledDeps: ['sync-request', 'axios'],
+  bundledDeps: ['sync-request', 'axios', 'string-similarity'],
   jestOptions: {
     jestConfig: {
       detectOpenHandles: true,

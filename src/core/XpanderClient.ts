@@ -1,4 +1,5 @@
 import request, { HttpVerb } from 'sync-request';
+import { convertKeysToCamelCase, searchGraphByPrompt } from './graphs';
 import { LLMProvider } from '../constants/llmProvider';
 import { OpenAI, NvidiaNIM, AmazonBedrock, LangChain } from '../llmProviders';
 import { BaseOpenAISDKHandler } from '../llmProviders/shared/baseOpenAI';
@@ -6,6 +7,9 @@ import { ToolResponse } from '../models/toolResponse';
 import {
   IBedrockToolOutput,
   ICustomParams,
+  IGraph,
+  IGraphItem,
+  IGraphSession,
   ILLMProviderHandler,
   ILocalTool,
   IOpenAIToolOutput,
@@ -31,9 +35,11 @@ export class XpanderClient {
   agentKey: string;
   agentUrl: string;
   toolsCache: any;
+  graphsCache: any | IGraph;
   toolsFromExternal: boolean = false;
   localTools: ILocalTool[] = [];
   protected llmProviderHandler: ILLMProviderHandler;
+  protected graphSession: any | IGraphSession;
 
   /**
    * @internal
@@ -75,6 +81,8 @@ export class XpanderClient {
     this.agentUrl = agentUrl;
     this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     this.toolsCache = null;
+    this.graphsCache = null;
+    this.graphSession = null;
     this.localTools = localTools || [];
     this._customParams = customParams;
 
@@ -84,6 +92,71 @@ export class XpanderClient {
     }
 
     this.loadXpanderTools();
+    this.loadXpanderGraphs();
+  }
+
+  public startSession(prompt: string = ''): void {
+    this.graphSession = {
+      prompt,
+      previousNode: '',
+      promptGroup: null,
+    };
+  }
+
+  public getToolsForGraphsSession(
+    tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[],
+  ): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] {
+    if (!!this._getCustomParamsIfExist()?.organization_id) return tools;
+    // no graphs loaded, error
+    if (!this.graphsCache) {
+      throw new Error('Graphs not loaded');
+    }
+    // no prompt, allow all enabled - return all tools
+    if (!this.graphSession?.prompt) {
+      if (this.graphsCache.allowAllOperations) {
+        return tools;
+      } else {
+        throw new Error('Graph session not initiated');
+      }
+    }
+
+    const matchedPromptGroup =
+      this.graphSession.promptGroup ||
+      searchGraphByPrompt(this.graphSession?.prompt, this.graphsCache.graphs);
+
+    // set to cache
+    if (!this.graphSession.promptGroup && matchedPromptGroup) {
+      this.graphSession.promptGroup = matchedPromptGroup;
+    }
+
+    // no prompt group but all allowed so return all
+    if (!matchedPromptGroup && this.graphsCache.allowAllOperations) {
+      return tools;
+    }
+
+    const pg = matchedPromptGroup as IGraphItem;
+
+    // we have prompt group, lets return subset of tools
+    let subset = pg.graph[this.graphSession.previousNode] || [];
+
+    // first iteration
+    if (!this.graphSession.previousNode) {
+      if (pg?.startingNode) {
+        subset = [pg.startingNode]; // starting node
+      } else {
+        subset = [Object.keys(pg?.graph)[0]]; // first node in graph
+      }
+    }
+
+    const toolsByFunctionName = tools.reduce(
+      (all, tool) => {
+        all[tool.function.name] = tool;
+        return all;
+      },
+      {} as Record<string, any>,
+    );
+
+    return subset.map((node: string) => toolsByFunctionName[node]);
   }
 
   /**
@@ -124,6 +197,46 @@ export class XpanderClient {
   }
 
   /**
+   * Loads the graphs associated with the agent.
+   * @returns Array of graphs.
+   * @throws Will throw an error if the graphs cannot be loaded.
+   */
+  private loadXpanderGraphs(): IGraph {
+    if (this.graphsCache) {
+      return this.graphsCache;
+    }
+
+    try {
+      const response = this.syncRequest(
+        'POST',
+        `${this.agentUrl}/tools/graphs`,
+        this._customParams
+          ? {
+              __custom__: this._getCustomParamsIfExist(),
+            }
+          : {},
+      );
+      if (response.statusCode !== 200) {
+        throw new Error(JSON.stringify(response.getBody('utf8')));
+      }
+
+      this.graphsCache = convertKeysToCamelCase(
+        JSON.parse(response.getBody('utf8')),
+      );
+
+      if (!this.graphsCache?.organizationId) {
+        throw new Error(
+          `Returned graphs are malformed - ${JSON.stringify(this.graphsCache)}`,
+        );
+      }
+    } catch (e) {
+      throw new Error(`Failed to get agent's graphs - ${(e as Error).message}`);
+    }
+
+    return this.graphsCache;
+  }
+
+  /**
    * Retrieves custom params in the right format for agents service, only if they exist (passed by constructor).
    * For internal use only.
    * @internal
@@ -155,6 +268,7 @@ export class XpanderClient {
     if (this.toolsFromExternal) {
       return this.toolsCache;
     }
+
     let tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] = [];
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
@@ -248,6 +362,15 @@ export class XpanderClient {
       toolId,
       payload || ({} as any),
     );
+  }
+
+  public setGraphSessionParam(
+    param: 'previousNode' | 'prompt',
+    value: any,
+  ): void {
+    if (this.graphSession && param in this.graphSession) {
+      this.graphSession[param] = value;
+    }
   }
 
   /**

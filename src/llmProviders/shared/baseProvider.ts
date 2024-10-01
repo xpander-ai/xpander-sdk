@@ -48,7 +48,7 @@ export class BaseLLMProvider {
    */
   getTools<T>(functionize: boolean = false): T[] {
     const agentTools = this.client.loadXpanderTools();
-    const tools: any[] = [];
+    let tools: any[] = [];
 
     for (const toolInstructions of agentTools) {
       if (this.client.toolsFromExternal) {
@@ -90,6 +90,9 @@ export class BaseLLMProvider {
         this.client.localTools = this.postProcessTools(this.client.localTools);
       }
     }
+
+    // filter tools according to graph's sessions
+    tools = this.client.getToolsForGraphsSession(tools);
 
     return typeof this.postProcessTools === 'function'
       ? this.postProcessTools(tools)

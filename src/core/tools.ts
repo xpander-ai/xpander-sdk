@@ -41,7 +41,8 @@ export function createTool(
   const toolData: any = toolInstructions;
   if (functionize) {
     const toolInvocationFunction = (payload: RequestPayload): any => {
-      const url = `${client.agentUrl}/operations/${toolData?.id || toolData?.function?.name}`;
+      const functionName = toolData?.id || toolData?.function?.name;
+      const url = `${client.agentUrl}/operations/${functionName}`;
       const jsonPayload: any = payload instanceof Object ? payload : {};
 
       try {
@@ -59,6 +60,9 @@ export function createTool(
         if (!response.statusCode.toString().startsWith('2')) {
           throw new Error(response.body.toString());
         }
+
+        // success? report to graph
+        client.setGraphSessionParam('previousNode', functionName);
 
         return JSON.parse(response.getBody('utf8'));
       } catch (err) {
