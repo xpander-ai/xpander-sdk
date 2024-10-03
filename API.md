@@ -632,7 +632,7 @@ The prompt to initialize the session with.
 ##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
 
 ```typescript
-public tools(llmProvider?: LLMProvider): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]
+public tools(llmProvider?: LLMProvider): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] | IToolDefinition[]
 ```
 
 Retrieves the tools for the current or specified LLM provider.
@@ -1568,6 +1568,62 @@ Parameters of the tool.
 
 ---
 
+### IToolDefinition <a name="IToolDefinition" id="xpander-sdk.IToolDefinition"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolDefinition">IToolDefinition</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolDefinition.property.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolDefinition.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolDefinition.property.parameters">parameters</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolDefinition.property.type">type</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.IToolDefinition.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IToolDefinition.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `parameters`<sup>Required</sup> <a name="parameters" id="xpander-sdk.IToolDefinition.property.parameters"></a>
+
+```typescript
+public readonly parameters: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+---
+
+##### `type`<sup>Optional</sup> <a name="type" id="xpander-sdk.IToolDefinition.property.type"></a>
+
+```typescript
+public readonly type: string;
+```
+
+- *Type:* string
+
+---
+
 ### IToolParameter <a name="IToolParameter" id="xpander-sdk.IToolParameter"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
@@ -1761,6 +1817,7 @@ Enum representing different Large Language Model (LLM) providers.
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.REAL_TIME_OPEN_AI">REAL_TIME_OPEN_AI</a></code> | Represents the 'realtimeopenai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.AMAZON_BEDROCK">AMAZON_BEDROCK</a></code> | Represents the 'amazonBedrock' provider. |
 
@@ -1776,6 +1833,13 @@ Represents the 'langchain' provider.
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
 Represents the 'openai' provider.
+
+---
+
+
+##### `REAL_TIME_OPEN_AI` <a name="REAL_TIME_OPEN_AI" id="xpander-sdk.LLMProvider.REAL_TIME_OPEN_AI"></a>
+
+Represents the 'realtimeopenai' provider.
 
 ---
 

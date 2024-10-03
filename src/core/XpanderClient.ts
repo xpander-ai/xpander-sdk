@@ -13,6 +13,7 @@ import {
   ILLMProviderHandler,
   ILocalTool,
   IOpenAIToolOutput,
+  IToolDefinition,
 } from '../types';
 
 /**
@@ -281,12 +282,16 @@ export class XpanderClient {
    */
   public tools(
     llmProvider?: LLMProvider,
-  ): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] {
+  ): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] | IToolDefinition[] {
     if (this.toolsFromExternal) {
       return this.toolsCache;
     }
 
-    let tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[] = [];
+    let tools:
+      | any[]
+      | IOpenAIToolOutput[]
+      | IBedrockToolOutput[]
+      | IToolDefinition;
     if (llmProvider) {
       this.llmProviderHandler = this.initLLMProviderHandler(llmProvider);
     }

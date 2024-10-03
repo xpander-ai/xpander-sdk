@@ -79,7 +79,19 @@ export interface IOpenAIToolOutput {
   readonly function: IOpenAIToolFunctionOutput;
 }
 
-export type IToolOutput = IBedrockToolOutput | IOpenAIToolOutput;
+export interface IToolDefinition {
+  readonly type?: 'function' | undefined;
+  readonly name: string;
+  readonly description: string;
+  readonly parameters: {
+    [key: string]: any;
+  };
+}
+
+export type IToolOutput =
+  | IBedrockToolOutput
+  | IOpenAIToolOutput
+  | IToolDefinition;
 
 export interface ILocalToolFunction {
   readonly name: string;
