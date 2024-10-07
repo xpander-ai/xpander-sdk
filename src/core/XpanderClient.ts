@@ -147,6 +147,8 @@ export class XpanderClient {
     // No prompt group but all allowed, so return all
     if (!matchedPromptGroup && this.graphsCache.allowAllOperations) {
       return tools;
+    } else if (!matchedPromptGroup && !this.graphsCache.allowAllOperations) {
+      return [];
     }
 
     const pg = matchedPromptGroup as IGraphItem;
