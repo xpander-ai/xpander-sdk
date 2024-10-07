@@ -6,13 +6,13 @@ import { IGraphItem } from '../types';
  *
  * @param {string} query - The string to match against the list.
  * @param {string[]} listOfStrings - List of strings to match with the query.
- * @param {number} [threshold=0.8] - The similarity score threshold for considering a match.
+ * @param {number} [threshold=0.5] - The similarity score threshold for considering a match.
  * @returns {number} The best match score if it meets the threshold, otherwise 0.
  */
 const getBestMatchScore = (
   query: string,
   listOfStrings: string[],
-  threshold: number = 0.8,
+  threshold: number = 0.5,
 ): number => {
   const similarityScores = findBestMatch(query, listOfStrings);
   if (similarityScores?.bestMatch?.rating >= threshold) {
