@@ -156,7 +156,25 @@ export class XpanderClient {
 
     // First iteration
     if (!this.graphSession.previousNode) {
-      if (pg?.startingNode) {
+      const allTargets = Object.entries(pg.graph);
+      const multipleStartingNodes = Object.keys(pg.graph).reduce(
+        (all: string[], node_name: string) => {
+          const hasNoPointers = !allTargets.some(
+            ([node, targets]: [string, string[]]) =>
+              node !== node_name && targets.includes(node_name),
+          );
+
+          if (hasNoPointers) {
+            all.push(node_name);
+          }
+
+          return all;
+        },
+        [],
+      );
+      if (multipleStartingNodes.length > 1) {
+        subset = multipleStartingNodes;
+      } else if (pg?.startingNode) {
         subset = [pg.startingNode]; // Starting node
       } else {
         subset = [Object.keys(pg?.graph)[0]]; // First node in graph
