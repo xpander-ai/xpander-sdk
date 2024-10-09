@@ -5357,20 +5357,7 @@ oo-ascii-tree@^1.103.1:
   resolved "https://registry.npmjs.org/oo-ascii-tree/-/oo-ascii-tree-1.103.1.tgz"
   integrity sha512-X0nmbb8xUUi637JXzCxY/K4AtO/I0fB5b7iiGaHJHu8IXBWV8TnQ4xqa0Igb/NoAg3OP2uXNhSeiTsErETOA/g==
 
-openai@^4.55.4:
-  version "4.55.4"
-  resolved "https://registry.npmjs.org/openai/-/openai-4.55.4.tgz"
-  integrity sha512-TEC75Y6U/OKIJp9fHao3zkTYfKLYGqXdD2TI+xN2Zd5W8KNKvv6E4/OBTOW7jg7fySfrBrhy5fYzBbyBcdHEtQ==
-  dependencies:
-    "@types/node" "^18.11.18"
-    "@types/node-fetch" "^2.6.4"
-    abort-controller "^3.0.0"
-    agentkeepalive "^4.2.1"
-    form-data-encoder "1.7.2"
-    formdata-node "^4.3.2"
-    node-fetch "^2.6.7"
-
-openai@^4.57.3:
+openai@^4.55.4, openai@^4.57.3:
   version "4.67.3"
   resolved "https://registry.yarnpkg.com/openai/-/openai-4.67.3.tgz#a7c1b59cb9eca064f3ff3d439b7bf51487d88a49"
   integrity sha512-HT2tZgjLgRqbLQNKmYtjdF/4TQuiBvg1oGvTDhwpSEQzxo6/oM1us8VQ53vBK2BiKvCxFuq6gKGG70qfwrNhKg==
