@@ -43,7 +43,12 @@ const project = new cdk.JsiiProject({
     'dotenv',
     '@aws-sdk/client-bedrock-runtime',
   ],
-  bundledDeps: ['sync-request', 'axios', 'string-similarity'],
+  bundledDeps: [
+    'sync-request',
+    'axios',
+    'natural',
+    'compute-cosine-similarity',
+  ],
   jestOptions: {
     jestConfig: {
       detectOpenHandles: true,

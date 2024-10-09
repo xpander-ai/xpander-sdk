@@ -66,12 +66,14 @@
   },
   "dependencies": {
     "axios": "^1.7.2",
-    "string-similarity": "^4.0.4",
+    "compute-cosine-similarity": "^1.1.0",
+    "natural": "^8.0.1",
     "sync-request": "^6.1.0"
   },
   "bundledDependencies": [
     "axios",
-    "string-similarity",
+    "compute-cosine-similarity",
+    "natural",
     "sync-request"
   ],
   "main": "lib/index.js",
