@@ -122,7 +122,11 @@
       "type": "bundled"
     },
     {
-      "name": "string-similarity",
+      "name": "compute-cosine-similarity",
+      "type": "bundled"
+    },
+    {
+      "name": "natural",
       "type": "bundled"
     },
     {
