@@ -1,5 +1,4 @@
-import cosineSimilarity from 'compute-cosine-similarity';
-import { PorterStemmer, WordTokenizer } from 'natural';
+import { TfIdf, PorterStemmer, WordTokenizer } from 'natural';
 import { IGraphItem } from '../types';
 
 /**
@@ -16,8 +15,7 @@ export const preprocessText = (text: string): string => {
   // Remove email addresses
   const noEmails = noLinks.replace(/\S+@\S+\.\S+/g, '');
 
-  // You can add further patterns to clean the text if needed
-  // e.g., Remove special characters
+  // Remove special characters
   const cleanedText = noEmails.replace(/[^a-zA-Z0-9\s]/g, '');
 
   return cleanedText;
@@ -41,73 +39,125 @@ export const sanitizeAndStem = (text: string): string[] => {
 };
 
 /**
- * Convert prompt to vectors using character codes (basic vectorization).
- * Pads vectors with zeros to ensure they are the same length.
- *
- * @param {string} prompt - The input prompt string.
- * @param {number} maxLength - The maximum length for padding.
- * @returns {number[]} Array of vector representation of the input prompt.
+ * Performs TF-IDF vectorization of documents.
+ * Uses natural's TfIdf to build TF-IDF vectors for each document.
  */
-export const getVectorRepresentation = (
-  prompt: string,
-  maxLength: number,
-): number[] => {
-  const vector = Array.from(prompt).map((char) => char.charCodeAt(0));
+class TfidfSearch {
+  private tfidf: TfIdf;
 
-  // Pad the vector with zeros to ensure it matches the desired max length
-  while (vector.length < maxLength) {
-    vector.push(0);
+  constructor() {
+    this.tfidf = new TfIdf();
   }
 
-  return vector;
-};
+  /**
+   * Adds documents (prompts) to the TF-IDF model.
+   *
+   * @param {string[][]} documents - Array of documents (arrays of tokens).
+   */
+  addDocuments(documents: string[][]): void {
+    documents.forEach((docTokens) => this.tfidf.addDocument(docTokens));
+  }
 
-/**
- * Get the maximum length of all strings in the list.
- *
- * @param {string[]} list - The list of strings.
- * @returns {number} The length of the longest string in the list.
- */
-export const getMaxStringLength = (list: string[]): number => {
-  return list.reduce((max, str) => Math.max(max, str.length), 0);
-};
+  /**
+   * Calculates cosine similarity between the query and the documents
+   * in the TF-IDF model.
+   *
+   * @param {string[]} queryTokens - The tokenized search query.
+   * @returns {number[]} Array of cosine similarity scores for each document.
+   */
+  calculateSimilarity(queryTokens: string[]): number[] {
+    // Add the query to the TF-IDF model temporarily
+    this.tfidf.addDocument(queryTokens);
 
-/**
- * Calculates the best match score between the query and a list of strings based on cosine similarity.
- *
- * @param {string} query - The string to match against the list.
- * @param {string[]} listOfStrings - List of strings to match with the query.
- * @returns {number} The best match score if it meets the threshold, otherwise 0.
- */
-const getBestMatchScore = (query: string, listOfStrings: string[]): number => {
-  const sanitizedQuery = sanitizeAndStem(query).join(' ');
+    const queryIndex = this.tfidf.documents.length - 1; // Query is the last added document
+    const scores: number[] = [];
 
-  // Find the max string length to pad all vectors to the same length
-  const maxLength = Math.max(
-    sanitizedQuery.length,
-    getMaxStringLength(
-      listOfStrings.map(sanitizeAndStem).map((s) => s.join(' ')),
-    ),
-  );
+    const queryTerms = this.tfidf.listTerms(queryIndex);
 
-  const queryVector = getVectorRepresentation(sanitizedQuery, maxLength);
+    for (let i = 0; i < queryIndex; i++) {
+      const docTerms = this.tfidf.listTerms(i);
 
-  let highestScore = 0;
-
-  listOfStrings.forEach((prompt) => {
-    const sanitizedPrompt = sanitizeAndStem(prompt).join(' ');
-    const promptVector = getVectorRepresentation(sanitizedPrompt, maxLength);
-
-    // Compute cosine similarity between the query vector and prompt vector
-    const similarityScore = cosineSimilarity(queryVector, promptVector);
-
-    if (similarityScore && similarityScore > highestScore) {
-      highestScore = similarityScore;
+      const similarity = this.cosineSimilarity(queryTerms, docTerms);
+      scores.push(similarity);
     }
-  });
 
-  return highestScore;
-};
+    // Remove the query from the model after calculation
+    this.tfidf.documents.pop();
+
+    return scores;
+  }
+
+  /**
+   * Compute cosine similarity between two lists of TF-IDF terms.
+   *
+   * @param {any[]} termsA - Terms of document A.
+   * @param {any[]} termsB - Terms of document B.
+   * @returns {number} Cosine similarity score.
+   */
+  private cosineSimilarity(termsA: any[], termsB: any[]): number {
+    const vectorA = this.getVector(termsA);
+    const vectorB = this.getVector(termsB);
+
+    // Compute cosine similarity using the vectors
+    const dotProduct = this.dot(vectorA, vectorB);
+    const magnitudeA = this.magnitude(vectorA);
+    const magnitudeB = this.magnitude(vectorB);
+
+    if (magnitudeA === 0 || magnitudeB === 0) return 0;
+
+    return dotProduct / (magnitudeA * magnitudeB);
+  }
+
+  /**
+   * Convert TF-IDF terms into vectors.
+   *
+   * @param {any[]} terms - List of terms with TF-IDF values.
+   * @returns {{ [term: string]: number }} TF-IDF vector.
+   */
+  private getVector(terms: any[]): { [term: string]: number } {
+    const vector: { [term: string]: number } = {};
+
+    terms.forEach((termObj) => {
+      vector[termObj.term] = termObj.tfidf;
+    });
+
+    return vector;
+  }
+
+  /**
+   * Calculate the dot product of two vectors.
+   *
+   * @param {{ [term: string]: number }} vectorA - Vector A.
+   * @param {{ [term: string]: number }} vectorB - Vector B.
+   * @returns {number} Dot product.
+   */
+  private dot(
+    vectorA: { [term: string]: number },
+    vectorB: { [term: string]: number },
+  ): number {
+    let dotProduct = 0;
+    for (const term in vectorA) {
+      if (vectorB[term]) {
+        dotProduct += vectorA[term] * vectorB[term];
+      }
+    }
+    return dotProduct;
+  }
+
+  /**
+   * Calculate the magnitude of a vector.
+   *
+   * @param {{ [term: string]: number }} vector - The vector.
+   * @returns {number} Magnitude of the vector.
+   */
+  private magnitude(vector: { [term: string]: number }): number {
+    let sum = 0;
+    for (const term in vector) {
+      sum += vector[term] * vector[term];
+    }
+    return Math.sqrt(sum);
+  }
+}
 
 /**
  * Searches the provided graphs for a matching graph item based on the prompt.
@@ -123,30 +173,57 @@ export const searchGraphByPrompt = (
   if (!prompt) {
     return null;
   }
-  let matchedGraph: IGraphItem | null = null;
-  let maxScore = 0;
 
-  // Sanitize the input prompt
-  const sanitizedPrompt = sanitizeAndStem(prompt).join(' ');
+  const search = new TfidfSearch();
 
-  for (const graph of graphs) {
-    // Sanitize and stem each prompt and enriched prompt in the graph
-    const graphPrompts = [
-      ...graph.prompts.map((p) => sanitizeAndStem(p).join(' ')),
-      ...graph.enrichedPrompts.map((p) => sanitizeAndStem(p).join(' ')),
-    ];
+  // Collect all prompts and enriched prompts from each graph
+  const processedDocs: string[][] = [];
+  const documentGraphIndices: number[] = [];
 
-    // Get the best match score using cosine similarity
-    const score = getBestMatchScore(sanitizedPrompt, graphPrompts);
+  graphs.forEach((graph, graphIndex) => {
+    const prompts = graph.prompts || [];
+    const enrichedPrompts = graph.enrichedPrompts || [];
 
+    prompts.forEach((docPrompt) => {
+      const processed = sanitizeAndStem(docPrompt);
+      processedDocs.push(processed);
+      documentGraphIndices.push(graphIndex);
+    });
+
+    enrichedPrompts.forEach((docPrompt) => {
+      const processed = sanitizeAndStem(docPrompt);
+      processedDocs.push(processed);
+      documentGraphIndices.push(graphIndex);
+    });
+  });
+
+  // Add documents to the TF-IDF model
+  search.addDocuments(processedDocs);
+
+  // Process the query
+  const processedQuery = sanitizeAndStem(prompt);
+
+  // Calculate similarity scores between the query and all documents
+  const scores = search.calculateSimilarity(processedQuery);
+
+  // Find the highest scoring document
+  let maxScore = -1;
+  let bestMatchIndex = -1;
+
+  scores.forEach((score, index) => {
     if (score > maxScore) {
       maxScore = score;
-      matchedGraph = graph;
+      bestMatchIndex = index;
     }
+  });
+
+  // Apply a threshold for matching (e.g., 0.6)
+  if (maxScore > 0.6 && bestMatchIndex !== -1) {
+    const bestGraphIndex = documentGraphIndices[bestMatchIndex];
+    return graphs[bestGraphIndex];
   }
 
-  // Apply a threshold for matching (adjust as needed)
-  return maxScore > 0.8 ? matchedGraph : null;
+  return null;
 };
 
 /**
