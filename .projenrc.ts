@@ -8,6 +8,7 @@ const project = new cdk.JsiiProject({
   tsconfig: {
     exclude: ['.env', '.env.template'],
     compilerOptions: {
+      esModuleInterop: true,
       typeRoots: ['./node_modules/@types', './src/@types'],
     },
   },
@@ -43,12 +44,7 @@ const project = new cdk.JsiiProject({
     'dotenv',
     '@aws-sdk/client-bedrock-runtime',
   ],
-  bundledDeps: [
-    'sync-request',
-    'axios',
-    'natural',
-    'compute-cosine-similarity',
-  ],
+  bundledDeps: ['sync-request', 'axios', 'natural'],
   jestOptions: {
     jestConfig: {
       detectOpenHandles: true,
