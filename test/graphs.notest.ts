@@ -16,7 +16,7 @@ const xpanderClient = new XpanderClient(
 
 describe('Testing OpenAI Function Calling with Graphs', () => {
   it('tool selection with graphs - with matched prompt group', async () => {
-    const userPrompt = 'get all tags and then latest article';
+    const userPrompt = 'get all tags and then latest article please';
     const messages = [
       {
         role: 'user',
