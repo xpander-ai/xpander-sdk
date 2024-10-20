@@ -8,6 +8,8 @@ export interface IGraphItem {
 export interface IGraph {
   graphs: IGraphItem[];
   allowAllOperations: boolean;
+  pgSwitchAllowed: boolean;
+  spec: any;
   organizationId: boolean;
 }
 

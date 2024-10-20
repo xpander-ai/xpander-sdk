@@ -539,6 +539,7 @@ Optional custom parameters for enhanced context.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.addLocalTools">addLocalTools</a></code> | Adds local tools to the client. |
+| <code><a href="#xpander-sdk.XpanderClient.getGraphSessionParam">getGraphSessionParam</a></code> | Gets a parameter in the current graph session. |
 | <code><a href="#xpander-sdk.XpanderClient.getToolsForGraphsSession">getToolsForGraphsSession</a></code> | Retrieves the appropriate tools for the current graph session. |
 | <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">loadXpanderTools</a></code> | Loads the tools available from the xpanderAI agent. |
 | <code><a href="#xpander-sdk.XpanderClient.setGraphSessionParam">setGraphSessionParam</a></code> | Sets a parameter in the current graph session. |
@@ -562,6 +563,22 @@ Adds local tools to the client.
 - *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
 
 Array of local tools to add.
+
+---
+
+##### `getGraphSessionParam` <a name="getGraphSessionParam" id="xpander-sdk.XpanderClient.getGraphSessionParam"></a>
+
+```typescript
+public getGraphSessionParam(param: string): any
+```
+
+Gets a parameter in the current graph session.
+
+###### `param`<sup>Required</sup> <a name="param" id="xpander-sdk.XpanderClient.getGraphSessionParam.parameter.param"></a>
+
+- *Type:* string
+
+The parameter to get, either 'previousNode' or 'prompt'.
 
 ---
 
@@ -1046,6 +1063,8 @@ Organization ID associated with the custom.
 | <code><a href="#xpander-sdk.IGraph.property.allowAllOperations">allowAllOperations</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.IGraph.property.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.IGraph.property.organizationId">organizationId</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraph.property.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraph.property.spec">spec</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -1076,6 +1095,26 @@ public readonly organizationId: boolean;
 ```
 
 - *Type:* boolean
+
+---
+
+##### `pgSwitchAllowed`<sup>Required</sup> <a name="pgSwitchAllowed" id="xpander-sdk.IGraph.property.pgSwitchAllowed"></a>
+
+```typescript
+public readonly pgSwitchAllowed: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `spec`<sup>Required</sup> <a name="spec" id="xpander-sdk.IGraph.property.spec"></a>
+
+```typescript
+public readonly spec: any;
+```
+
+- *Type:* any
 
 ---
 

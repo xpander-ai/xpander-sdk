@@ -1,5 +1,4 @@
 import request, { HttpVerb } from 'sync-request';
-import { convertKeysToCamelCase, searchGraphByPrompt } from './graphs';
 import { LLMProvider } from '../constants/llmProvider';
 import { OpenAI, NvidiaNIM, AmazonBedrock, LangChain } from '../llmProviders';
 import { BaseOpenAISDKHandler } from '../llmProviders/shared/baseOpenAI';
@@ -14,6 +13,7 @@ import {
   ILocalTool,
   IOpenAIToolOutput,
 } from '../types';
+import { convertKeysToCamelCase } from './graphs';
 
 /**
  * Handlers for various LLM providers.
@@ -135,23 +135,20 @@ export class XpanderClient {
       }
     }
 
-    const matchedPromptGroup =
-      this.graphSession.promptGroup ||
-      searchGraphByPrompt(this.graphSession?.prompt, this.graphsCache.graphs);
-
-    // Set to cache
-    if (!this.graphSession.promptGroup && matchedPromptGroup) {
-      this.graphSession.promptGroup = matchedPromptGroup;
-    }
-
     // No prompt group but all allowed, so return all
-    if (!matchedPromptGroup && this.graphsCache.allowAllOperations) {
+    if (
+      !this.graphSession?.promptGroup &&
+      this.graphsCache.allowAllOperations
+    ) {
       return tools;
-    } else if (!matchedPromptGroup && !this.graphsCache.allowAllOperations) {
+    } else if (
+      !this.graphSession.promptGroup &&
+      !this.graphsCache.allowAllOperations
+    ) {
       return [];
     }
 
-    const pg = matchedPromptGroup as IGraphItem;
+    const pg = this.graphSession.promptGroup as IGraphItem;
 
     // We have a prompt group, let's return a subset of tools
     let subset = pg.graph[this.graphSession.previousNode] || [];
@@ -260,6 +257,22 @@ export class XpanderClient {
       this.graphsCache = convertKeysToCamelCase(
         JSON.parse(response.getBody('utf8')),
       );
+
+      const specResponse = this.syncRequest(
+        'POST',
+        `${this.agentUrl}/tools/graphs/oas`,
+        this._customParams
+          ? {
+              __custom__: this._getCustomParamsIfExist(),
+            }
+          : {},
+      );
+
+      if (specResponse.statusCode !== 200) {
+        throw new Error(JSON.stringify(specResponse.getBody('utf8')));
+      }
+
+      this.graphsCache.spec = JSON.parse(specResponse.getBody('utf8'));
 
       if (!this.graphsCache?.organizationId) {
         throw new Error(
@@ -403,17 +416,28 @@ export class XpanderClient {
 
   /**
    * Sets a parameter in the current graph session.
-   * @param {'previousNode' | 'prompt'} param - The parameter to set, either 'previousNode' or 'prompt'.
+   * @param {'previousNode' | 'prompt' | 'promptGroup'} param - The parameter to set, either 'previousNode' or 'prompt'.
    * @param {any} value - The value to assign to the specified parameter.
    * @returns {void}
    */
   public setGraphSessionParam(
-    param: 'previousNode' | 'prompt',
+    param: 'previousNode' | 'prompt' | 'promptGroup',
     value: any,
   ): void {
     if (this.graphSession && param in this.graphSession) {
       this.graphSession[param] = value;
     }
+  }
+
+  /**
+   * Gets a parameter in the current graph session.
+   * @param {'previousNode' | 'prompt' | 'promptGroup' | 'pgSwitchAllowed'} param - The parameter to get, either 'previousNode' or 'prompt'.
+   * @returns {any}
+   */
+  public getGraphSessionParam(
+    param: 'previousNode' | 'prompt' | 'promptGroup' | 'pgSwitchAllowed',
+  ): any {
+    return this?.graphSession?.[param];
   }
 
   /**

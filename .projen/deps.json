@@ -122,10 +122,6 @@
       "type": "bundled"
     },
     {
-      "name": "natural",
-      "type": "bundled"
-    },
-    {
       "name": "sync-request",
       "type": "bundled"
     }
