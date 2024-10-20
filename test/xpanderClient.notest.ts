@@ -21,6 +21,7 @@ describe.only('Test XPander Client', () => {
     expect(tools).toBeInstanceOf(Array);
     expect(tools).not.toHaveLength(0);
   });
+  // TODO STOPPED HERE WHILE TESTING ALLLLLLL SCENARIOS
 
   it('allow tools by constructor', () => {
     const _tools = [

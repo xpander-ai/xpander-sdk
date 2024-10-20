@@ -240,44 +240,45 @@ export class XpanderClient {
     }
 
     try {
-      const response = this.syncRequest(
-        'POST',
-        `${this.agentUrl}/tools/graphs`,
-        this._customParams
-          ? {
-              __custom__: this._getCustomParamsIfExist(),
-            }
-          : {},
-      );
-
-      if (response.statusCode !== 200) {
-        throw new Error(JSON.stringify(response.getBody('utf8')));
-      }
-
-      this.graphsCache = convertKeysToCamelCase(
-        JSON.parse(response.getBody('utf8')),
-      );
-
-      const specResponse = this.syncRequest(
-        'POST',
-        `${this.agentUrl}/tools/graphs/oas`,
-        this._customParams
-          ? {
-              __custom__: this._getCustomParamsIfExist(),
-            }
-          : {},
-      );
-
-      if (specResponse.statusCode !== 200) {
-        throw new Error(JSON.stringify(specResponse.getBody('utf8')));
-      }
-
-      this.graphsCache.spec = JSON.parse(specResponse.getBody('utf8'));
-
-      if (!this.graphsCache?.organizationId) {
-        throw new Error(
-          `Returned graphs are malformed - ${JSON.stringify(this.graphsCache)}`,
+      if (!this._customParams?.organizationId) {
+        const response = this.syncRequest(
+          'POST',
+          `${this.agentUrl}/tools/graphs`,
+          this._customParams
+            ? {
+                __custom__: this._getCustomParamsIfExist(),
+              }
+            : {},
         );
+
+        if (response.statusCode !== 200) {
+          throw new Error(JSON.stringify(response.getBody('utf8')));
+        }
+
+        this.graphsCache = convertKeysToCamelCase(
+          JSON.parse(response.getBody('utf8')),
+        );
+
+        const specResponse = this.syncRequest(
+          'POST',
+          `${this.agentUrl}/tools/graphs/oas`,
+          this._customParams
+            ? {
+                __custom__: this._getCustomParamsIfExist(),
+              }
+            : {},
+        );
+
+        if (specResponse.statusCode !== 200) {
+          throw new Error(JSON.stringify(specResponse.getBody('utf8')));
+        }
+
+        this.graphsCache.spec = JSON.parse(specResponse.getBody('utf8'));
+        if (!this.graphsCache?.organizationId) {
+          throw new Error(
+            `Returned graphs are malformed - ${JSON.stringify(this.graphsCache)}`,
+          );
+        }
       }
     } catch (e) {
       throw new Error(`Failed to get agent's graphs - ${(e as Error).message}`);
