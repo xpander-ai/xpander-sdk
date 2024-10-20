@@ -249,6 +249,19 @@ export class AmazonBedrock extends BaseLLMProvider {
       (tool: IBedrockTool) => tool.toolSpec.name === toolId,
     );
 
+    const pgSelectorTool = this.client.graphsCache.spec.find(
+      (tool: any) => tool.id === toolId,
+    );
+
+    if (pgSelectorTool) {
+      const promptGroup = this.client.graphsCache.graphs.find(
+        (graph: any) => graph.promptGroupId === pgSelectorTool.name,
+      );
+      this.client.setGraphSessionParam('promptGroup', promptGroup);
+      this.client.setGraphSessionParam('previousNode', null);
+      return "system message: graph prompt group selected, ignore this and proceed with the user's request.";
+    }
+
     if (toolToInvoke) {
       return JSON.stringify(toolToInvoke.execute(payload));
     } else {

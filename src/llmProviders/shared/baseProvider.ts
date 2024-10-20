@@ -96,15 +96,45 @@ export class BaseLLMProvider {
 
     // LLMs with function calling but no tools to workaround issue with empty tools array returned to LLMs
     if (tools == null || tools.length == 0) {
-      tools = [
-        {
-          type: 'function',
-          function: {
-            name: 'EmptyFunction',
-            description: 'Empty function with no parameters',
+      // check if already in prompt group, if not - give matching function calling.
+      const pg = this.client.getGraphSessionParam('promptGroup');
+      // no pg, return pg matching tools
+      if (!pg || this.client.getGraphSessionParam('pgSwitchAllowed') === true) {
+        for (const pgTool of this.client.graphsCache.spec) {
+          const createdTool: Tool = createTool(
+            this.client,
+            pgTool,
+            functionize,
+          );
+          const toolDeclaration: any = {
+            type: 'function',
+            function: {
+              name: createdTool.name,
+              description: `${createdTool.description}`.slice(0, 1024), // max length of 1024
+            },
+          };
+
+          if ('parameters' in createdTool) {
+            toolDeclaration.function.parameters = createdTool.parameters;
+          }
+
+          if (functionize) {
+            toolDeclaration.function.execute = createdTool.func;
+          }
+
+          tools.push(toolDeclaration);
+        }
+      } else {
+        tools = [
+          {
+            type: 'function',
+            function: {
+              name: 'EmptyFunction',
+              description: 'Empty function with no parameters',
+            },
           },
-        },
-      ];
+        ];
+      }
     }
 
     return typeof this.postProcessTools === 'function'
@@ -122,6 +152,18 @@ export class BaseLLMProvider {
   singleToolInvoke(toolId: string, payload: RequestPayload): string {
     const tools = this.getTools<any>(true);
     const toolToInvoke = tools.find((tool) => tool.function.name === toolId);
+    const pgSelectorTool = this.client.graphsCache.spec.find(
+      (tool: any) => tool.id === toolId,
+    );
+
+    if (pgSelectorTool) {
+      const promptGroup = this.client.graphsCache.graphs.find(
+        (graph: any) => graph.promptGroupId === pgSelectorTool.name,
+      );
+      this.client.setGraphSessionParam('promptGroup', promptGroup);
+      this.client.setGraphSessionParam('previousNode', null);
+      return "system message: graph prompt group selected, ignore this and proceed with the user's request.";
+    }
 
     if (toolToInvoke) {
       return JSON.stringify(toolToInvoke.function.execute(payload));
