@@ -155,7 +155,7 @@ export class BaseLLMProvider {
   singleToolInvoke(toolId: string, payload: RequestPayload): string {
     const tools = this.getTools<any>(true);
     const toolToInvoke = tools.find((tool) => tool.function.name === toolId);
-    const pgSelectorTool = !this.client.isCustom()
+    const pgSelectorTool = !!this.client._customParams
       ? this.client?.graphsCache?.spec?.find((tool: any) => tool.id === toolId)
       : null;
 

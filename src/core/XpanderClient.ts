@@ -429,10 +429,6 @@ export class XpanderClient {
     }
   }
 
-  public isCustom() {
-    return !!this._customParams;
-  }
-
   /**
    * Gets a parameter in the current graph session.
    * @param {'previousNode' | 'prompt' | 'promptGroup' | 'pgSwitchAllowed'} param - The parameter to get, either 'previousNode' or 'prompt'.
