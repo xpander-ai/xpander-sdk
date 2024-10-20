@@ -99,7 +99,10 @@ export class BaseLLMProvider {
       // check if already in prompt group, if not - give matching function calling.
       const pg = this.client.getGraphSessionParam('promptGroup');
       // no pg, return pg matching tools
-      if (!pg || this.client.getGraphSessionParam('pgSwitchAllowed') === true) {
+      if (
+        !!this.client.graphsCache.spec &&
+        (!pg || this.client.getGraphSessionParam('pgSwitchAllowed') === true)
+      ) {
         for (const pgTool of this.client.graphsCache.spec) {
           const createdTool: Tool = createTool(
             this.client,
@@ -152,7 +155,7 @@ export class BaseLLMProvider {
   singleToolInvoke(toolId: string, payload: RequestPayload): string {
     const tools = this.getTools<any>(true);
     const toolToInvoke = tools.find((tool) => tool.function.name === toolId);
-    const pgSelectorTool = this.client.graphsCache.spec.find(
+    const pgSelectorTool = this.client?.graphsCache?.spec?.find(
       (tool: any) => tool.id === toolId,
     );
 

@@ -249,8 +249,8 @@ export class AmazonBedrock extends BaseLLMProvider {
       (tool: IBedrockTool) => tool.toolSpec.name === toolId,
     );
 
-    const pgSelectorTool = this.client.graphsCache.spec.find(
-      (tool: any) => tool.id === toolId,
+    const pgSelectorTool = this.client?.graphsCache?.spec?.find(
+      (tool: any) => tool?.id === toolId,
     );
 
     if (pgSelectorTool) {
