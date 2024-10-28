@@ -553,14 +553,14 @@ Optional custom parameters for enhanced context.
 ##### `addLocalTools` <a name="addLocalTools" id="xpander-sdk.XpanderClient.addLocalTools"></a>
 
 ```typescript
-public addLocalTools(tools: ILocalTool[]): void
+public addLocalTools(tools: any[] | ILocalTool[]): void
 ```
 
 Adds local tools to the client.
 
 ###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.XpanderClient.addLocalTools.parameter.tools"></a>
 
-- *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
+- *Type:* any[] | <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
 
 Array of local tools to add.
 
