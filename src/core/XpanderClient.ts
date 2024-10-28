@@ -397,7 +397,7 @@ export class XpanderClient {
    * Adds local tools to the client.
    * @param tools - Array of local tools to add.
    */
-  public addLocalTools(tools: ILocalTool[]): void {
+  public addLocalTools(tools: any[] | ILocalTool[]): void {
     this.localTools = tools;
   }
 
