@@ -25,8 +25,7 @@ export class OpenAIRealtime extends BaseOpenAISDKHandler {
       name: tool.name,
       description: tool.description,
       parameters: {
-        type: 'object',
-        properties: tool.parameters.properties,
+        ...tool.parameters,
         required: tool.parameters.required || [],
       },
     }));
