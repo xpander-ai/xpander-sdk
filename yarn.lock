@@ -5102,9 +5102,9 @@ oo-ascii-tree@^1.103.1:
   integrity sha512-X0nmbb8xUUi637JXzCxY/K4AtO/I0fB5b7iiGaHJHu8IXBWV8TnQ4xqa0Igb/NoAg3OP2uXNhSeiTsErETOA/g==
 
 openai@^4.55.4, openai@^4.57.3:
-  version "4.67.3"
-  resolved "https://registry.npmjs.org/openai/-/openai-4.67.3.tgz"
-  integrity sha512-HT2tZgjLgRqbLQNKmYtjdF/4TQuiBvg1oGvTDhwpSEQzxo6/oM1us8VQ53vBK2BiKvCxFuq6gKGG70qfwrNhKg==
+  version "4.70.2"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.70.2.tgz#dfe54b2b13996b76d93f2aaac07203d2660d6e65"
+  integrity sha512-Q2ymi/KPUYv+LJ9rFxeYxpkVAhcrZFTVvnJbdF1pUHg9eMC6lY8PU4TO1XOK5UZzOZuuVicouRwVMi1iDrT4qw==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
