@@ -28,3 +28,5 @@ export const DEFAULT_TOOL_PARAMETERS = Object.freeze({
     },
   },
 });
+
+export const LOCAL_TOOL_PREFIX = 'xpLocal_';

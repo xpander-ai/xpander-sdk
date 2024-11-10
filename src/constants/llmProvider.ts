@@ -1,5 +1,3 @@
-// constants/llmProviders.ts
-
 /**
  * Enum representing different Large Language Model (LLM) providers.
  */
@@ -15,7 +13,4 @@ export enum LLMProvider {
 
   /** Represents the 'amazonBedrock' provider. */
   AMAZON_BEDROCK = 'amazonBedrock',
-
-  // Represents the 'anthropic' provider.
-  // ANTHROPIC = 'anthropic'
 }

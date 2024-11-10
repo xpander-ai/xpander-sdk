@@ -640,7 +640,7 @@ The response from the tool selector.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.property.validProviders">validProviders</a></code> | <code>string[]</code> | Provides a list of valid LLM providers. |
-| <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">toolsNamesMapping</a></code> | <code>{[ key: string ]: string}</code> | Retrieves the tool names mapping for the current LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.property.originalToolNamesReamapping">originalToolNamesReamapping</a></code> | <code>{[ key: string ]: string}</code> | Retrieves the tool names mapping for the current LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agentKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
@@ -661,10 +661,10 @@ Provides a list of valid LLM providers.
 
 ---
 
-##### `toolsNamesMapping`<sup>Required</sup> <a name="toolsNamesMapping" id="xpander-sdk.XpanderClient.property.toolsNamesMapping"></a>
+##### `originalToolNamesReamapping`<sup>Required</sup> <a name="originalToolNamesReamapping" id="xpander-sdk.XpanderClient.property.originalToolNamesReamapping"></a>
 
 ```typescript
-public readonly toolsNamesMapping: {[ key: string ]: string};
+public readonly originalToolNamesReamapping: {[ key: string ]: string};
 ```
 
 - *Type:* {[ key: string ]: string}
@@ -1000,14 +1000,14 @@ The payload to send to the tool.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping">toolsNamesMapping</a></code> | <code>{[ key: string ]: string}</code> | Mapping of tool names. |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.property.originalToolNamesReamapping">originalToolNamesReamapping</a></code> | <code>{[ key: string ]: string}</code> | Mapping of tool names. |
 
 ---
 
-##### `toolsNamesMapping`<sup>Optional</sup> <a name="toolsNamesMapping" id="xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping"></a>
+##### `originalToolNamesReamapping`<sup>Optional</sup> <a name="originalToolNamesReamapping" id="xpander-sdk.ILLMProviderHandler.property.originalToolNamesReamapping"></a>
 
 ```typescript
-public readonly toolsNamesMapping: {[ key: string ]: string};
+public readonly originalToolNamesReamapping: {[ key: string ]: string};
 ```
 
 - *Type:* {[ key: string ]: string}

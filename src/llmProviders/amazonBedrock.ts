@@ -1,9 +1,8 @@
 import { BaseLLMProvider } from './shared/baseProvider';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
-import { RequestPayload } from '../models/payloads';
-import { ToolResponse } from '../models/toolResponse';
-import { IBedrockTool } from '../types';
+import { getToolBaseSignature } from '../core/tools';
+import { IBedrockTool, IToolCall } from '../types';
 
 /**
  * @class AmazonBedrockSupportedModels
@@ -117,14 +116,33 @@ export class AmazonBedrock extends BaseLLMProvider {
     return modifiedString;
   }
 
-  toolsNamesMapping: Record<string, string> = {};
+  static extractToolCalls(llmResponse: Record<string, any>): IToolCall[] {
+    if (typeof llmResponse !== 'object') {
+      throw new Error('llm response should be full');
+    }
 
-  /**
-   * Checks if the tools have already been mapped.
-   * @returns True if the tools have already been mapped, otherwise false.
-   */
-  get alreadyMappedFunctions() {
-    return Object.keys(this.toolsNamesMapping).length !== 0;
+    const extractedToolCalls: IToolCall[] = [];
+    const messages = llmResponse?.output?.message?.content || [];
+
+    if (messages.length === 0) {
+      return [];
+    }
+
+    for (const message of messages) {
+      if (!('toolUse' in message)) continue;
+      const toolCall = message.toolUse;
+      let payload = toolCall.input;
+      try {
+        payload = JSON.parse(toolCall.input);
+      } catch (err) {
+        payload = toolCall.input;
+      }
+      extractedToolCalls.push({
+        ...getToolBaseSignature(toolCall.name, toolCall.toolUseId),
+        payload,
+      });
+    }
+    return extractedToolCalls;
   }
 
   /**
@@ -138,7 +156,7 @@ export class AmazonBedrock extends BaseLLMProvider {
 
       const awsNormalizedFunctionName =
         AmazonBedrock.transformToValidAWSIdentifier(name);
-      this.toolsNamesMapping[awsNormalizedFunctionName] = name;
+      this.originalToolNamesReamapping[awsNormalizedFunctionName] = name;
       name = awsNormalizedFunctionName;
 
       return {
@@ -146,126 +164,14 @@ export class AmazonBedrock extends BaseLLMProvider {
           name,
           description: tool.function.description,
           inputSchema: {
-            json: tool?.function?.parameters || DEFAULT_TOOL_PARAMETERS,
+            json:
+              Object.keys(tool?.function?.parameters || {}).length !== 0
+                ? tool?.function?.parameters
+                : DEFAULT_TOOL_PARAMETERS,
           },
         },
         execute: tool?.function?.execute,
       };
     }) as IBedrockTool[];
-  }
-
-  /**
-   * Invokes tools based on the tool selector response.
-   * @param toolSelectorResponse - The response from the tool selector.
-   * @returns An array of tool responses.
-   * @throws Will throw an error if the tool selector response does not contain valid choices.
-   */
-  invokeTools(toolSelectorResponse: any): ToolResponse[] {
-    const outputMessages: ToolResponse[] = [];
-    if (!Array.isArray(toolSelectorResponse?.output?.message?.content)) {
-      throw new Error('Tool selector response does not contain valid choices');
-    }
-
-    const toolCalls: any[] =
-      toolSelectorResponse?.output?.message?.content.filter(
-        (msg: any) => msg.toolUse && msg.toolUse.name,
-      ) || [];
-
-    for (const { toolUse } of toolCalls) {
-      if (toolUse?.name) {
-        const functionName = toolUse.name;
-        const originalFunctionName = this.toolsNamesMapping[functionName];
-        const payload = toolUse?.input || {};
-
-        let payloadRequest;
-        try {
-          payloadRequest = JSON.stringify(payload); // Convert payload to JSON string
-        } catch (err) {
-          payloadRequest = String(payload); // Convert payload to JSON string
-        }
-
-        // support local tools
-        if (
-          Array.isArray(this.client.localTools) &&
-          this.client.localTools.length !== 0
-        ) {
-          const localTool = this.client.localTools.find(
-            (lt: any) => lt.toolSpec.name === functionName,
-          );
-          if (localTool) {
-            outputMessages.push(
-              new ToolResponse(
-                toolUse.toolUseId,
-                'tool',
-                originalFunctionName,
-                '',
-                {},
-                payloadRequest,
-                localTool,
-              ),
-            );
-            continue;
-          }
-        }
-
-        const functionResponse = this.singleToolInvoke(functionName, payload);
-        const filteredTool = this.filterTool(functionName);
-        outputMessages.push(
-          new ToolResponse(
-            toolUse.toolUseId,
-            'tool',
-            originalFunctionName,
-            functionResponse,
-            filteredTool,
-            payloadRequest,
-          ),
-        );
-      }
-    }
-    return outputMessages;
-  }
-
-  /**
-   * Filters the tools to find the one with the specified ID.
-   * @param toolId - The ID of the tool to find.
-   * @returns An array containing the filtered tool, or an empty array if not found.
-   */
-  filterTool(toolId: string): any[] {
-    const tools = this.getTools<IBedrockTool>(false);
-    const filteredTool = tools.find((tool) => tool.toolSpec.name === toolId);
-    return filteredTool ? [filteredTool] : [];
-  }
-
-  /**
-   * Invokes a single tool with the given ID and payload.
-   * @param toolId - The ID of the tool to invoke.
-   * @param payload - The payload to pass to the tool.
-   * @returns The result of the tool invocation.
-   * @throws Will throw an error if the tool implementation is not found.
-   */
-  singleToolInvoke(toolId: string, payload: RequestPayload): string {
-    const tools = this.getTools<IBedrockTool>(true);
-    const toolToInvoke = tools.find(
-      (tool: IBedrockTool) => tool.toolSpec.name === toolId,
-    );
-
-    const pgSelectorTool =
-      !this.client?._customParams?.organizationId &&
-      this.client?.graphsCache?.spec?.find((tool: any) => tool?.id === toolId);
-
-    if (pgSelectorTool) {
-      const promptGroup = this.client.graphsCache.graphs.find(
-        (graph: any) => graph.promptGroupId === pgSelectorTool.name,
-      );
-      this.client.setGraphSessionParam('promptGroup', promptGroup);
-      this.client.setGraphSessionParam('previousNode', null);
-      return "system message: graph prompt group selected, ignore this and proceed with the user's request.";
-    }
-
-    if (toolToInvoke) {
-      return JSON.stringify(toolToInvoke.execute(payload));
-    } else {
-      throw new Error(`Tool ${toolId} implementation not found`);
-    }
   }
 }

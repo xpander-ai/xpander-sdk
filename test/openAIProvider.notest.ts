@@ -1,102 +1,228 @@
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
-import { LLMProvider, OpenAISupportedModels, XpanderClient } from '../src';
-
+import {
+  ILocalTool,
+  OpenAISupportedModels,
+  ToolCallType,
+  XpanderClient,
+  IXpanderClientParams,
+} from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const agentUrl = process.env.XPANDER_AGENT_URL || '';
+const xpanderAgentID = process.env.XPANDER_AGENT_ID || '';
+const organizationId = process.env.ORGANIZATION_ID || ''; // only when working with agents service locally!
 const openAIKey = process.env.OPENAI_API_KEY || '';
 
-const xpanderClient = new XpanderClient(
-  xpanderAPIKey,
-  agentUrl,
-  LLMProvider.OPEN_AI,
-);
+const openaiClient = new OpenAI({
+  apiKey: openAIKey,
+});
 
-describe('Testing OpenAI Function Calling', () => {
-  const xpanderToolsForOpenAI = xpanderClient.tools();
+const xpanderClientParams: IXpanderClientParams = {
+  apiKey: xpanderAPIKey,
+  customParams: { organizationId },
+};
 
-  it('tool selection is correct', async () => {
-    const TOOL_NAME = 'Conduit-article-management-getAllTags';
+describe('Test OpenAI using xpander.ai', () => {
+  it('get tools for openai provider', async () => {
+    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const agent = xpanderClient.agents.get(xpanderAgentID);
+    expect(agent).toHaveProperty('id');
+    expect(agent.tools.length).toBeGreaterThanOrEqual(1);
+
+    const pgTools = agent.getTools();
+    expect(pgTools.length).toBeGreaterThanOrEqual(1);
+
+    // run completion
     const messages = [
       {
         role: 'user',
         content: 'get all tags',
       },
     ];
-
-    const openaiClient = new OpenAI({
-      apiKey: openAIKey,
-    });
-
     const response: any = await openaiClient.chat.completions.create({
       model: OpenAISupportedModels.GPT_4_O,
       messages: messages as any,
-      tools: xpanderToolsForOpenAI as any,
+      tools: pgTools,
       tool_choice: 'required',
     });
 
-    expect(response.choices[0].message.tool_calls[0].function.name).toEqual(
-      TOOL_NAME,
+    const toolCall = response?.choices?.[0]?.message?.tool_calls?.[0];
+    expect(toolCall).not.toBe(null);
+    const pgMatched = pgTools.find(
+      (pg: any) => pg.function.name === toolCall.function.name,
+    );
+    expect(pgMatched).not.toBe(null);
+
+    // extract tools
+    const xpanderToolCalls = xpanderClient.extractToolCalls(response);
+
+    expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
+
+    // pg selected
+    expect(xpanderToolCalls[0].isPg).toEqual(true);
+
+    // run tools
+    const invocationResults = agent.runTools(xpanderToolCalls);
+
+    expect(invocationResults.length).toBeGreaterThanOrEqual(1);
+    expect(invocationResults[0].result).toMatch(
+      /graph prompt group selected/gi,
     );
 
-    const toolResponse = xpanderClient.xpanderToolCall(response);
+    // now get tags for real using tool and not pg selection
+    const completionResult: any = await openaiClient.chat.completions.create({
+      model: OpenAISupportedModels.GPT_4_O,
+      messages: messages as any,
+      tools: agent.getTools(),
+      tool_choice: 'required',
+    });
 
-    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
-    expect(toolResponse[0].payloadRequest).toEqual('{}'); // check payload request stringified
-    expect(typeof toolResponse[0].toolCallId).toBe('string'); // check that response has correct id
+    const realToolCalls = xpanderClient.extractToolCalls(completionResult);
+    expect(realToolCalls.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('tool selection is correct with tools in constructor', async () => {
-    const tools = [
-      {
-        type: 'function',
-        function: {
-          name: 'Conduit-article-management-getAllTags',
-          description:
-            'Retrieves all tags used in articles. No authentication required. Use to display tag clouds or 4 filtering articles by tag in retrieveArticlesWithOptionalFilters. Helps other operations by providing valid tag options. IMPORTANT! make sure to use body_params, query_params, path_params. these are crucial for ensuring function calling works!',
-        },
-      },
-    ];
+  it('get tools for openai provider + invoke tool (one tool)', async () => {
+    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const agent = xpanderClient.agents.get(xpanderAgentID);
+    expect(agent).toHaveProperty('id');
+    expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const xpanderClient2 = new XpanderClient(
-      xpanderAPIKey,
-      agentUrl,
-      LLMProvider.OPEN_AI,
-      undefined,
-      tools,
-    );
-    const TOOL_NAME = 'Conduit-article-management-getAllTags';
+    const pgTools = agent.getTools();
+    expect(pgTools.length).toBeGreaterThanOrEqual(1);
+
+    // run completion
     const messages = [
       {
         role: 'user',
         content: 'get all tags',
       },
     ];
-
-    const openaiClient = new OpenAI({
-      apiKey: openAIKey,
-    });
-
     const response: any = await openaiClient.chat.completions.create({
       model: OpenAISupportedModels.GPT_4_O,
       messages: messages as any,
-      tools: xpanderToolsForOpenAI as any,
+      tools: pgTools,
       tool_choice: 'required',
     });
 
-    expect(response.choices[0].message.tool_calls[0].function.name).toEqual(
-      TOOL_NAME,
+    const toolCall = response?.choices?.[0]?.message?.tool_calls?.[0];
+    expect(toolCall).not.toBe(null);
+    const pgMatched = pgTools.find(
+      (pg: any) => pg.function.name === toolCall.function.name,
+    );
+    expect(pgMatched).not.toBe(null);
+
+    // extract tools
+    const xpanderToolCalls = xpanderClient.extractToolCalls(response);
+
+    expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
+
+    // pg selected
+    expect(xpanderToolCalls[0].isPg).toEqual(true);
+
+    // run tools
+    const invocationResults = agent.runTools(xpanderToolCalls);
+
+    expect(invocationResults.length).toBeGreaterThanOrEqual(1);
+    expect(invocationResults[0].result).toMatch(
+      /graph prompt group selected/gi,
     );
 
-    const toolResponse = xpanderClient2.xpanderToolCall(response);
+    // now get tags for real using tool and not pg selection
+    const completionResult: any = await openaiClient.chat.completions.create({
+      model: OpenAISupportedModels.GPT_4_O,
+      messages: messages as any,
+      tools: agent.getTools(),
+      tool_choice: 'required',
+    });
 
-    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
-    expect(toolResponse[0].payloadRequest).toEqual('{}'); // check payload request stringified
-  });
+    const realToolCalls = xpanderClient.extractToolCalls(completionResult);
 
-  it('local tool selection is correct', async () => {
+    const realInvocationResults = agent.runTools(realToolCalls);
+
+    expect(realInvocationResults.length).toEqual(realToolCalls.length);
+    expect(realInvocationResults[0].isSuccess).toBeTruthy();
+    expect(realInvocationResults[0].toolCallId).toEqual(
+      realToolCalls[0].toolCallId,
+    );
+  }, 20000);
+
+  it('get tools for openai provider + invoke tool (multi step)', async () => {
+    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const agent = xpanderClient.agents.get(xpanderAgentID);
+    expect(agent).toHaveProperty('id');
+    expect(agent.tools.length).toBeGreaterThanOrEqual(1);
+
+    const messages: any = [
+      {
+        role: 'system',
+        content:
+          'you are ai agent that runs in a loop, for every loop you may get different tools according to the graph position',
+      },
+      {
+        role: 'user',
+        content:
+          'step 1: get all tags. step 2: get article (limit = 5) titles from my blog. step 3: enrich and get data about the 3 tags & 3 article titles from "Tavily" in a single query. when you are done with all the required steps - responde with "###FINAL_ANSWER###:" alongside the final answer.',
+      },
+    ];
+
+    let isFinished = false;
+
+    // prompt groups exists and tools being called
+    while (!isFinished) {
+      // run completion
+      const response: any = await openaiClient.chat.completions.create({
+        model: OpenAISupportedModels.GPT_4_O,
+        messages: messages as any,
+        tools: agent.getTools(),
+        tool_choice: 'auto',
+        parallel_tool_calls: false,
+        temperature: 0.0,
+      });
+
+      isFinished =
+        response?.choices?.[0]?.message?.content?.includes(
+          '###FINAL_ANSWER###',
+        );
+
+      // extract tools
+      const toolCalls = xpanderClient.extractToolCalls(response);
+      for (const toolCall of toolCalls) {
+        messages.push({
+          role: 'assistant',
+          tool_calls: [
+            {
+              id: toolCall.toolCallId,
+              function: {
+                arguments: JSON.stringify(toolCall.payload),
+                name: toolCall.name,
+              },
+              type: 'function',
+            },
+          ],
+        });
+      }
+
+      // run tools
+      const toolCallsResults = agent.runTools(toolCalls);
+      for (const toolCallResult of toolCallsResults) {
+        messages.push({
+          role: 'tool',
+          content: JSON.stringify(toolCallResult.result),
+          tool_call_id: toolCallResult.toolCallId,
+          node_name: toolCallResult.functionName,
+        });
+      }
+    }
+    expect(isFinished).toBeTruthy();
+  }, 120000);
+
+  it('get tools for openai provider + invoke tool (local tool tool)', async () => {
+    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const agent = xpanderClient.agents.get(xpanderAgentID);
+    expect(agent).toHaveProperty('id');
+    expect(agent.tools.length).toBeGreaterThanOrEqual(1);
+
     const messages = [
       {
         role: 'user',
@@ -104,7 +230,7 @@ describe('Testing OpenAI Function Calling', () => {
       },
     ];
 
-    const localTools: any = [
+    const localTools: ILocalTool[] = [
       {
         type: 'function',
         function: {
@@ -125,135 +251,24 @@ describe('Testing OpenAI Function Calling', () => {
       },
     ];
 
-    xpanderClient.addLocalTools(localTools);
-    const tools = xpanderClient.tools();
-
-    const openaiClient = new OpenAI({
-      apiKey: openAIKey,
-    });
+    agent.addLocalTools(localTools);
 
     const response: any = await openaiClient.chat.completions.create({
       model: OpenAISupportedModels.GPT_4_O,
       messages: messages as any,
-      tools: tools as any,
+      tools: agent.getTools(),
       tool_choice: 'required',
     });
 
-    expect(response.choices[0].message.tool_calls[0].function.name).toEqual(
-      localTools[0].function.name,
-    );
+    // extract tools
+    const xpanderToolCalls = xpanderClient.extractToolCalls(response);
+    expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
+    expect(xpanderToolCalls[0].name).toEqual(localTools[0].function.name);
+    expect(xpanderToolCalls[0].type).toEqual(ToolCallType.LOCAL);
 
-    const toolResponse = xpanderClient.xpanderToolCall(response);
-
-    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
-    expect(toolResponse[0].localTool?.function.name).toEqual(
-      localTools[0].function.name,
-    ); // check payload request stringified
-    expect(toolResponse[0].payloadRequest).toEqual('{"userName":"David"}'); // check payload request stringified
-  });
-
-  it('local tool & xpander tool selection is correct', async () => {
-    const XPANDER_TOOL_NAME = 'Conduit-article-management-getAllTags';
-
-    const messages = [
-      {
-        role: 'user',
-        content: 'get all tags, Say hello to David',
-      },
-    ];
-
-    const localTools: any = [
-      {
-        type: 'function',
-        function: {
-          name: 'greet-by-name',
-          description: 'Returns a greet to a user with name',
-          parameters: {
-            type: 'object',
-            properties: {
-              userName: {
-                type: 'string',
-                description: "The user's name",
-              },
-            },
-            required: ['userName'],
-            additionalProperties: false,
-          },
-        },
-      },
-    ];
-
-    xpanderClient.addLocalTools(localTools);
-    const tools = xpanderClient.tools();
-
-    const openaiClient = new OpenAI({
-      apiKey: openAIKey,
-    });
-
-    const response: any = await openaiClient.chat.completions.create({
-      model: OpenAISupportedModels.GPT_4_O,
-      messages: messages as any,
-      tools: tools as any,
-      tool_choice: 'required',
-    });
-
-    const toolCalls = response.choices[0].message.tool_calls;
-
-    expect(toolCalls).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          function: expect.objectContaining({ name: XPANDER_TOOL_NAME }),
-        }),
-      ]),
-    );
-
-    expect(toolCalls).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          function: expect.objectContaining({
-            name: localTools[0].function.name,
-          }),
-        }),
-      ]),
-    );
-
-    const toolResponse = xpanderClient.xpanderToolCall(response);
-
-    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
-
-    // match xpander tools
-    expect(toolResponse).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          filteredTool: expect.arrayContaining([
-            expect.objectContaining({
-              function: expect.objectContaining({ name: XPANDER_TOOL_NAME }),
-            }),
-          ]),
-        }),
-      ]),
-    );
-
-    //match local function calling
-    expect(toolResponse).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          localTool: expect.objectContaining({
-            function: expect.objectContaining({
-              name: localTools[0].function.name,
-            }),
-          }),
-          payloadRequest: '{"userName":"David"}',
-        }),
-      ]),
-    );
-  });
-
-  it('invoke tool directly', async () => {
-    const TOOL_NAME = 'Conduit-article-management-getAllTags';
-
-    const toolResponse = xpanderClient.xpanderSingleToolInvoke(TOOL_NAME);
-
-    expect(toolResponse.length).toBeGreaterThan(0); // check that we've got tool responses
-  });
+    // run tools
+    const invocationResults = agent.runTools(xpanderToolCalls);
+    expect(invocationResults.length).toBeGreaterThanOrEqual(1);
+    expect(invocationResults[0]).not.toHaveProperty('result');
+  }, 20000);
 });

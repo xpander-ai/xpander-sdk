@@ -91,3 +91,45 @@ export interface ILocalTool {
   readonly type: 'function';
   readonly function: ILocalToolFunction;
 }
+
+/**
+ * Interface representing tool instructions.
+ */
+export interface IToolInstructions {
+  /** The ID of the tool. */
+  id: string;
+  /** The description of the tool function. */
+  functionDescription: string;
+  /** The parameters for the tool. */
+  parameters?: any;
+}
+
+export interface IToolCallPayload {
+  bodyParams: Record<string, any>;
+  queryParams: Record<string, any>;
+  pathParams: Record<string, any>;
+  headers: Record<string, any>;
+}
+
+export enum ToolCallType {
+  XPANDER = 'xpander',
+  LOCAL = 'local',
+}
+
+export interface IToolCall {
+  name: string;
+  type: ToolCallType;
+  payload: IToolCallPayload;
+  toolCallId: string;
+  isPg: boolean;
+}
+
+export interface IToolCallResult {
+  functionName: string;
+  payload: IToolCallPayload;
+  statusCode?: number;
+  result?: any;
+  isSuccess?: boolean;
+  isError?: boolean;
+  toolCallId: string;
+}
