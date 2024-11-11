@@ -1,4 +1,4 @@
-export interface OperationNodeInstructions {
+export interface IOperationNodeInstructions {
   nodeName: string;
   instructions: string;
   nodeIndexInGraph: number;
@@ -24,5 +24,5 @@ export interface IGraphItem {
   /** Unique identifier for the prompt group associated with this graph item. */
   promptGroupId: string;
 
-  operationNodesInstructions?: OperationNodeInstructions[];
+  operationNodesInstructions?: IOperationNodeInstructions[];
 }
