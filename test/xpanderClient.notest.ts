@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { XpanderClient, IXpanderClientCustomParams } from '../src';
+import { XpanderClient, IXpanderClientCustomParams, LLMProvider } from '../src';
 import {
   CUSTOM_AGENT_ID,
   DEFAULT_BASE_URL,
@@ -62,6 +62,24 @@ describe('Test XPander Client', () => {
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
     expect(agent.pgOas.length).toBeGreaterThanOrEqual(1);
     expect(agent.graphs.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it.only("get all the agent's tools by agent id", () => {
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
+    const agent = xpanderClient.agents.get(xpanderAgentID);
+    expect(agent).toHaveProperty('id');
+    expect(agent.organizationId.length).toBeGreaterThan(10);
+    expect(agent.tools.length).toBeGreaterThanOrEqual(1);
+    expect(agent.pgOas.length).toBeGreaterThanOrEqual(1);
+    expect(agent.graphs.length).toBeGreaterThanOrEqual(1);
+    expect(
+      agent.getTools(LLMProvider.OPEN_AI, true).length,
+    ).toBeGreaterThanOrEqual(1);
   });
 
   it('get custom agent - for chat i.e', () => {

@@ -3,6 +3,7 @@ import {
   ITool,
   IToolCall,
   IToolCallPayload,
+  IToolExecutionResult,
   IToolInstructions,
   ToolCallType,
 } from '../types';
@@ -58,35 +59,49 @@ export function executeTool(
   agentUrl: string,
   configuration: Configuration,
   sourceNodeType: SourceNodeType,
-): any {
-  const url = `${agentUrl}/${sourceNodeType}/operations/${tool.name}`;
-  const requestPayload = {
-    ...(configuration?.customParams?.connectors
-      ? {
-          [CUSTOM_AGENT_ID]: convertKeysToSnakeCase(configuration.customParams),
-        }
-      : {}),
-    body_params: tool?.payload?.bodyParams || {},
-    path_params: tool?.payload?.pathParams || {},
-    query_params: tool?.payload?.queryParams || {},
-    headers: tool?.payload?.headers || {},
+): IToolExecutionResult {
+  const result: IToolExecutionResult = {
+    statusCode: 200,
+    data: null,
+    isSuccess: true,
   };
-  const response = request('POST' as HttpVerb, url, {
-    json: requestPayload,
-    headers: { 'x-api-key': configuration.apiKey },
-  });
 
-  if (!response.statusCode.toString().startsWith('2')) {
-    throw new Error(
-      `error ${response.statusCode} - ${response.body.toString()}`,
-    );
-  } else {
-    try {
-      return JSON.parse(response.getBody('utf8')); // return as json
-    } catch (err) {
-      return response.getBody('utf8'); // return raw in case of parsing issue
+  try {
+    const url = `${agentUrl}/${sourceNodeType}/operations/${tool.name}`;
+    const requestPayload = {
+      ...(configuration?.customParams?.connectors
+        ? {
+            [CUSTOM_AGENT_ID]: convertKeysToSnakeCase(
+              configuration.customParams,
+            ),
+          }
+        : {}),
+      body_params: tool?.payload?.bodyParams || {},
+      path_params: tool?.payload?.pathParams || {},
+      query_params: tool?.payload?.queryParams || {},
+      headers: tool?.payload?.headers || {},
+    };
+    const response = request('POST' as HttpVerb, url, {
+      json: requestPayload,
+      headers: { 'x-api-key': configuration.apiKey },
+    });
+    result.statusCode = response.statusCode || 0;
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      result.data = response.body.toString();
+      result.isSuccess = false;
+    } else {
+      try {
+        result.data = JSON.parse(response.getBody('utf8')); // return as json
+      } catch (err) {
+        result.data = response.getBody('utf8'); // return raw in case of parsing issue
+      }
     }
+  } catch (err: any) {
+    result.statusCode = 500;
+    result.data = err.toString();
   }
+  return result;
 }
 
 /**

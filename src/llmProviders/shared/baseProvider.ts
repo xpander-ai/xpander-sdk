@@ -41,7 +41,7 @@ export class BaseLLMProvider {
    * @returns An array of processed tools ready for use.
    * @throws Error if no tools are found for the agent.
    */
-  getTools(): any[] {
+  getTools(returnAllTools: boolean = false): any[] {
     const agentTools: IToolInstructions[] = this.agent
       .tools as IToolInstructions[];
     const allTools: any[] = [];
@@ -61,11 +61,13 @@ export class BaseLLMProvider {
 
     // Return tools for custom agents, which lack graphs
     if (this.agent.id === CUSTOM_AGENT_ID) {
+      return this.postProcessTools(allTools);
+    }
+
+    if (returnAllTools) {
       return [
+        ...this.postProcessTools(this.agent.pgOas.map(createTool)),
         ...this.postProcessTools(allTools),
-        ...(this.agent.hasLocalTools
-          ? this.postProcessTools(this.agent.localTools)
-          : []),
       ];
     }
 

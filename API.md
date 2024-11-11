@@ -155,7 +155,7 @@ The list of local tools to add.
 ##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
 
 ```typescript
-public getTools(llmProvider?: LLMProvider): any[]
+public getTools(llmProvider?: LLMProvider, returnAllTools?: boolean): any[]
 ```
 
 Retrieves tools compatible with the specified LLM provider.
@@ -165,6 +165,12 @@ Retrieves tools compatible with the specified LLM provider.
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 The LLM provider to filter tools by.
+
+---
+
+###### `returnAllTools`<sup>Optional</sup> <a name="returnAllTools" id="xpander-sdk.Agent.getTools.parameter.returnAllTools"></a>
+
+- *Type:* boolean
 
 ---
 
@@ -2364,6 +2370,51 @@ public readonly statusCode: number;
 - *Type:* number
 
 Status code returned from the tool call, if available.
+
+---
+
+### IToolExecutionResult <a name="IToolExecutionResult" id="xpander-sdk.IToolExecutionResult"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolExecutionResult">IToolExecutionResult</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolExecutionResult.property.data">data</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolExecutionResult.property.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolExecutionResult.property.statusCode">statusCode</a></code> | <code>number</code> | *No description.* |
+
+---
+
+##### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.IToolExecutionResult.property.data"></a>
+
+```typescript
+public readonly data: any;
+```
+
+- *Type:* any
+
+---
+
+##### `isSuccess`<sup>Required</sup> <a name="isSuccess" id="xpander-sdk.IToolExecutionResult.property.isSuccess"></a>
+
+```typescript
+public readonly isSuccess: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `statusCode`<sup>Required</sup> <a name="statusCode" id="xpander-sdk.IToolExecutionResult.property.statusCode"></a>
+
+```typescript
+public readonly statusCode: number;
+```
+
+- *Type:* number
 
 ---
 

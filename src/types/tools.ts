@@ -218,3 +218,9 @@ export interface IToolCallResult {
   /** Unique identifier for the tool call. */
   toolCallId: string;
 }
+
+export interface IToolExecutionResult {
+  statusCode: number;
+  data: any;
+  isSuccess: boolean;
+}

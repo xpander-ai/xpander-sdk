@@ -176,13 +176,16 @@ export class Agent {
    * @param llmProvider - The LLM provider to filter tools by.
    * @returns A list of tools that match the specified provider.
    */
-  getTools(llmProvider: LLMProvider = LLMProvider.OPEN_AI): any[] {
+  getTools(
+    llmProvider: LLMProvider = LLMProvider.OPEN_AI,
+    returnAllTools: boolean = false,
+  ): any[] {
     const provider = allProviders.find((p) => p.shouldHandle(llmProvider));
     if (!provider) {
       throw new Error(`provider (${llmProvider}) not found`);
     }
     const providerInstance = new provider(this);
-    const tools = providerInstance.getTools();
+    const tools = providerInstance.getTools(returnAllTools);
 
     // mainly for AWS Bedrock resource ID conventions
     this.originalToolNamesReamapping = {
@@ -254,7 +257,7 @@ export class Agent {
         tool.payload = mergeDeep(tool.payload, payloadExtension);
       }
 
-      toolCallResult.result = executeTool(
+      const executionResult = executeTool(
         {
           ...tool,
           name: this.originalToolNamesReamapping?.[tool.name] || tool.name,
@@ -263,6 +266,11 @@ export class Agent {
         this.configuration,
         this.sourceNodeType,
       );
+      toolCallResult.statusCode = executionResult.statusCode;
+      toolCallResult.result = executionResult.data;
+      if (!executionResult.isSuccess) {
+        throw new Error(toolCallResult.result);
+      }
       if (!!this.promptGroupSessions.activeSession) {
         this.promptGroupSessions.activeSession.lastNode = tool.name;
       }
