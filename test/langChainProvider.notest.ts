@@ -33,7 +33,7 @@ describe('Test LangChain using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const tools = agent.getTools(LLMProvider.LangChain);
+    const tools = agent.getTools(LLMProvider.LANG_CHAIN);
     expect(tools.length).toBeGreaterThanOrEqual(1);
 
     const messages = [
@@ -51,16 +51,16 @@ describe('Test LangChain using xpander.ai', () => {
     // extract tools
     const toolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.LangChain,
+      LLMProvider.LANG_CHAIN,
     );
 
     expect(toolCalls.length).toBeGreaterThanOrEqual(1);
 
     // run tools
-    const toolCallsResults = agent.run_tools(toolCalls);
+    const toolCallsResults = agent.runTools(toolCalls);
     expect(toolCallsResults.length).toEqual(toolCalls.length);
     expect(toolCallsResults[0].isSuccess).toBeTruthy();
-  });
+  }, 12000);
 
   it('get tools for langchain provider + invoke tool (one tool)', async () => {
     const xpanderClient = new XpanderClient(xpanderClientParams);
@@ -68,7 +68,7 @@ describe('Test LangChain using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const pgTools = agent.getTools(LLMProvider.LangChain);
+    const pgTools = agent.getTools(LLMProvider.LANG_CHAIN);
     expect(pgTools.length).toBeGreaterThanOrEqual(1);
 
     // run completion
@@ -92,7 +92,7 @@ describe('Test LangChain using xpander.ai', () => {
     // extract tools
     const xpanderToolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.LangChain,
+      LLMProvider.LANG_CHAIN,
     );
 
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
@@ -101,7 +101,7 @@ describe('Test LangChain using xpander.ai', () => {
     expect(xpanderToolCalls[0].isPg).toEqual(true);
 
     // run tools
-    const invocationResults = agent.run_tools(xpanderToolCalls);
+    const invocationResults = agent.runTools(xpanderToolCalls);
 
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
     expect(invocationResults[0].result).toMatch(
@@ -110,15 +110,15 @@ describe('Test LangChain using xpander.ai', () => {
 
     // now get tags for real using tool and not pg selection
     const completionResult: any = await llmClient.invoke(messages, {
-      tools: agent.getTools(LLMProvider.LangChain),
+      tools: agent.getTools(LLMProvider.LANG_CHAIN),
     });
 
     const realToolCalls = xpanderClient.extractToolCalls(
       completionResult,
-      LLMProvider.LangChain,
+      LLMProvider.LANG_CHAIN,
     );
 
-    const realInvocationResults = agent.run_tools(realToolCalls);
+    const realInvocationResults = agent.runTools(realToolCalls);
 
     expect(realInvocationResults.length).toEqual(realToolCalls.length);
     expect(realInvocationResults[0].isSuccess).toBeTruthy();
@@ -153,7 +153,7 @@ describe('Test LangChain using xpander.ai', () => {
       // run completion
 
       const response: any = await llmClient.invoke(messages, {
-        tools: agent.getTools(LLMProvider.LangChain),
+        tools: agent.getTools(LLMProvider.LANG_CHAIN),
         tool_choice: 'auto',
         parallel_tool_calls: false,
       });
@@ -163,7 +163,7 @@ describe('Test LangChain using xpander.ai', () => {
       // extract tools
       const toolCalls = xpanderClient.extractToolCalls(
         response,
-        LLMProvider.LangChain,
+        LLMProvider.LANG_CHAIN,
       );
       for (const toolCall of toolCalls) {
         messages.push({
@@ -182,7 +182,7 @@ describe('Test LangChain using xpander.ai', () => {
       }
 
       // run tools
-      const toolCallsResults = agent.run_tools(toolCalls);
+      const toolCallsResults = agent.runTools(toolCalls);
       for (const toolCallResult of toolCallsResults) {
         messages.push({
           role: 'tool',
@@ -232,20 +232,20 @@ describe('Test LangChain using xpander.ai', () => {
     agent.addLocalTools(localTools);
 
     const response: any = await llmClient.invoke(messages, {
-      tools: agent.getTools(LLMProvider.LangChain),
+      tools: agent.getTools(LLMProvider.LANG_CHAIN),
     });
 
     // extract tools
     const xpanderToolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.LangChain,
+      LLMProvider.LANG_CHAIN,
     );
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
     expect(xpanderToolCalls[0].name).toEqual(localTools[0].function.name);
     expect(xpanderToolCalls[0].type).toEqual(ToolCallType.LOCAL);
 
     // run tools
-    const invocationResults = agent.run_tools(xpanderToolCalls);
+    const invocationResults = agent.runTools(xpanderToolCalls);
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
     expect(invocationResults[0]).not.toHaveProperty('result');
   }, 20000);

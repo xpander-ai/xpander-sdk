@@ -5,17 +5,29 @@ import { AgentStatus, SourceNodeType } from '../../types/agents';
 import { Configuration } from '../Configuration';
 import { convertKeysToCamelCase } from '../utils';
 
+/**
+ * Manages a collection of Agent instances in xpanderAI, providing methods to list,
+ * retrieve, and initialize specific agents including custom agents.
+ */
 export class Agents {
+  /** Collection of Agent instances managed by this class. */
   public agentsList: Agent[] = [];
+
   constructor(public configuration: Configuration) {}
 
+  /**
+   * Retrieves the list of agents. If `refetch` is true, it re-fetches the list
+   * from the API even if agents are already loaded.
+   * @param refetch - If true, forces a re-fetch of the agent list from the API.
+   * @returns Array of Agent instances.
+   */
   public list(refetch: boolean = false): Agent[] {
     if (this.agentsList.length !== 0 && !refetch) {
       return this.agentsList;
     }
     try {
       let url = `${this.configuration.baseUrl}/agents/list`;
-      if (!!this.configuration?.customParams?.organizationId) {
+      if (this.configuration?.customParams?.organizationId) {
         url += `/${this.configuration.customParams.organizationId}`;
       }
       const response = request('GET' as HttpVerb, url, {
@@ -48,6 +60,12 @@ export class Agents {
     }
   }
 
+  /**
+   * Retrieves an agent by ID and initializes it with the given source node type.
+   * @param agentId - The ID of the agent to retrieve.
+   * @param sourceNodeType - The source node type for the agent, default is SDK.
+   * @returns The requested Agent instance.
+   */
   public get(
     agentId: string,
     sourceNodeType: SourceNodeType = SourceNodeType.SDK,
@@ -68,6 +86,11 @@ export class Agents {
     }
   }
 
+  /**
+   * Retrieves the custom agent instance, initializing it with the given source node type.
+   * @param sourceNodeType - The source node type for the custom agent, default is SDK.
+   * @returns The custom Agent instance.
+   */
   public getCustomAgent(
     sourceNodeType: SourceNodeType = SourceNodeType.SDK,
   ): Agent {

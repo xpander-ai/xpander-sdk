@@ -9,7 +9,7 @@ import {
   ILocalTool,
   ToolCallType,
   XpanderClient,
-  XpanderClientParams,
+  IXpanderClientParams,
 } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
@@ -29,7 +29,7 @@ const bedrockClient = new BedrockRuntimeClient({
   },
 });
 
-const xpanderClientParams: XpanderClientParams = {
+const xpanderClientParams: IXpanderClientParams = {
   apiKey: xpanderAPIKey,
   customParams: { organizationId },
 };
@@ -41,7 +41,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const tools = agent.getTools(LLMProvider.AmazonBedrock);
+    const tools = agent.getTools(LLMProvider.AMAZON_BEDROCK);
     expect(tools.length).toBeGreaterThanOrEqual(1);
 
     const messages: any[] = [
@@ -68,16 +68,16 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     // extract tools
     const toolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.AmazonBedrock,
+      LLMProvider.AMAZON_BEDROCK,
     );
 
     expect(toolCalls.length).toBeGreaterThanOrEqual(1);
 
     // run tools
-    const toolCallsResults = agent.run_tools(toolCalls);
+    const toolCallsResults = agent.runTools(toolCalls);
     expect(toolCallsResults.length).toEqual(toolCalls.length);
     expect(toolCallsResults[0].isSuccess).toBeTruthy();
-  });
+  }, 12000);
 
   it('get tools for bedrock provider + invoke tool (one tool)', async () => {
     const xpanderClient = new XpanderClient(xpanderClientParams);
@@ -85,7 +85,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const pgTools = agent.getTools(LLMProvider.AmazonBedrock);
+    const pgTools = agent.getTools(LLMProvider.AMAZON_BEDROCK);
     expect(pgTools.length).toBeGreaterThanOrEqual(1);
 
     const messages: any[] = [
@@ -107,7 +107,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     // extract tools
     const xpanderToolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.AmazonBedrock,
+      LLMProvider.AMAZON_BEDROCK,
     );
 
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
@@ -122,7 +122,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     expect(xpanderToolCalls[0].isPg).toEqual(true);
 
     // run tools
-    const invocationResults = agent.run_tools(xpanderToolCalls);
+    const invocationResults = agent.runTools(xpanderToolCalls);
 
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
     expect(invocationResults[0].result).toMatch(
@@ -134,17 +134,17 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
       modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
       messages,
       inferenceConfig: { temperature: 0.0 },
-      toolConfig: { tools: agent.getTools(LLMProvider.AmazonBedrock) },
+      toolConfig: { tools: agent.getTools(LLMProvider.AMAZON_BEDROCK) },
     });
 
     const response2: any = await bedrockClient.send(command2);
 
     const realToolCalls = xpanderClient.extractToolCalls(
       response2,
-      LLMProvider.AmazonBedrock,
+      LLMProvider.AMAZON_BEDROCK,
     );
 
-    const realInvocationResults = agent.run_tools(realToolCalls);
+    const realInvocationResults = agent.runTools(realToolCalls);
 
     expect(realInvocationResults.length).toEqual(realToolCalls.length);
     expect(realInvocationResults[0].isSuccess).toBeTruthy();
@@ -180,7 +180,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
         modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
         messages,
         inferenceConfig: { temperature: 0.0 },
-        toolConfig: { tools: agent.getTools(LLMProvider.AmazonBedrock) },
+        toolConfig: { tools: agent.getTools(LLMProvider.AMAZON_BEDROCK) },
       });
 
       const response: any = await bedrockClient.send(command);
@@ -196,7 +196,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
       // extract tools
       const toolCalls = xpanderClient.extractToolCalls(
         response,
-        LLMProvider.AmazonBedrock,
+        LLMProvider.AMAZON_BEDROCK,
       );
       for (const toolCall of toolCalls) {
         const content: any = [
@@ -218,7 +218,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
       }
 
       // run tools
-      const toolCallsResults = agent.run_tools(toolCalls);
+      const toolCallsResults = agent.runTools(toolCalls);
       for (const toolCallResult of toolCallsResults) {
         messages.push({
           role: 'user',
@@ -276,7 +276,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
       modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
       messages,
       inferenceConfig: { temperature: 0.0 },
-      toolConfig: { tools: agent.getTools(LLMProvider.AmazonBedrock) },
+      toolConfig: { tools: agent.getTools(LLMProvider.AMAZON_BEDROCK) },
     });
 
     const response: any = await bedrockClient.send(command);
@@ -284,14 +284,14 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     // extract tools
     const xpanderToolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.AmazonBedrock,
+      LLMProvider.AMAZON_BEDROCK,
     );
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
     expect(xpanderToolCalls[0].name).toEqual(localTools[0].function.name);
     expect(xpanderToolCalls[0].type).toEqual(ToolCallType.LOCAL);
 
     // run tools
-    const invocationResults = agent.run_tools(xpanderToolCalls);
+    const invocationResults = agent.runTools(xpanderToolCalls);
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
     expect(invocationResults[0]).not.toHaveProperty('result');
   }, 20000);

@@ -5,7 +5,9 @@ import { createTool } from '../../core/tools';
 import { IToolCall, IToolInstructions } from '../../types';
 
 /**
- * Class representing the base LLM provider.
+ * BaseLLMProvider serves as the foundational class for integrating different
+ * LLM providers, defining common functionality for handling tool extraction
+ * and management within an agent.
  */
 export class BaseLLMProvider {
   /**
@@ -17,21 +19,34 @@ export class BaseLLMProvider {
     return llmProvider === LLMProvider.OPEN_AI;
   }
 
+  /**
+   * Extracts tool calls from an LLM response, if applicable.
+   * @param llmResponse - The LLM response object.
+   * @returns An array of IToolCall objects extracted from the response.
+   */
   static extractToolCalls(llmResponse: Record<string, any>): IToolCall[] {
-    // lint purpose only.
     if (llmResponse) {
       return [];
     }
     return [];
   }
-  public originalToolNamesReamapping: Record<string, string> = {};
-  constructor(public agent: Agent) {}
 
+  /** Maps original tool names to modified versions, if needed. */
+  public originalToolNamesReamapping: Record<string, string> = {};
+
+  constructor(public agent: Agent) {}
+  /**
+   * Retrieves and organizes tools available for the agent, considering local tools,
+   * session-specific tools, and tools for prompt groups.
+   * @returns An array of processed tools ready for use.
+   * @throws Error if no tools are found for the agent.
+   */
   getTools(): any[] {
-    const agentTools: any = this.agent.tools as unknown as IToolInstructions[];
+    const agentTools: IToolInstructions[] = this.agent
+      .tools as IToolInstructions[];
     const allTools: any[] = [];
 
-    // add local tools
+    // Add local tools
     if (this.agent.hasLocalTools) {
       for (const localTool of this.agent.localTools) {
         allTools.push(localTool);
@@ -44,7 +59,7 @@ export class BaseLLMProvider {
       throw new Error(`No tools found for agent ${this.agent.id}`);
     }
 
-    // custom agents doesn't have graphs!
+    // Return tools for custom agents, which lack graphs
     if (this.agent.id === CUSTOM_AGENT_ID) {
       return [
         ...this.postProcessTools(allTools),
@@ -54,7 +69,7 @@ export class BaseLLMProvider {
       ];
     }
 
-    // return pg selection
+    // For prompt group selection
     const pgSessions = this.agent.promptGroupSessions;
     if (!pgSessions.activeSession) {
       return [
@@ -65,9 +80,10 @@ export class BaseLLMProvider {
       ];
     }
 
-    // return session tools
+    // For active session tools
     const sessionTools: any[] = pgSessions.getToolsForActiveSession(allTools);
 
+    // If no session tools, reset sessions if allowed and return available tools
     if (sessionTools.length === 0 && this.agent.pgSwitchAllowed) {
       pgSessions.resetSessions();
       return [
@@ -82,9 +98,9 @@ export class BaseLLMProvider {
   }
 
   /**
-   * Post-processes the tools before returning them.
+   * Post-processes tools to prepare them for use, applying any necessary modifications.
    * @param tools - The tools to post-process.
-   * @returns The post-processed tools.
+   * @returns The processed tools ready for execution.
    */
   postProcessTools(tools: any[]): any[] {
     return tools;

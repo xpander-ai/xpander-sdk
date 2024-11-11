@@ -4,7 +4,7 @@ import { getToolBaseSignature } from '../core/tools';
 import { IToolCall } from '../types';
 
 /**
- * Class representing the LangChain LLM provider.
+ * Handles interactions with the LangChain LLM provider, extracting tool calls from responses.
  */
 export class LangChain extends BaseOpenAISDKHandler {
   /**
@@ -16,9 +16,15 @@ export class LangChain extends BaseOpenAISDKHandler {
     return llmProvider === LLMProvider.LANG_CHAIN;
   }
 
+  /**
+   * Extracts tool calls from a LangChain LLM response.
+   * @param llmResponse - The response object from LangChain.
+   * @returns An array of IToolCall objects extracted from the response.
+   * @throws Error if the response format is invalid.
+   */
   static extractToolCalls(llmResponse: Record<string, any>): IToolCall[] {
     if (typeof llmResponse !== 'object') {
-      throw new Error('llm response should be full');
+      throw new Error('LLM response should be an object.');
     }
 
     const extractedToolCalls: IToolCall[] = [];
@@ -30,7 +36,7 @@ export class LangChain extends BaseOpenAISDKHandler {
       return [];
     }
 
-    for (const toolCall of llmResponse?.tool_calls) {
+    for (const toolCall of llmResponse.tool_calls) {
       let payload = toolCall.args;
       try {
         payload = JSON.parse(toolCall.args);

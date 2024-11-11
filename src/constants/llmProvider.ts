@@ -1,5 +1,8 @@
 /**
  * Enum representing different Large Language Model (LLM) providers.
+ *
+ * This enum lists various LLM service providers integrated with xpanderAI, enabling
+ * selection of the desired LLM provider for specific tasks.
  */
 export enum LLMProvider {
   /** Represents the 'langchain' provider. */

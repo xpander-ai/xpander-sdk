@@ -5,6 +5,12 @@ import { LOCAL_TOOL_PREFIX } from '../constants/tools';
 import { CUSTOM_AGENT_ID } from '../constants/xpanderClient';
 import { SourceNodeType } from '../types/agents';
 
+/**
+ * Creates a tool representation for xpanderAI based on tool instructions,
+ * formatting description and ensuring parameter fields are included.
+ * @param toolInstructions - Instructions containing details about the tool.
+ * @returns A tool object structured for use in xpanderAI.
+ */
 export function createTool(toolInstructions: IToolInstructions): any {
   const { id, functionDescription, parameters } = toolInstructions;
 
@@ -30,6 +36,16 @@ export function createTool(toolInstructions: IToolInstructions): any {
   };
 }
 
+/**
+ * Executes a specified tool for an agent in xpanderAI, sending a request with
+ * the appropriate payload structure including headers, path, query, and body parameters.
+ * @param tool - The tool call details.
+ * @param agentUrl - The base URL of the agent.
+ * @param configuration - Configuration for authentication and custom params.
+ * @param sourceNodeType - Source node type for tool operation.
+ * @returns The result of the tool execution, parsed as JSON if possible.
+ * @throws Error if the response status code indicates failure.
+ */
 export function executeTool(
   tool: IToolCall,
   agentUrl: string,
@@ -38,7 +54,7 @@ export function executeTool(
 ): any {
   const url = `${agentUrl}/${sourceNodeType}/operations/${tool.name}`;
   const requestPayload = {
-    ...(!!configuration?.customParams?.connectors
+    ...(configuration?.customParams?.connectors
       ? { [CUSTOM_AGENT_ID]: configuration.customParams }
       : {}),
     body_params: tool?.payload?.bodyParams || {},
@@ -64,6 +80,13 @@ export function executeTool(
   }
 }
 
+/**
+ * Generates the base signature for a tool, identifying tool type and presence of
+ * prompt group (Pg) functionality based on the tool name.
+ * @param toolName - The name of the tool.
+ * @param toolCallId - Unique identifier for the tool call.
+ * @returns An object containing base details about the tool, such as its type and ID.
+ */
 export function getToolBaseSignature(toolName: string, toolCallId: string) {
   return {
     name: toolName.startsWith(LOCAL_TOOL_PREFIX)

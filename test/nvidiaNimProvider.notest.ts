@@ -32,7 +32,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const pgTools = agent.getTools(LLMProvider.NvidiaNIM);
+    const pgTools = agent.getTools(LLMProvider.NVIDIA_NIM);
     expect(pgTools.length).toBeGreaterThanOrEqual(1);
 
     // run completion
@@ -65,7 +65,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
     expect(xpanderToolCalls[0].isPg).toEqual(true);
 
     // run tools
-    const invocationResults = agent.run_tools(xpanderToolCalls);
+    const invocationResults = agent.runTools(xpanderToolCalls);
 
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
     expect(invocationResults[0].result).toMatch(
@@ -77,7 +77,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
       {
         model: NvidiaNIMSupportedModels.LLAMA_3_1_70B_INSTRUCT,
         messages: messages as any,
-        tools: agent.getTools(LLMProvider.NvidiaNIM),
+        tools: agent.getTools(LLMProvider.NVIDIA_NIM),
         tool_choice: 'required',
       },
     );
@@ -92,7 +92,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const pgTools = agent.getTools(LLMProvider.NvidiaNIM);
+    const pgTools = agent.getTools(LLMProvider.NVIDIA_NIM);
     expect(pgTools.length).toBeGreaterThanOrEqual(1);
 
     // run completion
@@ -125,7 +125,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
     expect(xpanderToolCalls[0].isPg).toEqual(true);
 
     // run tools
-    const invocationResults = agent.run_tools(xpanderToolCalls);
+    const invocationResults = agent.runTools(xpanderToolCalls);
 
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
     expect(invocationResults[0].result).toMatch(
@@ -137,14 +137,14 @@ describe('Test NvidiaNIM using xpander.ai', () => {
       {
         model: NvidiaNIMSupportedModels.LLAMA_3_1_70B_INSTRUCT,
         messages: messages as any,
-        tools: agent.getTools(LLMProvider.NvidiaNIM),
+        tools: agent.getTools(LLMProvider.NVIDIA_NIM),
         tool_choice: 'required',
       },
     );
 
     const realToolCalls = xpanderClient.extractToolCalls(completionResult);
 
-    const realInvocationResults = agent.run_tools(realToolCalls);
+    const realInvocationResults = agent.runTools(realToolCalls);
 
     expect(realInvocationResults.length).toEqual(realToolCalls.length);
     expect(realInvocationResults[0].isSuccess).toBeTruthy();
@@ -180,7 +180,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
       const response: any = await nvidiaNimClient.chat.completions.create({
         model: NvidiaNIMSupportedModels.LLAMA_3_1_70B_INSTRUCT,
         messages: messages as any,
-        tools: agent.getTools(LLMProvider.NvidiaNIM),
+        tools: agent.getTools(LLMProvider.NVIDIA_NIM),
         tool_choice: 'auto',
         parallel_tool_calls: false,
         temperature: 0.0,
@@ -210,7 +210,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
       }
 
       // run tools
-      const toolCallsResults = agent.run_tools(toolCalls);
+      const toolCallsResults = agent.runTools(toolCalls);
       for (const toolCallResult of toolCallsResults) {
         messages.push({
           role: 'tool',
@@ -262,7 +262,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
     const response: any = await nvidiaNimClient.chat.completions.create({
       model: NvidiaNIMSupportedModels.LLAMA_3_1_70B_INSTRUCT,
       messages: messages as any,
-      tools: agent.getTools(LLMProvider.NvidiaNIM),
+      tools: agent.getTools(LLMProvider.NVIDIA_NIM),
       tool_choice: 'required',
     });
 
@@ -273,7 +273,7 @@ describe('Test NvidiaNIM using xpander.ai', () => {
     expect(xpanderToolCalls[0].type).toEqual(ToolCallType.LOCAL);
 
     // run tools
-    const invocationResults = agent.run_tools(xpanderToolCalls);
+    const invocationResults = agent.runTools(xpanderToolCalls);
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
     expect(invocationResults[0]).not.toHaveProperty('result');
   }, 20000);

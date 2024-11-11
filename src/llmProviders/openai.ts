@@ -2,34 +2,21 @@ import { BaseOpenAISDKHandler } from './shared/baseOpenAI';
 import { LLMProvider } from '../constants/llmProvider';
 
 /**
- * @class OpenAISupportedModels
- * @description A class containing constants representing various supported models in OpenAI.
+ * Contains constants representing various models supported by OpenAI.
  */
 export abstract class OpenAISupportedModels {
-  /**
-   * @constant
-   * @type {string}
-   * @description OpenAI GPT-4 model.
-   */
+  /** OpenAI GPT-4 model. */
   public static readonly GPT_4: string = 'gpt-4';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description OpenAI GPT-4o model.
-   */
+  /** OpenAI GPT-4o model. */
   public static readonly GPT_4_O: string = 'gpt-4o';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description OpenAI GPT-4o Mini model.
-   */
+  /** OpenAI GPT-4o Mini model. */
   public static readonly GPT_4_O_MINI: string = 'gpt-4o-mini';
 }
 
 /**
- * Class representing the OpenAI LLM provider.
+ * Manages interactions with the OpenAI LLM provider, handling tool calls and model-specific settings.
  */
 export class OpenAI extends BaseOpenAISDKHandler {
   /**

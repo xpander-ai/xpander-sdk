@@ -6,10 +6,14 @@ import { allProviders } from '../llmProviders';
 import { IToolCall, IXpanderClientParams } from '../types';
 
 /**
- * Class representing the XpanderClient used to interact with xpanderAI tools.
+ * XpanderClient provides methods for configuring and interacting with xpanderAI tools,
+ * managing agents, and extracting tool calls from LLM responses.
  */
 export class XpanderClient {
+  /** Configuration settings for the xpanderAI client. */
   configuration: Configuration;
+
+  /** Instance of Agents to manage xpanderAI agents. */
   agents: Agents;
 
   /**
@@ -18,7 +22,7 @@ export class XpanderClient {
    * @param params.apiKey - The API key for the agent.
    * @param params.baseUrl - The base URL for the agent, defaults to DEFAULT_BASE_URL.
    * @param params.withMetricsReport - Optional flag for enabling metrics reporting.
-   * @param params.organizationId - Optional organization ID.
+   * @param params.customParams - Additional custom parameters for the client.
    * @throws Will throw an error if an invalid API key is specified.
    */
   constructor({
@@ -37,6 +41,13 @@ export class XpanderClient {
     this.agents = new Agents(this.configuration);
   }
 
+  /**
+   * Extracts tool calls from an LLM response based on the specified LLM provider.
+   * @param llmResponse - The LLM response to analyze for tool calls.
+   * @param llmProvider - The LLM provider, defaults to OPEN_AI.
+   * @returns An array of tool calls extracted from the LLM response.
+   * @throws Error if the specified LLM provider is not supported.
+   */
   public extractToolCalls(
     llmResponse: any,
     llmProvider: LLMProvider = LLMProvider.OPEN_AI,
