@@ -29,7 +29,7 @@ export class XpanderClient {
     apiKey: string,
     baseUrl: any = DEFAULT_BASE_URL,
     withMetricsReport: boolean = false,
-    customParams: IXpanderClientCustomParams = {},
+    customParams: any | IXpanderClientCustomParams = {},
   ) {
     this.configuration = new Configuration({
       apiKey,

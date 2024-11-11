@@ -132,6 +132,7 @@ Whether the agent should automatically load its resources.
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
+| <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
 
 ---
 
@@ -214,6 +215,12 @@ Executes multiple tool calls sequentially and returns their results.
 The list of tool calls to execute.
 
 ---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Agent.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -752,6 +759,19 @@ new Configuration(__0: IConfiguration)
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Configuration.toDict">toDict</a></code> | *No description.* |
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Configuration.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1131,7 +1151,7 @@ XpanderClient provides methods for configuring and interacting with xpanderAI to
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, customParams?: IXpanderClientCustomParams)
+new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, customParams?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1139,7 +1159,7 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, cu
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.apiKey">apiKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.baseUrl">baseUrl</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.customParams">customParams</a></code> | <code><a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.customParams">customParams</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -1163,7 +1183,7 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, cu
 
 ##### `customParams`<sup>Optional</sup> <a name="customParams" id="xpander-sdk.XpanderClient.Initializer.parameter.customParams"></a>
 
-- *Type:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
+- *Type:* any
 
 ---
 

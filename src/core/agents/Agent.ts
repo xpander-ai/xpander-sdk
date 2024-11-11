@@ -257,4 +257,15 @@ export class Agent {
   public get sourceNodeType(): SourceNodeType {
     return this.sourceNodes[0].type || SourceNodeType.SDK;
   }
+
+  public toDict(): Record<string, any> {
+    const dict: Record<string, any> = {};
+
+    // Use Object.getOwnPropertyNames to get all properties
+    for (const key of Object.getOwnPropertyNames(this)) {
+      dict[key] = (this as any)[key];
+    }
+
+    return dict;
+  }
 }

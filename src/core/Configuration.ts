@@ -29,4 +29,15 @@ export class Configuration {
     this.withMetricsReport = withMetricsReport;
     this.customParams = customParams;
   }
+
+  public toDict(): Record<string, any> {
+    const dict: Record<string, any> = {};
+
+    // Use Object.getOwnPropertyNames to get all properties
+    for (const key of Object.getOwnPropertyNames(this)) {
+      dict[key] = (this as any)[key];
+    }
+
+    return dict;
+  }
 }
