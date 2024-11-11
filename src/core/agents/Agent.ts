@@ -20,7 +20,11 @@ import {
 } from '../../types/agents';
 import { Configuration } from '../Configuration';
 import { PromptGroupSessionsList } from '../promptGroups/PromptGroupSessionsList';
-import { executeTool, mergeDeep } from '../tools';
+import {
+  ensureToolCallPayloadStructure,
+  executeTool,
+  mergeDeep,
+} from '../tools';
 import { convertKeysToCamelCase, convertKeysToSnakeCase } from '../utils';
 
 /**
@@ -221,7 +225,7 @@ export class Agent {
   public runTool(tool: IToolCall, payloadExtension?: any): IToolCallResult {
     const toolCallResult: IToolCallResult = {
       functionName: tool.name,
-      payload: tool.payload,
+      payload: ensureToolCallPayloadStructure(tool?.payload || {}),
       toolCallId: tool.toolCallId,
     };
 

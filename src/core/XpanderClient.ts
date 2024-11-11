@@ -4,6 +4,7 @@ import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
 import { IToolCall, IXpanderClientCustomParams } from '../types';
+import { ensureToolCallPayloadStructure } from './tools';
 
 /**
  * XpanderClient provides methods for configuring and interacting with xpanderAI tools,
@@ -57,6 +58,9 @@ export class XpanderClient {
     if (!provider) {
       throw new Error(`provider (${llmProvider}) not found`);
     }
-    return provider.extractToolCalls(llmResponse);
+    return provider.extractToolCalls(llmResponse).map((toolCall) => ({
+      ...toolCall,
+      payload: ensureToolCallPayloadStructure(toolCall?.payload || {}),
+    }));
   }
 }

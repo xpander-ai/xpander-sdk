@@ -1,5 +1,11 @@
 import request, { HttpVerb } from 'sync-request';
-import { ITool, IToolCall, IToolInstructions, ToolCallType } from '../types';
+import {
+  ITool,
+  IToolCall,
+  IToolCallPayload,
+  IToolInstructions,
+  ToolCallType,
+} from '../types';
 import { Configuration } from './Configuration';
 import { convertKeysToSnakeCase } from './utils';
 import { LOCAL_TOOL_PREFIX } from '../constants/tools';
@@ -128,4 +134,13 @@ export function mergeDeep<T>(target: T, source: T): T {
   }
 
   return target;
+}
+
+export function ensureToolCallPayloadStructure(payload: any): IToolCallPayload {
+  return {
+    bodyParams: { ...(payload?.bodyParams || {}) },
+    queryParams: { ...(payload?.queryParams || {}) },
+    pathParams: { ...(payload?.pathParams || {}) },
+    headers: { ...(payload?.headers || {}) },
+  };
 }

@@ -78,6 +78,11 @@ export class Agents {
         AgentStatus.ACTIVE,
         '',
         [],
+        false,
+        [],
+        [],
+        [],
+        false,
       );
       agent.load(sourceNodeType);
       return agent;

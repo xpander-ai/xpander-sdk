@@ -256,12 +256,19 @@ describe('Test OpenAI using xpander.ai', () => {
           parameters: {
             type: 'object',
             properties: {
-              userName: {
-                type: 'string',
-                description: "The user's name",
+              bodyParams: {
+                type: 'object',
+                properties: {
+                  userName: {
+                    type: 'string',
+                    description: "The user's name",
+                  },
+                },
+                required: ['userName'],
+                additionalProperties: false,
               },
             },
-            required: ['userName'],
+            required: ['bodyParams'],
             additionalProperties: false,
           },
         },
@@ -282,10 +289,12 @@ describe('Test OpenAI using xpander.ai', () => {
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
     expect(xpanderToolCalls[0].name).toEqual(localTools[0].function.name);
     expect(xpanderToolCalls[0].type).toEqual(ToolCallType.LOCAL);
+    expect(xpanderToolCalls[0].payload.bodyParams.userName).toEqual('David');
 
     // run tools
     const invocationResults = agent.runTools(xpanderToolCalls);
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
     expect(invocationResults[0]).not.toHaveProperty('result');
+    expect(invocationResults[0].payload.bodyParams.userName).toEqual('David');
   }, 20000);
 });
