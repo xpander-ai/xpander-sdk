@@ -1131,20 +1131,39 @@ XpanderClient provides methods for configuring and interacting with xpanderAI to
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(__0: IXpanderClientParams)
+new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, customParams?: IXpanderClientCustomParams)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.__0">__0</a></code> | <code><a href="#xpander-sdk.IXpanderClientParams">IXpanderClientParams</a></code> | - An object containing the parameters for the XpanderClient. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.apiKey">apiKey</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.baseUrl">baseUrl</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.customParams">customParams</a></code> | <code><a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a></code> | *No description.* |
 
 ---
 
-##### `__0`<sup>Required</sup> <a name="__0" id="xpander-sdk.XpanderClient.Initializer.parameter.__0"></a>
+##### `apiKey`<sup>Required</sup> <a name="apiKey" id="xpander-sdk.XpanderClient.Initializer.parameter.apiKey"></a>
 
-- *Type:* <a href="#xpander-sdk.IXpanderClientParams">IXpanderClientParams</a>
+- *Type:* string
 
-An object containing the parameters for the XpanderClient.
+---
+
+##### `baseUrl`<sup>Optional</sup> <a name="baseUrl" id="xpander-sdk.XpanderClient.Initializer.parameter.baseUrl"></a>
+
+- *Type:* any
+
+---
+
+##### `withMetricsReport`<sup>Optional</sup> <a name="withMetricsReport" id="xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport"></a>
+
+- *Type:* boolean
+
+---
+
+##### `customParams`<sup>Optional</sup> <a name="customParams" id="xpander-sdk.XpanderClient.Initializer.parameter.customParams"></a>
+
+- *Type:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
 
 ---
 
@@ -2459,72 +2478,6 @@ public readonly organizationId: string;
 - *Type:* string
 
 Optional organization ID associated with the client.
-
----
-
-### IXpanderClientParams <a name="IXpanderClientParams" id="xpander-sdk.IXpanderClientParams"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IXpanderClientParams">IXpanderClientParams</a>
-
-Interface representing parameters for initializing the xpanderAI client.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IXpanderClientParams.property.apiKey">apiKey</a></code> | <code>string</code> | API key for authenticating with xpanderAI. |
-| <code><a href="#xpander-sdk.IXpanderClientParams.property.baseUrl">baseUrl</a></code> | <code>string</code> | Optional base URL for the xpanderAI API. |
-| <code><a href="#xpander-sdk.IXpanderClientParams.property.customParams">customParams</a></code> | <code><a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a></code> | Optional custom parameters for additional configuration. |
-| <code><a href="#xpander-sdk.IXpanderClientParams.property.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | Optional flag to enable metrics reporting. |
-
----
-
-##### `apiKey`<sup>Required</sup> <a name="apiKey" id="xpander-sdk.IXpanderClientParams.property.apiKey"></a>
-
-```typescript
-public readonly apiKey: string;
-```
-
-- *Type:* string
-
-API key for authenticating with xpanderAI.
-
----
-
-##### `baseUrl`<sup>Optional</sup> <a name="baseUrl" id="xpander-sdk.IXpanderClientParams.property.baseUrl"></a>
-
-```typescript
-public readonly baseUrl: string;
-```
-
-- *Type:* string
-
-Optional base URL for the xpanderAI API.
-
----
-
-##### `customParams`<sup>Optional</sup> <a name="customParams" id="xpander-sdk.IXpanderClientParams.property.customParams"></a>
-
-```typescript
-public readonly customParams: IXpanderClientCustomParams;
-```
-
-- *Type:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
-
-Optional custom parameters for additional configuration.
-
----
-
-##### `withMetricsReport`<sup>Optional</sup> <a name="withMetricsReport" id="xpander-sdk.IXpanderClientParams.property.withMetricsReport"></a>
-
-```typescript
-public readonly withMetricsReport: boolean;
-```
-
-- *Type:* boolean
-
-Optional flag to enable metrics reporting.
 
 ---
 

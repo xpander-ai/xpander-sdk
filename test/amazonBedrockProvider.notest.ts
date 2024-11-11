@@ -9,7 +9,7 @@ import {
   ILocalTool,
   ToolCallType,
   XpanderClient,
-  IXpanderClientParams,
+  IXpanderClientCustomParams,
 } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
@@ -29,14 +29,16 @@ const bedrockClient = new BedrockRuntimeClient({
   },
 });
 
-const xpanderClientParams: IXpanderClientParams = {
-  apiKey: xpanderAPIKey,
-  customParams: { organizationId },
-};
+const customParams: IXpanderClientCustomParams = { organizationId };
 
 describe('Test Amazon Bedrock using xpander.ai', () => {
   it('get tools for bedrock provider', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -80,7 +82,12 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
   }, 12000);
 
   it('get tools for bedrock provider + invoke tool (one tool)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -154,7 +161,12 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
   }, 20000);
 
   it('get tools for bedrock provider + invoke tool (multi step)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -237,7 +249,12 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
   }, 120000);
 
   it('get tools for bedrock provider + invoke tool (local tool tool)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);

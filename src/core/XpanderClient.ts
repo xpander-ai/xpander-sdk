@@ -3,7 +3,7 @@ import { Configuration } from './Configuration';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
-import { IToolCall, IXpanderClientParams } from '../types';
+import { IToolCall, IXpanderClientCustomParams } from '../types';
 
 /**
  * XpanderClient provides methods for configuring and interacting with xpanderAI tools,
@@ -25,15 +25,16 @@ export class XpanderClient {
    * @param params.customParams - Additional custom parameters for the client.
    * @throws Will throw an error if an invalid API key is specified.
    */
-  constructor({
-    apiKey,
-    baseUrl = DEFAULT_BASE_URL,
-    withMetricsReport = false,
-    customParams = {},
-  }: IXpanderClientParams) {
+  constructor(
+    apiKey: string,
+    baseUrl: any = DEFAULT_BASE_URL,
+    withMetricsReport: boolean = false,
+    customParams: IXpanderClientCustomParams = {},
+  ) {
     this.configuration = new Configuration({
       apiKey,
-      baseUrl,
+      baseUrl:
+        baseUrl && typeof baseUrl === 'string' ? baseUrl : DEFAULT_BASE_URL,
       withMetricsReport,
       customParams,
     });

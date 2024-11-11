@@ -15,23 +15,6 @@ export interface IXpanderClientCustomParams {
 }
 
 /**
- * Interface representing parameters for initializing the xpanderAI client.
- */
-export interface IXpanderClientParams {
-  /** API key for authenticating with xpanderAI. */
-  readonly apiKey: string;
-
-  /** Optional base URL for the xpanderAI API. */
-  readonly baseUrl?: string;
-
-  /** Optional flag to enable metrics reporting. */
-  readonly withMetricsReport?: boolean;
-
-  /** Optional custom parameters for additional configuration. */
-  readonly customParams?: IXpanderClientCustomParams;
-}
-
-/**
  * Interface representing configuration settings for the xpanderAI client.
  */
 export interface IConfiguration {

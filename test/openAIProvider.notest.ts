@@ -5,7 +5,7 @@ import {
   OpenAISupportedModels,
   ToolCallType,
   XpanderClient,
-  IXpanderClientParams,
+  IXpanderClientCustomParams,
 } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
@@ -18,14 +18,16 @@ const openaiClient = new OpenAI({
   apiKey: openAIKey,
 });
 
-const xpanderClientParams: IXpanderClientParams = {
-  apiKey: xpanderAPIKey,
-  customParams: { organizationId },
-};
+const customParams: IXpanderClientCustomParams = { organizationId };
 
 describe('Test OpenAI using xpander.ai', () => {
-  it.only('get tools for openai provider', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+  it('get tools for openai provider', async () => {
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -83,7 +85,12 @@ describe('Test OpenAI using xpander.ai', () => {
   });
 
   it('get tools for openai provider + invoke tool (one tool)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -148,7 +155,12 @@ describe('Test OpenAI using xpander.ai', () => {
   }, 20000);
 
   it('get tools for openai provider + invoke tool (multi step)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -218,7 +230,12 @@ describe('Test OpenAI using xpander.ai', () => {
   }, 120000);
 
   it('get tools for openai provider + invoke tool (local tool tool)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);

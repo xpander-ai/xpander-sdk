@@ -6,7 +6,7 @@ import {
   OpenAISupportedModels,
   ToolCallType,
   XpanderClient,
-  IXpanderClientParams,
+  IXpanderClientCustomParams,
 } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
@@ -21,14 +21,16 @@ const llmClient = new ChatOpenAI({
   apiKey: openAIKey,
 });
 
-const xpanderClientParams: IXpanderClientParams = {
-  apiKey: xpanderAPIKey,
-  customParams: { organizationId },
-};
+const customParams: IXpanderClientCustomParams = { organizationId };
 
 describe('Test LangChain using xpander.ai', () => {
   it('get tools for langchain provider', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -63,7 +65,12 @@ describe('Test LangChain using xpander.ai', () => {
   }, 12000);
 
   it('get tools for langchain provider + invoke tool (one tool)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -128,7 +135,12 @@ describe('Test LangChain using xpander.ai', () => {
   }, 20000);
 
   it('get tools for langchain provider + invoke tool (multi step)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
@@ -196,7 +208,12 @@ describe('Test LangChain using xpander.ai', () => {
   }, 120000);
 
   it('get tools for langchain provider + invoke tool (local tool tool)', async () => {
-    const xpanderClient = new XpanderClient(xpanderClientParams);
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
