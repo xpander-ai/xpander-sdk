@@ -319,4 +319,15 @@ export class Agent {
 
     return dict;
   }
+
+  // used in hybrid agents for cross instance messaging and clients
+  public selectPromptGroup(promptGroupName: string): void {
+    const pgTool = this.pgOas.find((pg) => pg.id === promptGroupName);
+    if (!pgTool) {
+      throw new Error(`Prompt group ${promptGroupName} not found`);
+    }
+    this.promptGroupSessions.startPgSession({
+      name: pgTool.id,
+    } as unknown as IToolCall);
+  }
 }

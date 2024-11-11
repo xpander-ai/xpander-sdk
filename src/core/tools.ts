@@ -97,6 +97,15 @@ export function executeTool(
         result.data = response.getBody('utf8'); // return raw in case of parsing issue
       }
     }
+
+    // Error handling for GRPC like responses
+    if (
+      typeof result?.data === 'object' &&
+      result.data?.ok === false &&
+      'error' in result?.data
+    ) {
+      throw new Error(JSON.stringify(result.data));
+    }
   } catch (err: any) {
     result.statusCode = 500;
     result.data = err.toString();

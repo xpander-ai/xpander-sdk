@@ -132,6 +132,7 @@ Whether the agent should automatically load its resources.
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
+| <code><a href="#xpander-sdk.Agent.selectPromptGroup">selectPromptGroup</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
 
 ---
@@ -231,6 +232,18 @@ The list of tool calls to execute.
 ###### `payloadExtension`<sup>Optional</sup> <a name="payloadExtension" id="xpander-sdk.Agent.runTools.parameter.payloadExtension"></a>
 
 - *Type:* any
+
+---
+
+##### `selectPromptGroup` <a name="selectPromptGroup" id="xpander-sdk.Agent.selectPromptGroup"></a>
+
+```typescript
+public selectPromptGroup(promptGroupName: string): void
+```
+
+###### `promptGroupName`<sup>Required</sup> <a name="promptGroupName" id="xpander-sdk.Agent.selectPromptGroup.parameter.promptGroupName"></a>
+
+- *Type:* string
 
 ---
 
