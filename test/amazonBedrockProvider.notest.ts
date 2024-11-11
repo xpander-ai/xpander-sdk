@@ -65,7 +65,6 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
       (msg: any) => !!msg.toolUse,
     )?.toolUse;
     expect(toolUse).toHaveProperty('name');
-    console.log(response);
 
     // extract tools
     const toolCalls = xpanderClient.extractToolCalls(

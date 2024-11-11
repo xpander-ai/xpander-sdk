@@ -8,6 +8,7 @@ import {
   IGraphItem,
   ILocalTool,
   IToolCall,
+  IToolCallPayload,
   IToolCallResult,
   ToolCallType,
 } from '../../types';
@@ -19,7 +20,7 @@ import {
 } from '../../types/agents';
 import { Configuration } from '../Configuration';
 import { PromptGroupSessionsList } from '../promptGroups/PromptGroupSessionsList';
-import { executeTool } from '../tools';
+import { executeTool, mergeDeep } from '../tools';
 import { convertKeysToCamelCase, convertKeysToSnakeCase } from '../utils';
 
 /**
@@ -119,9 +120,33 @@ export class Agent {
           throw new Error(response.body.toString());
         }
 
-        const agent = convertKeysToCamelCase(
-          JSON.parse(response.getBody('utf8')),
-        );
+        const rawAgent = JSON.parse(response.getBody('utf8'));
+        const agent = convertKeysToCamelCase(rawAgent);
+
+        // keep original tools structure
+        if ('tools' in agent) {
+          for (const tool of agent.tools) {
+            const matchedRawTool = rawAgent.tools.find(
+              (t: any) => t.id === tool.id,
+            );
+            tool.bodySchema = matchedRawTool.body_schema;
+            tool.bodyParams = matchedRawTool.body_params;
+            tool.queryParams = matchedRawTool.query_params;
+            tool.pathParams = matchedRawTool.path_params;
+            if (!!tool?.parameters) {
+              tool.parameters = {
+                type: 'object',
+                properties: {
+                  bodyParams: matchedRawTool.parameters.properties.body_params,
+                  queryParams:
+                    matchedRawTool.parameters.properties.query_params,
+                  pathParams: matchedRawTool.parameters.properties.path_params,
+                },
+                required: ['bodyParams', 'queryParams', 'pathParams'],
+              };
+            }
+          }
+        }
 
         const loadedAgent = new Agent(
           this.configuration,
@@ -193,7 +218,7 @@ export class Agent {
    * @param tool - The tool call to execute.
    * @returns The result of the tool execution.
    */
-  public runTool(tool: IToolCall): IToolCallResult {
+  public runTool(tool: IToolCall, payloadExtension?: any): IToolCallResult {
     const toolCallResult: IToolCallResult = {
       functionName: tool.name,
       payload: tool.payload,
@@ -218,6 +243,13 @@ export class Agent {
 
     // run tool
     try {
+      if (payloadExtension && typeof payloadExtension === 'object') {
+        if (!tool.payload) {
+          tool.payload = {} as IToolCallPayload;
+        }
+        tool.payload = mergeDeep(tool.payload, payloadExtension);
+      }
+
       toolCallResult.result = executeTool(
         {
           ...tool,
@@ -227,7 +259,9 @@ export class Agent {
         this.configuration,
         this.sourceNodeType,
       );
-      this.promptGroupSessions.activeSession.lastNode = tool.name;
+      if (!!this.promptGroupSessions.activeSession) {
+        this.promptGroupSessions.activeSession.lastNode = tool.name;
+      }
       toolCallResult.isSuccess = true;
     } catch (err: any) {
       toolCallResult.isError = true;
@@ -242,7 +276,10 @@ export class Agent {
    * @param toolCalls - The list of tool calls to execute.
    * @returns A list of results for each tool execution.
    */
-  public runTools(toolCalls: IToolCall[]): IToolCallResult[] {
+  public runTools(
+    toolCalls: IToolCall[],
+    payloadExtension?: any,
+  ): IToolCallResult[] {
     if (
       toolCalls.length === 0 &&
       !!this.promptGroupSessions.activeSession &&
@@ -250,7 +287,9 @@ export class Agent {
     ) {
       this.promptGroupSessions.resetSessions();
     }
-    return toolCalls.map(this.runTool.bind(this));
+    return toolCalls.map((toolCall) =>
+      this.runTool(toolCall, payloadExtension),
+    );
   }
 
   /** Retrieves the type of source node for the agent. */

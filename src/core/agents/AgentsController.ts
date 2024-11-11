@@ -104,6 +104,15 @@ export class Agents {
         [],
       );
       agent.load(sourceNodeType);
+      agent.sourceNodes = [
+        {
+          id: 'source-node-id',
+          type: sourceNodeType,
+          targets: [],
+          pgSwitchAllowed: false,
+          metadata: {},
+        },
+      ];
       return agent;
     } catch (err) {
       throw new Error('Failed to get custom agent');

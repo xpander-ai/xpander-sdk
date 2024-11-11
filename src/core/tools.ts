@@ -1,6 +1,7 @@
 import request, { HttpVerb } from 'sync-request';
 import { ITool, IToolCall, IToolInstructions, ToolCallType } from '../types';
 import { Configuration } from './Configuration';
+import { convertKeysToSnakeCase } from './utils';
 import { LOCAL_TOOL_PREFIX } from '../constants/tools';
 import { CUSTOM_AGENT_ID } from '../constants/xpanderClient';
 import { SourceNodeType } from '../types/agents';
@@ -15,7 +16,7 @@ export function createTool(toolInstructions: IToolInstructions): any {
   const { id, functionDescription, parameters } = toolInstructions;
 
   const description =
-    `${functionDescription.split(' - Valid')[0]} IMPORTANT! Ensure to use bodyParams, queryParams, pathParams. These are crucial for correct function calling!`.slice(
+    `${functionDescription.split(' - Valid')[0]} IMPORTANT! Ensure to use body_params, query_params, path_params. These are crucial for correct function calling!`.slice(
       0,
       1024,
     );
@@ -55,7 +56,9 @@ export function executeTool(
   const url = `${agentUrl}/${sourceNodeType}/operations/${tool.name}`;
   const requestPayload = {
     ...(configuration?.customParams?.connectors
-      ? { [CUSTOM_AGENT_ID]: configuration.customParams }
+      ? {
+          [CUSTOM_AGENT_ID]: convertKeysToSnakeCase(configuration.customParams),
+        }
       : {}),
     body_params: tool?.payload?.bodyParams || {},
     path_params: tool?.payload?.pathParams || {},
@@ -98,4 +101,31 @@ export function getToolBaseSignature(toolName: string, toolCallId: string) {
       : ToolCallType.XPANDER,
     toolCallId: toolCallId,
   };
+}
+
+export function mergeDeep<T>(target: T, source: T): T {
+  if (typeof target !== 'object' || target === null) return source;
+  if (typeof source !== 'object' || source === null) return target;
+
+  for (const key in source) {
+    if (Object.prototype.hasOwnProperty.call(source, key)) {
+      const targetValue = (target as any)[key];
+      const sourceValue = (source as any)[key];
+
+      if (Array.isArray(sourceValue)) {
+        (target as any)[key] = Array.isArray(targetValue)
+          ? [...targetValue, ...sourceValue]
+          : [...sourceValue];
+      } else if (typeof sourceValue === 'object') {
+        (target as any)[key] = mergeDeep(
+          targetValue && typeof targetValue === 'object' ? targetValue : {},
+          sourceValue,
+        );
+      } else {
+        (target as any)[key] = sourceValue;
+      }
+    }
+  }
+
+  return target;
 }

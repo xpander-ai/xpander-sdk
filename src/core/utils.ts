@@ -9,19 +9,26 @@ export const toCamelCase = (str: string): string => {
 };
 
 /**
- * Recursively converts all object keys to camelCase.
+ * Recursively converts all object keys to camelCase, excluding specified root key values.
  *
  * @param {any} obj - The object or array to convert.
+ * @param {string[]} [excludeKeys=[]] - List of root-level keys whose values should be excluded from conversion.
  * @returns {any} The object with keys converted to camelCase.
  */
-export const convertKeysToCamelCase = (obj: any): any => {
+export const convertKeysToCamelCase = (
+  obj: any,
+  excludeKeys: string[] = [],
+): any => {
   if (Array.isArray(obj)) {
-    return obj.map((item) => convertKeysToCamelCase(item));
+    return obj.map((item) => convertKeysToCamelCase(item, excludeKeys));
   } else if (obj !== null && typeof obj === 'object') {
     return Object.keys(obj).reduce(
       (acc, key) => {
         const camelKey = toCamelCase(key);
-        acc[camelKey] = convertKeysToCamelCase(obj[key]);
+        // If key is in excludeKeys, keep the original value without converting
+        acc[camelKey] = excludeKeys.includes(key)
+          ? obj[key]
+          : convertKeysToCamelCase(obj[key], excludeKeys);
         return acc;
       },
       {} as Record<string, any>,
@@ -41,19 +48,26 @@ export const toSnakeCase = (str: string): string => {
 };
 
 /**
- * Recursively converts all object keys to snake_case.
+ * Recursively converts all object keys to snake_case, excluding specified root key values.
  *
  * @param {any} obj - The object or array to convert.
+ * @param {string[]} [excludeKeys=[]] - List of root-level keys whose values should be excluded from conversion.
  * @returns {any} The object with keys converted to snake_case.
  */
-export const convertKeysToSnakeCase = (obj: any): any => {
+export const convertKeysToSnakeCase = (
+  obj: any,
+  excludeKeys: string[] = [],
+): any => {
   if (Array.isArray(obj)) {
-    return obj.map((item) => convertKeysToSnakeCase(item));
+    return obj.map((item) => convertKeysToSnakeCase(item, excludeKeys));
   } else if (obj !== null && typeof obj === 'object') {
     return Object.keys(obj).reduce(
       (acc, key) => {
         const snakeKey = toSnakeCase(key);
-        acc[snakeKey] = convertKeysToSnakeCase(obj[key]);
+        // If key is in excludeKeys, keep the original value without converting
+        acc[snakeKey] = excludeKeys.includes(key)
+          ? obj[key]
+          : convertKeysToSnakeCase(obj[key], excludeKeys);
         return acc;
       },
       {} as Record<string, any>,

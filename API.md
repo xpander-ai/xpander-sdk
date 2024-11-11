@@ -187,7 +187,7 @@ The type of source node to load.
 ##### `runTool` <a name="runTool" id="xpander-sdk.Agent.runTool"></a>
 
 ```typescript
-public runTool(tool: IToolCall): IToolCallResult
+public runTool(tool: IToolCall, payloadExtension?: any): IToolCallResult
 ```
 
 Executes a single tool call and returns the result.
@@ -200,10 +200,16 @@ The tool call to execute.
 
 ---
 
+###### `payloadExtension`<sup>Optional</sup> <a name="payloadExtension" id="xpander-sdk.Agent.runTool.parameter.payloadExtension"></a>
+
+- *Type:* any
+
+---
+
 ##### `runTools` <a name="runTools" id="xpander-sdk.Agent.runTools"></a>
 
 ```typescript
-public runTools(toolCalls: IToolCall[]): IToolCallResult[]
+public runTools(toolCalls: IToolCall[], payloadExtension?: any): IToolCallResult[]
 ```
 
 Executes multiple tool calls sequentially and returns their results.
@@ -213,6 +219,12 @@ Executes multiple tool calls sequentially and returns their results.
 - *Type:* <a href="#xpander-sdk.IToolCall">IToolCall</a>[]
 
 The list of tool calls to execute.
+
+---
+
+###### `payloadExtension`<sup>Optional</sup> <a name="payloadExtension" id="xpander-sdk.Agent.runTools.parameter.payloadExtension"></a>
+
+- *Type:* any
 
 ---
 
