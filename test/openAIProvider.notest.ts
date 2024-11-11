@@ -24,7 +24,7 @@ const xpanderClientParams: IXpanderClientParams = {
 };
 
 describe('Test OpenAI using xpander.ai', () => {
-  it('get tools for openai provider', async () => {
+  it.only('get tools for openai provider', async () => {
     const xpanderClient = new XpanderClient(xpanderClientParams);
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');

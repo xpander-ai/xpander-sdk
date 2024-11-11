@@ -1,3 +1,9 @@
+export interface OperationNodeInstructions {
+  nodeName: string;
+  instructions: string;
+  nodeIndexInGraph: number;
+}
+
 /**
  * Interface representing an item in an agent's graph, containing the structure
  * of connected nodes, prompt details, and associated group information.
@@ -17,4 +23,6 @@ export interface IGraphItem {
 
   /** Unique identifier for the prompt group associated with this graph item. */
   promptGroupId: string;
+
+  operationNodesInstructions?: OperationNodeInstructions[];
 }

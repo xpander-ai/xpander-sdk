@@ -83,6 +83,33 @@ export class BaseLLMProvider {
     // For active session tools
     const sessionTools: any[] = pgSessions.getToolsForActiveSession(allTools);
 
+    // add instructions per node
+    if (
+      sessionTools.length !== 0 &&
+      !!pgSessions.activeSession &&
+      Array.isArray(
+        pgSessions?.activeSession?.pg?.operationNodesInstructions,
+      ) &&
+      pgSessions.activeSession.pg.operationNodesInstructions.length !== 0
+    ) {
+      const graphNodesInstructions =
+        pgSessions.activeSession.pg.operationNodesInstructions;
+      for (const sessionTool of sessionTools) {
+        const {
+          function: { name: nodeName },
+        } = sessionTool;
+        const nodeInstructions = graphNodesInstructions.find(
+          (gni) => gni.nodeName === nodeName,
+        );
+        if (nodeInstructions?.instructions) {
+          const addon = ` - IMPORTANT INSTRUCTIONS FOR THIS TOOL: ${nodeInstructions.instructions}`;
+          sessionTool.function.description =
+            sessionTool.function.description.slice(0, 1024 - addon.length);
+          sessionTool.function.description += addon;
+        }
+      }
+    }
+
     // If no session tools, reset sessions if allowed and return available tools
     if (sessionTools.length === 0 && this.agent.pgSwitchAllowed) {
       pgSessions.resetSessions();
