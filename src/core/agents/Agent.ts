@@ -7,9 +7,7 @@ import { allProviders } from '../../llmProviders';
 import {
   IGraphItem,
   ILocalTool,
-  IToolCall,
   IToolCallPayload,
-  IToolCallResult,
   ToolCallType,
 } from '../../types';
 import {
@@ -18,8 +16,10 @@ import {
   ISourceNode,
   SourceNodeType,
 } from '../../types/agents';
+import { Base } from '../base';
 import { Configuration } from '../Configuration';
 import { PromptGroupSessionsList } from '../promptGroups/PromptGroupSessionsList';
+import { ToolCall, ToolCallResult } from '../toolCalls';
 import {
   ensureToolCallPayloadStructure,
   executeTool,
@@ -32,7 +32,7 @@ import { convertKeysToCamelCase, convertKeysToSnakeCase } from '../utils';
  * associated with the agent. This class enables loading agents, handling tool executions,
  * and managing prompt group sessions.
  */
-export class Agent {
+export class Agent extends Base {
   /** Indicates whether the agent is ready with tools loaded. */
   ready: boolean = false;
 
@@ -79,6 +79,7 @@ export class Agent {
     /** Whether the agent should automatically load its resources. */
     autoLoad: boolean = true,
   ) {
+    super();
     if (this.tools.length !== 0) {
       this.ready = true;
     }
@@ -225,12 +226,12 @@ export class Agent {
    * @param tool - The tool call to execute.
    * @returns The result of the tool execution.
    */
-  public runTool(tool: IToolCall, payloadExtension?: any): IToolCallResult {
-    const toolCallResult: IToolCallResult = {
+  public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult {
+    const toolCallResult = ToolCallResult.fromObject({
       functionName: tool.name,
       payload: ensureToolCallPayloadStructure(tool?.payload || {}),
       toolCallId: tool.toolCallId,
-    };
+    });
 
     if (tool.isPg) {
       // start session
@@ -258,10 +259,10 @@ export class Agent {
       }
 
       const executionResult = executeTool(
-        {
+        ToolCall.fromObject({
           ...tool,
           name: this.originalToolNamesReamapping?.[tool.name] || tool.name,
-        },
+        }),
         this.url,
         this.configuration,
         this.sourceNodeType,
@@ -289,9 +290,9 @@ export class Agent {
    * @returns A list of results for each tool execution.
    */
   public runTools(
-    toolCalls: IToolCall[],
+    toolCalls: ToolCall[],
     payloadExtension?: any,
-  ): IToolCallResult[] {
+  ): ToolCallResult[] {
     if (
       toolCalls.length === 0 &&
       !!this.promptGroupSessions.activeSession &&
@@ -309,25 +310,16 @@ export class Agent {
     return this.sourceNodes[0].type || SourceNodeType.SDK;
   }
 
-  public toDict(): Record<string, any> {
-    const dict: Record<string, any> = {};
-
-    // Use Object.getOwnPropertyNames to get all properties
-    for (const key of Object.getOwnPropertyNames(this)) {
-      dict[key] = (this as any)[key];
-    }
-
-    return dict;
-  }
-
   // used in hybrid agents for cross instance messaging and clients
   public selectPromptGroup(promptGroupName: string): void {
     const pgTool = this.pgOas.find((pg) => pg.id === promptGroupName);
     if (!pgTool) {
       throw new Error(`Prompt group ${promptGroupName} not found`);
     }
-    this.promptGroupSessions.startPgSession({
-      name: pgTool.id,
-    } as unknown as IToolCall);
+    this.promptGroupSessions.startPgSession(
+      ToolCall.fromObject({
+        name: pgTool.id,
+      }),
+    );
   }
 }

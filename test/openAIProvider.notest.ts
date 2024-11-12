@@ -53,7 +53,7 @@ describe('Test OpenAI using xpander.ai', () => {
     expect(pgMatched).not.toBe(null);
 
     // extract tools
-    const xpanderToolCalls = xpanderClient.extractToolCalls(response);
+    const xpanderToolCalls = XpanderClient.extractToolCalls(response);
 
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
 
@@ -76,7 +76,7 @@ describe('Test OpenAI using xpander.ai', () => {
       tool_choice: 'required',
     });
 
-    const realToolCalls = xpanderClient.extractToolCalls(completionResult);
+    const realToolCalls = XpanderClient.extractToolCalls(completionResult);
     expect(realToolCalls.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -115,7 +115,7 @@ describe('Test OpenAI using xpander.ai', () => {
     expect(pgMatched).not.toBe(null);
 
     // extract tools
-    const xpanderToolCalls = xpanderClient.extractToolCalls(response);
+    const xpanderToolCalls = XpanderClient.extractToolCalls(response);
 
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
 
@@ -138,7 +138,7 @@ describe('Test OpenAI using xpander.ai', () => {
       tool_choice: 'required',
     });
 
-    const realToolCalls = xpanderClient.extractToolCalls(completionResult);
+    const realToolCalls = XpanderClient.extractToolCalls(completionResult);
 
     const realInvocationResults = agent.runTools(realToolCalls);
 
@@ -192,7 +192,7 @@ describe('Test OpenAI using xpander.ai', () => {
         );
 
       // extract tools
-      const toolCalls = xpanderClient.extractToolCalls(response);
+      const toolCalls = XpanderClient.extractToolCalls(response);
       for (const toolCall of toolCalls) {
         messages.push({
           role: 'assistant',
@@ -278,7 +278,7 @@ describe('Test OpenAI using xpander.ai', () => {
     });
 
     // extract tools
-    const xpanderToolCalls = xpanderClient.extractToolCalls(response);
+    const xpanderToolCalls = XpanderClient.extractToolCalls(response);
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
     expect(xpanderToolCalls[0].name).toEqual(localTools[0].function.name);
     expect(xpanderToolCalls[0].type).toEqual(ToolCallType.LOCAL);
@@ -287,7 +287,7 @@ describe('Test OpenAI using xpander.ai', () => {
     // run tools
     const invocationResults = agent.runTools(xpanderToolCalls);
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
-    expect(invocationResults[0]).not.toHaveProperty('result');
+    expect(invocationResults[0].result).toEqual(null);
     expect(invocationResults[0].payload.bodyParams.userName).toEqual('David');
   }, 20000);
 });

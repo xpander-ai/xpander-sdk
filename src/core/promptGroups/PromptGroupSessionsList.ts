@@ -1,7 +1,8 @@
 import { PromptGroupSession } from './PromptGroupSession';
 import { LOCAL_TOOL_PREFIX } from '../../constants/tools';
-import { IGraphItem, IToolCall } from '../../types';
+import { IGraphItem } from '../../types';
 import { IAgentTool } from '../../types/agents';
+import { ToolCall } from '../toolCalls';
 import { createTool } from '../tools';
 
 /**
@@ -26,7 +27,7 @@ export class PromptGroupSessionsList {
    * @param tool - The tool call used to start the prompt group session.
    * @returns A system message indicating the prompt group was successfully selected.
    */
-  public startPgSession(tool: IToolCall): string {
+  public startPgSession(tool: ToolCall): string {
     const matchedPg = this.pgOas.find((pg) => pg.id === tool.name);
     if (!matchedPg) {
       throw new Error(`failed to match prompt group - ${tool.name}`);

@@ -1,7 +1,7 @@
 import { BaseOpenAISDKHandler } from './shared/baseOpenAI';
 import { LLMProvider } from '../constants/llmProvider';
+import { ToolCall } from '../core/toolCalls';
 import { getToolBaseSignature } from '../core/tools';
-import { IToolCall } from '../types';
 
 /**
  * Handles interactions with the LangChain LLM provider, extracting tool calls from responses.
@@ -19,15 +19,15 @@ export class LangChain extends BaseOpenAISDKHandler {
   /**
    * Extracts tool calls from a LangChain LLM response.
    * @param llmResponse - The response object from LangChain.
-   * @returns An array of IToolCall objects extracted from the response.
+   * @returns An array of ToolCall objects extracted from the response.
    * @throws Error if the response format is invalid.
    */
-  static extractToolCalls(llmResponse: Record<string, any>): IToolCall[] {
+  static extractToolCalls(llmResponse: Record<string, any>): ToolCall[] {
     if (typeof llmResponse !== 'object') {
       throw new Error('LLM response should be an object.');
     }
 
-    const extractedToolCalls: IToolCall[] = [];
+    const extractedToolCalls: ToolCall[] = [];
 
     if (
       !Array.isArray(llmResponse?.tool_calls) ||
@@ -43,10 +43,12 @@ export class LangChain extends BaseOpenAISDKHandler {
       } catch (err) {
         payload = toolCall.args;
       }
-      extractedToolCalls.push({
-        ...getToolBaseSignature(toolCall.name, toolCall.id),
-        payload,
-      });
+      extractedToolCalls.push(
+        ToolCall.fromObject({
+          ...getToolBaseSignature(toolCall.name, toolCall.id),
+          payload,
+        }),
+      );
     }
     return extractedToolCalls;
   }

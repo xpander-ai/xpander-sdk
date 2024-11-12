@@ -1,8 +1,9 @@
 import { LLMProvider } from '../../constants/llmProvider';
 import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
 import { Agent } from '../../core/agents/Agent';
+import { ToolCall } from '../../core/toolCalls';
 import { createTool } from '../../core/tools';
-import { IToolCall, IToolInstructions } from '../../types';
+import { IToolInstructions } from '../../types';
 
 /**
  * BaseLLMProvider serves as the foundational class for integrating different
@@ -22,9 +23,9 @@ export class BaseLLMProvider {
   /**
    * Extracts tool calls from an LLM response, if applicable.
    * @param llmResponse - The LLM response object.
-   * @returns An array of IToolCall objects extracted from the response.
+   * @returns An array of ToolCall objects extracted from the response.
    */
-  static extractToolCalls(llmResponse: Record<string, any>): IToolCall[] {
+  static extractToolCalls(llmResponse: Record<string, any>): ToolCall[] {
     if (llmResponse) {
       return [];
     }

@@ -1,8 +1,9 @@
 import { BaseLLMProvider } from './shared/baseProvider';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
+import { ToolCall } from '../core/toolCalls';
 import { getToolBaseSignature } from '../core/tools';
-import { IBedrockTool, IToolCall } from '../types';
+import { IBedrockTool } from '../types';
 
 /**
  * Contains constants representing various models supported by Amazon Bedrock.
@@ -77,15 +78,15 @@ export class AmazonBedrock extends BaseLLMProvider {
   /**
    * Extracts tool calls from an Amazon Bedrock LLM response.
    * @param llmResponse - The response object from Amazon Bedrock.
-   * @returns An array of IToolCall objects extracted from the response.
+   * @returns An array of ToolCall objects extracted from the response.
    * @throws Error if the response format is invalid.
    */
-  static extractToolCalls(llmResponse: Record<string, any>): IToolCall[] {
+  static extractToolCalls(llmResponse: Record<string, any>): ToolCall[] {
     if (typeof llmResponse !== 'object') {
       throw new Error('LLM response should be an object.');
     }
 
-    const extractedToolCalls: IToolCall[] = [];
+    const extractedToolCalls: ToolCall[] = [];
     const messages = llmResponse?.output?.message?.content || [];
 
     if (messages.length === 0) {
@@ -101,10 +102,12 @@ export class AmazonBedrock extends BaseLLMProvider {
       } catch (err) {
         payload = toolCall.input;
       }
-      extractedToolCalls.push({
-        ...getToolBaseSignature(toolCall.name, toolCall.toolUseId),
-        payload,
-      });
+      extractedToolCalls.push(
+        ToolCall.fromObject({
+          ...getToolBaseSignature(toolCall.name, toolCall.toolUseId),
+          payload,
+        }),
+      );
     }
     return extractedToolCalls;
   }

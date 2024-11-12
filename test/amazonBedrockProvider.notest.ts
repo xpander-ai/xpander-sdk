@@ -63,7 +63,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     expect(toolUse).toHaveProperty('name');
 
     // extract tools
-    const toolCalls = xpanderClient.extractToolCalls(
+    const toolCalls = XpanderClient.extractToolCalls(
       response,
       LLMProvider.AMAZON_BEDROCK,
     );
@@ -106,7 +106,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     const response: any = await bedrockClient.send(command);
 
     // extract tools
-    const xpanderToolCalls = xpanderClient.extractToolCalls(
+    const xpanderToolCalls = XpanderClient.extractToolCalls(
       response,
       LLMProvider.AMAZON_BEDROCK,
     );
@@ -140,7 +140,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
 
     const response2: any = await bedrockClient.send(command2);
 
-    const realToolCalls = xpanderClient.extractToolCalls(
+    const realToolCalls = XpanderClient.extractToolCalls(
       response2,
       LLMProvider.AMAZON_BEDROCK,
     );
@@ -199,7 +199,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
       isFinished = textResponse?.includes('###FINAL_ANSWER###');
 
       // extract tools
-      const toolCalls = xpanderClient.extractToolCalls(
+      const toolCalls = XpanderClient.extractToolCalls(
         response,
         LLMProvider.AMAZON_BEDROCK,
       );
@@ -291,7 +291,7 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     const response: any = await bedrockClient.send(command);
 
     // extract tools
-    const xpanderToolCalls = xpanderClient.extractToolCalls(
+    const xpanderToolCalls = XpanderClient.extractToolCalls(
       response,
       LLMProvider.AMAZON_BEDROCK,
     );
@@ -302,6 +302,6 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
     // run tools
     const invocationResults = agent.runTools(xpanderToolCalls);
     expect(invocationResults.length).toBeGreaterThanOrEqual(1);
-    expect(invocationResults[0]).not.toHaveProperty('result');
+    expect(invocationResults[0].result).toEqual(null);
   }, 20000);
 });

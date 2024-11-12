@@ -1,9 +1,10 @@
 import { Agents } from './agents/AgentsController';
 import { Configuration } from './Configuration';
+import { ToolCall } from './toolCalls';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
-import { IToolCall, IXpanderClientCustomParams } from '../types';
+import { IXpanderClientCustomParams } from '../types';
 import { ensureToolCallPayloadStructure } from './tools';
 
 /**
@@ -11,6 +12,29 @@ import { ensureToolCallPayloadStructure } from './tools';
  * managing agents, and extracting tool calls from LLM responses.
  */
 export class XpanderClient {
+  /**
+   * Extracts tool calls from an LLM response based on the specified LLM provider.
+   * @param llmResponse - The LLM response to analyze for tool calls.
+   * @param llmProvider - The LLM provider, defaults to OPEN_AI.
+   * @returns An array of tool calls extracted from the LLM response.
+   * @throws Error if the specified LLM provider is not supported.
+   */
+  public static extractToolCalls(
+    llmResponse: any,
+    llmProvider: LLMProvider = LLMProvider.OPEN_AI,
+  ): ToolCall[] {
+    const provider = allProviders.find((p) => p.shouldHandle(llmProvider));
+    if (!provider) {
+      throw new Error(`provider (${llmProvider}) not found`);
+    }
+    return provider.extractToolCalls(llmResponse).map((toolCall) =>
+      ToolCall.fromObject({
+        ...toolCall,
+        payload: ensureToolCallPayloadStructure(toolCall?.payload || {}),
+      }),
+    );
+  }
+
   /** Configuration settings for the xpanderAI client. */
   configuration: Configuration;
 
@@ -41,26 +65,5 @@ export class XpanderClient {
     });
 
     this.agents = new Agents(this.configuration);
-  }
-
-  /**
-   * Extracts tool calls from an LLM response based on the specified LLM provider.
-   * @param llmResponse - The LLM response to analyze for tool calls.
-   * @param llmProvider - The LLM provider, defaults to OPEN_AI.
-   * @returns An array of tool calls extracted from the LLM response.
-   * @throws Error if the specified LLM provider is not supported.
-   */
-  public extractToolCalls(
-    llmResponse: any,
-    llmProvider: LLMProvider = LLMProvider.OPEN_AI,
-  ): IToolCall[] {
-    const provider = allProviders.find((p) => p.shouldHandle(llmProvider));
-    if (!provider) {
-      throw new Error(`provider (${llmProvider}) not found`);
-    }
-    return provider.extractToolCalls(llmResponse).map((toolCall) => ({
-      ...toolCall,
-      payload: ensureToolCallPayloadStructure(toolCall?.payload || {}),
-    }));
   }
 }
