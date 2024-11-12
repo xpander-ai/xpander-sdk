@@ -6,14 +6,13 @@ import {
   OpenAISupportedModels,
   ToolCallType,
   XpanderClient,
-  IXpanderClientCustomParams,
 } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const xpanderAgentID = process.env.XPANDER_AGENT_ID || '';
-const organizationId = process.env.ORGANIZATION_ID || ''; // only when working with agents service locally!
 const openAIKey = process.env.OPENAI_API_KEY || '';
+const inboundStgURL = process.env.INBOUND_STG || '';
 
 const llmClient = new ChatOpenAI({
   model: OpenAISupportedModels.GPT_4_O,
@@ -21,15 +20,12 @@ const llmClient = new ChatOpenAI({
   apiKey: openAIKey,
 });
 
-const customParams: IXpanderClientCustomParams = { organizationId };
-
 describe('Test LangChain using xpander.ai', () => {
   it('get tools for langchain provider', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -67,9 +63,8 @@ describe('Test LangChain using xpander.ai', () => {
   it('get tools for langchain provider + invoke tool (one tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -137,9 +132,8 @@ describe('Test LangChain using xpander.ai', () => {
   it('get tools for langchain provider + invoke tool (multi step)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -210,9 +204,8 @@ describe('Test LangChain using xpander.ai', () => {
   it('get tools for langchain provider + invoke tool (local tool tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');

@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
 import {
   ILocalTool,
-  IXpanderClientCustomParams,
   LLMProvider,
   NvidiaNIMSupportedModels,
   ToolCallType,
@@ -12,23 +11,20 @@ dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const xpanderAgentID = process.env.XPANDER_AGENT_ID || '';
-const organizationId = process.env.ORGANIZATION_ID || ''; // only when working with agents service locally!
 const nvidiaNIMKey = process.env.NVIDIA_NIM_API_KEY || '';
+const inboundStgURL = process.env.INBOUND_STG || '';
 
 const nvidiaNimClient = new OpenAI({
   baseURL: 'https://integrate.api.nvidia.com/v1',
   apiKey: nvidiaNIMKey,
 });
 
-const customParams: IXpanderClientCustomParams = { organizationId };
-
 describe('Test NvidiaNIM using xpander.ai', () => {
   it('get tools for nvidia nim provider', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -91,9 +87,8 @@ describe('Test NvidiaNIM using xpander.ai', () => {
   it('get tools for nvidia nim provider + invoke tool (one tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -163,9 +158,8 @@ describe('Test NvidiaNIM using xpander.ai', () => {
   it('get tools for nvidia nim provider + invoke tool (multi step)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -238,9 +232,8 @@ describe('Test NvidiaNIM using xpander.ai', () => {
   it('get tools for nvidia nim provider + invoke tool (local tool tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');

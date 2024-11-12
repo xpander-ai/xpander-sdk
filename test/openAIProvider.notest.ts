@@ -5,28 +5,24 @@ import {
   OpenAISupportedModels,
   ToolCallType,
   XpanderClient,
-  IXpanderClientCustomParams,
 } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const xpanderAgentID = process.env.XPANDER_AGENT_ID || '';
-const organizationId = process.env.ORGANIZATION_ID || ''; // only when working with agents service locally!
 const openAIKey = process.env.OPENAI_API_KEY || '';
+const inboundStgURL = process.env.INBOUND_STG || '';
 
 const openaiClient = new OpenAI({
   apiKey: openAIKey,
 });
 
-const customParams: IXpanderClientCustomParams = { organizationId };
-
 describe('Test OpenAI using xpander.ai', () => {
   it('get tools for openai provider', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -87,9 +83,8 @@ describe('Test OpenAI using xpander.ai', () => {
   it('get tools for openai provider + invoke tool (one tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -157,9 +152,8 @@ describe('Test OpenAI using xpander.ai', () => {
   it('get tools for openai provider + invoke tool (multi step)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -232,9 +226,8 @@ describe('Test OpenAI using xpander.ai', () => {
   it('get tools for openai provider + invoke tool (local tool tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
