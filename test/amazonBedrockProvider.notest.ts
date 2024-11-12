@@ -9,17 +9,16 @@ import {
   ILocalTool,
   ToolCallType,
   XpanderClient,
-  IXpanderClientCustomParams,
 } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const xpanderAgentID = process.env.XPANDER_AGENT_ID || '';
-const organizationId = process.env.ORGANIZATION_ID || ''; // only when working with agents service locally!
 const bedrockAWSRegionName = process.env.BEDROCK_AWS_REGION_NAME || '';
 const bedrockAWSAccessKeyId = process.env.BEDROCK_AWS_ACCESS_KEY_ID || '';
 const bedrockAWSSecretAccessKey =
   process.env.BEDROCK_AWS_SECRET_ACCESS_KEY || '';
+const inboundStgURL = process.env.INBOUND_STG || '';
 
 const bedrockClient = new BedrockRuntimeClient({
   region: bedrockAWSRegionName,
@@ -29,15 +28,12 @@ const bedrockClient = new BedrockRuntimeClient({
   },
 });
 
-const customParams: IXpanderClientCustomParams = { organizationId };
-
 describe('Test Amazon Bedrock using xpander.ai', () => {
   it('get tools for bedrock provider', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -83,9 +79,8 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
   it('get tools for bedrock provider + invoke tool (one tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -162,9 +157,8 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
   it('get tools for bedrock provider + invoke tool (multi step)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
@@ -250,9 +244,8 @@ describe('Test Amazon Bedrock using xpander.ai', () => {
   it('get tools for bedrock provider + invoke tool (local tool tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      null,
+      inboundStgURL,
       false,
-      customParams,
     );
     const agent = xpanderClient.agents.get(xpanderAgentID);
     expect(agent).toHaveProperty('id');
