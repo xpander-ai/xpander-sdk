@@ -1,13 +1,13 @@
 import request, { HttpVerb } from 'sync-request';
 import {
   ITool,
-  IToolCall,
   IToolCallPayload,
   IToolExecutionResult,
   IToolInstructions,
   ToolCallType,
 } from '../types';
 import { Configuration } from './Configuration';
+import { ToolCall } from './toolCalls';
 import { convertKeysToSnakeCase } from './utils';
 import { LOCAL_TOOL_PREFIX } from '../constants/tools';
 import { CUSTOM_AGENT_ID } from '../constants/xpanderClient';
@@ -55,7 +55,7 @@ export function createTool(toolInstructions: IToolInstructions): any {
  * @throws Error if the response status code indicates failure.
  */
 export function executeTool(
-  tool: IToolCall,
+  tool: ToolCall,
   agentUrl: string,
   configuration: Configuration,
   sourceNodeType: SourceNodeType,

@@ -173,52 +173,6 @@ export enum ToolCallType {
   LOCAL = 'local',
 }
 
-/**
- * Interface representing a tool call.
- */
-export interface IToolCall {
-  /** The name of the tool being called. */
-  name: string;
-
-  /** The type of the tool call (e.g., xpander, local). */
-  type: ToolCallType;
-
-  /** Payload data for the tool call. */
-  payload: IToolCallPayload;
-
-  /** Unique identifier for the tool call. */
-  toolCallId: string;
-
-  /** Flag indicating if the tool call is part of a prompt group. */
-  isPg: boolean;
-}
-
-/**
- * Interface representing the result of a tool call.
- */
-export interface IToolCallResult {
-  /** Name of the function called in the tool. */
-  functionName: string;
-
-  /** Payload data used in the tool call. */
-  payload: IToolCallPayload;
-
-  /** Status code returned from the tool call, if available. */
-  statusCode?: number;
-
-  /** Result of the tool call, if successful. */
-  result?: any;
-
-  /** Success flag indicating if the tool call was successful. */
-  isSuccess?: boolean;
-
-  /** Error flag indicating if there was an error with the tool call. */
-  isError?: boolean;
-
-  /** Unique identifier for the tool call. */
-  toolCallId: string;
-}
-
 export interface IToolExecutionResult {
   statusCode: number;
   data: any;

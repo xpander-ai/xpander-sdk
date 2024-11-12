@@ -127,15 +127,41 @@ Whether the agent should automatically load its resources.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#xpander-sdk.Agent.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.toJson">toJson</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with the specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
 | <code><a href="#xpander-sdk.Agent.selectPromptGroup">selectPromptGroup</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
 
 ---
+
+##### `from` <a name="from" id="xpander-sdk.Agent.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Agent.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Agent.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.Agent.toJson"></a>
+
+```typescript
+public toJson(): string
+```
 
 ##### `addLocalTools` <a name="addLocalTools" id="xpander-sdk.Agent.addLocalTools"></a>
 
@@ -194,14 +220,14 @@ The type of source node to load.
 ##### `runTool` <a name="runTool" id="xpander-sdk.Agent.runTool"></a>
 
 ```typescript
-public runTool(tool: IToolCall, payloadExtension?: any): IToolCallResult
+public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult
 ```
 
 Executes a single tool call and returns the result.
 
 ###### `tool`<sup>Required</sup> <a name="tool" id="xpander-sdk.Agent.runTool.parameter.tool"></a>
 
-- *Type:* <a href="#xpander-sdk.IToolCall">IToolCall</a>
+- *Type:* <a href="#xpander-sdk.ToolCall">ToolCall</a>
 
 The tool call to execute.
 
@@ -216,14 +242,14 @@ The tool call to execute.
 ##### `runTools` <a name="runTools" id="xpander-sdk.Agent.runTools"></a>
 
 ```typescript
-public runTools(toolCalls: IToolCall[], payloadExtension?: any): IToolCallResult[]
+public runTools(toolCalls: ToolCall[], payloadExtension?: any): ToolCallResult[]
 ```
 
 Executes multiple tool calls sequentially and returns their results.
 
 ###### `toolCalls`<sup>Required</sup> <a name="toolCalls" id="xpander-sdk.Agent.runTools.parameter.toolCalls"></a>
 
-- *Type:* <a href="#xpander-sdk.IToolCall">IToolCall</a>[]
+- *Type:* <a href="#xpander-sdk.ToolCall">ToolCall</a>[]
 
 The list of tool calls to execute.
 
@@ -247,12 +273,27 @@ public selectPromptGroup(promptGroupName: string): void
 
 ---
 
-##### `toDict` <a name="toDict" id="xpander-sdk.Agent.toDict"></a>
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Agent.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.Agent.fromObject"></a>
 
 ```typescript
-public toDict(): {[ key: string ]: any}
+import { Agent } from 'xpander-sdk'
+
+Agent.fromObject(data: any)
 ```
 
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Agent.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -766,6 +807,79 @@ Mistral Small 2402 model.
 
 ---
 
+### Base <a name="Base" id="xpander-sdk.Base"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.Base.Initializer"></a>
+
+```typescript
+import { Base } from 'xpander-sdk'
+
+new Base()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Base.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Base.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Base.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.Base.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Base.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Base.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.Base.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Base.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.Base.fromObject"></a>
+
+```typescript
+import { Base } from 'xpander-sdk'
+
+Base.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Base.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+
+
 ### Configuration <a name="Configuration" id="xpander-sdk.Configuration"></a>
 
 Manages the configuration settings for the xpanderAI client, including API key, base URL, metrics reporting, and custom parameters.
@@ -794,7 +908,21 @@ new Configuration(__0: IConfiguration)
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#xpander-sdk.Configuration.from">from</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Configuration.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Configuration.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.Configuration.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Configuration.from.parameter.data"></a>
+
+- *Type:* object
 
 ---
 
@@ -804,6 +932,33 @@ new Configuration(__0: IConfiguration)
 public toDict(): {[ key: string ]: any}
 ```
 
+##### `toJson` <a name="toJson" id="xpander-sdk.Configuration.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Configuration.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.Configuration.fromObject"></a>
+
+```typescript
+import { Configuration } from 'xpander-sdk'
+
+Configuration.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Configuration.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -1123,7 +1278,7 @@ Resets all active prompt group sessions.
 ##### `startPgSession` <a name="startPgSession" id="xpander-sdk.PromptGroupSessionsList.startPgSession"></a>
 
 ```typescript
-public startPgSession(tool: IToolCall): string
+public startPgSession(tool: ToolCall): string
 ```
 
 Starts a new session for a specified tool call, associating it with a prompt group.
@@ -1132,7 +1287,7 @@ If the prompt group or graph cannot be matched, an error is thrown.
 
 ###### `tool`<sup>Required</sup> <a name="tool" id="xpander-sdk.PromptGroupSessionsList.startPgSession.parameter.tool"></a>
 
-- *Type:* <a href="#xpander-sdk.IToolCall">IToolCall</a>
+- *Type:* <a href="#xpander-sdk.ToolCall">ToolCall</a>
 
 The tool call used to start the prompt group session.
 
@@ -1169,6 +1324,380 @@ public readonly pgOas: IAgentTool[];
 - *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
 
 Array of agent tools specific to prompt groups.
+
+---
+
+
+### ToolCall <a name="ToolCall" id="xpander-sdk.ToolCall"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.ToolCall.Initializer"></a>
+
+```typescript
+import { ToolCall } from 'xpander-sdk'
+
+new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: string, isPg?: boolean)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.type">type</a></code> | <code><a href="#xpander-sdk.ToolCallType">ToolCallType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.payload">payload</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.isPg">isPg</a></code> | <code>boolean</code> | *No description.* |
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="xpander-sdk.ToolCall.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+##### `type`<sup>Optional</sup> <a name="type" id="xpander-sdk.ToolCall.Initializer.parameter.type"></a>
+
+- *Type:* <a href="#xpander-sdk.ToolCallType">ToolCallType</a>
+
+---
+
+##### `payload`<sup>Optional</sup> <a name="payload" id="xpander-sdk.ToolCall.Initializer.parameter.payload"></a>
+
+- *Type:* any
+
+---
+
+##### `toolCallId`<sup>Optional</sup> <a name="toolCallId" id="xpander-sdk.ToolCall.Initializer.parameter.toolCallId"></a>
+
+- *Type:* string
+
+---
+
+##### `isPg`<sup>Optional</sup> <a name="isPg" id="xpander-sdk.ToolCall.Initializer.parameter.isPg"></a>
+
+- *Type:* boolean
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ToolCall.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.ToolCall.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.ToolCall.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.ToolCall.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.ToolCall.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ToolCall.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.ToolCall.fromObject"></a>
+
+```typescript
+import { ToolCall } from 'xpander-sdk'
+
+ToolCall.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.ToolCall.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ToolCall.property.isPg">isPg</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.property.payload">payload</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.property.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.property.type">type</a></code> | <code><a href="#xpander-sdk.ToolCallType">ToolCallType</a></code> | *No description.* |
+
+---
+
+##### `isPg`<sup>Required</sup> <a name="isPg" id="xpander-sdk.ToolCall.property.isPg"></a>
+
+```typescript
+public readonly isPg: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ToolCall.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.ToolCall.property.payload"></a>
+
+```typescript
+public readonly payload: any;
+```
+
+- *Type:* any
+
+---
+
+##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.ToolCall.property.toolCallId"></a>
+
+```typescript
+public readonly toolCallId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.ToolCall.property.type"></a>
+
+```typescript
+public readonly type: ToolCallType;
+```
+
+- *Type:* <a href="#xpander-sdk.ToolCallType">ToolCallType</a>
+
+---
+
+
+### ToolCallResult <a name="ToolCallResult" id="xpander-sdk.ToolCallResult"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.ToolCallResult.Initializer"></a>
+
+```typescript
+import { ToolCallResult } from 'xpander-sdk'
+
+new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, statusCode?: number, result?: any, isSuccess?: boolean, isError?: boolean)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.functionName">functionName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.payload">payload</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.statusCode">statusCode</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.result">result</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.isError">isError</a></code> | <code>boolean</code> | *No description.* |
+
+---
+
+##### `functionName`<sup>Optional</sup> <a name="functionName" id="xpander-sdk.ToolCallResult.Initializer.parameter.functionName"></a>
+
+- *Type:* string
+
+---
+
+##### `toolCallId`<sup>Optional</sup> <a name="toolCallId" id="xpander-sdk.ToolCallResult.Initializer.parameter.toolCallId"></a>
+
+- *Type:* string
+
+---
+
+##### `payload`<sup>Optional</sup> <a name="payload" id="xpander-sdk.ToolCallResult.Initializer.parameter.payload"></a>
+
+- *Type:* any
+
+---
+
+##### `statusCode`<sup>Optional</sup> <a name="statusCode" id="xpander-sdk.ToolCallResult.Initializer.parameter.statusCode"></a>
+
+- *Type:* number
+
+---
+
+##### `result`<sup>Optional</sup> <a name="result" id="xpander-sdk.ToolCallResult.Initializer.parameter.result"></a>
+
+- *Type:* any
+
+---
+
+##### `isSuccess`<sup>Optional</sup> <a name="isSuccess" id="xpander-sdk.ToolCallResult.Initializer.parameter.isSuccess"></a>
+
+- *Type:* boolean
+
+---
+
+##### `isError`<sup>Optional</sup> <a name="isError" id="xpander-sdk.ToolCallResult.Initializer.parameter.isError"></a>
+
+- *Type:* boolean
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ToolCallResult.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.ToolCallResult.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.ToolCallResult.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.ToolCallResult.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.ToolCallResult.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ToolCallResult.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.ToolCallResult.fromObject"></a>
+
+```typescript
+import { ToolCallResult } from 'xpander-sdk'
+
+ToolCallResult.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.ToolCallResult.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ToolCallResult.property.functionName">functionName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.property.isError">isError</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.property.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.property.payload">payload</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.property.result">result</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.property.statusCode">statusCode</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.property.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="xpander-sdk.ToolCallResult.property.functionName"></a>
+
+```typescript
+public readonly functionName: string;
+```
+
+- *Type:* string
+
+---
+
+##### `isError`<sup>Required</sup> <a name="isError" id="xpander-sdk.ToolCallResult.property.isError"></a>
+
+```typescript
+public readonly isError: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `isSuccess`<sup>Required</sup> <a name="isSuccess" id="xpander-sdk.ToolCallResult.property.isSuccess"></a>
+
+```typescript
+public readonly isSuccess: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.ToolCallResult.property.payload"></a>
+
+```typescript
+public readonly payload: any;
+```
+
+- *Type:* any
+
+---
+
+##### `result`<sup>Required</sup> <a name="result" id="xpander-sdk.ToolCallResult.property.result"></a>
+
+```typescript
+public readonly result: any;
+```
+
+- *Type:* any
+
+---
+
+##### `statusCode`<sup>Required</sup> <a name="statusCode" id="xpander-sdk.ToolCallResult.property.statusCode"></a>
+
+```typescript
+public readonly statusCode: number;
+```
+
+- *Type:* number
+
+---
+
+##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.ToolCallResult.property.toolCallId"></a>
+
+```typescript
+public readonly toolCallId: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -1218,7 +1747,8 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, cu
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
@@ -1229,7 +1759,9 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, cu
 ##### `extractToolCalls` <a name="extractToolCalls" id="xpander-sdk.XpanderClient.extractToolCalls"></a>
 
 ```typescript
-public extractToolCalls(llmResponse: any, llmProvider?: LLMProvider): IToolCall[]
+import { XpanderClient } from 'xpander-sdk'
+
+XpanderClient.extractToolCalls(llmResponse: any, llmProvider?: LLMProvider)
 ```
 
 Extracts tool calls from an LLM response based on the specified LLM provider.
@@ -1249,7 +1781,6 @@ The LLM response to analyze for tool calls.
 The LLM provider, defaults to OPEN_AI.
 
 ---
-
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -2136,85 +2667,6 @@ Parameters required by the tool.
 
 ---
 
-### IToolCall <a name="IToolCall" id="xpander-sdk.IToolCall"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IToolCall">IToolCall</a>
-
-Interface representing a tool call.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolCall.property.isPg">isPg</a></code> | <code>boolean</code> | Flag indicating if the tool call is part of a prompt group. |
-| <code><a href="#xpander-sdk.IToolCall.property.name">name</a></code> | <code>string</code> | The name of the tool being called. |
-| <code><a href="#xpander-sdk.IToolCall.property.payload">payload</a></code> | <code><a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a></code> | Payload data for the tool call. |
-| <code><a href="#xpander-sdk.IToolCall.property.toolCallId">toolCallId</a></code> | <code>string</code> | Unique identifier for the tool call. |
-| <code><a href="#xpander-sdk.IToolCall.property.type">type</a></code> | <code><a href="#xpander-sdk.ToolCallType">ToolCallType</a></code> | The type of the tool call (e.g., xpander, local). |
-
----
-
-##### `isPg`<sup>Required</sup> <a name="isPg" id="xpander-sdk.IToolCall.property.isPg"></a>
-
-```typescript
-public readonly isPg: boolean;
-```
-
-- *Type:* boolean
-
-Flag indicating if the tool call is part of a prompt group.
-
----
-
-##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IToolCall.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
-The name of the tool being called.
-
----
-
-##### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.IToolCall.property.payload"></a>
-
-```typescript
-public readonly payload: IToolCallPayload;
-```
-
-- *Type:* <a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a>
-
-Payload data for the tool call.
-
----
-
-##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.IToolCall.property.toolCallId"></a>
-
-```typescript
-public readonly toolCallId: string;
-```
-
-- *Type:* string
-
-Unique identifier for the tool call.
-
----
-
-##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.IToolCall.property.type"></a>
-
-```typescript
-public readonly type: ToolCallType;
-```
-
-- *Type:* <a href="#xpander-sdk.ToolCallType">ToolCallType</a>
-
-The type of the tool call (e.g., xpander, local).
-
----
-
 ### IToolCallPayload <a name="IToolCallPayload" id="xpander-sdk.IToolCallPayload"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a>
@@ -2278,111 +2730,6 @@ public readonly queryParams: {[ key: string ]: any};
 - *Type:* {[ key: string ]: any}
 
 Parameters for the URL query string.
-
----
-
-### IToolCallResult <a name="IToolCallResult" id="xpander-sdk.IToolCallResult"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IToolCallResult">IToolCallResult</a>
-
-Interface representing the result of a tool call.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolCallResult.property.functionName">functionName</a></code> | <code>string</code> | Name of the function called in the tool. |
-| <code><a href="#xpander-sdk.IToolCallResult.property.payload">payload</a></code> | <code><a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a></code> | Payload data used in the tool call. |
-| <code><a href="#xpander-sdk.IToolCallResult.property.toolCallId">toolCallId</a></code> | <code>string</code> | Unique identifier for the tool call. |
-| <code><a href="#xpander-sdk.IToolCallResult.property.isError">isError</a></code> | <code>boolean</code> | Error flag indicating if there was an error with the tool call. |
-| <code><a href="#xpander-sdk.IToolCallResult.property.isSuccess">isSuccess</a></code> | <code>boolean</code> | Success flag indicating if the tool call was successful. |
-| <code><a href="#xpander-sdk.IToolCallResult.property.result">result</a></code> | <code>any</code> | Result of the tool call, if successful. |
-| <code><a href="#xpander-sdk.IToolCallResult.property.statusCode">statusCode</a></code> | <code>number</code> | Status code returned from the tool call, if available. |
-
----
-
-##### `functionName`<sup>Required</sup> <a name="functionName" id="xpander-sdk.IToolCallResult.property.functionName"></a>
-
-```typescript
-public readonly functionName: string;
-```
-
-- *Type:* string
-
-Name of the function called in the tool.
-
----
-
-##### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.IToolCallResult.property.payload"></a>
-
-```typescript
-public readonly payload: IToolCallPayload;
-```
-
-- *Type:* <a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a>
-
-Payload data used in the tool call.
-
----
-
-##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.IToolCallResult.property.toolCallId"></a>
-
-```typescript
-public readonly toolCallId: string;
-```
-
-- *Type:* string
-
-Unique identifier for the tool call.
-
----
-
-##### `isError`<sup>Optional</sup> <a name="isError" id="xpander-sdk.IToolCallResult.property.isError"></a>
-
-```typescript
-public readonly isError: boolean;
-```
-
-- *Type:* boolean
-
-Error flag indicating if there was an error with the tool call.
-
----
-
-##### `isSuccess`<sup>Optional</sup> <a name="isSuccess" id="xpander-sdk.IToolCallResult.property.isSuccess"></a>
-
-```typescript
-public readonly isSuccess: boolean;
-```
-
-- *Type:* boolean
-
-Success flag indicating if the tool call was successful.
-
----
-
-##### `result`<sup>Optional</sup> <a name="result" id="xpander-sdk.IToolCallResult.property.result"></a>
-
-```typescript
-public readonly result: any;
-```
-
-- *Type:* any
-
-Result of the tool call, if successful.
-
----
-
-##### `statusCode`<sup>Optional</sup> <a name="statusCode" id="xpander-sdk.IToolCallResult.property.statusCode"></a>
-
-```typescript
-public readonly statusCode: number;
-```
-
-- *Type:* number
-
-Status code returned from the tool call, if available.
 
 ---
 
