@@ -1,103 +1,103 @@
 import dotenv from 'dotenv';
-import { IOpenAIToolOutput, LLMProvider, XpanderClient } from '../src';
+import { XpanderClient, IXpanderClientCustomParams, LLMProvider } from '../src';
+import {
+  CUSTOM_AGENT_ID,
+  DEFAULT_BASE_URL,
+} from '../src/constants/xpanderClient';
+import { SourceNodeType } from '../src/types/agents';
 
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const agentUrl = process.env.XPANDER_AGENT_URL || '';
-const chatAgentID = process.env.CHAT_AGENT_ID || '';
-const agentsURL = process.env.AGENTS_URL || '';
-const chatAgentKey = process.env.CHAT_AGENT_API_KEY || '';
+const xpanderAgentID = process.env.XPANDER_AGENT_ID || '';
+const agentsServiceURL = process.env.AGENT_SERVICE_URL || '';
+const organizationId = process.env.ORGANIZATION_ID || ''; // only when working with agents service locally!
 
-describe.only('Test XPander Client', () => {
-  it('tools are not empty', () => {
+const customParams: IXpanderClientCustomParams = { organizationId };
+
+describe('Test XPander Client', () => {
+  it('client initiated', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      agentUrl,
-      LLMProvider.OPEN_AI,
+      null,
+      false,
+      customParams,
     );
-    const tools: IOpenAIToolOutput[] =
-      xpanderClient.tools() as IOpenAIToolOutput[];
-    expect(tools).toBeInstanceOf(Array);
-    expect(tools).not.toHaveLength(0);
+    expect(xpanderClient.configuration.apiKey).toEqual(xpanderAPIKey);
+    expect(xpanderClient.configuration.baseUrl).toEqual(DEFAULT_BASE_URL);
   });
-  // TODO STOPPED HERE WHILE TESTING ALLLLLLL SCENARIOS
 
-  it('allow tools by constructor', () => {
-    const _tools = [
-      {
-        type: 'function',
-        function: {
-          name: 'XpanderAI-yaml-to-csv-excel-convertYamlToExcelOrCsv',
-          description:
-            "Converts YAML to Excel or CSV format. If yaml_content isn't provided, run extractMediaPlansFromFile before anything else to get YAML data. Use 4 data transformation, creating spreadsheets from YAML, or preparing data 4 analysis in Excel or CSV format. IMPORTANT! make sure to use body_params, query_params, path_params. these are crucial for ensuring function calling works!",
-          parameters: {
-            type: 'object',
-            properties: {
-              query_params: { type: 'object', properties: {}, required: [] },
-              path_params: { type: 'object', properties: {}, required: [] },
-              body_params: {
-                type: 'object',
-                properties: {
-                  file_name: {
-                    type: 'string',
-                    description: 'File name - NO extension.',
-                  },
-                  is_csv: {
-                    type: 'boolean',
-                    description:
-                      'Mark `true` for YAML to CSV conversion, `false` for YAML to Excel conversion.',
-                  },
-                  yaml_content: {
-                    type: 'string',
-                    description: 'YAML content to convert.',
-                  },
-                },
-                required: [],
-              },
-            },
-            required: ['query_params', 'path_params', 'body_params'],
-          },
-        },
-      },
-    ];
+  it('client initiated - different base url', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
-      agentUrl,
-      LLMProvider.OPEN_AI,
-      undefined,
-      _tools,
+      agentsServiceURL,
+      false,
+      customParams,
     );
-    const tools: IOpenAIToolOutput[] =
-      xpanderClient.tools() as IOpenAIToolOutput[];
-    expect(tools).toBeInstanceOf(Array);
-    expect(tools).not.toHaveLength(0);
+    expect(xpanderClient.configuration.apiKey).toEqual(xpanderAPIKey);
+    expect(xpanderClient.configuration.baseUrl).toEqual(agentsServiceURL);
   });
 
-  it('allow custom params by constructor', () => {
-    const chatParams = {
-      // those are hardcoded for test purpose and would need to change in case these ids change.
-      organizationId: '6f3a8d1a-00e4-4ae7-bb1f-907b8704d4e2',
+  it('get agent list', () => {
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
+    const agents = xpanderClient.agents.list();
+    expect(agents.length).toBeGreaterThan(0);
+  });
+
+  it('get agent by id', () => {
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
+    const agent = xpanderClient.agents.get(xpanderAgentID);
+    expect(agent).toHaveProperty('id');
+    expect(agent.organizationId.length).toBeGreaterThan(10);
+    expect(agent.tools.length).toBeGreaterThanOrEqual(1);
+    expect(agent.pgOas.length).toBeGreaterThanOrEqual(1);
+    expect(agent.graphs.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it.only("get all the agent's tools by agent id", () => {
+    const xpanderClient = new XpanderClient(
+      xpanderAPIKey,
+      null,
+      false,
+      customParams,
+    );
+    const agent = xpanderClient.agents.get(xpanderAgentID);
+    expect(agent).toHaveProperty('id');
+    expect(agent.organizationId.length).toBeGreaterThan(10);
+    expect(agent.tools.length).toBeGreaterThanOrEqual(1);
+    expect(agent.pgOas.length).toBeGreaterThanOrEqual(1);
+    expect(agent.graphs.length).toBeGreaterThanOrEqual(1);
+    expect(
+      agent.getTools(LLMProvider.OPEN_AI, true).length,
+    ).toBeGreaterThanOrEqual(1);
+  });
+
+  it('get custom agent - for chat i.e', () => {
+    const xpanderClient = new XpanderClient(xpanderAPIKey, '', false, {
+      ...customParams,
       connectors: [
         {
-          id: '0cf2a84a-b9e8-4c72-aa43-4b39ecf0cd70',
-          operationIds: ['66cdb21ac2d9da6b42de0b0f'],
+          id: '178c1d77-58c0-457a-8ed5-acd614b8bfd1',
+          operation_ids: [
+            '66c1d2c986be0770d862eed4',
+            '66c1d2c986be0770d862eee2',
+          ],
         },
       ],
-    };
-
-    const xpanderClient = new XpanderClient(
-      chatAgentKey,
-      agentsURL + '/' + chatAgentID,
-      LLMProvider.OPEN_AI,
-      undefined,
-      undefined,
-      chatParams,
-    );
-
-    const tools = xpanderClient.tools();
-    expect(tools).toBeInstanceOf(Array);
-    expect(tools).not.toHaveLength(0);
-    console.log(tools);
+    });
+    const agent = xpanderClient.agents.getCustomAgent(SourceNodeType.SDK);
+    expect(agent.id).toEqual(CUSTOM_AGENT_ID);
+    expect(agent.organizationId.length).toBeGreaterThan(10);
+    expect(agent.tools.length).toEqual(2);
   });
 });

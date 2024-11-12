@@ -1,9 +1,12 @@
-import { ChatOpenAI } from '@langchain/openai';
+import {
+  BedrockRuntimeClient,
+  ConverseCommand,
+} from '@aws-sdk/client-bedrock-runtime';
 import dotenv from 'dotenv';
 import {
+  AmazonBedrockSupportedModels,
   LLMProvider,
   ILocalTool,
-  OpenAISupportedModels,
   ToolCallType,
   XpanderClient,
   IXpanderClientCustomParams,
@@ -13,18 +16,23 @@ dotenv.config({ path: __dirname + '/.env' });
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const xpanderAgentID = process.env.XPANDER_AGENT_ID || '';
 const organizationId = process.env.ORGANIZATION_ID || ''; // only when working with agents service locally!
-const openAIKey = process.env.OPENAI_API_KEY || '';
+const bedrockAWSRegionName = process.env.BEDROCK_AWS_REGION_NAME || '';
+const bedrockAWSAccessKeyId = process.env.BEDROCK_AWS_ACCESS_KEY_ID || '';
+const bedrockAWSSecretAccessKey =
+  process.env.BEDROCK_AWS_SECRET_ACCESS_KEY || '';
 
-const llmClient = new ChatOpenAI({
-  model: OpenAISupportedModels.GPT_4_O,
-  temperature: 0,
-  apiKey: openAIKey,
+const bedrockClient = new BedrockRuntimeClient({
+  region: bedrockAWSRegionName,
+  credentials: {
+    accessKeyId: bedrockAWSAccessKeyId,
+    secretAccessKey: bedrockAWSSecretAccessKey,
+  },
 });
 
 const customParams: IXpanderClientCustomParams = { organizationId };
 
-describe('Test LangChain using xpander.ai', () => {
-  it('get tools for langchain provider', async () => {
+describe('Test Amazon Bedrock using xpander.ai', () => {
+  it('get tools for bedrock provider', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       null,
@@ -35,25 +43,33 @@ describe('Test LangChain using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const tools = agent.getTools(LLMProvider.LANG_CHAIN);
+    const tools = agent.getTools(LLMProvider.AMAZON_BEDROCK);
     expect(tools.length).toBeGreaterThanOrEqual(1);
 
-    const messages = [
+    const messages: any[] = [
       {
         role: 'user',
-        content: 'get all tags',
+        content: [{ text: 'get all tags' }],
       },
     ];
-    const response: any = await llmClient.invoke(messages, {
-      tools,
+
+    const command = new ConverseCommand({
+      modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
+      messages,
+      inferenceConfig: { temperature: 0.0 },
+      toolConfig: { tools },
     });
 
-    expect(response.tool_calls.length).toBeGreaterThanOrEqual(1);
+    const response: any = await bedrockClient.send(command);
+    const toolUse = response?.output?.message?.content.find(
+      (msg: any) => !!msg.toolUse,
+    )?.toolUse;
+    expect(toolUse).toHaveProperty('name');
 
     // extract tools
     const toolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.LANG_CHAIN,
+      LLMProvider.AMAZON_BEDROCK,
     );
 
     expect(toolCalls.length).toBeGreaterThanOrEqual(1);
@@ -64,7 +80,7 @@ describe('Test LangChain using xpander.ai', () => {
     expect(toolCallsResults[0].isSuccess).toBeTruthy();
   }, 12000);
 
-  it('get tools for langchain provider + invoke tool (one tool)', async () => {
+  it('get tools for bedrock provider + invoke tool (one tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       null,
@@ -75,32 +91,36 @@ describe('Test LangChain using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const pgTools = agent.getTools(LLMProvider.LANG_CHAIN);
+    const pgTools = agent.getTools(LLMProvider.AMAZON_BEDROCK);
     expect(pgTools.length).toBeGreaterThanOrEqual(1);
 
-    // run completion
-    const messages = [
+    const messages: any[] = [
       {
         role: 'user',
-        content: 'get all tags',
+        content: [{ text: 'get all tags' }],
       },
     ];
-    const response: any = await llmClient.invoke(messages, {
-      tools: pgTools,
+
+    const command = new ConverseCommand({
+      modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
+      messages,
+      inferenceConfig: { temperature: 0.0 },
+      toolConfig: { tools: pgTools },
     });
 
-    const toolCall = response?.tool_calls?.[0];
-    expect(toolCall).not.toBe(null);
-    const pgMatched = pgTools.find(
-      (pg: any) => pg.function.name === toolCall.name,
-    );
-    expect(pgMatched).not.toBe(null);
+    const response: any = await bedrockClient.send(command);
 
     // extract tools
     const xpanderToolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.LANG_CHAIN,
+      LLMProvider.AMAZON_BEDROCK,
     );
+
+    expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
+    const pgMatched = pgTools.find(
+      (pg: any) => pg.toolSpec.name === xpanderToolCalls[0].name,
+    );
+    expect(pgMatched).not.toBe(null);
 
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
 
@@ -116,13 +136,18 @@ describe('Test LangChain using xpander.ai', () => {
     );
 
     // now get tags for real using tool and not pg selection
-    const completionResult: any = await llmClient.invoke(messages, {
-      tools: agent.getTools(LLMProvider.LANG_CHAIN),
+    const command2 = new ConverseCommand({
+      modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
+      messages,
+      inferenceConfig: { temperature: 0.0 },
+      toolConfig: { tools: agent.getTools(LLMProvider.AMAZON_BEDROCK) },
     });
 
+    const response2: any = await bedrockClient.send(command2);
+
     const realToolCalls = xpanderClient.extractToolCalls(
-      completionResult,
-      LLMProvider.LANG_CHAIN,
+      response2,
+      LLMProvider.AMAZON_BEDROCK,
     );
 
     const realInvocationResults = agent.runTools(realToolCalls);
@@ -134,7 +159,7 @@ describe('Test LangChain using xpander.ai', () => {
     );
   }, 20000);
 
-  it('get tools for langchain provider + invoke tool (multi step)', async () => {
+  it('get tools for bedrock provider + invoke tool (multi step)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       null,
@@ -147,14 +172,12 @@ describe('Test LangChain using xpander.ai', () => {
 
     const messages: any = [
       {
-        role: 'assistant',
-        content:
-          'you are ai agent that runs in a loop, for every loop you may get different tools according to the graph position',
-      },
-      {
         role: 'user',
-        content:
-          'step 1: get all tags. step 2: get article (limit = 5) titles from my blog. step 3: enrich and get data about the 3 tags & 3 article titles from "Tavily" in a single query. when you are done with all the required steps - responde with "###FINAL_ANSWER###:" alongside the final answer.',
+        content: [
+          {
+            text: 'step 1: get all tags. step 2: get article (limit = 5) titles from my blog. step 3: enrich and get data about the 3 tags & 3 article titles from "Tavily" in a single query. when you are done with all the required steps - responde with "###FINAL_ANSWER###:" alongside the final answer.',
+          },
+        ],
       },
     ];
 
@@ -164,32 +187,44 @@ describe('Test LangChain using xpander.ai', () => {
     while (!isFinished) {
       // run completion
 
-      const response: any = await llmClient.invoke(messages, {
-        tools: agent.getTools(LLMProvider.LANG_CHAIN),
-        tool_choice: 'auto',
-        parallel_tool_calls: false,
+      const command = new ConverseCommand({
+        modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
+        messages,
+        inferenceConfig: { temperature: 0.0 },
+        toolConfig: { tools: agent.getTools(LLMProvider.AMAZON_BEDROCK) },
       });
 
-      isFinished = response?.content?.includes('###FINAL_ANSWER###');
+      const response: any = await bedrockClient.send(command);
+
+      const llmMessages = response?.output?.message?.content || [];
+      const textResponse = llmMessages
+        ?.filter((msg: any) => !!msg?.text)
+        ?.map((msg: any) => msg.text)
+        ?.join();
+
+      isFinished = textResponse?.includes('###FINAL_ANSWER###');
 
       // extract tools
       const toolCalls = xpanderClient.extractToolCalls(
         response,
-        LLMProvider.LANG_CHAIN,
+        LLMProvider.AMAZON_BEDROCK,
       );
       for (const toolCall of toolCalls) {
+        const content: any = [
+          {
+            toolUse: {
+              toolUseId: toolCall.toolCallId,
+              name: toolCall.name,
+              input: toolCall.payload,
+            },
+          },
+        ];
+        if (!!llmMessages?.[0]?.text) {
+          content.unshift({ text: llmMessages[0].text });
+        }
         messages.push({
           role: 'assistant',
-          tool_calls: [
-            {
-              id: toolCall.toolCallId,
-              function: {
-                arguments: JSON.stringify(toolCall.payload),
-                name: toolCall.name,
-              },
-              type: 'function',
-            },
-          ],
+          content,
         });
       }
 
@@ -197,17 +232,22 @@ describe('Test LangChain using xpander.ai', () => {
       const toolCallsResults = agent.runTools(toolCalls);
       for (const toolCallResult of toolCallsResults) {
         messages.push({
-          role: 'tool',
-          content: JSON.stringify(toolCallResult.result),
-          tool_call_id: toolCallResult.toolCallId,
-          node_name: toolCallResult.functionName,
+          role: 'user',
+          content: [
+            {
+              toolResult: {
+                toolUseId: toolCallResult.toolCallId,
+                content: [{ text: JSON.stringify(toolCallResult.result) }],
+              },
+            },
+          ],
         });
       }
     }
     expect(isFinished).toBeTruthy();
   }, 120000);
 
-  it('get tools for langchain provider + invoke tool (local tool tool)', async () => {
+  it('get tools for bedrock provider + invoke tool (local tool tool)', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       null,
@@ -218,10 +258,10 @@ describe('Test LangChain using xpander.ai', () => {
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
-    const messages = [
+    const messages: any = [
       {
         role: 'user',
-        content: 'Say hello to David',
+        content: [{ text: 'Say hello to David' }],
       },
     ];
 
@@ -229,7 +269,7 @@ describe('Test LangChain using xpander.ai', () => {
       {
         type: 'function',
         function: {
-          name: 'greet-by-name',
+          name: 'greet_by_name',
           description: 'Returns a greet to a user with name',
           parameters: {
             type: 'object',
@@ -248,14 +288,19 @@ describe('Test LangChain using xpander.ai', () => {
 
     agent.addLocalTools(localTools);
 
-    const response: any = await llmClient.invoke(messages, {
-      tools: agent.getTools(LLMProvider.LANG_CHAIN),
+    const command = new ConverseCommand({
+      modelId: AmazonBedrockSupportedModels.ANTHROPIC_CLAUDE_3_HAIKU_20240307,
+      messages,
+      inferenceConfig: { temperature: 0.0 },
+      toolConfig: { tools: agent.getTools(LLMProvider.AMAZON_BEDROCK) },
     });
+
+    const response: any = await bedrockClient.send(command);
 
     // extract tools
     const xpanderToolCalls = xpanderClient.extractToolCalls(
       response,
-      LLMProvider.LANG_CHAIN,
+      LLMProvider.AMAZON_BEDROCK,
     );
     expect(xpanderToolCalls.length).toBeGreaterThanOrEqual(1);
     expect(xpanderToolCalls[0].name).toEqual(localTools[0].function.name);

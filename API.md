@@ -4,7 +4,614 @@
 
 ## Classes <a name="Classes" id="Classes"></a>
 
+### Agent <a name="Agent" id="xpander-sdk.Agent"></a>
+
+Represents an agent in xpanderAI, managing the tools, sessions, and operations associated with the agent.
+
+This class enables loading agents, handling tool executions,
+and managing prompt group sessions.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.Agent.Initializer"></a>
+
+```typescript
+import { Agent } from 'xpander-sdk'
+
+new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.id">id</a></code> | <code>string</code> | Unique identifier for the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | Current status of the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | List of source nodes associated with the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | Whether prompt group switching is allowed for the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of tools available to the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Array of graph items related to the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.autoLoad">autoLoad</a></code> | <code>boolean</code> | Whether the agent should automatically load its resources. |
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.Agent.Initializer.parameter.configuration"></a>
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+Configuration settings for the agent.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.Agent.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+Unique identifier for the agent.
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.Agent.Initializer.parameter.organizationId"></a>
+
+- *Type:* string
+
+Organization ID to which the agent belongs.
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.Agent.Initializer.parameter.status"></a>
+
+- *Type:* <a href="#xpander-sdk.AgentStatus">AgentStatus</a>
+
+Current status of the agent.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.Agent.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+Human-readable name of the agent.
+
+---
+
+##### `sourceNodes`<sup>Required</sup> <a name="sourceNodes" id="xpander-sdk.Agent.Initializer.parameter.sourceNodes"></a>
+
+- *Type:* <a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]
+
+List of source nodes associated with the agent.
+
+---
+
+##### `pgSwitchAllowed`<sup>Optional</sup> <a name="pgSwitchAllowed" id="xpander-sdk.Agent.Initializer.parameter.pgSwitchAllowed"></a>
+
+- *Type:* boolean
+
+Whether prompt group switching is allowed for the agent.
+
+---
+
+##### `tools`<sup>Optional</sup> <a name="tools" id="xpander-sdk.Agent.Initializer.parameter.tools"></a>
+
+- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
+
+Array of tools available to the agent.
+
+---
+
+##### `graphs`<sup>Optional</sup> <a name="graphs" id="xpander-sdk.Agent.Initializer.parameter.graphs"></a>
+
+- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]
+
+Array of graph items related to the agent.
+
+---
+
+##### `pgOas`<sup>Optional</sup> <a name="pgOas" id="xpander-sdk.Agent.Initializer.parameter.pgOas"></a>
+
+- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
+
+Array of agent tools specific to prompt groups.
+
+---
+
+##### `autoLoad`<sup>Optional</sup> <a name="autoLoad" id="xpander-sdk.Agent.Initializer.parameter.autoLoad"></a>
+
+- *Type:* boolean
+
+Whether the agent should automatically load its resources.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
+| <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with the specified LLM provider. |
+| <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
+| <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
+| <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
+| <code><a href="#xpander-sdk.Agent.selectPromptGroup">selectPromptGroup</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
+
+---
+
+##### `addLocalTools` <a name="addLocalTools" id="xpander-sdk.Agent.addLocalTools"></a>
+
+```typescript
+public addLocalTools(tools: any[] | ILocalTool[]): void
+```
+
+Adds local tools to the agent with prefixed function names.
+
+###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.Agent.addLocalTools.parameter.tools"></a>
+
+- *Type:* any[] | <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
+
+The list of local tools to add.
+
+---
+
+##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
+
+```typescript
+public getTools(llmProvider?: LLMProvider, returnAllTools?: boolean): any[]
+```
+
+Retrieves tools compatible with the specified LLM provider.
+
+###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Agent.getTools.parameter.llmProvider"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+The LLM provider to filter tools by.
+
+---
+
+###### `returnAllTools`<sup>Optional</sup> <a name="returnAllTools" id="xpander-sdk.Agent.getTools.parameter.returnAllTools"></a>
+
+- *Type:* boolean
+
+---
+
+##### `load` <a name="load" id="xpander-sdk.Agent.load"></a>
+
+```typescript
+public load(sourceNodeType?: SourceNodeType): void
+```
+
+Loads the agent data from the specified source node type.
+
+###### `sourceNodeType`<sup>Optional</sup> <a name="sourceNodeType" id="xpander-sdk.Agent.load.parameter.sourceNodeType"></a>
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+The type of source node to load.
+
+---
+
+##### `runTool` <a name="runTool" id="xpander-sdk.Agent.runTool"></a>
+
+```typescript
+public runTool(tool: IToolCall, payloadExtension?: any): IToolCallResult
+```
+
+Executes a single tool call and returns the result.
+
+###### `tool`<sup>Required</sup> <a name="tool" id="xpander-sdk.Agent.runTool.parameter.tool"></a>
+
+- *Type:* <a href="#xpander-sdk.IToolCall">IToolCall</a>
+
+The tool call to execute.
+
+---
+
+###### `payloadExtension`<sup>Optional</sup> <a name="payloadExtension" id="xpander-sdk.Agent.runTool.parameter.payloadExtension"></a>
+
+- *Type:* any
+
+---
+
+##### `runTools` <a name="runTools" id="xpander-sdk.Agent.runTools"></a>
+
+```typescript
+public runTools(toolCalls: IToolCall[], payloadExtension?: any): IToolCallResult[]
+```
+
+Executes multiple tool calls sequentially and returns their results.
+
+###### `toolCalls`<sup>Required</sup> <a name="toolCalls" id="xpander-sdk.Agent.runTools.parameter.toolCalls"></a>
+
+- *Type:* <a href="#xpander-sdk.IToolCall">IToolCall</a>[]
+
+The list of tool calls to execute.
+
+---
+
+###### `payloadExtension`<sup>Optional</sup> <a name="payloadExtension" id="xpander-sdk.Agent.runTools.parameter.payloadExtension"></a>
+
+- *Type:* any
+
+---
+
+##### `selectPromptGroup` <a name="selectPromptGroup" id="xpander-sdk.Agent.selectPromptGroup"></a>
+
+```typescript
+public selectPromptGroup(promptGroupName: string): void
+```
+
+###### `promptGroupName`<sup>Required</sup> <a name="promptGroupName" id="xpander-sdk.Agent.selectPromptGroup.parameter.promptGroupName"></a>
+
+- *Type:* string
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Agent.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has any local tools loaded. |
+| <code><a href="#xpander-sdk.Agent.property.isCustom">isCustom</a></code> | <code>boolean</code> | Checks if the agent is a custom-defined agent. |
+| <code><a href="#xpander-sdk.Agent.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Retrieves the type of source node for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.url">url</a></code> | <code>string</code> | Constructs the API URL for this agent. |
+| <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Array of graph items related to the agent. |
+| <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | Unique identifier for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | Collection of local tools specific to this agent. |
+| <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
+| <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
+| <code><a href="#xpander-sdk.Agent.property.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
+| <code><a href="#xpander-sdk.Agent.property.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | Whether prompt group switching is allowed for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.promptGroupSessions">promptGroupSessions</a></code> | <code><a href="#xpander-sdk.PromptGroupSessionsList">PromptGroupSessionsList</a></code> | Manages prompt group sessions for this agent. |
+| <code><a href="#xpander-sdk.Agent.property.ready">ready</a></code> | <code>boolean</code> | Indicates whether the agent is ready with tools loaded. |
+| <code><a href="#xpander-sdk.Agent.property.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | List of source nodes associated with the agent. |
+| <code><a href="#xpander-sdk.Agent.property.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | Current status of the agent. |
+| <code><a href="#xpander-sdk.Agent.property.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of tools available to the agent. |
+
+---
+
+##### `hasLocalTools`<sup>Required</sup> <a name="hasLocalTools" id="xpander-sdk.Agent.property.hasLocalTools"></a>
+
+```typescript
+public readonly hasLocalTools: boolean;
+```
+
+- *Type:* boolean
+
+Checks if the agent has any local tools loaded.
+
+---
+
+##### `isCustom`<sup>Required</sup> <a name="isCustom" id="xpander-sdk.Agent.property.isCustom"></a>
+
+```typescript
+public readonly isCustom: boolean;
+```
+
+- *Type:* boolean
+
+Checks if the agent is a custom-defined agent.
+
+---
+
+##### `sourceNodeType`<sup>Required</sup> <a name="sourceNodeType" id="xpander-sdk.Agent.property.sourceNodeType"></a>
+
+```typescript
+public readonly sourceNodeType: SourceNodeType;
+```
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+Retrieves the type of source node for the agent.
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="xpander-sdk.Agent.property.url"></a>
+
+```typescript
+public readonly url: string;
+```
+
+- *Type:* string
+
+Constructs the API URL for this agent.
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.Agent.property.configuration"></a>
+
+```typescript
+public readonly configuration: Configuration;
+```
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+Configuration settings for the agent.
+
+---
+
+##### `graphs`<sup>Required</sup> <a name="graphs" id="xpander-sdk.Agent.property.graphs"></a>
+
+```typescript
+public readonly graphs: IGraphItem[];
+```
+
+- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]
+
+Array of graph items related to the agent.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.Agent.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+Unique identifier for the agent.
+
+---
+
+##### `localTools`<sup>Required</sup> <a name="localTools" id="xpander-sdk.Agent.property.localTools"></a>
+
+```typescript
+public readonly localTools: ILocalTool[];
+```
+
+- *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
+
+Collection of local tools specific to this agent.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.Agent.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+Human-readable name of the agent.
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.Agent.property.organizationId"></a>
+
+```typescript
+public readonly organizationId: string;
+```
+
+- *Type:* string
+
+Organization ID to which the agent belongs.
+
+---
+
+##### `pgOas`<sup>Required</sup> <a name="pgOas" id="xpander-sdk.Agent.property.pgOas"></a>
+
+```typescript
+public readonly pgOas: IAgentTool[];
+```
+
+- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
+
+Array of agent tools specific to prompt groups.
+
+---
+
+##### `pgSwitchAllowed`<sup>Required</sup> <a name="pgSwitchAllowed" id="xpander-sdk.Agent.property.pgSwitchAllowed"></a>
+
+```typescript
+public readonly pgSwitchAllowed: boolean;
+```
+
+- *Type:* boolean
+
+Whether prompt group switching is allowed for the agent.
+
+---
+
+##### `promptGroupSessions`<sup>Required</sup> <a name="promptGroupSessions" id="xpander-sdk.Agent.property.promptGroupSessions"></a>
+
+```typescript
+public readonly promptGroupSessions: PromptGroupSessionsList;
+```
+
+- *Type:* <a href="#xpander-sdk.PromptGroupSessionsList">PromptGroupSessionsList</a>
+
+Manages prompt group sessions for this agent.
+
+---
+
+##### `ready`<sup>Required</sup> <a name="ready" id="xpander-sdk.Agent.property.ready"></a>
+
+```typescript
+public readonly ready: boolean;
+```
+
+- *Type:* boolean
+
+Indicates whether the agent is ready with tools loaded.
+
+---
+
+##### `sourceNodes`<sup>Required</sup> <a name="sourceNodes" id="xpander-sdk.Agent.property.sourceNodes"></a>
+
+```typescript
+public readonly sourceNodes: ISourceNode[];
+```
+
+- *Type:* <a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]
+
+List of source nodes associated with the agent.
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.Agent.property.status"></a>
+
+```typescript
+public readonly status: AgentStatus;
+```
+
+- *Type:* <a href="#xpander-sdk.AgentStatus">AgentStatus</a>
+
+Current status of the agent.
+
+---
+
+##### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.Agent.property.tools"></a>
+
+```typescript
+public readonly tools: IAgentTool[];
+```
+
+- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
+
+Array of tools available to the agent.
+
+---
+
+
+### Agents <a name="Agents" id="xpander-sdk.Agents"></a>
+
+Manages a collection of Agent instances in xpanderAI, providing methods to list, retrieve, and initialize specific agents including custom agents.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.Agents.Initializer"></a>
+
+```typescript
+import { Agents } from 'xpander-sdk'
+
+new Agents(configuration: Configuration)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Agents.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | *No description.* |
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.Agents.Initializer.parameter.configuration"></a>
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Agents.get">get</a></code> | Retrieves an agent by ID and initializes it with the given source node type. |
+| <code><a href="#xpander-sdk.Agents.getCustomAgent">getCustomAgent</a></code> | Retrieves the custom agent instance, initializing it with the given source node type. |
+| <code><a href="#xpander-sdk.Agents.list">list</a></code> | Retrieves the list of agents. |
+
+---
+
+##### `get` <a name="get" id="xpander-sdk.Agents.get"></a>
+
+```typescript
+public get(agentId: string, sourceNodeType?: SourceNodeType): Agent
+```
+
+Retrieves an agent by ID and initializes it with the given source node type.
+
+###### `agentId`<sup>Required</sup> <a name="agentId" id="xpander-sdk.Agents.get.parameter.agentId"></a>
+
+- *Type:* string
+
+The ID of the agent to retrieve.
+
+---
+
+###### `sourceNodeType`<sup>Optional</sup> <a name="sourceNodeType" id="xpander-sdk.Agents.get.parameter.sourceNodeType"></a>
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+The source node type for the agent, default is SDK.
+
+---
+
+##### `getCustomAgent` <a name="getCustomAgent" id="xpander-sdk.Agents.getCustomAgent"></a>
+
+```typescript
+public getCustomAgent(sourceNodeType?: SourceNodeType): Agent
+```
+
+Retrieves the custom agent instance, initializing it with the given source node type.
+
+###### `sourceNodeType`<sup>Optional</sup> <a name="sourceNodeType" id="xpander-sdk.Agents.getCustomAgent.parameter.sourceNodeType"></a>
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+The source node type for the custom agent, default is SDK.
+
+---
+
+##### `list` <a name="list" id="xpander-sdk.Agents.list"></a>
+
+```typescript
+public list(refetch?: boolean): Agent[]
+```
+
+Retrieves the list of agents.
+
+If `refetch` is true, it re-fetches the list
+from the API even if agents are already loaded.
+
+###### `refetch`<sup>Optional</sup> <a name="refetch" id="xpander-sdk.Agents.list.parameter.refetch"></a>
+
+- *Type:* boolean
+
+If true, forces a re-fetch of the agent list from the API.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Agents.property.agentsList">agentsList</a></code> | <code><a href="#xpander-sdk.Agent">Agent</a>[]</code> | Collection of Agent instances managed by this class. |
+| <code><a href="#xpander-sdk.Agents.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | *No description.* |
+
+---
+
+##### `agentsList`<sup>Required</sup> <a name="agentsList" id="xpander-sdk.Agents.property.agentsList"></a>
+
+```typescript
+public readonly agentsList: Agent[];
+```
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>[]
+
+Collection of Agent instances managed by this class.
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.Agents.property.configuration"></a>
+
+```typescript
+public readonly configuration: Configuration;
+```
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+---
+
+
 ### AmazonBedrockSupportedModels <a name="AmazonBedrockSupportedModels" id="xpander-sdk.AmazonBedrockSupportedModels"></a>
+
+Contains constants representing various models supported by Amazon Bedrock.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.AmazonBedrockSupportedModels.Initializer"></a>
 
@@ -26,16 +633,16 @@ new AmazonBedrockSupportedModels()
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_5_SONNET_20240620">ANTHROPIC_CLAUDE_3_5_SONNET_20240620</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307">ANTHROPIC_CLAUDE_3_HAIKU_20240307</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R">COHERE_COMMAND_R</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS">COHERE_COMMAND_R_PLUS</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_405B_INSTRUCT">META_LLAMA3_1_405B_INSTRUCT</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT">META_LLAMA3_1_70B_INSTRUCT</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_8B_INSTRUCT">META_LLAMA3_1_8B_INSTRUCT</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402">MISTRAL_MISTRAL_LARGE_2402</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2407">MISTRAL_MISTRAL_LARGE_2407</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402">MISTRAL_MISTRAL_SMALL_2402</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_5_SONNET_20240620">ANTHROPIC_CLAUDE_3_5_SONNET_20240620</a></code> | <code>string</code> | Anthropocene Claude 3.5 Sonnet model (version 2024-06-20). |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307">ANTHROPIC_CLAUDE_3_HAIKU_20240307</a></code> | <code>string</code> | Anthropocene Claude 3 Haiku model (version 2024-03-07). |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R">COHERE_COMMAND_R</a></code> | <code>string</code> | Cohere Command R model. |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS">COHERE_COMMAND_R_PLUS</a></code> | <code>string</code> | Cohere Command R Plus model. |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_405B_INSTRUCT">META_LLAMA3_1_405B_INSTRUCT</a></code> | <code>string</code> | Meta Llama 3 1.405B Instruct model. |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT">META_LLAMA3_1_70B_INSTRUCT</a></code> | <code>string</code> | Meta Llama 3 1.70B Instruct model. |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_8B_INSTRUCT">META_LLAMA3_1_8B_INSTRUCT</a></code> | <code>string</code> | Meta Llama 3 1.8B Instruct model. |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402">MISTRAL_MISTRAL_LARGE_2402</a></code> | <code>string</code> | Mistral Large 2402 model. |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2407">MISTRAL_MISTRAL_LARGE_2407</a></code> | <code>string</code> | Mistral Large 2407 model. |
+| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402">MISTRAL_MISTRAL_SMALL_2402</a></code> | <code>string</code> | Mistral Small 2402 model. |
 
 ---
 
@@ -47,6 +654,8 @@ public readonly ANTHROPIC_CLAUDE_3_5_SONNET_20240620: string;
 
 - *Type:* string
 
+Anthropocene Claude 3.5 Sonnet model (version 2024-06-20).
+
 ---
 
 ##### `ANTHROPIC_CLAUDE_3_HAIKU_20240307`<sup>Required</sup> <a name="ANTHROPIC_CLAUDE_3_HAIKU_20240307" id="xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307"></a>
@@ -56,6 +665,8 @@ public readonly ANTHROPIC_CLAUDE_3_HAIKU_20240307: string;
 ```
 
 - *Type:* string
+
+Anthropocene Claude 3 Haiku model (version 2024-03-07).
 
 ---
 
@@ -67,6 +678,8 @@ public readonly COHERE_COMMAND_R: string;
 
 - *Type:* string
 
+Cohere Command R model.
+
 ---
 
 ##### `COHERE_COMMAND_R_PLUS`<sup>Required</sup> <a name="COHERE_COMMAND_R_PLUS" id="xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS"></a>
@@ -76,6 +689,8 @@ public readonly COHERE_COMMAND_R_PLUS: string;
 ```
 
 - *Type:* string
+
+Cohere Command R Plus model.
 
 ---
 
@@ -87,6 +702,8 @@ public readonly META_LLAMA3_1_405B_INSTRUCT: string;
 
 - *Type:* string
 
+Meta Llama 3 1.405B Instruct model.
+
 ---
 
 ##### `META_LLAMA3_1_70B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA3_1_70B_INSTRUCT" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT"></a>
@@ -96,6 +713,8 @@ public readonly META_LLAMA3_1_70B_INSTRUCT: string;
 ```
 
 - *Type:* string
+
+Meta Llama 3 1.70B Instruct model.
 
 ---
 
@@ -107,6 +726,8 @@ public readonly META_LLAMA3_1_8B_INSTRUCT: string;
 
 - *Type:* string
 
+Meta Llama 3 1.8B Instruct model.
+
 ---
 
 ##### `MISTRAL_MISTRAL_LARGE_2402`<sup>Required</sup> <a name="MISTRAL_MISTRAL_LARGE_2402" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402"></a>
@@ -116,6 +737,8 @@ public readonly MISTRAL_MISTRAL_LARGE_2402: string;
 ```
 
 - *Type:* string
+
+Mistral Large 2402 model.
 
 ---
 
@@ -127,6 +750,8 @@ public readonly MISTRAL_MISTRAL_LARGE_2407: string;
 
 - *Type:* string
 
+Mistral Large 2407 model.
+
 ---
 
 ##### `MISTRAL_MISTRAL_SMALL_2402`<sup>Required</sup> <a name="MISTRAL_MISTRAL_SMALL_2402" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402"></a>
@@ -137,9 +762,112 @@ public readonly MISTRAL_MISTRAL_SMALL_2402: string;
 
 - *Type:* string
 
+Mistral Small 2402 model.
+
 ---
 
+### Configuration <a name="Configuration" id="xpander-sdk.Configuration"></a>
+
+Manages the configuration settings for the xpanderAI client, including API key, base URL, metrics reporting, and custom parameters.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.Configuration.Initializer"></a>
+
+```typescript
+import { Configuration } from 'xpander-sdk'
+
+new Configuration(__0: IConfiguration)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Configuration.Initializer.parameter.__0">__0</a></code> | <code><a href="#xpander-sdk.IConfiguration">IConfiguration</a></code> | *No description.* |
+
+---
+
+##### `__0`<sup>Required</sup> <a name="__0" id="xpander-sdk.Configuration.Initializer.parameter.__0"></a>
+
+- *Type:* <a href="#xpander-sdk.IConfiguration">IConfiguration</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Configuration.toDict">toDict</a></code> | *No description.* |
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Configuration.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Configuration.property.apiKey">apiKey</a></code> | <code>string</code> | API key for authenticating requests to xpanderAI. |
+| <code><a href="#xpander-sdk.Configuration.property.baseUrl">baseUrl</a></code> | <code>string</code> | Base URL for the xpanderAI API requests. |
+| <code><a href="#xpander-sdk.Configuration.property.customParams">customParams</a></code> | <code><a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a></code> | Custom parameters for additional configuration options. |
+| <code><a href="#xpander-sdk.Configuration.property.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | Flag to enable or disable metrics reporting. |
+
+---
+
+##### `apiKey`<sup>Required</sup> <a name="apiKey" id="xpander-sdk.Configuration.property.apiKey"></a>
+
+```typescript
+public readonly apiKey: string;
+```
+
+- *Type:* string
+
+API key for authenticating requests to xpanderAI.
+
+---
+
+##### `baseUrl`<sup>Required</sup> <a name="baseUrl" id="xpander-sdk.Configuration.property.baseUrl"></a>
+
+```typescript
+public readonly baseUrl: string;
+```
+
+- *Type:* string
+
+Base URL for the xpanderAI API requests.
+
+---
+
+##### `customParams`<sup>Required</sup> <a name="customParams" id="xpander-sdk.Configuration.property.customParams"></a>
+
+```typescript
+public readonly customParams: IXpanderClientCustomParams;
+```
+
+- *Type:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
+
+Custom parameters for additional configuration options.
+
+---
+
+##### `withMetricsReport`<sup>Required</sup> <a name="withMetricsReport" id="xpander-sdk.Configuration.property.withMetricsReport"></a>
+
+```typescript
+public readonly withMetricsReport: boolean;
+```
+
+- *Type:* boolean
+
+Flag to enable or disable metrics reporting.
+
+---
+
+
 ### NvidiaNIMSupportedModels <a name="NvidiaNIMSupportedModels" id="xpander-sdk.NvidiaNIMSupportedModels"></a>
+
+Contains constants representing various models supported by Nvidia NIM.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.NvidiaNIMSupportedModels.Initializer"></a>
 
@@ -161,7 +889,7 @@ new NvidiaNIMSupportedModels()
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.NvidiaNIMSupportedModels.property.LLAMA_3_1_70B_INSTRUCT">LLAMA_3_1_70B_INSTRUCT</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.NvidiaNIMSupportedModels.property.LLAMA_3_1_70B_INSTRUCT">LLAMA_3_1_70B_INSTRUCT</a></code> | <code>string</code> | Meta Llama 3.1 70B Instruct model. |
 
 ---
 
@@ -173,9 +901,13 @@ public readonly LLAMA_3_1_70B_INSTRUCT: string;
 
 - *Type:* string
 
+Meta Llama 3.1 70B Instruct model.
+
 ---
 
 ### OpenAISupportedModels <a name="OpenAISupportedModels" id="xpander-sdk.OpenAISupportedModels"></a>
+
+Contains constants representing various models supported by OpenAI.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.OpenAISupportedModels.Initializer"></a>
 
@@ -197,9 +929,9 @@ new OpenAISupportedModels()
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4">GPT_4</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O">GPT_4_O</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O_MINI">GPT_4_O_MINI</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4">GPT_4</a></code> | <code>string</code> | OpenAI GPT-4 model. |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O">GPT_4_O</a></code> | <code>string</code> | OpenAI GPT-4o model. |
+| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O_MINI">GPT_4_O_MINI</a></code> | <code>string</code> | OpenAI GPT-4o Mini model. |
 
 ---
 
@@ -211,6 +943,8 @@ public readonly GPT_4: string;
 
 - *Type:* string
 
+OpenAI GPT-4 model.
+
 ---
 
 ##### `GPT_4_O`<sup>Required</sup> <a name="GPT_4_O" id="xpander-sdk.OpenAISupportedModels.property.GPT_4_O"></a>
@@ -220,6 +954,8 @@ public readonly GPT_4_O: string;
 ```
 
 - *Type:* string
+
+OpenAI GPT-4o model.
 
 ---
 
@@ -231,83 +967,122 @@ public readonly GPT_4_O_MINI: string;
 
 - *Type:* string
 
+OpenAI GPT-4o Mini model.
+
 ---
 
-### ToolResponse <a name="ToolResponse" id="xpander-sdk.ToolResponse"></a>
+### PromptGroupSession <a name="PromptGroupSession" id="xpander-sdk.PromptGroupSession"></a>
 
-- *Implements:* <a href="#xpander-sdk.IToolResponse">IToolResponse</a>
+Represents a session within a prompt group in xpanderAI, managing the graph item and tracking the last processed node.
 
-#### Initializers <a name="Initializers" id="xpander-sdk.ToolResponse.Initializer"></a>
+#### Initializers <a name="Initializers" id="xpander-sdk.PromptGroupSession.Initializer"></a>
 
 ```typescript
-import { ToolResponse } from 'xpander-sdk'
+import { PromptGroupSession } from 'xpander-sdk'
 
-new ToolResponse(toolCallId: string, role: string, name: string, responseMessage: string, filteredTool: object, payloadRequest: string, localTool?: IBedrockToolOutput | ILocalTool)
+new PromptGroupSession(pg: IGraphItem, lastNode?: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.toolCallId">toolCallId</a></code> | <code>string</code> | - The ID of the tool call. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.role">role</a></code> | <code>string</code> | - The role in the response. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.name">name</a></code> | <code>string</code> | - The name of the tool. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.responseMessage">responseMessage</a></code> | <code>string</code> | - The response message from the tool. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.filteredTool">filteredTool</a></code> | <code>object</code> | - The filtered tool object. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest">payloadRequest</a></code> | <code>string</code> | - The request payload that sent to tool. |
-| <code><a href="#xpander-sdk.ToolResponse.Initializer.parameter.localTool">localTool</a></code> | <code><a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a> \| <a href="#xpander-sdk.ILocalTool">ILocalTool</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.PromptGroupSession.Initializer.parameter.pg">pg</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a></code> | The graph item associated with the prompt group session. |
+| <code><a href="#xpander-sdk.PromptGroupSession.Initializer.parameter.lastNode">lastNode</a></code> | <code>string</code> | Identifier for the last node accessed in the session. |
 
 ---
 
-##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.ToolResponse.Initializer.parameter.toolCallId"></a>
+##### `pg`<sup>Required</sup> <a name="pg" id="xpander-sdk.PromptGroupSession.Initializer.parameter.pg"></a>
+
+- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>
+
+The graph item associated with the prompt group session.
+
+---
+
+##### `lastNode`<sup>Optional</sup> <a name="lastNode" id="xpander-sdk.PromptGroupSession.Initializer.parameter.lastNode"></a>
 
 - *Type:* string
 
-The ID of the tool call.
+Identifier for the last node accessed in the session.
 
 ---
 
-##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.ToolResponse.Initializer.parameter.role"></a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.PromptGroupSession.property.lastNode">lastNode</a></code> | <code>string</code> | Identifier for the last node accessed in the session. |
+| <code><a href="#xpander-sdk.PromptGroupSession.property.pg">pg</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a></code> | The graph item associated with the prompt group session. |
+
+---
+
+##### `lastNode`<sup>Required</sup> <a name="lastNode" id="xpander-sdk.PromptGroupSession.property.lastNode"></a>
+
+```typescript
+public readonly lastNode: string;
+```
 
 - *Type:* string
 
-The role in the response.
+Identifier for the last node accessed in the session.
 
 ---
 
-##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ToolResponse.Initializer.parameter.name"></a>
+##### `pg`<sup>Required</sup> <a name="pg" id="xpander-sdk.PromptGroupSession.property.pg"></a>
 
-- *Type:* string
+```typescript
+public readonly pg: IGraphItem;
+```
 
-The name of the tool.
+- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>
 
----
-
-##### `responseMessage`<sup>Required</sup> <a name="responseMessage" id="xpander-sdk.ToolResponse.Initializer.parameter.responseMessage"></a>
-
-- *Type:* string
-
-The response message from the tool.
+The graph item associated with the prompt group session.
 
 ---
 
-##### `filteredTool`<sup>Required</sup> <a name="filteredTool" id="xpander-sdk.ToolResponse.Initializer.parameter.filteredTool"></a>
 
-- *Type:* object
+### PromptGroupSessionsList <a name="PromptGroupSessionsList" id="xpander-sdk.PromptGroupSessionsList"></a>
 
-The filtered tool object.
+Manages a collection of prompt group sessions, providing functionalities to start, manage, and retrieve tools for active sessions in xpanderAI.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.PromptGroupSessionsList.Initializer"></a>
+
+```typescript
+import { PromptGroupSessionsList } from 'xpander-sdk'
+
+new PromptGroupSessionsList(graphs: IGraphItem[], pgOas: IAgentTool[], sessions?: PromptGroupSession[])
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.PromptGroupSessionsList.Initializer.parameter.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Collection of graph items associated with prompt groups. |
+| <code><a href="#xpander-sdk.PromptGroupSessionsList.Initializer.parameter.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
+| <code><a href="#xpander-sdk.PromptGroupSessionsList.Initializer.parameter.sessions">sessions</a></code> | <code><a href="#xpander-sdk.PromptGroupSession">PromptGroupSession</a>[]</code> | List of active prompt group sessions. |
 
 ---
 
-##### `payloadRequest`<sup>Required</sup> <a name="payloadRequest" id="xpander-sdk.ToolResponse.Initializer.parameter.payloadRequest"></a>
+##### `graphs`<sup>Required</sup> <a name="graphs" id="xpander-sdk.PromptGroupSessionsList.Initializer.parameter.graphs"></a>
 
-- *Type:* string
+- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]
 
-The request payload that sent to tool.
+Collection of graph items associated with prompt groups.
 
 ---
 
-##### `localTool`<sup>Optional</sup> <a name="localTool" id="xpander-sdk.ToolResponse.Initializer.parameter.localTool"></a>
+##### `pgOas`<sup>Required</sup> <a name="pgOas" id="xpander-sdk.PromptGroupSessionsList.Initializer.parameter.pgOas"></a>
 
-- *Type:* <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a> | <a href="#xpander-sdk.ILocalTool">ILocalTool</a>
+- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
+
+Array of agent tools specific to prompt groups.
+
+---
+
+##### `sessions`<sup>Optional</sup> <a name="sessions" id="xpander-sdk.PromptGroupSessionsList.Initializer.parameter.sessions"></a>
+
+- *Type:* <a href="#xpander-sdk.PromptGroupSession">PromptGroupSession</a>[]
+
+List of active prompt group sessions.
 
 ---
 
@@ -315,214 +1090,125 @@ The request payload that sent to tool.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.toJSON">toJSON</a></code> | Converts the ToolResponse instance to a JSON object. |
+| <code><a href="#xpander-sdk.PromptGroupSessionsList.getToolsForActiveSession">getToolsForActiveSession</a></code> | Retrieves the available tools for the currently active session, filtering tools based on their position in the graph and local tool prefix. |
+| <code><a href="#xpander-sdk.PromptGroupSessionsList.resetSessions">resetSessions</a></code> | Resets all active prompt group sessions. |
+| <code><a href="#xpander-sdk.PromptGroupSessionsList.startPgSession">startPgSession</a></code> | Starts a new session for a specified tool call, associating it with a prompt group. |
 
 ---
 
-##### `toJSON` <a name="toJSON" id="xpander-sdk.ToolResponse.toJSON"></a>
+##### `getToolsForActiveSession` <a name="getToolsForActiveSession" id="xpander-sdk.PromptGroupSessionsList.getToolsForActiveSession"></a>
 
 ```typescript
-public toJSON(): object
+public getToolsForActiveSession(allTools: any[]): any[]
 ```
 
-Converts the ToolResponse instance to a JSON object.
+Retrieves the available tools for the currently active session, filtering tools based on their position in the graph and local tool prefix.
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+###### `allTools`<sup>Required</sup> <a name="allTools" id="xpander-sdk.PromptGroupSessionsList.getToolsForActiveSession.parameter.allTools"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.fromJSON">fromJSON</a></code> | Creates a ToolResponse instance from a JSON object. |
+- *Type:* any[]
+
+A list of all tools available for the session.
 
 ---
 
-##### `fromJSON` <a name="fromJSON" id="xpander-sdk.ToolResponse.fromJSON"></a>
+##### `resetSessions` <a name="resetSessions" id="xpander-sdk.PromptGroupSessionsList.resetSessions"></a>
 
 ```typescript
-import { ToolResponse } from 'xpander-sdk'
-
-ToolResponse.fromJSON(json: any)
+public resetSessions(): void
 ```
 
-Creates a ToolResponse instance from a JSON object.
+Resets all active prompt group sessions.
 
-###### `json`<sup>Required</sup> <a name="json" id="xpander-sdk.ToolResponse.fromJSON.parameter.json"></a>
+##### `startPgSession` <a name="startPgSession" id="xpander-sdk.PromptGroupSessionsList.startPgSession"></a>
 
-- *Type:* any
+```typescript
+public startPgSession(tool: IToolCall): string
+```
 
-The JSON object to create the instance from.
+Starts a new session for a specified tool call, associating it with a prompt group.
+
+If the prompt group or graph cannot be matched, an error is thrown.
+
+###### `tool`<sup>Required</sup> <a name="tool" id="xpander-sdk.PromptGroupSessionsList.startPgSession.parameter.tool"></a>
+
+- *Type:* <a href="#xpander-sdk.IToolCall">IToolCall</a>
+
+The tool call used to start the prompt group session.
 
 ---
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ToolResponse.property.rawResponse">rawResponse</a></code> | <code>any</code> | Gets the response message. |
-| <code><a href="#xpander-sdk.ToolResponse.property.filteredTool">filteredTool</a></code> | <code>object</code> | The filtered tool object. |
-| <code><a href="#xpander-sdk.ToolResponse.property.name">name</a></code> | <code>string</code> | The name of the tool. |
-| <code><a href="#xpander-sdk.ToolResponse.property.payloadRequest">payloadRequest</a></code> | <code>string</code> | The request payload that sent to tool. |
-| <code><a href="#xpander-sdk.ToolResponse.property.responseMessage">responseMessage</a></code> | <code>string</code> | The response message from the tool. |
-| <code><a href="#xpander-sdk.ToolResponse.property.role">role</a></code> | <code>string</code> | The role in the response. |
-| <code><a href="#xpander-sdk.ToolResponse.property.toolCallId">toolCallId</a></code> | <code>string</code> | The ID of the tool call. |
-| <code><a href="#xpander-sdk.ToolResponse.property.localTool">localTool</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.PromptGroupSessionsList.property.activeSession">activeSession</a></code> | <code><a href="#xpander-sdk.PromptGroupSession">PromptGroupSession</a></code> | Returns the currently active session, if one exists. |
+| <code><a href="#xpander-sdk.PromptGroupSessionsList.property.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
 
 ---
 
-##### `rawResponse`<sup>Required</sup> <a name="rawResponse" id="xpander-sdk.ToolResponse.property.rawResponse"></a>
+##### `activeSession`<sup>Required</sup> <a name="activeSession" id="xpander-sdk.PromptGroupSessionsList.property.activeSession"></a>
 
 ```typescript
-public readonly rawResponse: any;
+public readonly activeSession: PromptGroupSession;
 ```
 
-- *Type:* any
+- *Type:* <a href="#xpander-sdk.PromptGroupSession">PromptGroupSession</a>
 
-Gets the response message.
+Returns the currently active session, if one exists.
 
 ---
 
-##### `filteredTool`<sup>Required</sup> <a name="filteredTool" id="xpander-sdk.ToolResponse.property.filteredTool"></a>
+##### `pgOas`<sup>Required</sup> <a name="pgOas" id="xpander-sdk.PromptGroupSessionsList.property.pgOas"></a>
 
 ```typescript
-public readonly filteredTool: object;
+public readonly pgOas: IAgentTool[];
 ```
 
-- *Type:* object
+- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
 
-The filtered tool object.
-
----
-
-##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ToolResponse.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
-The name of the tool.
-
----
-
-##### `payloadRequest`<sup>Required</sup> <a name="payloadRequest" id="xpander-sdk.ToolResponse.property.payloadRequest"></a>
-
-```typescript
-public readonly payloadRequest: string;
-```
-
-- *Type:* string
-
-The request payload that sent to tool.
-
----
-
-##### `responseMessage`<sup>Required</sup> <a name="responseMessage" id="xpander-sdk.ToolResponse.property.responseMessage"></a>
-
-```typescript
-public readonly responseMessage: string;
-```
-
-- *Type:* string
-
-The response message from the tool.
-
----
-
-##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.ToolResponse.property.role"></a>
-
-```typescript
-public readonly role: string;
-```
-
-- *Type:* string
-
-The role in the response.
-
----
-
-##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.ToolResponse.property.toolCallId"></a>
-
-```typescript
-public readonly toolCallId: string;
-```
-
-- *Type:* string
-
-The ID of the tool call.
-
----
-
-##### `localTool`<sup>Optional</sup> <a name="localTool" id="xpander-sdk.ToolResponse.property.localTool"></a>
-
-```typescript
-public readonly localTool: any;
-```
-
-- *Type:* any
+Array of agent tools specific to prompt groups.
 
 ---
 
 
 ### XpanderClient <a name="XpanderClient" id="xpander-sdk.XpanderClient"></a>
 
-Class representing the XpanderClient used to interact with xpanderAI tools.
+XpanderClient provides methods for configuring and interacting with xpanderAI tools, managing agents, and extracting tool calls from LLM responses.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.XpanderClient.Initializer"></a>
 
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(agentKey: string, agentUrl: string, llmProvider: LLMProvider, localTools?: ILocalTool[], tools?: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[], customParams?: any)
+new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, customParams?: any)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentKey">agentKey</a></code> | <code>string</code> | - The API key for the agent. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.agentUrl">agentUrl</a></code> | <code>string</code> | - The URL for the agent. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | - The LLM provider to use. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | - Local tools to append into the tools list. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.tools">tools</a></code> | <code>any[] \| <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] \| <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]</code> | - Pass existing xpanderAI tools to the client instead of fetching. |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.customParams">customParams</a></code> | <code>any</code> | - Optional custom parameters for enhanced context. |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.apiKey">apiKey</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.baseUrl">baseUrl</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.customParams">customParams</a></code> | <code>any</code> | *No description.* |
 
 ---
 
-##### `agentKey`<sup>Required</sup> <a name="agentKey" id="xpander-sdk.XpanderClient.Initializer.parameter.agentKey"></a>
+##### `apiKey`<sup>Required</sup> <a name="apiKey" id="xpander-sdk.XpanderClient.Initializer.parameter.apiKey"></a>
 
 - *Type:* string
 
-The API key for the agent.
+---
+
+##### `baseUrl`<sup>Optional</sup> <a name="baseUrl" id="xpander-sdk.XpanderClient.Initializer.parameter.baseUrl"></a>
+
+- *Type:* any
 
 ---
 
-##### `agentUrl`<sup>Required</sup> <a name="agentUrl" id="xpander-sdk.XpanderClient.Initializer.parameter.agentUrl"></a>
+##### `withMetricsReport`<sup>Optional</sup> <a name="withMetricsReport" id="xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport"></a>
 
-- *Type:* string
-
-The URL for the agent.
-
----
-
-##### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.Initializer.parameter.llmProvider"></a>
-
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
-
-The LLM provider to use.
-
----
-
-##### `localTools`<sup>Optional</sup> <a name="localTools" id="xpander-sdk.XpanderClient.Initializer.parameter.localTools"></a>
-
-- *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
-
-Local tools to append into the tools list.
-
----
-
-##### `tools`<sup>Optional</sup> <a name="tools" id="xpander-sdk.XpanderClient.Initializer.parameter.tools"></a>
-
-- *Type:* any[] | <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] | <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]
-
-Pass existing xpanderAI tools to the client instead of fetching.
+- *Type:* boolean
 
 ---
 
@@ -530,183 +1216,37 @@ Pass existing xpanderAI tools to the client instead of fetching.
 
 - *Type:* any
 
-Optional custom parameters for enhanced context.
-
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.addLocalTools">addLocalTools</a></code> | Adds local tools to the client. |
-| <code><a href="#xpander-sdk.XpanderClient.getGraphSessionParam">getGraphSessionParam</a></code> | Gets a parameter in the current graph session. |
-| <code><a href="#xpander-sdk.XpanderClient.getToolsForGraphsSession">getToolsForGraphsSession</a></code> | Retrieves the appropriate tools for the current graph session. |
-| <code><a href="#xpander-sdk.XpanderClient.loadXpanderTools">loadXpanderTools</a></code> | Loads the tools available from the xpanderAI agent. |
-| <code><a href="#xpander-sdk.XpanderClient.setGraphSessionParam">setGraphSessionParam</a></code> | Sets a parameter in the current graph session. |
-| <code><a href="#xpander-sdk.XpanderClient.startSession">startSession</a></code> | Initializes a new graph session with the provided prompt. |
-| <code><a href="#xpander-sdk.XpanderClient.tools">tools</a></code> | Retrieves the tools for the current or specified LLM provider. |
-| <code><a href="#xpander-sdk.XpanderClient.xpanderSingleToolInvoke">xpanderSingleToolInvoke</a></code> | Invokes a single tool with the given tool ID and payload. |
-| <code><a href="#xpander-sdk.XpanderClient.xpanderToolCall">xpanderToolCall</a></code> | Invokes the tools based on the tool selector response. |
+| <code><a href="#xpander-sdk.XpanderClient.extractToolCalls">extractToolCalls</a></code> | Extracts tool calls from an LLM response based on the specified LLM provider. |
 
 ---
 
-##### `addLocalTools` <a name="addLocalTools" id="xpander-sdk.XpanderClient.addLocalTools"></a>
+##### `extractToolCalls` <a name="extractToolCalls" id="xpander-sdk.XpanderClient.extractToolCalls"></a>
 
 ```typescript
-public addLocalTools(tools: any[] | ILocalTool[]): void
+public extractToolCalls(llmResponse: any, llmProvider?: LLMProvider): IToolCall[]
 ```
 
-Adds local tools to the client.
+Extracts tool calls from an LLM response based on the specified LLM provider.
 
-###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.XpanderClient.addLocalTools.parameter.tools"></a>
-
-- *Type:* any[] | <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
-
-Array of local tools to add.
-
----
-
-##### `getGraphSessionParam` <a name="getGraphSessionParam" id="xpander-sdk.XpanderClient.getGraphSessionParam"></a>
-
-```typescript
-public getGraphSessionParam(param: string): any
-```
-
-Gets a parameter in the current graph session.
-
-###### `param`<sup>Required</sup> <a name="param" id="xpander-sdk.XpanderClient.getGraphSessionParam.parameter.param"></a>
-
-- *Type:* string
-
-The parameter to get, either 'previousNode' or 'prompt'.
-
----
-
-##### `getToolsForGraphsSession` <a name="getToolsForGraphsSession" id="xpander-sdk.XpanderClient.getToolsForGraphsSession"></a>
-
-```typescript
-public getToolsForGraphsSession(tools: any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]
-```
-
-Retrieves the appropriate tools for the current graph session.
-
-###### `tools`<sup>Required</sup> <a name="tools" id="xpander-sdk.XpanderClient.getToolsForGraphsSession.parameter.tools"></a>
-
-- *Type:* any[] | <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>[] | <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>[]
-
-Array of available tools.
-
----
-
-##### `loadXpanderTools` <a name="loadXpanderTools" id="xpander-sdk.XpanderClient.loadXpanderTools"></a>
-
-```typescript
-public loadXpanderTools(): any[]
-```
-
-Loads the tools available from the xpanderAI agent.
-
-##### `setGraphSessionParam` <a name="setGraphSessionParam" id="xpander-sdk.XpanderClient.setGraphSessionParam"></a>
-
-```typescript
-public setGraphSessionParam(param: string, value: any): void
-```
-
-Sets a parameter in the current graph session.
-
-###### `param`<sup>Required</sup> <a name="param" id="xpander-sdk.XpanderClient.setGraphSessionParam.parameter.param"></a>
-
-- *Type:* string
-
-The parameter to set, either 'previousNode' or 'prompt'.
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="xpander-sdk.XpanderClient.setGraphSessionParam.parameter.value"></a>
+###### `llmResponse`<sup>Required</sup> <a name="llmResponse" id="xpander-sdk.XpanderClient.extractToolCalls.parameter.llmResponse"></a>
 
 - *Type:* any
 
-The value to assign to the specified parameter.
+The LLM response to analyze for tool calls.
 
 ---
 
-##### `startSession` <a name="startSession" id="xpander-sdk.XpanderClient.startSession"></a>
-
-```typescript
-public startSession(prompt?: string): void
-```
-
-Initializes a new graph session with the provided prompt.
-
-###### `prompt`<sup>Optional</sup> <a name="prompt" id="xpander-sdk.XpanderClient.startSession.parameter.prompt"></a>
-
-- *Type:* string
-
-The prompt to initialize the session with.
-
----
-
-##### `tools` <a name="tools" id="xpander-sdk.XpanderClient.tools"></a>
-
-```typescript
-public tools(llmProvider?: LLMProvider): any[] | IOpenAIToolOutput[] | IBedrockToolOutput[]
-```
-
-Retrieves the tools for the current or specified LLM provider.
-
-###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.tools.parameter.llmProvider"></a>
+###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.extractToolCalls.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
-(Optional) The LLM provider to use.
-
----
-
-##### `xpanderSingleToolInvoke` <a name="xpanderSingleToolInvoke" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke"></a>
-
-```typescript
-public xpanderSingleToolInvoke(toolId: string, payload?: any): string
-```
-
-Invokes a single tool with the given tool ID and payload.
-
-###### `toolId`<sup>Required</sup> <a name="toolId" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke.parameter.toolId"></a>
-
-- *Type:* string
-
-The ID of the tool to invoke.
-
----
-
-###### `payload`<sup>Optional</sup> <a name="payload" id="xpander-sdk.XpanderClient.xpanderSingleToolInvoke.parameter.payload"></a>
-
-- *Type:* any
-
-The payload to pass to the tool.
-
----
-
-##### `xpanderToolCall` <a name="xpanderToolCall" id="xpander-sdk.XpanderClient.xpanderToolCall"></a>
-
-```typescript
-public xpanderToolCall(toolSelectorResponse: any, llmProvider?: string): ToolResponse[]
-```
-
-Invokes the tools based on the tool selector response.
-
-###### `toolSelectorResponse`<sup>Required</sup> <a name="toolSelectorResponse" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.toolSelectorResponse"></a>
-
-- *Type:* any
-
-The response from the tool selector.
-
----
-
-###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.XpanderClient.xpanderToolCall.parameter.llmProvider"></a>
-
-- *Type:* string
-
-(Optional) The LLM provider to use.
+The LLM provider, defaults to OPEN_AI.
 
 ---
 
@@ -715,103 +1255,168 @@ The response from the tool selector.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.XpanderClient.property.validProviders">validProviders</a></code> | <code>string[]</code> | Provides a list of valid LLM providers. |
-| <code><a href="#xpander-sdk.XpanderClient.property.toolsNamesMapping">toolsNamesMapping</a></code> | <code>{[ key: string ]: string}</code> | Retrieves the tool names mapping for the current LLM provider. |
-| <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agentKey</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agentUrl</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.graphsCache">graphsCache</a></code> | <code>any</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.toolsCache">toolsCache</a></code> | <code>any</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.property.toolsFromExternal">toolsFromExternal</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.property.agents">agents</a></code> | <code><a href="#xpander-sdk.Agents">Agents</a></code> | Instance of Agents to manage xpanderAI agents. |
+| <code><a href="#xpander-sdk.XpanderClient.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the xpanderAI client. |
 
 ---
 
-##### `validProviders`<sup>Required</sup> <a name="validProviders" id="xpander-sdk.XpanderClient.property.validProviders"></a>
+##### `agents`<sup>Required</sup> <a name="agents" id="xpander-sdk.XpanderClient.property.agents"></a>
 
 ```typescript
-public readonly validProviders: string[];
+public readonly agents: Agents;
 ```
 
-- *Type:* string[]
+- *Type:* <a href="#xpander-sdk.Agents">Agents</a>
 
-Provides a list of valid LLM providers.
+Instance of Agents to manage xpanderAI agents.
 
 ---
 
-##### `toolsNamesMapping`<sup>Required</sup> <a name="toolsNamesMapping" id="xpander-sdk.XpanderClient.property.toolsNamesMapping"></a>
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.XpanderClient.property.configuration"></a>
 
 ```typescript
-public readonly toolsNamesMapping: {[ key: string ]: string};
+public readonly configuration: Configuration;
 ```
 
-- *Type:* {[ key: string ]: string}
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
 
-Retrieves the tool names mapping for the current LLM provider.
-
----
-
-##### `agentKey`<sup>Required</sup> <a name="agentKey" id="xpander-sdk.XpanderClient.property.agentKey"></a>
-
-```typescript
-public readonly agentKey: string;
-```
-
-- *Type:* string
-
----
-
-##### `agentUrl`<sup>Required</sup> <a name="agentUrl" id="xpander-sdk.XpanderClient.property.agentUrl"></a>
-
-```typescript
-public readonly agentUrl: string;
-```
-
-- *Type:* string
-
----
-
-##### `graphsCache`<sup>Required</sup> <a name="graphsCache" id="xpander-sdk.XpanderClient.property.graphsCache"></a>
-
-```typescript
-public readonly graphsCache: any;
-```
-
-- *Type:* any
-
----
-
-##### `localTools`<sup>Required</sup> <a name="localTools" id="xpander-sdk.XpanderClient.property.localTools"></a>
-
-```typescript
-public readonly localTools: ILocalTool[];
-```
-
-- *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
-
----
-
-##### `toolsCache`<sup>Required</sup> <a name="toolsCache" id="xpander-sdk.XpanderClient.property.toolsCache"></a>
-
-```typescript
-public readonly toolsCache: any;
-```
-
-- *Type:* any
-
----
-
-##### `toolsFromExternal`<sup>Required</sup> <a name="toolsFromExternal" id="xpander-sdk.XpanderClient.property.toolsFromExternal"></a>
-
-```typescript
-public readonly toolsFromExternal: boolean;
-```
-
-- *Type:* boolean
+Configuration settings for the xpanderAI client.
 
 ---
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IAgentTool <a name="IAgentTool" id="xpander-sdk.IAgentTool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>
+
+Interface representing a tool available to an agent.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IAgentTool.property.functionDescription">functionDescription</a></code> | <code>string</code> | Function-level description for the tool. |
+| <code><a href="#xpander-sdk.IAgentTool.property.id">id</a></code> | <code>string</code> | Unique identifier for the tool. |
+| <code><a href="#xpander-sdk.IAgentTool.property.method">method</a></code> | <code>string</code> | HTTP method used to call the tool. |
+| <code><a href="#xpander-sdk.IAgentTool.property.name">name</a></code> | <code>string</code> | Name of the tool. |
+| <code><a href="#xpander-sdk.IAgentTool.property.parameters">parameters</a></code> | <code>any</code> | Parameters required for executing the tool. |
+| <code><a href="#xpander-sdk.IAgentTool.property.path">path</a></code> | <code>string</code> | Endpoint path for the tool. |
+| <code><a href="#xpander-sdk.IAgentTool.property.pathParams">pathParams</a></code> | <code>any</code> | Parameters for path in the tool’s endpoint. |
+| <code><a href="#xpander-sdk.IAgentTool.property.queryParams">queryParams</a></code> | <code>any</code> | Parameters for query in the tool’s endpoint. |
+| <code><a href="#xpander-sdk.IAgentTool.property.rawDescription">rawDescription</a></code> | <code>string</code> | Raw description of the tool. |
+
+---
+
+##### `functionDescription`<sup>Required</sup> <a name="functionDescription" id="xpander-sdk.IAgentTool.property.functionDescription"></a>
+
+```typescript
+public readonly functionDescription: string;
+```
+
+- *Type:* string
+
+Function-level description for the tool.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.IAgentTool.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+Unique identifier for the tool.
+
+---
+
+##### `method`<sup>Required</sup> <a name="method" id="xpander-sdk.IAgentTool.property.method"></a>
+
+```typescript
+public readonly method: string;
+```
+
+- *Type:* string
+
+HTTP method used to call the tool.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IAgentTool.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+Name of the tool.
+
+---
+
+##### `parameters`<sup>Required</sup> <a name="parameters" id="xpander-sdk.IAgentTool.property.parameters"></a>
+
+```typescript
+public readonly parameters: any;
+```
+
+- *Type:* any
+
+Parameters required for executing the tool.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="xpander-sdk.IAgentTool.property.path"></a>
+
+```typescript
+public readonly path: string;
+```
+
+- *Type:* string
+
+Endpoint path for the tool.
+
+---
+
+##### `pathParams`<sup>Required</sup> <a name="pathParams" id="xpander-sdk.IAgentTool.property.pathParams"></a>
+
+```typescript
+public readonly pathParams: any;
+```
+
+- *Type:* any
+
+Parameters for path in the tool’s endpoint.
+
+---
+
+##### `queryParams`<sup>Required</sup> <a name="queryParams" id="xpander-sdk.IAgentTool.property.queryParams"></a>
+
+```typescript
+public readonly queryParams: any;
+```
+
+- *Type:* any
+
+Parameters for query in the tool’s endpoint.
+
+---
+
+##### `rawDescription`<sup>Required</sup> <a name="rawDescription" id="xpander-sdk.IAgentTool.property.rawDescription"></a>
+
+```typescript
+public readonly rawDescription: string;
+```
+
+- *Type:* string
+
+Raw description of the tool.
+
+---
 
 ### IBedrockTool <a name="IBedrockTool" id="xpander-sdk.IBedrockTool"></a>
 
@@ -824,8 +1429,8 @@ Interface representing a Bedrock tool.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockTool.property.toolSpec">toolSpec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | The tool specification of the Bedrock tool. |
-| <code><a href="#xpander-sdk.IBedrockTool.property.execute">execute</a></code> | <code>any</code> | Function to execute the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockTool.property.toolSpec">toolSpec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | Specification details for the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockTool.property.execute">execute</a></code> | <code>any</code> | Function to execute the tool, if defined. |
 
 ---
 
@@ -837,7 +1442,7 @@ public readonly toolSpec: IBedrockToolSpec;
 
 - *Type:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
 
-The tool specification of the Bedrock tool.
+Specification details for the Bedrock tool.
 
 ---
 
@@ -849,7 +1454,7 @@ public readonly execute: any;
 
 - *Type:* any
 
-Function to execute the Bedrock tool.
+Function to execute the tool, if defined.
 
 ---
 
@@ -857,12 +1462,14 @@ Function to execute the Bedrock tool.
 
 - *Implemented By:* <a href="#xpander-sdk.IBedrockToolOutput">IBedrockToolOutput</a>
 
+Output interface for a Bedrock tool.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockToolOutput.property.toolSpec">toolSpec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | The tool specification of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockToolOutput.property.toolSpec">toolSpec</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a></code> | Specification of the Bedrock tool. |
 | <code><a href="#xpander-sdk.IBedrockToolOutput.property.execute">execute</a></code> | <code>any</code> | Function to execute the Bedrock tool. |
 
 ---
@@ -875,7 +1482,7 @@ public readonly toolSpec: IBedrockToolSpec;
 
 - *Type:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
 
-The tool specification of the Bedrock tool.
+Specification of the Bedrock tool.
 
 ---
 
@@ -895,15 +1502,15 @@ Function to execute the Bedrock tool.
 
 - *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpec">IBedrockToolSpec</a>
 
-Interface representing a Bedrock tool specification.
+Interface representing the specification for a Bedrock tool.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockToolSpec.property.description">description</a></code> | <code>string</code> | The description of the Bedrock tool. |
-| <code><a href="#xpander-sdk.IBedrockToolSpec.property.inputSchema">inputSchema</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a></code> | Input schema of the Bedrock tool. |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.description">description</a></code> | <code>string</code> | Description of what the Bedrock tool does. |
+| <code><a href="#xpander-sdk.IBedrockToolSpec.property.inputSchema">inputSchema</a></code> | <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a></code> | Input schema detailing required parameters for the tool. |
 | <code><a href="#xpander-sdk.IBedrockToolSpec.property.name">name</a></code> | <code>string</code> | The name of the Bedrock tool. |
 
 ---
@@ -916,7 +1523,7 @@ public readonly description: string;
 
 - *Type:* string
 
-The description of the Bedrock tool.
+Description of what the Bedrock tool does.
 
 ---
 
@@ -928,7 +1535,7 @@ public readonly inputSchema: IBedrockToolSpecInputSchema;
 
 - *Type:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
 
-Input schema of the Bedrock tool.
+Input schema detailing required parameters for the tool.
 
 ---
 
@@ -948,14 +1555,14 @@ The name of the Bedrock tool.
 
 - *Implemented By:* <a href="#xpander-sdk.IBedrockToolSpecInputSchema">IBedrockToolSpecInputSchema</a>
 
-Interface representing the input schema for a Bedrock tool specification.
+Interface representing the input schema for a Bedrock tool.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema.property.json">json</a></code> | <code>{[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}</code> | JSON schema of the tool parameters. |
+| <code><a href="#xpander-sdk.IBedrockToolSpecInputSchema.property.json">json</a></code> | <code>{[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}</code> | JSON schema defining the parameters for the tool. |
 
 ---
 
@@ -967,154 +1574,73 @@ public readonly json: {[ key: string ]: IToolParameter};
 
 - *Type:* {[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}
 
-JSON schema of the tool parameters.
+JSON schema defining the parameters for the tool.
 
 ---
 
-### IConnector <a name="IConnector" id="xpander-sdk.IConnector"></a>
+### IConfiguration <a name="IConfiguration" id="xpander-sdk.IConfiguration"></a>
 
-- *Implemented By:* <a href="#xpander-sdk.IConnector">IConnector</a>
+- *Implemented By:* <a href="#xpander-sdk.IConfiguration">IConfiguration</a>
 
-Interface representing a connector.
+Interface representing configuration settings for the xpanderAI client.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IConnector.property.id">id</a></code> | <code>string</code> | Unique connector ID. |
-| <code><a href="#xpander-sdk.IConnector.property.operationIds">operationIds</a></code> | <code>string[]</code> | List of operation IDs for the connector. |
+| <code><a href="#xpander-sdk.IConfiguration.property.apiKey">apiKey</a></code> | <code>string</code> | API key for authenticating with xpanderAI. |
+| <code><a href="#xpander-sdk.IConfiguration.property.customParams">customParams</a></code> | <code><a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a></code> | Custom parameters for client-specific settings. |
+| <code><a href="#xpander-sdk.IConfiguration.property.baseUrl">baseUrl</a></code> | <code>string</code> | Optional base URL for the xpanderAI API. |
+| <code><a href="#xpander-sdk.IConfiguration.property.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | Optional flag to enable metrics reporting. |
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.IConnector.property.id"></a>
+##### `apiKey`<sup>Required</sup> <a name="apiKey" id="xpander-sdk.IConfiguration.property.apiKey"></a>
 
 ```typescript
-public readonly id: string;
+public readonly apiKey: string;
 ```
 
 - *Type:* string
 
-Unique connector ID.
+API key for authenticating with xpanderAI.
 
 ---
 
-##### `operationIds`<sup>Required</sup> <a name="operationIds" id="xpander-sdk.IConnector.property.operationIds"></a>
+##### `customParams`<sup>Required</sup> <a name="customParams" id="xpander-sdk.IConfiguration.property.customParams"></a>
 
 ```typescript
-public readonly operationIds: string[];
+public readonly customParams: IXpanderClientCustomParams;
 ```
 
-- *Type:* string[]
+- *Type:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
 
-List of operation IDs for the connector.
-
----
-
-### ICustomParams <a name="ICustomParams" id="xpander-sdk.ICustomParams"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.ICustomParams">ICustomParams</a>
-
-Interface representing custom parameters.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.ICustomParams.property.connectors">connectors</a></code> | <code><a href="#xpander-sdk.IConnector">IConnector</a>[]</code> | List of connectors associated with the organization. |
-| <code><a href="#xpander-sdk.ICustomParams.property.organizationId">organizationId</a></code> | <code>string</code> | Organization ID associated with the custom. |
+Custom parameters for client-specific settings.
 
 ---
 
-##### `connectors`<sup>Required</sup> <a name="connectors" id="xpander-sdk.ICustomParams.property.connectors"></a>
+##### `baseUrl`<sup>Optional</sup> <a name="baseUrl" id="xpander-sdk.IConfiguration.property.baseUrl"></a>
 
 ```typescript
-public readonly connectors: IConnector[];
-```
-
-- *Type:* <a href="#xpander-sdk.IConnector">IConnector</a>[]
-
-List of connectors associated with the organization.
-
----
-
-##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.ICustomParams.property.organizationId"></a>
-
-```typescript
-public readonly organizationId: string;
+public readonly baseUrl: string;
 ```
 
 - *Type:* string
 
-Organization ID associated with the custom.
+Optional base URL for the xpanderAI API.
 
 ---
 
-### IGraph <a name="IGraph" id="xpander-sdk.IGraph"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IGraph">IGraph</a>
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IGraph.property.allowAllOperations">allowAllOperations</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraph.property.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraph.property.organizationId">organizationId</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraph.property.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraph.property.spec">spec</a></code> | <code>any</code> | *No description.* |
-
----
-
-##### `allowAllOperations`<sup>Required</sup> <a name="allowAllOperations" id="xpander-sdk.IGraph.property.allowAllOperations"></a>
+##### `withMetricsReport`<sup>Optional</sup> <a name="withMetricsReport" id="xpander-sdk.IConfiguration.property.withMetricsReport"></a>
 
 ```typescript
-public readonly allowAllOperations: boolean;
+public readonly withMetricsReport: boolean;
 ```
 
 - *Type:* boolean
 
----
-
-##### `graphs`<sup>Required</sup> <a name="graphs" id="xpander-sdk.IGraph.property.graphs"></a>
-
-```typescript
-public readonly graphs: IGraphItem[];
-```
-
-- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]
-
----
-
-##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.IGraph.property.organizationId"></a>
-
-```typescript
-public readonly organizationId: boolean;
-```
-
-- *Type:* boolean
-
----
-
-##### `pgSwitchAllowed`<sup>Required</sup> <a name="pgSwitchAllowed" id="xpander-sdk.IGraph.property.pgSwitchAllowed"></a>
-
-```typescript
-public readonly pgSwitchAllowed: boolean;
-```
-
-- *Type:* boolean
-
----
-
-##### `spec`<sup>Required</sup> <a name="spec" id="xpander-sdk.IGraph.property.spec"></a>
-
-```typescript
-public readonly spec: any;
-```
-
-- *Type:* any
+Optional flag to enable metrics reporting.
 
 ---
 
@@ -1122,15 +1648,19 @@ public readonly spec: any;
 
 - *Implemented By:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>
 
+Interface representing an item in an agent's graph, containing the structure of connected nodes, prompt details, and associated group information.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IGraphItem.property.enrichedPrompts">enrichedPrompts</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraphItem.property.graph">graph</a></code> | <code>{[ key: string ]: string[]}</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraphItem.property.prompts">prompts</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraphItem.property.startingNode">startingNode</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IGraphItem.property.enrichedPrompts">enrichedPrompts</a></code> | <code>string[]</code> | Array of enriched prompts, providing additional context or formatting. |
+| <code><a href="#xpander-sdk.IGraphItem.property.graph">graph</a></code> | <code>{[ key: string ]: string[]}</code> | Representation of the graph structure with nodes and their connections. |
+| <code><a href="#xpander-sdk.IGraphItem.property.promptGroupId">promptGroupId</a></code> | <code>string</code> | Unique identifier for the prompt group associated with this graph item. |
+| <code><a href="#xpander-sdk.IGraphItem.property.prompts">prompts</a></code> | <code>string[]</code> | Array of prompt texts associated with the graph item. |
+| <code><a href="#xpander-sdk.IGraphItem.property.startingNode">startingNode</a></code> | <code>string</code> | Identifier for the starting node in the graph. |
+| <code><a href="#xpander-sdk.IGraphItem.property.operationNodesInstructions">operationNodesInstructions</a></code> | <code><a href="#xpander-sdk.IOperationNodeInstructions">IOperationNodeInstructions</a>[]</code> | *No description.* |
 
 ---
 
@@ -1142,6 +1672,8 @@ public readonly enrichedPrompts: string[];
 
 - *Type:* string[]
 
+Array of enriched prompts, providing additional context or formatting.
+
 ---
 
 ##### `graph`<sup>Required</sup> <a name="graph" id="xpander-sdk.IGraphItem.property.graph"></a>
@@ -1151,6 +1683,20 @@ public readonly graph: {[ key: string ]: string[]};
 ```
 
 - *Type:* {[ key: string ]: string[]}
+
+Representation of the graph structure with nodes and their connections.
+
+---
+
+##### `promptGroupId`<sup>Required</sup> <a name="promptGroupId" id="xpander-sdk.IGraphItem.property.promptGroupId"></a>
+
+```typescript
+public readonly promptGroupId: string;
+```
+
+- *Type:* string
+
+Unique identifier for the prompt group associated with this graph item.
 
 ---
 
@@ -1162,6 +1708,8 @@ public readonly prompts: string[];
 
 - *Type:* string[]
 
+Array of prompt texts associated with the graph item.
+
 ---
 
 ##### `startingNode`<sup>Required</sup> <a name="startingNode" id="xpander-sdk.IGraphItem.property.startingNode"></a>
@@ -1172,142 +1720,17 @@ public readonly startingNode: string;
 
 - *Type:* string
 
----
-
-### IGraphSession <a name="IGraphSession" id="xpander-sdk.IGraphSession"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IGraphSession">IGraphSession</a>
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IGraphSession.property.previousNode">previousNode</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraphSession.property.prompt">prompt</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IGraphSession.property.promptGroup">promptGroup</a></code> | <code>any</code> | *No description.* |
+Identifier for the starting node in the graph.
 
 ---
 
-##### `previousNode`<sup>Required</sup> <a name="previousNode" id="xpander-sdk.IGraphSession.property.previousNode"></a>
+##### `operationNodesInstructions`<sup>Optional</sup> <a name="operationNodesInstructions" id="xpander-sdk.IGraphItem.property.operationNodesInstructions"></a>
 
 ```typescript
-public readonly previousNode: string;
+public readonly operationNodesInstructions: IOperationNodeInstructions[];
 ```
 
-- *Type:* string
-
----
-
-##### `prompt`<sup>Required</sup> <a name="prompt" id="xpander-sdk.IGraphSession.property.prompt"></a>
-
-```typescript
-public readonly prompt: string;
-```
-
-- *Type:* string
-
----
-
-##### `promptGroup`<sup>Required</sup> <a name="promptGroup" id="xpander-sdk.IGraphSession.property.promptGroup"></a>
-
-```typescript
-public readonly promptGroup: any;
-```
-
-- *Type:* any
-
----
-
-### ILLMProviderHandler <a name="ILLMProviderHandler" id="xpander-sdk.ILLMProviderHandler"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.ILLMProviderHandler">ILLMProviderHandler</a>
-
-Interface representing a LLM (Large Language Model) provider handler.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.getTools">getTools</a></code> | Retrieves tools. |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.invokeTools">invokeTools</a></code> | Invokes tools based on the tool selector response. |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.singleToolInvoke">singleToolInvoke</a></code> | Invokes a single tool with the provided payload. |
-
----
-
-##### `getTools` <a name="getTools" id="xpander-sdk.ILLMProviderHandler.getTools"></a>
-
-```typescript
-public getTools(functionize?: boolean): any[]
-```
-
-Retrieves tools.
-
-###### `functionize`<sup>Optional</sup> <a name="functionize" id="xpander-sdk.ILLMProviderHandler.getTools.parameter.functionize"></a>
-
-- *Type:* boolean
-
-Whether to functionize the tools.
-
----
-
-##### `invokeTools` <a name="invokeTools" id="xpander-sdk.ILLMProviderHandler.invokeTools"></a>
-
-```typescript
-public invokeTools(toolSelectorResponse: any): any
-```
-
-Invokes tools based on the tool selector response.
-
-###### `toolSelectorResponse`<sup>Required</sup> <a name="toolSelectorResponse" id="xpander-sdk.ILLMProviderHandler.invokeTools.parameter.toolSelectorResponse"></a>
-
-- *Type:* any
-
-The response from the tool selector.
-
----
-
-##### `singleToolInvoke` <a name="singleToolInvoke" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke"></a>
-
-```typescript
-public singleToolInvoke(toolId: string, payload: any): string
-```
-
-Invokes a single tool with the provided payload.
-
-###### `toolId`<sup>Required</sup> <a name="toolId" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke.parameter.toolId"></a>
-
-- *Type:* string
-
-The ID of the tool to invoke.
-
----
-
-###### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.ILLMProviderHandler.singleToolInvoke.parameter.payload"></a>
-
-- *Type:* any
-
-The payload to send to the tool.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping">toolsNamesMapping</a></code> | <code>{[ key: string ]: string}</code> | Mapping of tool names. |
-
----
-
-##### `toolsNamesMapping`<sup>Optional</sup> <a name="toolsNamesMapping" id="xpander-sdk.ILLMProviderHandler.property.toolsNamesMapping"></a>
-
-```typescript
-public readonly toolsNamesMapping: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-
-Mapping of tool names.
+- *Type:* <a href="#xpander-sdk.IOperationNodeInstructions">IOperationNodeInstructions</a>[]
 
 ---
 
@@ -1315,13 +1738,15 @@ Mapping of tool names.
 
 - *Implemented By:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>
 
+Interface for a local tool.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ILocalTool.property.function">function</a></code> | <code><a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.ILocalTool.property.type">type</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ILocalTool.property.function">function</a></code> | <code><a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a></code> | Function specification for the local tool. |
+| <code><a href="#xpander-sdk.ILocalTool.property.type">type</a></code> | <code>string</code> | Specifies the tool type as a 'function'. |
 
 ---
 
@@ -1333,6 +1758,8 @@ public readonly function: ILocalToolFunction;
 
 - *Type:* <a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a>
 
+Function specification for the local tool.
+
 ---
 
 ##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.ILocalTool.property.type"></a>
@@ -1343,20 +1770,24 @@ public readonly type: string;
 
 - *Type:* string
 
+Specifies the tool type as a 'function'.
+
 ---
 
 ### ILocalToolFunction <a name="ILocalToolFunction" id="xpander-sdk.ILocalToolFunction"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.ILocalToolFunction">ILocalToolFunction</a>
 
+Interface for a function within a local tool.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ILocalToolFunction.property.description">description</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ILocalToolFunction.property.name">name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ILocalToolFunction.property.parameters">parameters</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.description">description</a></code> | <code>string</code> | Description of the local tool's purpose. |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.name">name</a></code> | <code>string</code> | The name of the local tool function. |
+| <code><a href="#xpander-sdk.ILocalToolFunction.property.parameters">parameters</a></code> | <code>any</code> | Parameters used by the local tool function. |
 
 ---
 
@@ -1368,6 +1799,8 @@ public readonly description: string;
 
 - *Type:* string
 
+Description of the local tool's purpose.
+
 ---
 
 ##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.ILocalToolFunction.property.name"></a>
@@ -1377,6 +1810,8 @@ public readonly name: string;
 ```
 
 - *Type:* string
+
+The name of the local tool function.
 
 ---
 
@@ -1388,45 +1823,7 @@ public readonly parameters: any;
 
 - *Type:* any
 
----
-
-### IMessage <a name="IMessage" id="xpander-sdk.IMessage"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IMessage">IMessage</a>
-
-Interface representing a message.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IMessage.property.content">content</a></code> | <code>string</code> | The content of the message. |
-| <code><a href="#xpander-sdk.IMessage.property.role">role</a></code> | <code>string</code> | The role of the message sender. |
-
----
-
-##### `content`<sup>Required</sup> <a name="content" id="xpander-sdk.IMessage.property.content"></a>
-
-```typescript
-public readonly content: string;
-```
-
-- *Type:* string
-
-The content of the message.
-
----
-
-##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.IMessage.property.role"></a>
-
-```typescript
-public readonly role: string;
-```
-
-- *Type:* string
-
-The role of the message sender.
+Parameters used by the local tool function.
 
 ---
 
@@ -1434,16 +1831,18 @@ The role of the message sender.
 
 - *Implemented By:* <a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a>
 
+Output interface for an OpenAI tool function.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.description">description</a></code> | <code>string</code> | The description of the tool. |
-| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.name">name</a></code> | <code>string</code> | The name of the tool. |
-| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.execute">execute</a></code> | <code>any</code> | Function to execute the Bedrock tool. |
-| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.func">func</a></code> | <code>any</code> | Function to execute the tool. |
-| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.parameters">parameters</a></code> | <code><a href="#xpander-sdk.IToolParameter">IToolParameter</a></code> | Parameters of the tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.description">description</a></code> | <code>string</code> | Description of the tool function's purpose. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.name">name</a></code> | <code>string</code> | The name of the tool function. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.execute">execute</a></code> | <code>any</code> | Secondary execution function for Bedrock compatibility. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.func">func</a></code> | <code>any</code> | Primary function to execute the tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput.property.parameters">parameters</a></code> | <code><a href="#xpander-sdk.IToolParameter">IToolParameter</a></code> | Parameters required for the tool function. |
 
 ---
 
@@ -1455,7 +1854,7 @@ public readonly description: string;
 
 - *Type:* string
 
-The description of the tool.
+Description of the tool function's purpose.
 
 ---
 
@@ -1467,7 +1866,7 @@ public readonly name: string;
 
 - *Type:* string
 
-The name of the tool.
+The name of the tool function.
 
 ---
 
@@ -1479,7 +1878,7 @@ public readonly execute: any;
 
 - *Type:* any
 
-Function to execute the Bedrock tool.
+Secondary execution function for Bedrock compatibility.
 
 ---
 
@@ -1491,7 +1890,7 @@ public readonly func: any;
 
 - *Type:* any
 
-Function to execute the tool.
+Primary function to execute the tool.
 
 ---
 
@@ -1503,7 +1902,7 @@ public readonly parameters: IToolParameter;
 
 - *Type:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
 
-Parameters of the tool.
+Parameters required for the tool function.
 
 ---
 
@@ -1511,13 +1910,15 @@ Parameters of the tool.
 
 - *Implemented By:* <a href="#xpander-sdk.IOpenAIToolOutput">IOpenAIToolOutput</a>
 
+Output interface for an OpenAI tool.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IOpenAIToolOutput.property.function">function</a></code> | <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.IOpenAIToolOutput.property.type">type</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IOpenAIToolOutput.property.function">function</a></code> | <code><a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a></code> | Function specification for the OpenAI tool. |
+| <code><a href="#xpander-sdk.IOpenAIToolOutput.property.type">type</a></code> | <code>string</code> | Type of the tool, typically 'function'. |
 
 ---
 
@@ -1529,6 +1930,8 @@ public readonly function: IOpenAIToolFunctionOutput;
 
 - *Type:* <a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a>
 
+Function specification for the OpenAI tool.
+
 ---
 
 ##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.IOpenAIToolOutput.property.type"></a>
@@ -1539,23 +1942,149 @@ public readonly type: string;
 
 - *Type:* string
 
+Type of the tool, typically 'function'.
+
 ---
 
-### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+### IOperationNodeInstructions <a name="IOperationNodeInstructions" id="xpander-sdk.IOperationNodeInstructions"></a>
 
-- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
-
-Interface representing a tool.
+- *Implemented By:* <a href="#xpander-sdk.IOperationNodeInstructions">IOperationNodeInstructions</a>
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ITool.property.description">description</a></code> | <code>string</code> | The description of the tool. |
+| <code><a href="#xpander-sdk.IOperationNodeInstructions.property.instructions">instructions</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IOperationNodeInstructions.property.nodeIndexInGraph">nodeIndexInGraph</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.IOperationNodeInstructions.property.nodeName">nodeName</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.IOperationNodeInstructions.property.instructions"></a>
+
+```typescript
+public readonly instructions: string;
+```
+
+- *Type:* string
+
+---
+
+##### `nodeIndexInGraph`<sup>Required</sup> <a name="nodeIndexInGraph" id="xpander-sdk.IOperationNodeInstructions.property.nodeIndexInGraph"></a>
+
+```typescript
+public readonly nodeIndexInGraph: number;
+```
+
+- *Type:* number
+
+---
+
+##### `nodeName`<sup>Required</sup> <a name="nodeName" id="xpander-sdk.IOperationNodeInstructions.property.nodeName"></a>
+
+```typescript
+public readonly nodeName: string;
+```
+
+- *Type:* string
+
+---
+
+### ISourceNode <a name="ISourceNode" id="xpander-sdk.ISourceNode"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ISourceNode">ISourceNode</a>
+
+Interface representing a source node in the agent's graph.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ISourceNode.property.id">id</a></code> | <code>string</code> | Unique identifier for the source node. |
+| <code><a href="#xpander-sdk.ISourceNode.property.metadata">metadata</a></code> | <code>any</code> | Metadata associated with the source node. |
+| <code><a href="#xpander-sdk.ISourceNode.property.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | Flag indicating if switching prompt groups is allowed for this node. |
+| <code><a href="#xpander-sdk.ISourceNode.property.targets">targets</a></code> | <code>string[]</code> | List of target nodes connected to this source node. |
+| <code><a href="#xpander-sdk.ISourceNode.property.type">type</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Type of the source node (e.g., SDK, TASK). |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.ISourceNode.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+Unique identifier for the source node.
+
+---
+
+##### `metadata`<sup>Required</sup> <a name="metadata" id="xpander-sdk.ISourceNode.property.metadata"></a>
+
+```typescript
+public readonly metadata: any;
+```
+
+- *Type:* any
+
+Metadata associated with the source node.
+
+---
+
+##### `pgSwitchAllowed`<sup>Required</sup> <a name="pgSwitchAllowed" id="xpander-sdk.ISourceNode.property.pgSwitchAllowed"></a>
+
+```typescript
+public readonly pgSwitchAllowed: boolean;
+```
+
+- *Type:* boolean
+
+Flag indicating if switching prompt groups is allowed for this node.
+
+---
+
+##### `targets`<sup>Required</sup> <a name="targets" id="xpander-sdk.ISourceNode.property.targets"></a>
+
+```typescript
+public readonly targets: string[];
+```
+
+- *Type:* string[]
+
+List of target nodes connected to this source node.
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.ISourceNode.property.type"></a>
+
+```typescript
+public readonly type: SourceNodeType;
+```
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+Type of the source node (e.g., SDK, TASK).
+
+---
+
+### ITool <a name="ITool" id="xpander-sdk.ITool"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.ITool">ITool</a>
+
+Interface representing a general tool.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ITool.property.description">description</a></code> | <code>string</code> | A description of the tool's functionality. |
 | <code><a href="#xpander-sdk.ITool.property.name">name</a></code> | <code>string</code> | The name of the tool. |
-| <code><a href="#xpander-sdk.ITool.property.func">func</a></code> | <code>any</code> | Function to execute the tool. |
-| <code><a href="#xpander-sdk.ITool.property.parameters">parameters</a></code> | <code>{[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}</code> | Parameters of the tool. |
+| <code><a href="#xpander-sdk.ITool.property.func">func</a></code> | <code>any</code> | Function to execute the tool's logic. |
+| <code><a href="#xpander-sdk.ITool.property.parameters">parameters</a></code> | <code>{[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}</code> | Parameters required by the tool. |
 
 ---
 
@@ -1567,7 +2096,7 @@ public readonly description: string;
 
 - *Type:* string
 
-The description of the tool.
+A description of the tool's functionality.
 
 ---
 
@@ -1591,7 +2120,7 @@ public readonly func: any;
 
 - *Type:* any
 
-Function to execute the tool.
+Function to execute the tool's logic.
 
 ---
 
@@ -1603,7 +2132,355 @@ public readonly parameters: {[ key: string ]: IToolParameter};
 
 - *Type:* {[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}
 
-Parameters of the tool.
+Parameters required by the tool.
+
+---
+
+### IToolCall <a name="IToolCall" id="xpander-sdk.IToolCall"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolCall">IToolCall</a>
+
+Interface representing a tool call.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolCall.property.isPg">isPg</a></code> | <code>boolean</code> | Flag indicating if the tool call is part of a prompt group. |
+| <code><a href="#xpander-sdk.IToolCall.property.name">name</a></code> | <code>string</code> | The name of the tool being called. |
+| <code><a href="#xpander-sdk.IToolCall.property.payload">payload</a></code> | <code><a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a></code> | Payload data for the tool call. |
+| <code><a href="#xpander-sdk.IToolCall.property.toolCallId">toolCallId</a></code> | <code>string</code> | Unique identifier for the tool call. |
+| <code><a href="#xpander-sdk.IToolCall.property.type">type</a></code> | <code><a href="#xpander-sdk.ToolCallType">ToolCallType</a></code> | The type of the tool call (e.g., xpander, local). |
+
+---
+
+##### `isPg`<sup>Required</sup> <a name="isPg" id="xpander-sdk.IToolCall.property.isPg"></a>
+
+```typescript
+public readonly isPg: boolean;
+```
+
+- *Type:* boolean
+
+Flag indicating if the tool call is part of a prompt group.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IToolCall.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+The name of the tool being called.
+
+---
+
+##### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.IToolCall.property.payload"></a>
+
+```typescript
+public readonly payload: IToolCallPayload;
+```
+
+- *Type:* <a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a>
+
+Payload data for the tool call.
+
+---
+
+##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.IToolCall.property.toolCallId"></a>
+
+```typescript
+public readonly toolCallId: string;
+```
+
+- *Type:* string
+
+Unique identifier for the tool call.
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.IToolCall.property.type"></a>
+
+```typescript
+public readonly type: ToolCallType;
+```
+
+- *Type:* <a href="#xpander-sdk.ToolCallType">ToolCallType</a>
+
+The type of the tool call (e.g., xpander, local).
+
+---
+
+### IToolCallPayload <a name="IToolCallPayload" id="xpander-sdk.IToolCallPayload"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a>
+
+Interface representing the payload for a tool call.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolCallPayload.property.bodyParams">bodyParams</a></code> | <code>{[ key: string ]: any}</code> | Parameters for the request body. |
+| <code><a href="#xpander-sdk.IToolCallPayload.property.headers">headers</a></code> | <code>{[ key: string ]: any}</code> | Headers for the tool call request. |
+| <code><a href="#xpander-sdk.IToolCallPayload.property.pathParams">pathParams</a></code> | <code>{[ key: string ]: any}</code> | Parameters for the URL path. |
+| <code><a href="#xpander-sdk.IToolCallPayload.property.queryParams">queryParams</a></code> | <code>{[ key: string ]: any}</code> | Parameters for the URL query string. |
+
+---
+
+##### `bodyParams`<sup>Required</sup> <a name="bodyParams" id="xpander-sdk.IToolCallPayload.property.bodyParams"></a>
+
+```typescript
+public readonly bodyParams: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+Parameters for the request body.
+
+---
+
+##### `headers`<sup>Required</sup> <a name="headers" id="xpander-sdk.IToolCallPayload.property.headers"></a>
+
+```typescript
+public readonly headers: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+Headers for the tool call request.
+
+---
+
+##### `pathParams`<sup>Required</sup> <a name="pathParams" id="xpander-sdk.IToolCallPayload.property.pathParams"></a>
+
+```typescript
+public readonly pathParams: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+Parameters for the URL path.
+
+---
+
+##### `queryParams`<sup>Required</sup> <a name="queryParams" id="xpander-sdk.IToolCallPayload.property.queryParams"></a>
+
+```typescript
+public readonly queryParams: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+Parameters for the URL query string.
+
+---
+
+### IToolCallResult <a name="IToolCallResult" id="xpander-sdk.IToolCallResult"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolCallResult">IToolCallResult</a>
+
+Interface representing the result of a tool call.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolCallResult.property.functionName">functionName</a></code> | <code>string</code> | Name of the function called in the tool. |
+| <code><a href="#xpander-sdk.IToolCallResult.property.payload">payload</a></code> | <code><a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a></code> | Payload data used in the tool call. |
+| <code><a href="#xpander-sdk.IToolCallResult.property.toolCallId">toolCallId</a></code> | <code>string</code> | Unique identifier for the tool call. |
+| <code><a href="#xpander-sdk.IToolCallResult.property.isError">isError</a></code> | <code>boolean</code> | Error flag indicating if there was an error with the tool call. |
+| <code><a href="#xpander-sdk.IToolCallResult.property.isSuccess">isSuccess</a></code> | <code>boolean</code> | Success flag indicating if the tool call was successful. |
+| <code><a href="#xpander-sdk.IToolCallResult.property.result">result</a></code> | <code>any</code> | Result of the tool call, if successful. |
+| <code><a href="#xpander-sdk.IToolCallResult.property.statusCode">statusCode</a></code> | <code>number</code> | Status code returned from the tool call, if available. |
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="xpander-sdk.IToolCallResult.property.functionName"></a>
+
+```typescript
+public readonly functionName: string;
+```
+
+- *Type:* string
+
+Name of the function called in the tool.
+
+---
+
+##### `payload`<sup>Required</sup> <a name="payload" id="xpander-sdk.IToolCallResult.property.payload"></a>
+
+```typescript
+public readonly payload: IToolCallPayload;
+```
+
+- *Type:* <a href="#xpander-sdk.IToolCallPayload">IToolCallPayload</a>
+
+Payload data used in the tool call.
+
+---
+
+##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.IToolCallResult.property.toolCallId"></a>
+
+```typescript
+public readonly toolCallId: string;
+```
+
+- *Type:* string
+
+Unique identifier for the tool call.
+
+---
+
+##### `isError`<sup>Optional</sup> <a name="isError" id="xpander-sdk.IToolCallResult.property.isError"></a>
+
+```typescript
+public readonly isError: boolean;
+```
+
+- *Type:* boolean
+
+Error flag indicating if there was an error with the tool call.
+
+---
+
+##### `isSuccess`<sup>Optional</sup> <a name="isSuccess" id="xpander-sdk.IToolCallResult.property.isSuccess"></a>
+
+```typescript
+public readonly isSuccess: boolean;
+```
+
+- *Type:* boolean
+
+Success flag indicating if the tool call was successful.
+
+---
+
+##### `result`<sup>Optional</sup> <a name="result" id="xpander-sdk.IToolCallResult.property.result"></a>
+
+```typescript
+public readonly result: any;
+```
+
+- *Type:* any
+
+Result of the tool call, if successful.
+
+---
+
+##### `statusCode`<sup>Optional</sup> <a name="statusCode" id="xpander-sdk.IToolCallResult.property.statusCode"></a>
+
+```typescript
+public readonly statusCode: number;
+```
+
+- *Type:* number
+
+Status code returned from the tool call, if available.
+
+---
+
+### IToolExecutionResult <a name="IToolExecutionResult" id="xpander-sdk.IToolExecutionResult"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolExecutionResult">IToolExecutionResult</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolExecutionResult.property.data">data</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolExecutionResult.property.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolExecutionResult.property.statusCode">statusCode</a></code> | <code>number</code> | *No description.* |
+
+---
+
+##### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.IToolExecutionResult.property.data"></a>
+
+```typescript
+public readonly data: any;
+```
+
+- *Type:* any
+
+---
+
+##### `isSuccess`<sup>Required</sup> <a name="isSuccess" id="xpander-sdk.IToolExecutionResult.property.isSuccess"></a>
+
+```typescript
+public readonly isSuccess: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `statusCode`<sup>Required</sup> <a name="statusCode" id="xpander-sdk.IToolExecutionResult.property.statusCode"></a>
+
+```typescript
+public readonly statusCode: number;
+```
+
+- *Type:* number
+
+---
+
+### IToolInstructions <a name="IToolInstructions" id="xpander-sdk.IToolInstructions"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolInstructions">IToolInstructions</a>
+
+Interface representing instructions for a tool.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolInstructions.property.functionDescription">functionDescription</a></code> | <code>string</code> | Description of the tool's function. |
+| <code><a href="#xpander-sdk.IToolInstructions.property.id">id</a></code> | <code>string</code> | Identifier for the tool. |
+| <code><a href="#xpander-sdk.IToolInstructions.property.parameters">parameters</a></code> | <code>any</code> | Parameters required by the tool. |
+
+---
+
+##### `functionDescription`<sup>Required</sup> <a name="functionDescription" id="xpander-sdk.IToolInstructions.property.functionDescription"></a>
+
+```typescript
+public readonly functionDescription: string;
+```
+
+- *Type:* string
+
+Description of the tool's function.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.IToolInstructions.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+Identifier for the tool.
+
+---
+
+##### `parameters`<sup>Optional</sup> <a name="parameters" id="xpander-sdk.IToolInstructions.property.parameters"></a>
+
+```typescript
+public readonly parameters: any;
+```
+
+- *Type:* any
+
+Parameters required by the tool.
 
 ---
 
@@ -1611,16 +2488,16 @@ Parameters of the tool.
 
 - *Implemented By:* <a href="#xpander-sdk.IToolParameter">IToolParameter</a>
 
-Interface representing a tool parameter.
+Interface representing a parameter for a tool.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolParameter.property.properties">properties</a></code> | <code>{[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}</code> | Properties of the parameter. |
-| <code><a href="#xpander-sdk.IToolParameter.property.type">type</a></code> | <code>string</code> | The type of the parameter. |
-| <code><a href="#xpander-sdk.IToolParameter.property.required">required</a></code> | <code>string[]</code> | List of required properties. |
+| <code><a href="#xpander-sdk.IToolParameter.property.properties">properties</a></code> | <code>{[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}</code> | Properties of the parameter, if it is an object type. |
+| <code><a href="#xpander-sdk.IToolParameter.property.type">type</a></code> | <code>string</code> | The type of the parameter (e.g., string, object). |
+| <code><a href="#xpander-sdk.IToolParameter.property.required">required</a></code> | <code>string[]</code> | List of required properties within this parameter, if any. |
 
 ---
 
@@ -1632,7 +2509,7 @@ public readonly properties: {[ key: string ]: IToolParameter};
 
 - *Type:* {[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}
 
-Properties of the parameter.
+Properties of the parameter, if it is an object type.
 
 ---
 
@@ -1644,7 +2521,7 @@ public readonly type: string;
 
 - *Type:* string
 
-The type of the parameter.
+The type of the parameter (e.g., string, object).
 
 ---
 
@@ -1656,143 +2533,87 @@ public readonly required: string[];
 
 - *Type:* string[]
 
-List of required properties.
+List of required properties within this parameter, if any.
 
 ---
 
-### IToolResponse <a name="IToolResponse" id="xpander-sdk.IToolResponse"></a>
+### IXpanderClientCustomParams <a name="IXpanderClientCustomParams" id="xpander-sdk.IXpanderClientCustomParams"></a>
 
-- *Implemented By:* <a href="#xpander-sdk.ToolResponse">ToolResponse</a>, <a href="#xpander-sdk.IToolResponse">IToolResponse</a>
+- *Implemented By:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
+
+Interface representing optional custom parameters for configuring the xpanderAI client.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolResponse.property.filteredTool">filteredTool</a></code> | <code>object</code> | The filtered tool object. |
-| <code><a href="#xpander-sdk.IToolResponse.property.name">name</a></code> | <code>string</code> | The name of the tool. |
-| <code><a href="#xpander-sdk.IToolResponse.property.payloadRequest">payloadRequest</a></code> | <code>string</code> | The request payload that sent to tool. |
-| <code><a href="#xpander-sdk.IToolResponse.property.responseMessage">responseMessage</a></code> | <code>string</code> | The response message from the tool. |
-| <code><a href="#xpander-sdk.IToolResponse.property.role">role</a></code> | <code>string</code> | The role in the response. |
-| <code><a href="#xpander-sdk.IToolResponse.property.toolCallId">toolCallId</a></code> | <code>string</code> | The ID of the tool call. |
+| <code><a href="#xpander-sdk.IXpanderClientCustomParams.property.connectors">connectors</a></code> | <code>any[]</code> | Optional array of connectors associated with the client. |
+| <code><a href="#xpander-sdk.IXpanderClientCustomParams.property.organizationId">organizationId</a></code> | <code>string</code> | Optional organization ID associated with the client. |
 
 ---
 
-##### `filteredTool`<sup>Required</sup> <a name="filteredTool" id="xpander-sdk.IToolResponse.property.filteredTool"></a>
+##### `connectors`<sup>Optional</sup> <a name="connectors" id="xpander-sdk.IXpanderClientCustomParams.property.connectors"></a>
 
 ```typescript
-public readonly filteredTool: object;
+public readonly connectors: any[];
 ```
 
-- *Type:* object
+- *Type:* any[]
 
-The filtered tool object.
+Optional array of connectors associated with the client.
 
 ---
 
-##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IToolResponse.property.name"></a>
+##### `organizationId`<sup>Optional</sup> <a name="organizationId" id="xpander-sdk.IXpanderClientCustomParams.property.organizationId"></a>
 
 ```typescript
-public readonly name: string;
+public readonly organizationId: string;
 ```
 
 - *Type:* string
 
-The name of the tool.
-
----
-
-##### `payloadRequest`<sup>Required</sup> <a name="payloadRequest" id="xpander-sdk.IToolResponse.property.payloadRequest"></a>
-
-```typescript
-public readonly payloadRequest: string;
-```
-
-- *Type:* string
-
-The request payload that sent to tool.
-
----
-
-##### `responseMessage`<sup>Required</sup> <a name="responseMessage" id="xpander-sdk.IToolResponse.property.responseMessage"></a>
-
-```typescript
-public readonly responseMessage: string;
-```
-
-- *Type:* string
-
-The response message from the tool.
-
----
-
-##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.IToolResponse.property.role"></a>
-
-```typescript
-public readonly role: string;
-```
-
-- *Type:* string
-
-The role in the response.
-
----
-
-##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.IToolResponse.property.toolCallId"></a>
-
-```typescript
-public readonly toolCallId: string;
-```
-
-- *Type:* string
-
-The ID of the tool call.
-
----
-
-### IToolResponsePayload <a name="IToolResponsePayload" id="xpander-sdk.IToolResponsePayload"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IToolResponsePayload">IToolResponsePayload</a>
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IToolResponsePayload.property.property1">property1</a></code> | <code>string</code> | A string property for the tool response payload. |
-| <code><a href="#xpander-sdk.IToolResponsePayload.property.property2">property2</a></code> | <code>number</code> | A numeric property for the tool response payload. |
-
----
-
-##### `property1`<sup>Required</sup> <a name="property1" id="xpander-sdk.IToolResponsePayload.property.property1"></a>
-
-```typescript
-public readonly property1: string;
-```
-
-- *Type:* string
-
-A string property for the tool response payload.
-
----
-
-##### `property2`<sup>Required</sup> <a name="property2" id="xpander-sdk.IToolResponsePayload.property.property2"></a>
-
-```typescript
-public readonly property2: number;
-```
-
-- *Type:* number
-
-A numeric property for the tool response payload.
+Optional organization ID associated with the client.
 
 ---
 
 ## Enums <a name="Enums" id="Enums"></a>
 
+### AgentStatus <a name="AgentStatus" id="xpander-sdk.AgentStatus"></a>
+
+Enum representing the possible statuses of an agent.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentStatus.DRAFT">DRAFT</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentStatus.ACTIVE">ACTIVE</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentStatus.INACTIVE">INACTIVE</a></code> | *No description.* |
+
+---
+
+##### `DRAFT` <a name="DRAFT" id="xpander-sdk.AgentStatus.DRAFT"></a>
+
+---
+
+
+##### `ACTIVE` <a name="ACTIVE" id="xpander-sdk.AgentStatus.ACTIVE"></a>
+
+---
+
+
+##### `INACTIVE` <a name="INACTIVE" id="xpander-sdk.AgentStatus.INACTIVE"></a>
+
+---
+
+
 ### LLMProvider <a name="LLMProvider" id="xpander-sdk.LLMProvider"></a>
 
 Enum representing different Large Language Model (LLM) providers.
+
+This enum lists various LLM service providers integrated with xpanderAI, enabling
+selection of the desired LLM provider for specific tasks.
 
 #### Members <a name="Members" id="Members"></a>
 
@@ -1829,6 +2650,64 @@ Represents the 'nvidiaNim' provider.
 ##### `AMAZON_BEDROCK` <a name="AMAZON_BEDROCK" id="xpander-sdk.LLMProvider.AMAZON_BEDROCK"></a>
 
 Represents the 'amazonBedrock' provider.
+
+---
+
+
+### SourceNodeType <a name="SourceNodeType" id="xpander-sdk.SourceNodeType"></a>
+
+Enum representing different source node types for agents.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.SourceNodeType.SDK">SDK</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.SourceNodeType.TASK">TASK</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.SourceNodeType.ASSISTANT">ASSISTANT</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.SourceNodeType.WEBHOOK">WEBHOOK</a></code> | *No description.* |
+
+---
+
+##### `SDK` <a name="SDK" id="xpander-sdk.SourceNodeType.SDK"></a>
+
+---
+
+
+##### `TASK` <a name="TASK" id="xpander-sdk.SourceNodeType.TASK"></a>
+
+---
+
+
+##### `ASSISTANT` <a name="ASSISTANT" id="xpander-sdk.SourceNodeType.ASSISTANT"></a>
+
+---
+
+
+##### `WEBHOOK` <a name="WEBHOOK" id="xpander-sdk.SourceNodeType.WEBHOOK"></a>
+
+---
+
+
+### ToolCallType <a name="ToolCallType" id="xpander-sdk.ToolCallType"></a>
+
+Enum representing types of tool calls.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ToolCallType.XPANDER">XPANDER</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallType.LOCAL">LOCAL</a></code> | *No description.* |
+
+---
+
+##### `XPANDER` <a name="XPANDER" id="xpander-sdk.ToolCallType.XPANDER"></a>
+
+---
+
+
+##### `LOCAL` <a name="LOCAL" id="xpander-sdk.ToolCallType.LOCAL"></a>
 
 ---
 

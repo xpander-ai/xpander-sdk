@@ -3,20 +3,16 @@ import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
 
 /**
- * @class NvidiaNIMSupportedModels
- * @description A class containing constants representing various supported models in Nvidia NIM.
+ * Contains constants representing various models supported by Nvidia NIM.
  */
 export abstract class NvidiaNIMSupportedModels {
-  /**
-   * @constant
-   * @type {string}
-   * @description Meta Llama 3.1 70B Instruct model.
-   */
+  /** Meta Llama 3.1 70B Instruct model. */
   public static readonly LLAMA_3_1_70B_INSTRUCT = 'meta/llama-3.1-70b-instruct';
 }
 
 /**
- * Class representing the Nvidia NIM LLM provider.
+ * Handles interactions with the Nvidia NIM LLM provider, including tool post-processing
+ * to append default parameters when necessary.
  */
 export class NvidiaNIM extends BaseOpenAISDKHandler {
   /**
@@ -29,9 +25,9 @@ export class NvidiaNIM extends BaseOpenAISDKHandler {
   }
 
   /**
-   * Post-processes the tools to append default parameters due to Nvidia's strict mode.
+   * Post-processes tools to append default parameters, ensuring compatibility with Nvidia's strict requirements.
    * @param tools - The tools to post-process.
-   * @returns An array of post-processed tools.
+   * @returns An array of post-processed tools with default parameters applied where necessary.
    */
   postProcessTools(tools: any[]): any[] {
     return tools.map((tool: any) => {

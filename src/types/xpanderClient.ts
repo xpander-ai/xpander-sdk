@@ -1,27 +1,32 @@
-/**
- * Interface representing a LLM (Large Language Model) provider handler.
- */
-export interface ILLMProviderHandler {
-  /** Mapping of tool names. */
-  toolsNamesMapping?: Record<string, string>;
-  /**
-   * Retrieves tools.
-   * @param functionize - Whether to functionize the tools.
-   * @returns Array of tools.
-   */
-  getTools<T>(functionize?: boolean): T[];
-  /**
-   * Invokes tools based on the tool selector response.
-   * @param toolSelectorResponse - The response from the tool selector.
-   * @returns Result of the invoked tools.
-   */
-  invokeTools(toolSelectorResponse: any): any;
+// interface IConnector {
+//   readonly id: string;
+//   readonly operation_ids: string[];
+// }
 
-  /**
-   * Invokes a single tool with the provided payload.
-   * @param toolId - The ID of the tool to invoke.
-   * @param payload - The payload to send to the tool.
-   * @returns Result of the invoked tool as a string.
-   */
-  singleToolInvoke(toolId: string, payload: any): string;
+/**
+ * Interface representing optional custom parameters for configuring the xpanderAI client.
+ */
+export interface IXpanderClientCustomParams {
+  /** Optional organization ID associated with the client. */
+  readonly organizationId?: string;
+
+  /** Optional array of connectors associated with the client. */
+  readonly connectors?: any[];
+}
+
+/**
+ * Interface representing configuration settings for the xpanderAI client.
+ */
+export interface IConfiguration {
+  /** API key for authenticating with xpanderAI. */
+  apiKey: string;
+
+  /** Optional base URL for the xpanderAI API. */
+  baseUrl?: string;
+
+  /** Optional flag to enable metrics reporting. */
+  withMetricsReport?: boolean;
+
+  /** Custom parameters for client-specific settings. */
+  customParams: IXpanderClientCustomParams;
 }

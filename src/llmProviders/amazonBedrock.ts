@@ -1,96 +1,54 @@
 import { BaseLLMProvider } from './shared/baseProvider';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
-import { RequestPayload } from '../models/payloads';
-import { ToolResponse } from '../models/toolResponse';
-import { IBedrockTool } from '../types';
+import { getToolBaseSignature } from '../core/tools';
+import { IBedrockTool, IToolCall } from '../types';
 
 /**
- * @class AmazonBedrockSupportedModels
- * @description A class containing constants representing various supported models in Amazon Bedrock.
+ * Contains constants representing various models supported by Amazon Bedrock.
  */
 export abstract class AmazonBedrockSupportedModels {
-  /**
-   * @constant
-   * @type {string}
-   * @description Anthropocene Claude 3 Haiku model with a version date of 2024-03-07.
-   */
+  /** Anthropocene Claude 3 Haiku model (version 2024-03-07). */
   public static readonly ANTHROPIC_CLAUDE_3_HAIKU_20240307 =
     'anthropic.claude-3-haiku-20240307-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Anthropocene Claude 3.5 Sonnet model with a version date of 2024-06-20.
-   */
+  /** Anthropocene Claude 3.5 Sonnet model (version 2024-06-20). */
   public static readonly ANTHROPIC_CLAUDE_3_5_SONNET_20240620 =
     'anthropic.claude-3-5-sonnet-20240620-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Cohere Command R model.
-   */
+  /** Cohere Command R model. */
   public static readonly COHERE_COMMAND_R = 'cohere.command-r-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Cohere Command R Plus model.
-   */
+  /** Cohere Command R Plus model. */
   public static readonly COHERE_COMMAND_R_PLUS = 'cohere.command-r-plus-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Meta Llama 3 1.8B Instruct model.
-   */
+  /** Meta Llama 3 1.8B Instruct model. */
   public static readonly META_LLAMA3_1_8B_INSTRUCT =
     'meta.llama3-1-8b-instruct-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Meta Llama 3 1.70B Instruct model.
-   */
+  /** Meta Llama 3 1.70B Instruct model. */
   public static readonly META_LLAMA3_1_70B_INSTRUCT =
     'meta.llama3-1-70b-instruct-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Meta Llama 3 1.405B Instruct model.
-   */
+  /** Meta Llama 3 1.405B Instruct model. */
   public static readonly META_LLAMA3_1_405B_INSTRUCT =
     'meta.llama3-1-405b-instruct-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Mistral Large 2402 model.
-   */
+  /** Mistral Large 2402 model. */
   public static readonly MISTRAL_MISTRAL_LARGE_2402 =
     'mistral.mistral-large-2402-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Mistral Large 2407 model.
-   */
+  /** Mistral Large 2407 model. */
   public static readonly MISTRAL_MISTRAL_LARGE_2407 =
     'mistral.mistral-large-2407-v1:0';
 
-  /**
-   * @constant
-   * @type {string}
-   * @description Mistral Small 2402 model.
-   */
+  /** Mistral Small 2402 model. */
   public static readonly MISTRAL_MISTRAL_SMALL_2402 =
     'mistral.mistral-small-2402-v1:0';
 }
 
 /**
- * Class representing the Amazon Bedrock LLM provider.
+ * Represents the Amazon Bedrock LLM provider, handling tool calls and model-specific processing.
  */
 export class AmazonBedrock extends BaseLLMProvider {
   /**
@@ -103,32 +61,57 @@ export class AmazonBedrock extends BaseLLMProvider {
   }
 
   /**
-   * Transforms a string to a valid AWS identifier.
+   * Transforms a string to a valid AWS identifier by replacing non-alphanumeric characters
+   * with underscores and ensuring it starts with a letter.
    * @param inputString - The string to transform.
-   * @returns The transformed string.
+   * @returns The transformed AWS-compatible string.
    */
-  static transformToValidAWSIdentifier(inputString: string) {
+  static transformToValidAWSIdentifier(inputString: string): string {
     let modifiedString = inputString.replace(/[^a-zA-Z0-9_]/g, '_');
-
     if (!/^[a-zA-Z]/.test(modifiedString)) {
       modifiedString = 'a' + modifiedString;
     }
-
     return modifiedString;
   }
 
-  toolsNamesMapping: Record<string, string> = {};
-
   /**
-   * Checks if the tools have already been mapped.
-   * @returns True if the tools have already been mapped, otherwise false.
+   * Extracts tool calls from an Amazon Bedrock LLM response.
+   * @param llmResponse - The response object from Amazon Bedrock.
+   * @returns An array of IToolCall objects extracted from the response.
+   * @throws Error if the response format is invalid.
    */
-  get alreadyMappedFunctions() {
-    return Object.keys(this.toolsNamesMapping).length !== 0;
+  static extractToolCalls(llmResponse: Record<string, any>): IToolCall[] {
+    if (typeof llmResponse !== 'object') {
+      throw new Error('LLM response should be an object.');
+    }
+
+    const extractedToolCalls: IToolCall[] = [];
+    const messages = llmResponse?.output?.message?.content || [];
+
+    if (messages.length === 0) {
+      return [];
+    }
+
+    for (const message of messages) {
+      if (!('toolUse' in message)) continue;
+      const toolCall = message.toolUse;
+      let payload = toolCall.input;
+      try {
+        payload = JSON.parse(toolCall.input);
+      } catch (err) {
+        payload = toolCall.input;
+      }
+      extractedToolCalls.push({
+        ...getToolBaseSignature(toolCall.name, toolCall.toolUseId),
+        payload,
+      });
+    }
+    return extractedToolCalls;
   }
 
   /**
-   * Post-processes the tools to conform to the IBedrockTool interface.
+   * Post-processes tools to ensure compliance with the IBedrockTool interface,
+   * adjusting names to be AWS-compatible where necessary.
    * @param tools - The tools to post-process.
    * @returns An array of post-processed tools.
    */
@@ -138,7 +121,7 @@ export class AmazonBedrock extends BaseLLMProvider {
 
       const awsNormalizedFunctionName =
         AmazonBedrock.transformToValidAWSIdentifier(name);
-      this.toolsNamesMapping[awsNormalizedFunctionName] = name;
+      this.originalToolNamesReamapping[awsNormalizedFunctionName] = name;
       name = awsNormalizedFunctionName;
 
       return {
@@ -146,126 +129,14 @@ export class AmazonBedrock extends BaseLLMProvider {
           name,
           description: tool.function.description,
           inputSchema: {
-            json: tool?.function?.parameters || DEFAULT_TOOL_PARAMETERS,
+            json:
+              Object.keys(tool?.function?.parameters || {}).length !== 0
+                ? tool?.function?.parameters
+                : DEFAULT_TOOL_PARAMETERS,
           },
         },
         execute: tool?.function?.execute,
       };
     }) as IBedrockTool[];
-  }
-
-  /**
-   * Invokes tools based on the tool selector response.
-   * @param toolSelectorResponse - The response from the tool selector.
-   * @returns An array of tool responses.
-   * @throws Will throw an error if the tool selector response does not contain valid choices.
-   */
-  invokeTools(toolSelectorResponse: any): ToolResponse[] {
-    const outputMessages: ToolResponse[] = [];
-    if (!Array.isArray(toolSelectorResponse?.output?.message?.content)) {
-      throw new Error('Tool selector response does not contain valid choices');
-    }
-
-    const toolCalls: any[] =
-      toolSelectorResponse?.output?.message?.content.filter(
-        (msg: any) => msg.toolUse && msg.toolUse.name,
-      ) || [];
-
-    for (const { toolUse } of toolCalls) {
-      if (toolUse?.name) {
-        const functionName = toolUse.name;
-        const originalFunctionName = this.toolsNamesMapping[functionName];
-        const payload = toolUse?.input || {};
-
-        let payloadRequest;
-        try {
-          payloadRequest = JSON.stringify(payload); // Convert payload to JSON string
-        } catch (err) {
-          payloadRequest = String(payload); // Convert payload to JSON string
-        }
-
-        // support local tools
-        if (
-          Array.isArray(this.client.localTools) &&
-          this.client.localTools.length !== 0
-        ) {
-          const localTool = this.client.localTools.find(
-            (lt: any) => lt.toolSpec.name === functionName,
-          );
-          if (localTool) {
-            outputMessages.push(
-              new ToolResponse(
-                toolUse.toolUseId,
-                'tool',
-                originalFunctionName,
-                '',
-                {},
-                payloadRequest,
-                localTool,
-              ),
-            );
-            continue;
-          }
-        }
-
-        const functionResponse = this.singleToolInvoke(functionName, payload);
-        const filteredTool = this.filterTool(functionName);
-        outputMessages.push(
-          new ToolResponse(
-            toolUse.toolUseId,
-            'tool',
-            originalFunctionName,
-            functionResponse,
-            filteredTool,
-            payloadRequest,
-          ),
-        );
-      }
-    }
-    return outputMessages;
-  }
-
-  /**
-   * Filters the tools to find the one with the specified ID.
-   * @param toolId - The ID of the tool to find.
-   * @returns An array containing the filtered tool, or an empty array if not found.
-   */
-  filterTool(toolId: string): any[] {
-    const tools = this.getTools<IBedrockTool>(false);
-    const filteredTool = tools.find((tool) => tool.toolSpec.name === toolId);
-    return filteredTool ? [filteredTool] : [];
-  }
-
-  /**
-   * Invokes a single tool with the given ID and payload.
-   * @param toolId - The ID of the tool to invoke.
-   * @param payload - The payload to pass to the tool.
-   * @returns The result of the tool invocation.
-   * @throws Will throw an error if the tool implementation is not found.
-   */
-  singleToolInvoke(toolId: string, payload: RequestPayload): string {
-    const tools = this.getTools<IBedrockTool>(true);
-    const toolToInvoke = tools.find(
-      (tool: IBedrockTool) => tool.toolSpec.name === toolId,
-    );
-
-    const pgSelectorTool =
-      !this.client?._customParams?.organizationId &&
-      this.client?.graphsCache?.spec?.find((tool: any) => tool?.id === toolId);
-
-    if (pgSelectorTool) {
-      const promptGroup = this.client.graphsCache.graphs.find(
-        (graph: any) => graph.promptGroupId === pgSelectorTool.name,
-      );
-      this.client.setGraphSessionParam('promptGroup', promptGroup);
-      this.client.setGraphSessionParam('previousNode', null);
-      return "system message: graph prompt group selected, ignore this and proceed with the user's request.";
-    }
-
-    if (toolToInvoke) {
-      return JSON.stringify(toolToInvoke.execute(payload));
-    } else {
-      throw new Error(`Tool ${toolId} implementation not found`);
-    }
   }
 }

@@ -5,6 +5,7 @@ const project = new cdk.JsiiProject({
   authorAddress: 'opensource@xpander.ai',
   defaultReleaseBranch: 'main',
   jsiiVersion: '~5.4.0',
+  gitignore: ['test/.env'],
   tsconfig: {
     exclude: ['.env', '.env.template'],
     compilerOptions: {

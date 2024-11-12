@@ -1,26 +1,30 @@
 /**
- * Default tool parameters.
+ * Default tool parameters used in xpanderAI tool configuration.
+ *
+ * These parameters define the structure of request payloads for tools, including
+ * query, path, and body parameters, as well as specifying required fields for
+ * each parameter type.
  */
 export const DEFAULT_TOOL_PARAMETERS = Object.freeze({
-  /** The type of the tool parameters. */
+  /** Specifies the type of tool parameters structure. */
   type: 'object',
-  /** List of required parameters. */
+  /** List of required top-level parameters. */
   required: [],
-  /** Properties of the tool parameters. */
+  /** Detailed properties of tool parameters. */
   properties: {
-    /** Query parameters of the tool. */
+    /** Query parameters for the tool, structured as an object. */
     query_params: {
       type: 'object',
       properties: {},
       required: [],
     },
-    /** Path parameters of the tool. */
+    /** Path parameters for the tool, structured as an object. */
     path_params: {
       type: 'object',
       properties: {},
       required: [],
     },
-    /** Body parameters of the tool. */
+    /** Body parameters for the tool, structured as an object. */
     body_params: {
       type: 'object',
       properties: {},
@@ -28,3 +32,6 @@ export const DEFAULT_TOOL_PARAMETERS = Object.freeze({
     },
   },
 });
+
+/** Prefix for identifying local tools in xpanderAI. */
+export const LOCAL_TOOL_PREFIX = 'xpLocal_';

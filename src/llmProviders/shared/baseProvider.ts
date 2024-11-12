@@ -1,25 +1,13 @@
 import { LLMProvider } from '../../constants/llmProvider';
+import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
+import { Agent } from '../../core/agents/Agent';
 import { createTool } from '../../core/tools';
-import { XpanderClient } from '../../core/XpanderClient';
-import { RequestPayload } from '../../models/payloads';
-import { ToolResponse } from '../../models/toolResponse';
+import { IToolCall, IToolInstructions } from '../../types';
 
 /**
- * Interface representing a tool.
- */
-interface Tool {
-  /** The name of the tool. */
-  name: string;
-  /** The description of the tool. */
-  description: string;
-  /** The parameters for the tool. */
-  parameters?: any;
-  /** The function to execute the tool. */
-  func?: Function;
-}
-
-/**
- * Class representing the base LLM provider.
+ * BaseLLMProvider serves as the foundational class for integrating different
+ * LLM providers, defining common functionality for handling tool extraction
+ * and management within an agent.
  */
 export class BaseLLMProvider {
   /**
@@ -31,246 +19,117 @@ export class BaseLLMProvider {
     return llmProvider === LLMProvider.OPEN_AI;
   }
 
-  client: XpanderClient;
-
   /**
-   * Constructs a new BaseLLMProvider instance.
-   * @param xpanderClient - The XpanderClient instance.
+   * Extracts tool calls from an LLM response, if applicable.
+   * @param llmResponse - The LLM response object.
+   * @returns An array of IToolCall objects extracted from the response.
    */
-  constructor(xpanderClient: XpanderClient) {
-    this.client = xpanderClient;
+  static extractToolCalls(llmResponse: Record<string, any>): IToolCall[] {
+    if (llmResponse) {
+      return [];
+    }
+    return [];
   }
 
+  /** Maps original tool names to modified versions, if needed. */
+  public originalToolNamesReamapping: Record<string, string> = {};
+
+  constructor(public agent: Agent) {}
   /**
-   * Retrieves the tools for the LLM provider.
-   * @param functionize - (Optional) Whether to include an invocation function for the tools. Default is false.
-   * @returns An array of tools.
+   * Retrieves and organizes tools available for the agent, considering local tools,
+   * session-specific tools, and tools for prompt groups.
+   * @returns An array of processed tools ready for use.
+   * @throws Error if no tools are found for the agent.
    */
-  getTools<T>(functionize: boolean = false): T[] {
-    const agentTools = this.client.loadXpanderTools();
-    let tools: any[] = [];
+  getTools(returnAllTools: boolean = false): any[] {
+    const agentTools: IToolInstructions[] = this.agent
+      .tools as IToolInstructions[];
+    const allTools: any[] = [];
 
-    for (const toolInstructions of agentTools) {
-      if (this.client.toolsFromExternal) {
-        if (functionize) {
-          toolInstructions.func = toolInstructions.function.execute =
-            createTool(this.client, toolInstructions, true, true);
-        }
-        tools.push({ ...toolInstructions });
-        continue;
-      }
-
-      const createdTool: Tool = createTool(
-        this.client,
-        toolInstructions,
-        functionize,
-      );
-      const toolDeclaration: any = {
-        type: 'function',
-        function: {
-          name: createdTool.name,
-          description: `${createdTool.description}`.slice(0, 1024), // max length of 1024
-        },
-      };
-
-      if ('parameters' in createdTool) {
-        toolDeclaration.function.parameters = createdTool.parameters;
-      }
-
-      if (functionize) {
-        toolDeclaration.function.execute = createdTool.func;
-      }
-
-      tools.push(toolDeclaration);
-    }
-
-    // post process local tools
-    if (typeof this.postProcessTools === 'function') {
-      if (this.client.localTools.length !== 0) {
-        this.client.localTools = this.postProcessTools(this.client.localTools);
+    // Add local tools
+    if (this.agent.hasLocalTools) {
+      for (const localTool of this.agent.localTools) {
+        allTools.push(localTool);
       }
     }
 
-    // filter tools according to graph's sessions
-    tools = this.client.getToolsForGraphsSession(tools);
+    allTools.push(...agentTools.map(createTool));
 
-    // LLMs with function calling but no tools to workaround issue with empty tools array returned to LLMs
-    if (tools == null || tools.length == 0) {
-      // check if already in prompt group, if not - give matching function calling.
-      const pg = this.client.getGraphSessionParam('promptGroup');
-      // no pg, return pg matching tools
-      if (
-        !!this.client.graphsCache.spec &&
-        (!pg || this.client.getGraphSessionParam('pgSwitchAllowed') === true)
-      ) {
-        for (const pgTool of this.client.graphsCache.spec) {
-          const createdTool: Tool = createTool(
-            this.client,
-            pgTool,
-            functionize,
-          );
-          const toolDeclaration: any = {
-            type: 'function',
-            function: {
-              name: createdTool.name,
-              description: `${createdTool.description}`.slice(0, 1024), // max length of 1024
-            },
-          };
-
-          if ('parameters' in createdTool) {
-            toolDeclaration.function.parameters = createdTool.parameters;
-          }
-
-          if (functionize) {
-            toolDeclaration.function.execute = createdTool.func;
-          }
-
-          tools.push(toolDeclaration);
-        }
-      } else {
-        tools = [
-          {
-            type: 'function',
-            function: {
-              name: 'EmptyFunction',
-              description: 'Empty function with no parameters',
-            },
-          },
-        ];
-      }
+    if (allTools.length === 0) {
+      throw new Error(`No tools found for agent ${this.agent.id}`);
     }
 
-    return typeof this.postProcessTools === 'function'
-      ? this.postProcessTools(tools)
-      : tools;
-  }
-
-  /**
-   * Invokes a single tool with the given ID and payload.
-   * @param toolId - The ID of the tool to invoke.
-   * @param payload - The payload to pass to the tool.
-   * @returns The result of the tool invocation.
-   * @throws Will throw an error if the tool implementation is not found.
-   */
-  singleToolInvoke(toolId: string, payload: RequestPayload): string {
-    const tools = this.getTools<any>(true);
-    const toolToInvoke = tools.find((tool) => tool.function.name === toolId);
-    const pgSelectorTool =
-      !this.client?._customParams?.organizationId &&
-      this.client?.graphsCache?.spec?.find((tool: any) => tool.id === toolId);
-
-    if (pgSelectorTool) {
-      const promptGroup = this.client.graphsCache.graphs.find(
-        (graph: any) => graph.promptGroupId === pgSelectorTool.name,
-      );
-      this.client.setGraphSessionParam('promptGroup', promptGroup);
-      this.client.setGraphSessionParam('previousNode', null);
-      return "system message: graph prompt group selected, ignore this and proceed with the user's request.";
+    // Return tools for custom agents, which lack graphs
+    if (this.agent.id === CUSTOM_AGENT_ID) {
+      return this.postProcessTools(allTools);
     }
 
-    if (toolToInvoke) {
-      return JSON.stringify(toolToInvoke.function.execute(payload));
-    } else {
-      throw new Error(`Tool ${toolId} implementation not found`);
-    }
-  }
-
-  /**
-   * Invokes the tools based on the tool selector response.
-   * @param toolSelectorResponse - The response from the tool selector.
-   * @returns An array of tool responses.
-   * @throws Will throw an error if the tool selector response does not contain valid choices.
-   */
-  invokeTools(toolSelectorResponse: any): ToolResponse[] {
-    const outputMessages: ToolResponse[] = [];
-    if (!Array.isArray(toolSelectorResponse.choices)) {
-      throw new Error('Tool selector response does not contain valid choices');
+    if (returnAllTools) {
+      return [
+        ...this.postProcessTools(this.agent.pgOas.map(createTool)),
+        ...this.postProcessTools(allTools),
+      ];
     }
 
-    for (const chatChoice of toolSelectorResponse.choices) {
-      if (chatChoice.message) {
-        const responseMessage = chatChoice.message;
+    // For prompt group selection
+    const pgSessions = this.agent.promptGroupSessions;
+    if (!pgSessions.activeSession) {
+      return [
+        ...this.postProcessTools(this.agent.pgOas.map(createTool)),
+        ...(this.agent.hasLocalTools
+          ? this.postProcessTools(this.agent.localTools)
+          : []),
+      ];
+    }
 
-        const toolCalls = responseMessage.tool_calls;
-        if (toolCalls) {
-          for (const toolCall of toolCalls) {
-            const functionName = toolCall.function.name;
+    // For active session tools
+    const sessionTools: any[] = pgSessions.getToolsForActiveSession(allTools);
 
-            let payload: any;
-            try {
-              payload = JSON.parse(toolCall.function.arguments);
-            } catch (e) {
-              payload = null;
-            }
-
-            let payloadRequest;
-            try {
-              payloadRequest = JSON.stringify(payload); // Convert payload to JSON string
-            } catch (err) {
-              payloadRequest = String(payload); // Convert payload to JSON string
-            }
-
-            // support local tools
-            if (
-              Array.isArray(this.client.localTools) &&
-              this.client.localTools.length !== 0
-            ) {
-              const localTool = this.client.localTools.find(
-                (lt) => lt.function.name === functionName,
-              );
-              if (localTool) {
-                outputMessages.push(
-                  new ToolResponse(
-                    toolCall.id,
-                    'tool',
-                    functionName,
-                    '',
-                    {},
-                    payloadRequest,
-                    localTool,
-                  ),
-                );
-                continue;
-              }
-            }
-
-            const functionResponse = this.singleToolInvoke(
-              functionName,
-              payload,
-            );
-            const filteredTool = this.filterTool(functionName);
-            outputMessages.push(
-              new ToolResponse(
-                toolCall.id,
-                'tool',
-                functionName,
-                functionResponse,
-                filteredTool,
-                payloadRequest,
-              ),
-            );
-          }
+    // add instructions per node
+    if (
+      sessionTools.length !== 0 &&
+      !!pgSessions.activeSession &&
+      Array.isArray(
+        pgSessions?.activeSession?.pg?.operationNodesInstructions,
+      ) &&
+      pgSessions.activeSession.pg.operationNodesInstructions.length !== 0
+    ) {
+      const graphNodesInstructions =
+        pgSessions.activeSession.pg.operationNodesInstructions;
+      for (const sessionTool of sessionTools) {
+        const {
+          function: { name: nodeName },
+        } = sessionTool;
+        const nodeInstructions = graphNodesInstructions.find(
+          (gni) => gni.nodeName === nodeName,
+        );
+        if (nodeInstructions?.instructions) {
+          const addon = ` - IMPORTANT INSTRUCTIONS FOR THIS TOOL: ${nodeInstructions.instructions}`;
+          sessionTool.function.description =
+            sessionTool.function.description.slice(0, 1024 - addon.length);
+          sessionTool.function.description += addon;
         }
       }
     }
-    return outputMessages;
+
+    // If no session tools, reset sessions if allowed and return available tools
+    if (sessionTools.length === 0 && this.agent.pgSwitchAllowed) {
+      pgSessions.resetSessions();
+      return [
+        ...this.postProcessTools(this.agent.pgOas.map(createTool)),
+        ...(this.agent.hasLocalTools
+          ? this.postProcessTools(this.agent.localTools)
+          : []),
+      ];
+    }
+
+    return this.postProcessTools(sessionTools);
   }
 
   /**
-   * Filters the tools to find the one with the specified ID.
-   * @param toolId - The ID of the tool to find.
-   * @returns An array containing the filtered tool, or an empty array if not found.
-   */
-  filterTool(toolId: string): any[] {
-    const tools = this.getTools<any>(false);
-    const filteredTool = tools.find((tool) => tool.function.name === toolId);
-    return filteredTool ? [filteredTool] : [];
-  }
-
-  /**
-   * Post-processes the tools before returning them.
+   * Post-processes tools to prepare them for use, applying any necessary modifications.
    * @param tools - The tools to post-process.
-   * @returns The post-processed tools.
+   * @returns The processed tools ready for execution.
    */
   postProcessTools(tools: any[]): any[] {
     return tools;
