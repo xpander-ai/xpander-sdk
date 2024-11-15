@@ -2970,6 +2970,7 @@ selection of the desired LLM provider for specific tasks.
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.AMAZON_BEDROCK">AMAZON_BEDROCK</a></code> | Represents the 'amazonBedrock' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.OLLAMA">OLLAMA</a></code> | Represents the 'ollama' provider. |
 
 ---
 
@@ -2997,6 +2998,13 @@ Represents the 'nvidiaNim' provider.
 ##### `AMAZON_BEDROCK` <a name="AMAZON_BEDROCK" id="xpander-sdk.LLMProvider.AMAZON_BEDROCK"></a>
 
 Represents the 'amazonBedrock' provider.
+
+---
+
+
+##### `OLLAMA` <a name="OLLAMA" id="xpander-sdk.LLMProvider.OLLAMA"></a>
+
+Represents the 'ollama' provider.
 
 ---
 
