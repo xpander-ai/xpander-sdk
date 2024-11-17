@@ -2434,10 +2434,10 @@ co@^4.6.0:
   resolved "https://registry.npmjs.org/co/-/co-4.6.0.tgz"
   integrity sha512-QVb0dM5HvG+uaxitm8wONl7jltx8dqhfU33DcqtOZcLSVIKSDDLDi7+0LbAKiyI8hD9u42m2YxXSkMGWThaecQ==
 
-codemaker@^1.103.1:
-  version "1.103.1"
-  resolved "https://registry.npmjs.org/codemaker/-/codemaker-1.103.1.tgz"
-  integrity sha512-y3Ru0bZV6qiuPAt8c/Hik1dCI0dVb6lj/6gAIWckvNYVu5FS51avr3FU/mRtuPrY3b1bW/EA0pszGB/P54Bl5A==
+codemaker@^1.105.0:
+  version "1.105.0"
+  resolved "https://registry.yarnpkg.com/codemaker/-/codemaker-1.105.0.tgz#0ecc787a1277ad9c8e53052860f7fca663747fae"
+  integrity sha512-eTePuHlpXNDD4P1vdEv61j+O4f7cnzTSXfbl5bsz+dp8TC95B4YKUS7A/MfR39/CMfqjPn3+KjnCubRbqv5RMA==
   dependencies:
     camelcase "^6.3.0"
     decamelize "^5.0.1"
@@ -2495,14 +2495,14 @@ comment-json@4.2.2:
     has-own-prop "^2.0.0"
     repeat-string "^1.6.1"
 
-commonmark@^0.31.1:
-  version "0.31.1"
-  resolved "https://registry.npmjs.org/commonmark/-/commonmark-0.31.1.tgz"
-  integrity sha512-M6pbc3sRU96iiOK7rmjv/TNrXvTaOscvthUCq7YOrlvZWbqAA36fyEtBvyI3nCcEK4u+JAy9sAdtftIeXwIWig==
+commonmark@^0.31.1, commonmark@^0.31.2:
+  version "0.31.2"
+  resolved "https://registry.yarnpkg.com/commonmark/-/commonmark-0.31.2.tgz#9d8d5439c82c9a235154d858a53e1a7965d573a5"
+  integrity sha512-2fRLTyb9r/2835k5cwcAwOj0DEc44FARnMp5veGsJ+mEAZdi52sNopLu07ZyElQUz058H43whzlERDIaaSw4rg==
   dependencies:
     entities "~3.0.1"
     mdurl "~1.0.1"
-    minimist "~1.2.5"
+    minimist "~1.2.8"
 
 compare-func@^2.0.0:
   version "2.0.0"
@@ -4565,18 +4565,18 @@ jsii-docgen@^10.4.17:
     yargs "^16.2.0"
 
 jsii-pacmak@^1.101.0:
-  version "1.103.1"
-  resolved "https://registry.npmjs.org/jsii-pacmak/-/jsii-pacmak-1.103.1.tgz"
-  integrity sha512-2zzm/OYsdbxcaYuq4n0o2lQAPQ5Fo+T+sQJPGFeMXD0kgDZTNqXv21FdsKBKuQ/DutxTATOaZ7gTXEDK1n7/RQ==
+  version "1.105.0"
+  resolved "https://registry.yarnpkg.com/jsii-pacmak/-/jsii-pacmak-1.105.0.tgz#b04ad5a18deda0f0af9d85bc722bb049d6097477"
+  integrity sha512-oTQSoCfBite5cb+gwu2N6SWoJY/vteQSiCI24flo9UqR+PdGBlFDIJGPciPS6ZEC2v20et4YSJYyHFXFGfMQsQ==
   dependencies:
-    "@jsii/check-node" "1.103.1"
-    "@jsii/spec" "^1.103.1"
+    "@jsii/check-node" "1.105.0"
+    "@jsii/spec" "^1.105.0"
     clone "^2.1.2"
-    codemaker "^1.103.1"
-    commonmark "^0.31.1"
+    codemaker "^1.105.0"
+    commonmark "^0.31.2"
     escape-string-regexp "^4.0.0"
     fs-extra "^10.1.0"
-    jsii-reflect "^1.103.1"
+    jsii-reflect "^1.105.0"
     semver "^7.6.3"
     spdx-license-list "^6.9.0"
     xmlbuilder "^15.1.1"
@@ -4953,7 +4953,7 @@ minimist-options@4.1.0:
     is-plain-obj "^1.1.0"
     kind-of "^6.0.3"
 
-minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6, minimist@~1.2.5:
+minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@^1.2.6, minimist@~1.2.8:
   version "1.2.8"
   resolved "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz"
   integrity sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==
