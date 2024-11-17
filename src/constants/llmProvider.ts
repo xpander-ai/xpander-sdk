@@ -16,4 +16,7 @@ export enum LLMProvider {
 
   /** Represents the 'amazonBedrock' provider. */
   AMAZON_BEDROCK = 'amazonBedrock',
+
+  /** Represents the 'ollama' provider. */
+  OLLAMA = 'ollama',
 }
