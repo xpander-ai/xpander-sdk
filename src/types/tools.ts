@@ -178,3 +178,9 @@ export interface IToolExecutionResult {
   data: any;
   isSuccess: boolean;
 }
+
+export type SimplifiedSchemaMatchResult = {
+  path: string;
+  isBlocked?: boolean;
+  permanentValue?: string | number;
+};

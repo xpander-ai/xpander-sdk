@@ -4,14 +4,15 @@ import {
   IToolCallPayload,
   IToolExecutionResult,
   IToolInstructions,
+  SimplifiedSchemaMatchResult,
   ToolCallType,
 } from '../types';
 import { Configuration } from './Configuration';
-import { ToolCall } from './toolCalls';
-import { convertKeysToSnakeCase } from './utils';
+import { ToolCall, ToolCallResult } from './toolCalls';
+import { convertKeysToSnakeCase, toCamelCase } from './utils';
 import { LOCAL_TOOL_PREFIX } from '../constants/tools';
 import { CUSTOM_AGENT_ID } from '../constants/xpanderClient';
-import { SourceNodeType } from '../types/agents';
+import { INodeSchema, SourceNodeType } from '../types/agents';
 
 /**
  * Creates a tool representation for xpanderAI based on tool instructions,
@@ -167,4 +168,271 @@ export function ensureToolCallPayloadStructure(payload: any): IToolCallPayload {
     pathParams: { ...(payload?.pathParams || {}) },
     headers: { ...(payload?.headers || {}) },
   };
+}
+
+export function extractSimplifiedSchemaProps(
+  obj: any,
+  path: string[] = [],
+): SimplifiedSchemaMatchResult[] {
+  const results: SimplifiedSchemaMatchResult[] = [];
+
+  // Helper function to format the path
+  const formatPath = (p: string[]): string =>
+    p.slice(0, p.length - 1).join('.');
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const currentPath = [...path, key];
+      const value = obj[key];
+
+      // Recurse into nested objects
+      if (typeof value === 'object' && value !== null) {
+        results.push(...extractSimplifiedSchemaProps(value, currentPath));
+      }
+
+      // Handle isBlocked and permanentValue properties
+      if (key === 'isBlocked' || key === 'permanentValue') {
+        const formattedPath = formatPath(currentPath);
+        const existingMatch = results.find(
+          (result) => result.path === formattedPath,
+        );
+
+        if (key === 'isBlocked' && typeof value === 'boolean') {
+          if (existingMatch) {
+            existingMatch.isBlocked = value;
+          } else {
+            results.push({ path: formattedPath, isBlocked: value });
+          }
+        }
+
+        if (
+          key === 'permanentValue' &&
+          (typeof value === 'string' || typeof value === 'number')
+        ) {
+          if (existingMatch) {
+            existingMatch.permanentValue = value;
+          } else {
+            results.push({ path: formattedPath, permanentValue: value });
+          }
+        }
+      }
+    }
+  }
+
+  return results;
+}
+
+export function deletePropertyByPath(obj: any, path: string): void {
+  const keys = path.split('.');
+
+  function deleteInArray(array: any[], arrKeys: string[]): void {
+    const currentKey = arrKeys[0];
+    const remainingKeys = arrKeys.slice(1);
+
+    for (const item of array) {
+      if (remainingKeys.length > 0) {
+        // If there are more keys, keep traversing
+        if (currentKey in item) {
+          if (Array.isArray(item[currentKey])) {
+            deleteInArray(item[currentKey], remainingKeys);
+          } else {
+            deletePropertyByPath(item[currentKey], remainingKeys.join('.'));
+          }
+        }
+      } else {
+        // Delete the final property in each object
+        if (currentKey in item) {
+          delete item[currentKey];
+        }
+
+        // Handle "required" logic
+        if (Array.isArray(item.required)) {
+          item.required = item.required.filter(
+            (req: string) => req !== currentKey,
+          );
+        }
+      }
+    }
+  }
+
+  let current = obj;
+
+  // Traverse to the parent of the target property
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i];
+    if (!(key in current)) {
+      // If the path doesn't exist, exit early
+      return;
+    }
+
+    if (Array.isArray(current[key])) {
+      // If the key points to an array, handle array logic
+      deleteInArray(current[key], keys.slice(i + 1));
+      return;
+    } else {
+      current = current[key];
+    }
+  }
+
+  // The last key to be deleted
+  const lastKey = keys[keys.length - 1];
+
+  // Delete the property if it exists
+  if (lastKey in current) {
+    delete current[lastKey];
+  }
+
+  // Handle "required" logic
+  const parentPathKeys = keys.slice(0, -2); // Up to parent of parent
+  let parentOfParent = obj;
+
+  for (const key of parentPathKeys) {
+    if (!(key in parentOfParent)) {
+      return;
+    }
+    parentOfParent = parentOfParent[key];
+  }
+
+  const parentKey = keys[keys.length - 2];
+  if (Array.isArray(parentOfParent.required)) {
+    parentOfParent.required = parentOfParent.required.filter(
+      (item: string) => item !== parentKey,
+    );
+  }
+}
+
+export function filterOutProperties(
+  tool: any,
+  schemasByNodeName: Record<string, INodeSchema>,
+  kind: 'input' | 'output',
+) {
+  const matchedSchemas = schemasByNodeName?.[tool.function.name]?.[kind];
+  if (matchedSchemas) {
+    let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
+    if (simplifiedSchema.some((prop) => prop.isBlocked === true)) {
+      // convert paths to camelCase
+      simplifiedSchema = simplifiedSchema.map((prop) => {
+        const pathParts = prop.path.split('.');
+        pathParts[1] = toCamelCase(pathParts[1]);
+        prop.path = pathParts.join('.');
+        return prop;
+      });
+      for (const prop of simplifiedSchema) {
+        // if is blocked or has sticky value - llm shouldn't know about it
+        if (prop.isBlocked || !!prop.permanentValue) {
+          deletePropertyByPath(tool.function.parameters, prop.path);
+        }
+      }
+    }
+  }
+}
+
+export function setValueByPath<T extends object>(
+  obj: T,
+  path: string,
+  value: any,
+): void {
+  const [key, ...rest] = path.split('.');
+
+  if (rest.length === 0) {
+    // Base case: set the value when no more keys remain
+    if (Array.isArray(obj)) {
+      // If the current object is an array, set the value in each element
+      for (const item of obj) {
+        if (typeof item === 'object') {
+          (item as any)[key] = value;
+        }
+      }
+    } else {
+      (obj as any)[key] = value;
+    }
+  } else {
+    // Recursive case: traverse further down the path
+    if (Array.isArray(obj)) {
+      // If the current object is an array, recurse into each element
+      for (const item of obj) {
+        if (typeof item === 'object') {
+          setValueByPath(item as any, rest.join('.'), value);
+        }
+      }
+    } else {
+      // Ensure the next key exists and is an object or array
+      if (!(key in obj) || typeof (obj as any)[key] !== 'object') {
+        (obj as any)[key] = isNaN(Number(rest[0])) ? {} : [];
+      }
+      setValueByPath((obj as any)[key], rest.join('.'), value);
+    }
+  }
+}
+
+export function appendPermanentValues(
+  tool: any,
+  schemasByNodeName: Record<string, INodeSchema>,
+) {
+  const matchedSchemas = schemasByNodeName?.[tool.name]?.input;
+  if (matchedSchemas) {
+    let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
+    if (
+      simplifiedSchema.some((prop) => !!prop.permanentValue || prop.isBlocked)
+    ) {
+      // convert paths to camelCase
+      simplifiedSchema = simplifiedSchema.map((prop) => {
+        const pathParts = prop.path.split('.');
+        pathParts[1] = toCamelCase(pathParts[1]);
+        // join and remove "properties" prefix
+        prop.path = pathParts
+          .join('.')
+          .replace(/(?:^|\.)properties\.(\w+)\.properties(\.|$)/g, '.$1.')
+          .replace(/^\./, ''); // Remove leading dot if present
+
+        return prop;
+      });
+      for (const prop of simplifiedSchema) {
+        // if is blocked or has sticky value - llm shouldn't know about it
+        if (!!prop.permanentValue || prop.isBlocked) {
+          deletePropertyByPath(tool.payload, prop.path);
+          setValueByPath(tool.payload, prop.path, prop.permanentValue);
+        }
+      }
+    }
+  }
+}
+
+export function appendPermanentValuesToResult(
+  toolCallResult: ToolCallResult,
+  schemasByNodeName: Record<string, INodeSchema>,
+) {
+  const matchedSchemas =
+    schemasByNodeName?.[toolCallResult.functionName]?.output;
+  if (matchedSchemas) {
+    let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
+    if (
+      simplifiedSchema.some((prop) => !!prop.permanentValue || prop.isBlocked)
+    ) {
+      // convert paths to camelCase
+      simplifiedSchema = simplifiedSchema.map((prop) => {
+        const pathParts = prop.path.split('.');
+        if (pathParts.length === 2) {
+          pathParts.shift();
+        }
+        // join and remove "properties" prefix
+        prop.path = pathParts
+          .join('.')
+          .replace(
+            /(?:^|\.)properties\.(\w+)\.(?:items\.)?properties(\.|$)/g,
+            '.$1.',
+          )
+          .replace(/^\./, ''); // Remove leading dot if present
+
+        return prop;
+      });
+      for (const prop of simplifiedSchema) {
+        // if is blocked or has sticky value - llm shouldn't know about it
+        if (!!prop.permanentValue || prop.isBlocked) {
+          deletePropertyByPath(toolCallResult.result, prop.path);
+          setValueByPath(toolCallResult.result, prop.path, prop.permanentValue);
+        }
+      }
+    }
+  }
 }

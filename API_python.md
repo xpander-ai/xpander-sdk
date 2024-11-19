@@ -667,7 +667,7 @@ The response from the tool selector.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.property.validProviders">valid_providers</a></code> | <code>typing.List[str]</code> | Provides a list of valid LLM providers. |
-| <code><a href="#xpander-sdk.XpanderClient.property.originalToolNamesReamapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | Retrieves the tool names mapping for the current LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.property.originalToolNamesReMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | Retrieves the tool names mapping for the current LLM provider. |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentKey">agent_key</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.agentUrl">agent_url</a></code> | <code>str</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.property.localTools">local_tools</a></code> | <code>typing.List[<a href="#xpander-sdk.ILocalTool">ILocalTool</a>]</code> | *No description.* |
@@ -688,7 +688,7 @@ Provides a list of valid LLM providers.
 
 ---
 
-##### `tools_names_mapping`<sup>Required</sup> <a name="tools_names_mapping" id="xpander-sdk.XpanderClient.property.originalToolNamesReamapping"></a>
+##### `tools_names_mapping`<sup>Required</sup> <a name="tools_names_mapping" id="xpander-sdk.XpanderClient.property.originalToolNamesReMapping"></a>
 
 ```python
 tools_names_mapping: typing.Mapping[str]
@@ -1034,11 +1034,11 @@ The payload to send to the tool.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ILLMProviderHandler.property.originalToolNamesReamapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | Mapping of tool names. |
+| <code><a href="#xpander-sdk.ILLMProviderHandler.property.originalToolNamesReMapping">tools_names_mapping</a></code> | <code>typing.Mapping[str]</code> | Mapping of tool names. |
 
 ---
 
-##### `tools_names_mapping`<sup>Optional</sup> <a name="tools_names_mapping" id="xpander-sdk.ILLMProviderHandler.property.originalToolNamesReamapping"></a>
+##### `tools_names_mapping`<sup>Optional</sup> <a name="tools_names_mapping" id="xpander-sdk.ILLMProviderHandler.property.originalToolNamesReMapping"></a>
 
 ```python
 tools_names_mapping: typing.Mapping[str]

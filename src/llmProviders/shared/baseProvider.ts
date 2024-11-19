@@ -2,7 +2,7 @@ import { LLMProvider } from '../../constants/llmProvider';
 import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
 import { Agent } from '../../core/agents/Agent';
 import { ToolCall } from '../../core/toolCalls';
-import { createTool } from '../../core/tools';
+import { createTool, filterOutProperties } from '../../core/tools';
 import { IToolInstructions } from '../../types';
 
 /**
@@ -33,7 +33,7 @@ export class BaseLLMProvider {
   }
 
   /** Maps original tool names to modified versions, if needed. */
-  public originalToolNamesReamapping: Record<string, string> = {};
+  public originalToolNamesReMapping: Record<string, string> = {};
 
   constructor(public agent: Agent) {}
   /**
@@ -133,6 +133,17 @@ export class BaseLLMProvider {
    * @returns The processed tools ready for execution.
    */
   postProcessTools(tools: any[]): any[] {
+    return this.runSchemaEnforcement(tools);
+  }
+
+  runSchemaEnforcement(tools: any[]): any[] {
+    // delete properties from being used by the LLM
+    const schemasByNodeName = this.agent.schemasByNodeName();
+    if (Object.keys(schemasByNodeName).length !== 0) {
+      for (const tool of tools) {
+        filterOutProperties(tool, schemasByNodeName, 'input');
+      }
+    }
     return tools;
   }
 }

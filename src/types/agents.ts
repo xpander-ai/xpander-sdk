@@ -68,3 +68,14 @@ export interface IAgentTool {
   /** Endpoint path for the tool. */
   path: string;
 }
+
+export interface INodeSchema {
+  readonly nodeName: string;
+  readonly input: any;
+  readonly output: any;
+}
+
+export interface IPGSchema {
+  readonly id: string;
+  readonly schemas: INodeSchema[];
+}
