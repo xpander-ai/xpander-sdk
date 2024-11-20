@@ -357,7 +357,16 @@ export class Agent extends Base {
     );
   }
 
-  public schemasByNodeName() {
+  /**
+   * Retrieves schemas grouped by node name based on the active prompt group session.
+   *
+   * This method returns an object where each key is a node name, and the value is the corresponding schema.
+   * It ensures that schemas are only fetched if there is an active session with a valid `promptGroupId`
+   * and if `pgSchemas` is not empty.
+   *
+   * @returns {Record<string, INodeSchema>} A record of schemas indexed by their node name, or an empty object if conditions are not met.
+   */
+  public schemasByNodeName(): Record<string, INodeSchema> {
     if (
       !!this?.promptGroupSessions?.activeSession?.pg?.promptGroupId &&
       this?.pgSchemas?.length !== 0

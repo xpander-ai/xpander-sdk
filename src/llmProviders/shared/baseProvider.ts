@@ -136,14 +136,25 @@ export class BaseLLMProvider {
     return this.runSchemaEnforcement(tools);
   }
 
+  /**
+   * Applies schema enforcement to a list of tools by removing restricted properties
+   * from their parameters based on the agent's schemas.
+   *
+   * This function ensures that properties blocked or restricted by schemas are not
+   * accessible by the LLM, maintaining data integrity and compliance with schema rules.
+   *
+   * @param tools - The array of tools to enforce schema rules on.
+   * @returns The modified array of tools after schema enforcement.
+   */
   runSchemaEnforcement(tools: any[]): any[] {
-    // delete properties from being used by the LLM
     const schemasByNodeName = this.agent.schemasByNodeName();
+
     if (Object.keys(schemasByNodeName).length !== 0) {
       for (const tool of tools) {
         filterOutProperties(tool, schemasByNodeName, 'input');
       }
     }
+
     return tools;
   }
 }

@@ -17,6 +17,7 @@ import { INodeSchema, SourceNodeType } from '../types/agents';
 /**
  * Creates a tool representation for xpanderAI based on tool instructions,
  * formatting description and ensuring parameter fields are included.
+ *
  * @param toolInstructions - Instructions containing details about the tool.
  * @returns A tool object structured for use in xpanderAI.
  */
@@ -48,6 +49,7 @@ export function createTool(toolInstructions: IToolInstructions): any {
 /**
  * Executes a specified tool for an agent in xpanderAI, sending a request with
  * the appropriate payload structure including headers, path, query, and body parameters.
+ *
  * @param tool - The tool call details.
  * @param agentUrl - The base URL of the agent.
  * @param configuration - Configuration for authentication and custom params.
@@ -117,6 +119,7 @@ export function executeTool(
 /**
  * Generates the base signature for a tool, identifying tool type and presence of
  * prompt group (Pg) functionality based on the tool name.
+ *
  * @param toolName - The name of the tool.
  * @param toolCallId - Unique identifier for the tool call.
  * @returns An object containing base details about the tool, such as its type and ID.
@@ -134,6 +137,13 @@ export function getToolBaseSignature(toolName: string, toolCallId: string) {
   };
 }
 
+/**
+ * Performs a deep merge of two objects, combining arrays and overriding properties.
+ *
+ * @param target - The target object to merge into.
+ * @param source - The source object to merge from.
+ * @returns A new object representing the merged result.
+ */
 export function mergeDeep<T>(target: T, source: T): T {
   if (typeof target !== 'object' || target === null) return source;
   if (typeof source !== 'object' || source === null) return target;
@@ -161,6 +171,12 @@ export function mergeDeep<T>(target: T, source: T): T {
   return target;
 }
 
+/**
+ * Ensures a consistent structure for the tool call payload, setting default values for parameters.
+ *
+ * @param payload - The payload object to structure.
+ * @returns A structured tool call payload.
+ */
 export function ensureToolCallPayloadStructure(payload: any): IToolCallPayload {
   return {
     bodyParams: { ...(payload?.bodyParams || {}) },
@@ -170,6 +186,14 @@ export function ensureToolCallPayloadStructure(payload: any): IToolCallPayload {
   };
 }
 
+/**
+ * Extracts properties from a schema object, simplifying it into a list of match results
+ * containing paths, blocked statuses, and permanent values.
+ *
+ * @param obj - The schema object to extract properties from.
+ * @param path - The current traversal path (used internally).
+ * @returns A list of simplified schema match results.
+ */
 export function extractSimplifiedSchemaProps(
   obj: any,
   path: string[] = [],
@@ -222,6 +246,12 @@ export function extractSimplifiedSchemaProps(
   return results;
 }
 
+/**
+ * Deletes a property from an object or array by following a specified path.
+ *
+ * @param obj - The object from which to delete the property.
+ * @param path - The dot-separated path to the property.
+ */
 export function deletePropertyByPath(obj: any, path: string): void {
   const keys = path.split('.');
 
@@ -301,6 +331,14 @@ export function deletePropertyByPath(obj: any, path: string): void {
   }
 }
 
+/**
+ * Filters out properties from a tool's parameters based on schema restrictions, such as
+ * blocked properties or those with permanent values.
+ *
+ * @param tool - The tool object to filter.
+ * @param schemasByNodeName - The schemas defining property restrictions.
+ * @param kind - The type of schema to consider ('input' or 'output').
+ */
 export function filterOutProperties(
   tool: any,
   schemasByNodeName: Record<string, INodeSchema>,
@@ -327,6 +365,13 @@ export function filterOutProperties(
   }
 }
 
+/**
+ * Sets a value in an object or array at a specified path, creating intermediate objects as needed.
+ *
+ * @param obj - The target object or array.
+ * @param path - The dot-separated path where the value should be set.
+ * @param value - The value to set.
+ */
 export function setValueByPath<T extends object>(
   obj: T,
   path: string,
@@ -365,6 +410,12 @@ export function setValueByPath<T extends object>(
   }
 }
 
+/**
+ * Appends permanent values to the tool's payload based on schema restrictions.
+ *
+ * @param tool - The tool object to modify.
+ * @param schemasByNodeName - The schemas defining property restrictions.
+ */
 export function appendPermanentValues(
   tool: any,
   schemasByNodeName: Record<string, INodeSchema>,
@@ -398,6 +449,12 @@ export function appendPermanentValues(
   }
 }
 
+/**
+ * Appends permanent values to the tool call result based on schema restrictions.
+ *
+ * @param toolCallResult - The tool call result to modify.
+ * @param schemasByNodeName - The schemas defining property restrictions.
+ */
 export function appendPermanentValuesToResult(
   toolCallResult: ToolCallResult,
   schemasByNodeName: Record<string, INodeSchema>,
