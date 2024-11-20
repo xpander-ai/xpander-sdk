@@ -16,7 +16,7 @@ and managing prompt group sessions.
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean)
+new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean, pgSchemas?: IPGSchema[])
 ```
 
 | **Name** | **Type** | **Description** |
@@ -32,6 +32,7 @@ new Agent(configuration: Configuration, id: string, organizationId: string, stat
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Array of graph items related to the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.autoLoad">autoLoad</a></code> | <code>boolean</code> | Whether the agent should automatically load its resources. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgSchemas">pgSchemas</a></code> | <code><a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]</code> | Array of agent tools specific to prompt groups. |
 
 ---
 
@@ -123,6 +124,14 @@ Whether the agent should automatically load its resources.
 
 ---
 
+##### `pgSchemas`<sup>Optional</sup> <a name="pgSchemas" id="xpander-sdk.Agent.Initializer.parameter.pgSchemas"></a>
+
+- *Type:* <a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]
+
+Array of agent tools specific to prompt groups.
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -135,6 +144,7 @@ Whether the agent should automatically load its resources.
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
+| <code><a href="#xpander-sdk.Agent.schemasByNodeName">schemasByNodeName</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.selectPromptGroup">selectPromptGroup</a></code> | *No description.* |
 
 ---
@@ -261,6 +271,12 @@ The list of tool calls to execute.
 
 ---
 
+##### `schemasByNodeName` <a name="schemasByNodeName" id="xpander-sdk.Agent.schemasByNodeName"></a>
+
+```typescript
+public schemasByNodeName(): {[ key: string ]: INodeSchema}
+```
+
 ##### `selectPromptGroup` <a name="selectPromptGroup" id="xpander-sdk.Agent.selectPromptGroup"></a>
 
 ```typescript
@@ -310,6 +326,7 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
 | <code><a href="#xpander-sdk.Agent.property.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
+| <code><a href="#xpander-sdk.Agent.property.pgSchemas">pgSchemas</a></code> | <code><a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]</code> | Array of agent tools specific to prompt groups. |
 | <code><a href="#xpander-sdk.Agent.property.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | Whether prompt group switching is allowed for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.promptGroupSessions">promptGroupSessions</a></code> | <code><a href="#xpander-sdk.PromptGroupSessionsList">PromptGroupSessionsList</a></code> | Manages prompt group sessions for this agent. |
 | <code><a href="#xpander-sdk.Agent.property.ready">ready</a></code> | <code>boolean</code> | Indicates whether the agent is ready with tools loaded. |
@@ -446,6 +463,18 @@ public readonly pgOas: IAgentTool[];
 ```
 
 - *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
+
+Array of agent tools specific to prompt groups.
+
+---
+
+##### `pgSchemas`<sup>Required</sup> <a name="pgSchemas" id="xpander-sdk.Agent.property.pgSchemas"></a>
+
+```typescript
+public readonly pgSchemas: IPGSchema[];
+```
+
+- *Type:* <a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]
 
 Array of agent tools specific to prompt groups.
 
@@ -2358,6 +2387,51 @@ Parameters used by the local tool function.
 
 ---
 
+### INodeSchema <a name="INodeSchema" id="xpander-sdk.INodeSchema"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.INodeSchema">INodeSchema</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.INodeSchema.property.input">input</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.INodeSchema.property.nodeName">nodeName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.INodeSchema.property.output">output</a></code> | <code>any</code> | *No description.* |
+
+---
+
+##### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.INodeSchema.property.input"></a>
+
+```typescript
+public readonly input: any;
+```
+
+- *Type:* any
+
+---
+
+##### `nodeName`<sup>Required</sup> <a name="nodeName" id="xpander-sdk.INodeSchema.property.nodeName"></a>
+
+```typescript
+public readonly nodeName: string;
+```
+
+- *Type:* string
+
+---
+
+##### `output`<sup>Required</sup> <a name="output" id="xpander-sdk.INodeSchema.property.output"></a>
+
+```typescript
+public readonly output: any;
+```
+
+- *Type:* any
+
+---
+
 ### IOpenAIToolFunctionOutput <a name="IOpenAIToolFunctionOutput" id="xpander-sdk.IOpenAIToolFunctionOutput"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IOpenAIToolFunctionOutput">IOpenAIToolFunctionOutput</a>
@@ -2519,6 +2593,40 @@ public readonly nodeName: string;
 ```
 
 - *Type:* string
+
+---
+
+### IPGSchema <a name="IPGSchema" id="xpander-sdk.IPGSchema"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IPGSchema">IPGSchema</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IPGSchema.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IPGSchema.property.schemas">schemas</a></code> | <code><a href="#xpander-sdk.INodeSchema">INodeSchema</a>[]</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.IPGSchema.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `schemas`<sup>Required</sup> <a name="schemas" id="xpander-sdk.IPGSchema.property.schemas"></a>
+
+```typescript
+public readonly schemas: INodeSchema[];
+```
+
+- *Type:* <a href="#xpander-sdk.INodeSchema">INodeSchema</a>[]
 
 ---
 

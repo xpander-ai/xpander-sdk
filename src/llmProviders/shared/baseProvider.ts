@@ -2,7 +2,7 @@ import { LLMProvider } from '../../constants/llmProvider';
 import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
 import { Agent } from '../../core/agents/Agent';
 import { ToolCall } from '../../core/toolCalls';
-import { createTool } from '../../core/tools';
+import { createTool, filterOutProperties } from '../../core/tools';
 import { IToolInstructions } from '../../types';
 
 /**
@@ -33,7 +33,7 @@ export class BaseLLMProvider {
   }
 
   /** Maps original tool names to modified versions, if needed. */
-  public originalToolNamesReamapping: Record<string, string> = {};
+  public originalToolNamesReMapping: Record<string, string> = {};
 
   constructor(public agent: Agent) {}
   /**
@@ -133,6 +133,28 @@ export class BaseLLMProvider {
    * @returns The processed tools ready for execution.
    */
   postProcessTools(tools: any[]): any[] {
+    return this.runSchemaEnforcement(tools);
+  }
+
+  /**
+   * Applies schema enforcement to a list of tools by removing restricted properties
+   * from their parameters based on the agent's schemas.
+   *
+   * This function ensures that properties blocked or restricted by schemas are not
+   * accessible by the LLM, maintaining data integrity and compliance with schema rules.
+   *
+   * @param tools - The array of tools to enforce schema rules on.
+   * @returns The modified array of tools after schema enforcement.
+   */
+  runSchemaEnforcement(tools: any[]): any[] {
+    const schemasByNodeName = this.agent.schemasByNodeName();
+
+    if (Object.keys(schemasByNodeName).length !== 0) {
+      for (const tool of tools) {
+        filterOutProperties(tool, schemasByNodeName, 'input');
+      }
+    }
+
     return tools;
   }
 }

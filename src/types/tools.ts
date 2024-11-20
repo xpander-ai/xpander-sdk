@@ -173,8 +173,20 @@ export enum ToolCallType {
   LOCAL = 'local',
 }
 
+/**
+ * Represents the result of a tool execution, including status, data, and success indicator.
+ */
 export interface IToolExecutionResult {
-  statusCode: number;
-  data: any;
-  isSuccess: boolean;
+  statusCode: number; // HTTP status code of the tool execution response
+  data: any; // Response data from the tool execution
+  isSuccess: boolean; // Indicates whether the execution was successful
 }
+
+/**
+ * Represents a simplified schema property match, including its path and restrictions.
+ */
+export type SimplifiedSchemaMatchResult = {
+  path: string; // The dot-separated path of the property in the schema
+  isBlocked?: boolean; // Indicates if the property is blocked
+  permanentValue?: string | number; // A fixed value assigned to the property
+};

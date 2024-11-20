@@ -119,12 +119,12 @@ export class AmazonBedrock extends BaseLLMProvider {
    * @returns An array of post-processed tools.
    */
   postProcessTools(tools: any[]): IBedrockTool[] {
-    return tools.map((tool) => {
+    return this.runSchemaEnforcement(tools).map((tool) => {
       let name = tool.function.name;
 
       const awsNormalizedFunctionName =
         AmazonBedrock.transformToValidAWSIdentifier(name);
-      this.originalToolNamesReamapping[awsNormalizedFunctionName] = name;
+      this.originalToolNamesReMapping[awsNormalizedFunctionName] = name;
       name = awsNormalizedFunctionName;
 
       return {

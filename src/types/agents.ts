@@ -68,3 +68,21 @@ export interface IAgentTool {
   /** Endpoint path for the tool. */
   path: string;
 }
+
+/**
+ * Represents the schema of a single node with defined input and output structures.
+ */
+export interface INodeSchema {
+  readonly nodeName: string; // Name of the node
+  readonly input: any; // Input schema definition
+  readonly output: any; // Output schema definition
+}
+
+/**
+ * Represents a schema group for a prompt group session (PGSchema), 
+ * containing multiple node schemas.
+ */
+export interface IPGSchema {
+  readonly id: string; // Unique identifier for the schema group
+  readonly schemas: INodeSchema[]; // Array of node schemas within the group
+}

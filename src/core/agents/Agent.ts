@@ -14,6 +14,8 @@ import {
   AgentStatus,
   IAgentTool,
   ISourceNode,
+  INodeSchema,
+  IPGSchema,
   SourceNodeType,
 } from '../../types/agents';
 import { Base } from '../base';
@@ -21,6 +23,8 @@ import { Configuration } from '../Configuration';
 import { PromptGroupSessionsList } from '../promptGroups/PromptGroupSessionsList';
 import { ToolCall, ToolCallResult } from '../toolCalls';
 import {
+  appendPermanentValues,
+  appendPermanentValuesToResult,
   ensureToolCallPayloadStructure,
   executeTool,
   mergeDeep,
@@ -43,7 +47,7 @@ export class Agent extends Base {
   public promptGroupSessions: PromptGroupSessionsList;
 
   /** Maps original tool names to renamed versions for consistency. */
-  protected originalToolNamesReamapping: Record<string, string> = {};
+  protected originalToolNamesReMapping: Record<string, string> = {};
 
   constructor(
     /** Configuration settings for the agent. */
@@ -78,6 +82,9 @@ export class Agent extends Base {
 
     /** Whether the agent should automatically load its resources. */
     autoLoad: boolean = true,
+
+    /** Array of agent tools specific to prompt groups. */
+    public pgSchemas: IPGSchema[] = [],
   ) {
     super();
     if (this.tools.length !== 0) {
@@ -164,6 +171,15 @@ export class Agent extends Base {
           agent.tools,
           agent.graphs,
           agent.pgOas,
+          true,
+          rawAgent?.schemas?.map((schema: any) => ({
+            id: schema.id,
+            schemas: schema.schemas.map((nodeSchema: any) => ({
+              nodeName: nodeSchema.node_name,
+              input: nodeSchema.schemas.input,
+              output: nodeSchema.schemas.output,
+            })),
+          })) || [],
         );
         Object.assign(this, loadedAgent);
       } catch (err) {
@@ -189,9 +205,9 @@ export class Agent extends Base {
     const tools = providerInstance.getTools(returnAllTools);
 
     // mainly for AWS Bedrock resource ID conventions
-    this.originalToolNamesReamapping = {
-      ...(this.originalToolNamesReamapping || {}),
-      ...(providerInstance.originalToolNamesReamapping || {}),
+    this.originalToolNamesReMapping = {
+      ...(this.originalToolNamesReMapping || {}),
+      ...(providerInstance.originalToolNamesReMapping || {}),
     };
 
     return tools;
@@ -258,10 +274,23 @@ export class Agent extends Base {
         tool.payload = mergeDeep(tool.payload, payloadExtension);
       }
 
+      // append permanent values
+      const schemasByNodeName = this.schemasByNodeName();
+      const originalToolName =
+        this.originalToolNamesReMapping?.[tool.name] || tool.name;
+
+      const shouldEnforceSchema = !!schemasByNodeName?.[originalToolName];
+
+      if (shouldEnforceSchema) {
+        appendPermanentValues(
+          { ...tool, name: originalToolName },
+          schemasByNodeName,
+        );
+      }
       const executionResult = executeTool(
         ToolCall.fromObject({
           ...tool,
-          name: this.originalToolNamesReamapping?.[tool.name] || tool.name,
+          name: originalToolName,
         }),
         this.url,
         this.configuration,
@@ -272,6 +301,11 @@ export class Agent extends Base {
       if (!executionResult.isSuccess) {
         throw new Error(toolCallResult.result);
       }
+
+      if (shouldEnforceSchema) {
+        appendPermanentValuesToResult(toolCallResult, schemasByNodeName);
+      }
+
       if (!!this.promptGroupSessions.activeSession) {
         this.promptGroupSessions.activeSession.lastNode = tool.name;
       }
@@ -321,5 +355,39 @@ export class Agent extends Base {
         name: pgTool.id,
       }),
     );
+  }
+
+  /**
+   * Retrieves schemas grouped by node name based on the active prompt group session.
+   *
+   * This method returns an object where each key is a node name, and the value is the corresponding schema.
+   * It ensures that schemas are only fetched if there is an active session with a valid `promptGroupId`
+   * and if `pgSchemas` is not empty.
+   *
+   * @returns {Record<string, INodeSchema>} A record of schemas indexed by their node name, or an empty object if conditions are not met.
+   */
+  public schemasByNodeName(): Record<string, INodeSchema> {
+    if (
+      !!this?.promptGroupSessions?.activeSession?.pg?.promptGroupId &&
+      this?.pgSchemas?.length !== 0
+    ) {
+      const schemasByNodeName =
+        this.pgSchemas
+          .find(
+            (schema) =>
+              schema.id ===
+              this.promptGroupSessions.activeSession.pg.promptGroupId,
+          )
+          ?.schemas.reduce(
+            (all, item) => {
+              all[item.nodeName] = item;
+              return all;
+            },
+            {} as Record<string, INodeSchema>,
+          ) || {};
+
+      return schemasByNodeName;
+    }
+    return {};
   }
 }
