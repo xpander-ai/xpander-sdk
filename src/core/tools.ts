@@ -343,11 +343,16 @@ export function filterOutProperties(
   tool: any,
   schemasByNodeName: Record<string, INodeSchema>,
   kind: 'input' | 'output',
-) {
-  const matchedSchemas = schemasByNodeName?.[tool.function.name]?.[kind];
+): any {
+  const newTool = JSON.parse(JSON.stringify({ ...tool })); // deep copy
+  const matchedSchemas = schemasByNodeName?.[newTool.function.name]?.[kind];
   if (matchedSchemas) {
     let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
-    if (simplifiedSchema.some((prop) => prop.isBlocked === true)) {
+    if (
+      simplifiedSchema.some(
+        (prop) => prop.isBlocked === true || !!prop.permanentValue,
+      )
+    ) {
       // convert paths to camelCase
       simplifiedSchema = simplifiedSchema.map((prop) => {
         const pathParts = prop.path.split('.');
@@ -358,11 +363,12 @@ export function filterOutProperties(
       for (const prop of simplifiedSchema) {
         // if is blocked or has sticky value - llm shouldn't know about it
         if (prop.isBlocked || !!prop.permanentValue) {
-          deletePropertyByPath(tool.function.parameters, prop.path);
+          deletePropertyByPath(newTool.function.parameters, prop.path);
         }
       }
     }
   }
+  return newTool;
 }
 
 /**
@@ -417,10 +423,11 @@ export function setValueByPath<T extends object>(
  * @param schemasByNodeName - The schemas defining property restrictions.
  */
 export function appendPermanentValues(
-  tool: any,
+  tool: ToolCall,
   schemasByNodeName: Record<string, INodeSchema>,
-) {
-  const matchedSchemas = schemasByNodeName?.[tool.name]?.input;
+): ToolCall {
+  const newTool = ToolCall.fromObject(tool.toDict());
+  const matchedSchemas = schemasByNodeName?.[newTool.name]?.input;
   if (matchedSchemas) {
     let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
     if (
@@ -441,12 +448,13 @@ export function appendPermanentValues(
       for (const prop of simplifiedSchema) {
         // if is blocked or has sticky value - llm shouldn't know about it
         if (!!prop.permanentValue || prop.isBlocked) {
-          deletePropertyByPath(tool.payload, prop.path);
-          setValueByPath(tool.payload, prop.path, prop.permanentValue);
+          deletePropertyByPath(newTool.payload, prop.path);
+          setValueByPath(newTool.payload, prop.path, prop.permanentValue);
         }
       }
     }
   }
+  return newTool;
 }
 
 /**
@@ -458,9 +466,10 @@ export function appendPermanentValues(
 export function appendPermanentValuesToResult(
   toolCallResult: ToolCallResult,
   schemasByNodeName: Record<string, INodeSchema>,
-) {
+): ToolCallResult {
+  const newToolCallResult = ToolCallResult.fromObject(toolCallResult.toDict());
   const matchedSchemas =
-    schemasByNodeName?.[toolCallResult.functionName]?.output;
+    schemasByNodeName?.[newToolCallResult.functionName]?.output;
   if (matchedSchemas) {
     let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
     if (
@@ -486,10 +495,15 @@ export function appendPermanentValuesToResult(
       for (const prop of simplifiedSchema) {
         // if is blocked or has sticky value - llm shouldn't know about it
         if (!!prop.permanentValue || prop.isBlocked) {
-          deletePropertyByPath(toolCallResult.result, prop.path);
-          setValueByPath(toolCallResult.result, prop.path, prop.permanentValue);
+          deletePropertyByPath(newToolCallResult.result, prop.path);
+          setValueByPath(
+            newToolCallResult.result,
+            prop.path,
+            prop.permanentValue,
+          );
         }
       }
     }
   }
+  return newToolCallResult;
 }
