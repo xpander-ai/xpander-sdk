@@ -144,7 +144,7 @@ Array of agent tools specific to prompt groups.
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
-| <code><a href="#xpander-sdk.Agent.schemasByNodeName">schemasByNodeName</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.schemasByNodeName">schemasByNodeName</a></code> | Retrieves schemas grouped by node name based on the active prompt group session. |
 | <code><a href="#xpander-sdk.Agent.selectPromptGroup">selectPromptGroup</a></code> | *No description.* |
 
 ---
@@ -276,6 +276,12 @@ The list of tool calls to execute.
 ```typescript
 public schemasByNodeName(): {[ key: string ]: INodeSchema}
 ```
+
+Retrieves schemas grouped by node name based on the active prompt group session.
+
+This method returns an object where each key is a node name, and the value is the corresponding schema.
+It ensures that schemas are only fetched if there is an active session with a valid `promptGroupId`
+and if `pgSchemas` is not empty.
 
 ##### `selectPromptGroup` <a name="selectPromptGroup" id="xpander-sdk.Agent.selectPromptGroup"></a>
 
@@ -2391,6 +2397,8 @@ Parameters used by the local tool function.
 
 - *Implemented By:* <a href="#xpander-sdk.INodeSchema">INodeSchema</a>
 
+Represents the schema of a single node with defined input and output structures.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -2599,6 +2607,8 @@ public readonly nodeName: string;
 ### IPGSchema <a name="IPGSchema" id="xpander-sdk.IPGSchema"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IPGSchema">IPGSchema</a>
+
+Represents a schema group for a prompt group session (PGSchema), containing multiple node schemas.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2844,6 +2854,8 @@ Parameters for the URL query string.
 ### IToolExecutionResult <a name="IToolExecutionResult" id="xpander-sdk.IToolExecutionResult"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IToolExecutionResult">IToolExecutionResult</a>
+
+Represents the result of a tool execution, including status, data, and success indicator.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
