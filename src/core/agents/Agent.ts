@@ -245,7 +245,9 @@ export class Agent extends Base {
   public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult {
     let toolCallResult = ToolCallResult.fromObject({
       functionName: tool.name,
-      payload: ensureToolCallPayloadStructure(tool?.payload || {}),
+      payload: JSON.parse(
+        JSON.stringify(ensureToolCallPayloadStructure(tool?.payload || {})),
+      ),
       toolCallId: tool.toolCallId,
     });
 
