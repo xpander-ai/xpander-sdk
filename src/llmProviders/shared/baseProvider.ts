@@ -150,9 +150,9 @@ export class BaseLLMProvider {
     const schemasByNodeName = this.agent.schemasByNodeName();
 
     if (Object.keys(schemasByNodeName).length !== 0) {
-      for (const tool of tools) {
-        filterOutProperties(tool, schemasByNodeName, 'input');
-      }
+      return tools.map((tool) =>
+        filterOutProperties(tool, schemasByNodeName, 'input'),
+      );
     }
 
     return tools;

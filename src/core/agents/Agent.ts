@@ -243,7 +243,7 @@ export class Agent extends Base {
    * @returns The result of the tool execution.
    */
   public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult {
-    const toolCallResult = ToolCallResult.fromObject({
+    let toolCallResult = ToolCallResult.fromObject({
       functionName: tool.name,
       payload: ensureToolCallPayloadStructure(tool?.payload || {}),
       toolCallId: tool.toolCallId,
@@ -282,8 +282,8 @@ export class Agent extends Base {
       const shouldEnforceSchema = !!schemasByNodeName?.[originalToolName];
 
       if (shouldEnforceSchema) {
-        appendPermanentValues(
-          { ...tool, name: originalToolName },
+        tool = appendPermanentValues(
+          ToolCall.fromObject({ ...tool.toDict(), name: originalToolName }),
           schemasByNodeName,
         );
       }
@@ -303,7 +303,10 @@ export class Agent extends Base {
       }
 
       if (shouldEnforceSchema) {
-        appendPermanentValuesToResult(toolCallResult, schemasByNodeName);
+        toolCallResult = appendPermanentValuesToResult(
+          toolCallResult,
+          schemasByNodeName,
+        );
       }
 
       if (!!this.promptGroupSessions.activeSession) {

@@ -79,7 +79,7 @@ export interface INodeSchema {
 }
 
 /**
- * Represents a schema group for a prompt group session (PGSchema), 
+ * Represents a schema group for a prompt group session (PGSchema),
  * containing multiple node schemas.
  */
 export interface IPGSchema {
