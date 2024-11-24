@@ -243,18 +243,18 @@ export class Agent extends Base {
    * @returns The result of the tool execution.
    */
   public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult {
+    let clonedTool = ToolCall.fromObject(tool.toDict());
     let toolCallResult = ToolCallResult.fromObject({
-      functionName: tool.name,
-      payload: JSON.parse(
-        JSON.stringify(ensureToolCallPayloadStructure(tool?.payload || {})),
-      ),
-      toolCallId: tool.toolCallId,
+      functionName: clonedTool.name,
+      payload: ensureToolCallPayloadStructure(clonedTool?.payload || {}),
+      toolCallId: clonedTool.toolCallId,
     });
 
-    if (tool.isPg) {
+    if (clonedTool.isPg) {
       // start session
       try {
-        toolCallResult.result = this.promptGroupSessions.startPgSession(tool);
+        toolCallResult.result =
+          this.promptGroupSessions.startPgSession(clonedTool);
         toolCallResult.isSuccess = true;
       } catch (err: any) {
         toolCallResult.isError = true;
@@ -263,35 +263,41 @@ export class Agent extends Base {
       return toolCallResult;
     }
 
-    if (tool.type !== ToolCallType.XPANDER) {
+    if (clonedTool.type !== ToolCallType.XPANDER) {
       return toolCallResult;
     }
 
     // run tool
     try {
       if (payloadExtension && typeof payloadExtension === 'object') {
-        if (!tool.payload) {
-          tool.payload = {} as IToolCallPayload;
+        if (!clonedTool.payload) {
+          clonedTool.payload = {} as IToolCallPayload;
         }
-        tool.payload = mergeDeep(tool.payload, payloadExtension);
+        toolCallResult.payload = clonedTool.payload = mergeDeep(
+          clonedTool.payload,
+          payloadExtension,
+        );
       }
 
       // append permanent values
       const schemasByNodeName = this.schemasByNodeName();
       const originalToolName =
-        this.originalToolNamesReMapping?.[tool.name] || tool.name;
+        this.originalToolNamesReMapping?.[clonedTool.name] || clonedTool.name;
 
       const shouldEnforceSchema = !!schemasByNodeName?.[originalToolName];
 
       if (shouldEnforceSchema) {
-        tool = appendPermanentValues(
-          ToolCall.fromObject({ ...tool.toDict(), name: originalToolName }),
+        clonedTool = appendPermanentValues(
+          ToolCall.fromObject({
+            ...clonedTool.toDict(),
+            name: originalToolName,
+          }),
           schemasByNodeName,
         );
       }
       const executionResult = executeTool(
         ToolCall.fromObject({
-          ...tool,
+          ...clonedTool,
           name: originalToolName,
         }),
         this.url,
@@ -312,7 +318,7 @@ export class Agent extends Base {
       }
 
       if (!!this.promptGroupSessions.activeSession) {
-        this.promptGroupSessions.activeSession.lastNode = tool.name;
+        this.promptGroupSessions.activeSession.lastNode = clonedTool.name;
       }
       toolCallResult.isSuccess = true;
     } catch (err: any) {
