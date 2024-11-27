@@ -86,3 +86,12 @@ export interface IPGSchema {
   readonly id: string; // Unique identifier for the schema group
   readonly schemas: INodeSchema[]; // Array of node schemas within the group
 }
+
+/**
+ * Represents a prompt group + node name node's description override
+ */
+export interface INodeDescription {
+  readonly promptGroupId: string; // Unique identifier of the prompt group
+  readonly nodeName: string; // Node name to apply the description to
+  readonly description: string; // The description override
+}

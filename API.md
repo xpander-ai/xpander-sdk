@@ -16,7 +16,7 @@ and managing prompt group sessions.
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean, pgSchemas?: IPGSchema[])
+new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean, pgSchemas?: IPGSchema[], pgNodeDescriptionOverride?: INodeDescription[])
 ```
 
 | **Name** | **Type** | **Description** |
@@ -33,6 +33,7 @@ new Agent(configuration: Configuration, id: string, organizationId: string, stat
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.autoLoad">autoLoad</a></code> | <code>boolean</code> | Whether the agent should automatically load its resources. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgSchemas">pgSchemas</a></code> | <code><a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]</code> | Array of agent tools specific to prompt groups. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgNodeDescriptionOverride">pgNodeDescriptionOverride</a></code> | <code><a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]</code> | Array of agent tools specific to prompt groups. |
 
 ---
 
@@ -127,6 +128,14 @@ Whether the agent should automatically load its resources.
 ##### `pgSchemas`<sup>Optional</sup> <a name="pgSchemas" id="xpander-sdk.Agent.Initializer.parameter.pgSchemas"></a>
 
 - *Type:* <a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]
+
+Array of agent tools specific to prompt groups.
+
+---
+
+##### `pgNodeDescriptionOverride`<sup>Optional</sup> <a name="pgNodeDescriptionOverride" id="xpander-sdk.Agent.Initializer.parameter.pgNodeDescriptionOverride"></a>
+
+- *Type:* <a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]
 
 Array of agent tools specific to prompt groups.
 
@@ -331,6 +340,7 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | Collection of local tools specific to this agent. |
 | <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
+| <code><a href="#xpander-sdk.Agent.property.pgNodeDescriptionOverride">pgNodeDescriptionOverride</a></code> | <code><a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]</code> | Array of agent tools specific to prompt groups. |
 | <code><a href="#xpander-sdk.Agent.property.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
 | <code><a href="#xpander-sdk.Agent.property.pgSchemas">pgSchemas</a></code> | <code><a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]</code> | Array of agent tools specific to prompt groups. |
 | <code><a href="#xpander-sdk.Agent.property.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | Whether prompt group switching is allowed for the agent. |
@@ -459,6 +469,18 @@ public readonly organizationId: string;
 - *Type:* string
 
 Organization ID to which the agent belongs.
+
+---
+
+##### `pgNodeDescriptionOverride`<sup>Required</sup> <a name="pgNodeDescriptionOverride" id="xpander-sdk.Agent.property.pgNodeDescriptionOverride"></a>
+
+```typescript
+public readonly pgNodeDescriptionOverride: INodeDescription[];
+```
+
+- *Type:* <a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]
+
+Array of agent tools specific to prompt groups.
 
 ---
 
@@ -2390,6 +2412,53 @@ public readonly parameters: any;
 - *Type:* any
 
 Parameters used by the local tool function.
+
+---
+
+### INodeDescription <a name="INodeDescription" id="xpander-sdk.INodeDescription"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.INodeDescription">INodeDescription</a>
+
+Represents a prompt group + node name node's description override.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.INodeDescription.property.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.INodeDescription.property.nodeName">nodeName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.INodeDescription.property.promptGroupId">promptGroupId</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.INodeDescription.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+---
+
+##### `nodeName`<sup>Required</sup> <a name="nodeName" id="xpander-sdk.INodeDescription.property.nodeName"></a>
+
+```typescript
+public readonly nodeName: string;
+```
+
+- *Type:* string
+
+---
+
+##### `promptGroupId`<sup>Required</sup> <a name="promptGroupId" id="xpander-sdk.INodeDescription.property.promptGroupId"></a>
+
+```typescript
+public readonly promptGroupId: string;
+```
+
+- *Type:* string
 
 ---
 

@@ -1,8 +1,9 @@
 import { LLMProvider } from '../../constants/llmProvider';
+import { TOOL_BASE_DESCRIPTION } from '../../constants/tools';
 import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
 import { Agent } from '../../core/agents/Agent';
 import { ToolCall } from '../../core/toolCalls';
-import { createTool, filterOutProperties } from '../../core/tools';
+import { createTool, modifyPropertiesByRemoteSettings } from '../../core/tools';
 import { IToolInstructions } from '../../types';
 
 /**
@@ -87,23 +88,32 @@ export class BaseLLMProvider {
     const sessionTools: any[] = pgSessions.getToolsForActiveSession(allTools);
 
     // add instructions per node
-    if (
-      sessionTools.length !== 0 &&
-      !!pgSessions.activeSession &&
-      Array.isArray(
-        pgSessions?.activeSession?.pg?.operationNodesInstructions,
-      ) &&
-      pgSessions.activeSession.pg.operationNodesInstructions.length !== 0
-    ) {
+    if (sessionTools.length !== 0 && !!pgSessions.activeSession) {
       const graphNodesInstructions =
         pgSessions.activeSession.pg.operationNodesInstructions;
       for (const sessionTool of sessionTools) {
         const {
           function: { name: nodeName },
         } = sessionTool;
-        const nodeInstructions = graphNodesInstructions.find(
+        const nodeInstructions = graphNodesInstructions?.find(
           (gni) => gni.nodeName === nodeName,
         );
+        // override tool description for active pg session
+        if (
+          !!this?.agent?.promptGroupSessions?.activeSession?.pg?.promptGroupId
+        ) {
+          const activePg =
+            this.agent.promptGroupSessions.activeSession.pg.promptGroupId;
+          const descriptionOverride = this.agent.pgNodeDescriptionOverride.find(
+            (pndo) =>
+              pndo.promptGroupId === activePg &&
+              pndo.nodeName === sessionTool.function.name,
+          );
+          if (!!descriptionOverride?.description) {
+            sessionTool.function.description = `${descriptionOverride.description} - ${TOOL_BASE_DESCRIPTION}`;
+          }
+        }
+
         if (nodeInstructions?.instructions) {
           const addon = ` - IMPORTANT INSTRUCTIONS FOR THIS TOOL: ${nodeInstructions.instructions}`;
           sessionTool.function.description =
@@ -151,7 +161,7 @@ export class BaseLLMProvider {
 
     if (Object.keys(schemasByNodeName).length !== 0) {
       return tools.map((tool) =>
-        filterOutProperties(tool, schemasByNodeName, 'input'),
+        modifyPropertiesByRemoteSettings(tool, schemasByNodeName, 'input'),
       );
     }
 
