@@ -10,7 +10,7 @@ import {
 import { Configuration } from './Configuration';
 import { ToolCall, ToolCallResult } from './toolCalls';
 import { convertKeysToSnakeCase, toCamelCase } from './utils';
-import { LOCAL_TOOL_PREFIX } from '../constants/tools';
+import { LOCAL_TOOL_PREFIX, TOOL_BASE_DESCRIPTION } from '../constants/tools';
 import { CUSTOM_AGENT_ID } from '../constants/xpanderClient';
 import { INodeSchema, SourceNodeType } from '../types/agents';
 
@@ -25,7 +25,7 @@ export function createTool(toolInstructions: IToolInstructions): any {
   const { id, functionDescription, parameters } = toolInstructions;
 
   const description =
-    `${functionDescription.split(' - Valid')[0]} IMPORTANT! Ensure to use body_params, query_params, path_params. These are crucial for correct function calling!`.slice(
+    `${functionDescription.split(' - Valid')[0]} ${TOOL_BASE_DESCRIPTION}`.slice(
       0,
       1024,
     );
@@ -215,7 +215,11 @@ export function extractSimplifiedSchemaProps(
       }
 
       // Handle isBlocked and permanentValue properties
-      if (key === 'isBlocked' || key === 'permanentValue') {
+      if (
+        key === 'isBlocked' ||
+        key === 'permanentValue' ||
+        key === 'description'
+      ) {
         const formattedPath = formatPath(currentPath);
         const existingMatch = results.find(
           (result) => result.path === formattedPath,
@@ -237,6 +241,17 @@ export function extractSimplifiedSchemaProps(
             existingMatch.permanentValue = value;
           } else {
             results.push({ path: formattedPath, permanentValue: value });
+          }
+        }
+
+        if (
+          key === 'description' &&
+          (typeof value === 'string' || typeof value === 'number')
+        ) {
+          if (existingMatch) {
+            existingMatch.description = value as string;
+          } else {
+            results.push({ path: formattedPath, description: value as string });
           }
         }
       }
@@ -339,7 +354,7 @@ export function deletePropertyByPath(obj: any, path: string): void {
  * @param schemasByNodeName - The schemas defining property restrictions.
  * @param kind - The type of schema to consider ('input' or 'output').
  */
-export function filterOutProperties(
+export function modifyPropertiesByRemoteSettings(
   tool: any,
   schemasByNodeName: Record<string, INodeSchema>,
   kind: 'input' | 'output',
@@ -350,7 +365,10 @@ export function filterOutProperties(
     let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
     if (
       simplifiedSchema.some(
-        (prop) => prop.isBlocked === true || !!prop.permanentValue,
+        (prop) =>
+          prop.isBlocked === true ||
+          !!prop.permanentValue ||
+          !!prop.description,
       )
     ) {
       // convert paths to camelCase
@@ -361,6 +379,9 @@ export function filterOutProperties(
         return prop;
       });
       for (const prop of simplifiedSchema) {
+        if (!!prop.description) {
+          appendDescriptionOverride(newTool, schemasByNodeName);
+        }
         // if is blocked or has sticky value - llm shouldn't know about it
         if (prop.isBlocked || !!prop.permanentValue) {
           deletePropertyByPath(newTool.function.parameters, prop.path);
@@ -506,4 +527,43 @@ export function appendPermanentValuesToResult(
     }
   }
   return newToolCallResult;
+}
+
+/**
+ * Appends description override values to the tool's parameters description based on schema restrictions.
+ *
+ * @param tool - The tool object to modify.
+ * @param schemasByNodeName - The schemas defining property restrictions.
+ */
+export function appendDescriptionOverride(
+  tool: any,
+  schemasByNodeName: Record<string, INodeSchema>,
+): any {
+  const newTool = { ...tool };
+  const matchedSchemas = schemasByNodeName?.[newTool.function.name]?.input;
+  if (matchedSchemas) {
+    let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
+    if (simplifiedSchema.some((prop) => !!prop.description)) {
+      // convert paths to camelCase
+      simplifiedSchema = simplifiedSchema.map((prop) => {
+        const pathParts = prop.path.split('.');
+        pathParts[1] = toCamelCase(pathParts[1]);
+        // join and remove "properties" prefix
+        prop.path = pathParts.join('.').replace(/^\./, ''); // Remove leading dot if present
+
+        return prop;
+      });
+      for (const prop of simplifiedSchema) {
+        // if is has description override
+        if (!!prop.description) {
+          setValueByPath(
+            newTool.function.parameters,
+            `${prop.path}.description`,
+            prop.description,
+          );
+        }
+      }
+    }
+  }
+  return newTool;
 }

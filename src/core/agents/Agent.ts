@@ -17,6 +17,7 @@ import {
   INodeSchema,
   IPGSchema,
   SourceNodeType,
+  INodeDescription,
 } from '../../types/agents';
 import { Base } from '../base';
 import { Configuration } from '../Configuration';
@@ -85,6 +86,9 @@ export class Agent extends Base {
 
     /** Array of agent tools specific to prompt groups. */
     public pgSchemas: IPGSchema[] = [],
+
+    /** Array of agent tools specific to prompt groups. */
+    public pgNodeDescriptionOverride: INodeDescription[] = [],
   ) {
     super();
     if (this.tools.length !== 0) {
@@ -179,6 +183,11 @@ export class Agent extends Base {
               input: nodeSchema.schemas.input,
               output: nodeSchema.schemas.output,
             })),
+          })) || [],
+          rawAgent?.pgs_tools_descriptions?.map((ptd: any) => ({
+            promptGroupId: ptd.prompt_group_id,
+            nodeName: ptd.node_name,
+            description: ptd.description,
           })) || [],
         );
         Object.assign(this, loadedAgent);
