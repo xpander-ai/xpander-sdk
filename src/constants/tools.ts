@@ -35,6 +35,3 @@ export const DEFAULT_TOOL_PARAMETERS = Object.freeze({
 
 /** Prefix for identifying local tools in xpanderAI. */
 export const LOCAL_TOOL_PREFIX = 'xpLocal_';
-
-export const TOOL_BASE_DESCRIPTION =
-  'IMPORTANT! Ensure to use body_params, query_params, path_params. These are crucial for correct function calling!';
