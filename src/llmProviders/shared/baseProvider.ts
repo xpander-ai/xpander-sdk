@@ -1,5 +1,4 @@
 import { LLMProvider } from '../../constants/llmProvider';
-import { TOOL_BASE_DESCRIPTION } from '../../constants/tools';
 import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
 import { Agent } from '../../core/agents/Agent';
 import { ToolCall } from '../../core/toolCalls';
@@ -110,7 +109,7 @@ export class BaseLLMProvider {
               pndo.nodeName === sessionTool.function.name,
           );
           if (!!descriptionOverride?.description) {
-            sessionTool.function.description = `${descriptionOverride.description} - ${TOOL_BASE_DESCRIPTION}`;
+            sessionTool.function.description = descriptionOverride.description;
           }
         }
 

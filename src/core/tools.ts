@@ -10,7 +10,7 @@ import {
 import { Configuration } from './Configuration';
 import { ToolCall, ToolCallResult } from './toolCalls';
 import { convertKeysToSnakeCase, toCamelCase } from './utils';
-import { LOCAL_TOOL_PREFIX, TOOL_BASE_DESCRIPTION } from '../constants/tools';
+import { LOCAL_TOOL_PREFIX } from '../constants/tools';
 import { CUSTOM_AGENT_ID } from '../constants/xpanderClient';
 import { INodeSchema, SourceNodeType } from '../types/agents';
 
@@ -24,11 +24,7 @@ import { INodeSchema, SourceNodeType } from '../types/agents';
 export function createTool(toolInstructions: IToolInstructions): any {
   const { id, functionDescription, parameters } = toolInstructions;
 
-  const description =
-    `${functionDescription.split(' - Valid')[0]} ${TOOL_BASE_DESCRIPTION}`.slice(
-      0,
-      1024,
-    );
+  const description = functionDescription.slice(0, 1024);
 
   const createdTool: ITool = {
     name: id,
