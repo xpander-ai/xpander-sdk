@@ -1385,6 +1385,72 @@ Array of agent tools specific to prompt groups.
 ---
 
 
+### RealTimeOpenAISupportedModels <a name="RealTimeOpenAISupportedModels" id="xpander-sdk.RealTimeOpenAISupportedModels"></a>
+
+Contains constants representing various models supported by OpenAI.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.RealTimeOpenAISupportedModels.Initializer"></a>
+
+```typescript
+import { RealTimeOpenAISupportedModels } from 'xpander-sdk'
+
+new RealTimeOpenAISupportedModels()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_AUDIO_PREVIEW">GPT_4_O_AUDIO_PREVIEW</a></code> | <code>string</code> | OpenAI GPT-4o Audio Preview model. |
+| <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_REALTIME_PREVIEW">GPT_4_O_REALTIME_PREVIEW</a></code> | <code>string</code> | OpenAI GPT-4o Realtime Preview model. |
+| <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.WHISPER_1">WHISPER_1</a></code> | <code>string</code> | OpenAI Whisper model. |
+
+---
+
+##### `GPT_4_O_AUDIO_PREVIEW`<sup>Required</sup> <a name="GPT_4_O_AUDIO_PREVIEW" id="xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_AUDIO_PREVIEW"></a>
+
+```typescript
+public readonly GPT_4_O_AUDIO_PREVIEW: string;
+```
+
+- *Type:* string
+
+OpenAI GPT-4o Audio Preview model.
+
+---
+
+##### `GPT_4_O_REALTIME_PREVIEW`<sup>Required</sup> <a name="GPT_4_O_REALTIME_PREVIEW" id="xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_REALTIME_PREVIEW"></a>
+
+```typescript
+public readonly GPT_4_O_REALTIME_PREVIEW: string;
+```
+
+- *Type:* string
+
+OpenAI GPT-4o Realtime Preview model.
+
+---
+
+##### `WHISPER_1`<sup>Required</sup> <a name="WHISPER_1" id="xpander-sdk.RealTimeOpenAISupportedModels.property.WHISPER_1"></a>
+
+```typescript
+public readonly WHISPER_1: string;
+```
+
+- *Type:* string
+
+OpenAI Whisper model.
+
+---
+
 ### ToolCall <a name="ToolCall" id="xpander-sdk.ToolCall"></a>
 
 #### Initializers <a name="Initializers" id="xpander-sdk.ToolCall.Initializer"></a>
@@ -3157,6 +3223,7 @@ selection of the desired LLM provider for specific tasks.
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.REAL_TIME_OPEN_AI">REAL_TIME_OPEN_AI</a></code> | Represents the 'openai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.AMAZON_BEDROCK">AMAZON_BEDROCK</a></code> | Represents the 'amazonBedrock' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.OLLAMA">OLLAMA</a></code> | Represents the 'ollama' provider. |
@@ -3171,6 +3238,13 @@ Represents the 'langchain' provider.
 
 
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
+
+Represents the 'openai' provider.
+
+---
+
+
+##### `REAL_TIME_OPEN_AI` <a name="REAL_TIME_OPEN_AI" id="xpander-sdk.LLMProvider.REAL_TIME_OPEN_AI"></a>
 
 Represents the 'openai' provider.
 

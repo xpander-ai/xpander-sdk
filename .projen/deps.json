@@ -5,6 +5,10 @@
       "type": "build"
     },
     {
+      "name": "@flowiseai/openai-realtime-api-beta",
+      "type": "build"
+    },
+    {
       "name": "@langchain/openai",
       "type": "build"
     },
