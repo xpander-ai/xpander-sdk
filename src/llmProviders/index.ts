@@ -4,9 +4,11 @@ import { LangChain } from './langchain';
 import { NvidiaNIM } from './nvidiaNim';
 import { Ollama } from './ollama';
 import { OpenAI } from './openai';
+import { RealTimeOpenAI } from './rtOpenAI';
 // Define and export all available providers in a single list for easy management
 const allProviders = [
   OpenAI,
+  RealTimeOpenAI,
   LangChain,
   AmazonBedrock,
   NvidiaNIM,

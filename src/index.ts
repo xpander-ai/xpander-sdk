@@ -14,4 +14,5 @@ export {
 
 export { AmazonBedrockSupportedModels } from './llmProviders/amazonBedrock';
 export { OpenAISupportedModels } from './llmProviders/openai';
+export { RealTimeOpenAISupportedModels } from './llmProviders/rtOpenAI';
 export { NvidiaNIMSupportedModels } from './llmProviders/nvidiaNim';
