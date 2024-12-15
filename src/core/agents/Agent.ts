@@ -1,6 +1,11 @@
 import request, { HttpVerb } from 'sync-request';
 import { LLMProvider } from '../../constants/llmProvider';
-import { LOCAL_TOOL_PREFIX } from '../../constants/tools';
+import {
+  LOCAL_TOOL_PREFIX,
+  OVERSIZED_RESPONSE_TOOL_NAMES,
+  OVERSIZED_RESPONSE_TOOLS,
+  OverSizedResponseTool,
+} from '../../constants/tools';
 import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
 
 import { allProviders } from '../../llmProviders';
@@ -28,9 +33,11 @@ import {
   appendPermanentValuesToResult,
   ensureToolCallPayloadStructure,
   executeTool,
+  isOversizedToolResponse,
   mergeDeep,
 } from '../tools';
 import { convertKeysToCamelCase, convertKeysToSnakeCase } from '../utils';
+import { vectorSearchWithBubble } from '../vector';
 
 /**
  * Represents an agent in xpanderAI, managing the tools, sessions, and operations
@@ -46,6 +53,8 @@ export class Agent extends Base {
 
   /** Manages prompt group sessions for this agent. */
   public promptGroupSessions: PromptGroupSessionsList;
+
+  protected oversizedResponseCache: any = null;
 
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
@@ -206,6 +215,10 @@ export class Agent extends Base {
     llmProvider: LLMProvider = LLMProvider.OPEN_AI,
     returnAllTools: boolean = false,
   ): any[] {
+    if (!!this.oversizedResponseCache) {
+      return this.getOversizedResponseTools(llmProvider);
+    }
+
     const provider = allProviders.find((p) => p.shouldHandle(llmProvider));
     if (!provider) {
       throw new Error(`provider (${llmProvider}) not found`);
@@ -220,6 +233,20 @@ export class Agent extends Base {
     };
 
     return tools;
+  }
+
+  protected getOversizedResponseTools(
+    llmProvider: LLMProvider = LLMProvider.OPEN_AI,
+  ): any[] {
+    const tools: any[] = OVERSIZED_RESPONSE_TOOLS;
+
+    const provider = allProviders.find((p) => p.shouldHandle(llmProvider));
+    if (!provider) {
+      throw new Error(`provider (${llmProvider}) not found`);
+    }
+    const providerInstance = new provider(this);
+
+    return providerInstance.postProcessTools(tools);
   }
 
   /** Constructs the API URL for this agent. */
@@ -252,6 +279,10 @@ export class Agent extends Base {
    * @returns The result of the tool execution.
    */
   public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult {
+    if (OVERSIZED_RESPONSE_TOOL_NAMES.includes(tool.name)) {
+      return this.runOversizedResponseTool(tool);
+    }
+
     let clonedTool = ToolCall.fromObject(tool.toDict());
     let toolCallResult = ToolCallResult.fromObject({
       functionName: clonedTool.name,
@@ -329,6 +360,13 @@ export class Agent extends Base {
       if (!!this.promptGroupSessions.activeSession) {
         this.promptGroupSessions.activeSession.lastNode = clonedTool.name;
       }
+
+      const isOverSized = isOversizedToolResponse(toolCallResult.result);
+      if (isOverSized) {
+        this.oversizedResponseCache = toolCallResult.result;
+        toolCallResult.result = `the output of tool ${toolCallResult.functionName} is too big (${JSON.stringify(toolCallResult.result).length} chars). you can: 1. get full response. 2. search in the response. 3. skip or continue`;
+      }
+
       toolCallResult.isSuccess = true;
     } catch (err: any) {
       toolCallResult.isError = true;
@@ -409,5 +447,36 @@ export class Agent extends Base {
       return schemasByNodeName;
     }
     return {};
+  }
+
+  protected runOversizedResponseTool(tool: ToolCall): ToolCallResult {
+    let clonedTool = ToolCall.fromObject(tool.toDict());
+    let toolCallResult = ToolCallResult.fromObject({
+      functionName: clonedTool.name,
+      payload: ensureToolCallPayloadStructure(clonedTool?.payload || {}),
+      toolCallId: clonedTool.toolCallId,
+    });
+
+    switch (tool.name) {
+      case OverSizedResponseTool.GetFullResponse: {
+        toolCallResult.result = this.oversizedResponseCache;
+        this.oversizedResponseCache = null;
+        return toolCallResult;
+      }
+      case OverSizedResponseTool.SkipOrContinue: {
+        toolCallResult.result = 'skipped';
+        this.oversizedResponseCache = null;
+        return toolCallResult;
+      }
+      case OverSizedResponseTool.SearchInTheResponse: {
+        toolCallResult.result = vectorSearchWithBubble(
+          JSON.stringify(this.oversizedResponseCache),
+          tool.payload.bodyParams.phrase,
+        );
+        return toolCallResult;
+      }
+    }
+
+    return toolCallResult;
   }
 }
