@@ -75,3 +75,22 @@ export const convertKeysToSnakeCase = (
   }
   return obj;
 };
+
+export const countTokens = (input: string): number => {
+  /**
+   * A simple tokenizer function to estimate token count.
+   * This splits the string by spaces and common delimiters.
+   *
+   * @param input - The input string to tokenize.
+   * @returns The estimated number of tokens.
+   */
+
+  // Define a regular expression to match words and common punctuation
+  const regex = /\w+|[^\s\w]/g;
+
+  // Match the string against the regex to extract tokens
+  const tokens = input.match(regex);
+
+  // Return the number of tokens, or 0 if no matches found
+  return tokens ? tokens.length : 0;
+};
