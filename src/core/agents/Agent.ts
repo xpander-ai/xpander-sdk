@@ -472,6 +472,7 @@ export class Agent extends Base {
         toolCallResult.result = vectorSearchWithBubble(
           JSON.stringify(this.oversizedResponseCache),
           tool.payload.bodyParams.phrase,
+          1000,
         );
         return toolCallResult;
       }
