@@ -200,8 +200,8 @@ export class Agent extends Base {
             nodeName: ptd.node_name,
             description: ptd.description,
           })) || [],
-          agent.generalInstructions,
-          agent.judgeInstructions,
+          agent.generalInstructions || '',
+          agent.judgeInstructions || '',
         );
         Object.assign(this, loadedAgent);
       } catch (err) {
