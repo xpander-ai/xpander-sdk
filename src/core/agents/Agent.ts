@@ -98,6 +98,8 @@ export class Agent extends Base {
 
     /** Array of agent tools specific to prompt groups. */
     public pgNodeDescriptionOverride: INodeDescription[] = [],
+    public generalInstructions: string = '',
+    public judgeInstructions: string = '',
   ) {
     super();
     if (this.tools.length !== 0) {
@@ -198,6 +200,8 @@ export class Agent extends Base {
             nodeName: ptd.node_name,
             description: ptd.description,
           })) || [],
+          agent.generalInstructions,
+          agent.judgeInstructions,
         );
         Object.assign(this, loadedAgent);
       } catch (err) {

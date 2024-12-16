@@ -16,7 +16,7 @@ and managing prompt group sessions.
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean, pgSchemas?: IPGSchema[], pgNodeDescriptionOverride?: INodeDescription[])
+new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean, pgSchemas?: IPGSchema[], pgNodeDescriptionOverride?: INodeDescription[], generalInstructions?: string, judgeInstructions?: string)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -34,6 +34,8 @@ new Agent(configuration: Configuration, id: string, organizationId: string, stat
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.autoLoad">autoLoad</a></code> | <code>boolean</code> | Whether the agent should automatically load its resources. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgSchemas">pgSchemas</a></code> | <code><a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]</code> | Array of agent tools specific to prompt groups. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgNodeDescriptionOverride">pgNodeDescriptionOverride</a></code> | <code><a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]</code> | Array of agent tools specific to prompt groups. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.generalInstructions">generalInstructions</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.judgeInstructions">judgeInstructions</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -138,6 +140,18 @@ Array of agent tools specific to prompt groups.
 - *Type:* <a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]
 
 Array of agent tools specific to prompt groups.
+
+---
+
+##### `generalInstructions`<sup>Optional</sup> <a name="generalInstructions" id="xpander-sdk.Agent.Initializer.parameter.generalInstructions"></a>
+
+- *Type:* string
+
+---
+
+##### `judgeInstructions`<sup>Optional</sup> <a name="judgeInstructions" id="xpander-sdk.Agent.Initializer.parameter.judgeInstructions"></a>
+
+- *Type:* string
 
 ---
 
@@ -335,8 +349,10 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Retrieves the type of source node for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.url">url</a></code> | <code>string</code> | Constructs the API URL for this agent. |
 | <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.generalInstructions">generalInstructions</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Array of graph items related to the agent. |
 | <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | Unique identifier for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.judgeInstructions">judgeInstructions</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | Collection of local tools specific to this agent. |
 | <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
@@ -412,6 +428,16 @@ Configuration settings for the agent.
 
 ---
 
+##### `generalInstructions`<sup>Required</sup> <a name="generalInstructions" id="xpander-sdk.Agent.property.generalInstructions"></a>
+
+```typescript
+public readonly generalInstructions: string;
+```
+
+- *Type:* string
+
+---
+
 ##### `graphs`<sup>Required</sup> <a name="graphs" id="xpander-sdk.Agent.property.graphs"></a>
 
 ```typescript
@@ -433,6 +459,16 @@ public readonly id: string;
 - *Type:* string
 
 Unique identifier for the agent.
+
+---
+
+##### `judgeInstructions`<sup>Required</sup> <a name="judgeInstructions" id="xpander-sdk.Agent.property.judgeInstructions"></a>
+
+```typescript
+public readonly judgeInstructions: string;
+```
+
+- *Type:* string
 
 ---
 
