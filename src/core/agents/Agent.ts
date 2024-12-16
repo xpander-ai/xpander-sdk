@@ -484,4 +484,12 @@ export class Agent extends Base {
 
     return toolCallResult;
   }
+
+  public retrieveOversizedResponseCache(): any {
+    return this.oversizedResponseCache;
+  }
+
+  public modifyOversizedResponseCache(cache: any) {
+    return (this.oversizedResponseCache = cache);
+  }
 }
