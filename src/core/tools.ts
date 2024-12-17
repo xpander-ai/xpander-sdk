@@ -566,7 +566,7 @@ export function appendDescriptionOverride(
 
 export const isOversizedToolResponse = (response: any) => {
   try {
-    return countTokens(JSON.stringify(response)) >= 4096; // 4096 tokens
+    return countTokens(JSON.stringify(response)) >= 10000; // 10000 tokens
   } catch (err) {
     return false;
   }
