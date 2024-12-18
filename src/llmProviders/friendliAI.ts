@@ -33,6 +33,6 @@ export class FriendliAI extends OpenAI {
    * @returns A boolean indicating if the current provider matches the specified provider.
    */
   static shouldHandle(llmProvider: LLMProvider): boolean {
-    return llmProvider === LLMProvider.REAL_TIME_OPEN_AI;
+    return llmProvider === LLMProvider.FRIENDLI_AI;
   }
 }
