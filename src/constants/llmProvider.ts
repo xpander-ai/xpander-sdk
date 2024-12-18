@@ -22,4 +22,7 @@ export enum LLMProvider {
 
   /** Represents the 'ollama' provider. */
   OLLAMA = 'ollama',
+
+  /** Represents the 'FriendliAI' provider. */
+  FRIENDLI_AI = 'friendliai',
 }

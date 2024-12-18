@@ -1133,6 +1133,68 @@ Flag to enable or disable metrics reporting.
 ---
 
 
+### FriendliAISupportedModels <a name="FriendliAISupportedModels" id="xpander-sdk.FriendliAISupportedModels"></a>
+
+Contains constants representing various models supported by OpenAI.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.FriendliAISupportedModels.Initializer"></a>
+
+```typescript
+import { FriendliAISupportedModels } from 'xpander-sdk'
+
+new FriendliAISupportedModels()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_70B_INSTRUCT">META_LLAMA_3_1_70B_INSTRUCT</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_8B_INSTRUCT">META_LLAMA_3_1_8B_INSTRUCT</a></code> | <code>string</code> | OpenAI GPT-4o Realtime Preview model. |
+| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.MISTRAL_8X_7B_INSTRUCT">MISTRAL_8X_7B_INSTRUCT</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `META_LLAMA_3_1_70B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA_3_1_70B_INSTRUCT" id="xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_70B_INSTRUCT"></a>
+
+```typescript
+public readonly META_LLAMA_3_1_70B_INSTRUCT: string;
+```
+
+- *Type:* string
+
+---
+
+##### `META_LLAMA_3_1_8B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA_3_1_8B_INSTRUCT" id="xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_8B_INSTRUCT"></a>
+
+```typescript
+public readonly META_LLAMA_3_1_8B_INSTRUCT: string;
+```
+
+- *Type:* string
+
+OpenAI GPT-4o Realtime Preview model.
+
+---
+
+##### `MISTRAL_8X_7B_INSTRUCT`<sup>Required</sup> <a name="MISTRAL_8X_7B_INSTRUCT" id="xpander-sdk.FriendliAISupportedModels.property.MISTRAL_8X_7B_INSTRUCT"></a>
+
+```typescript
+public readonly MISTRAL_8X_7B_INSTRUCT: string;
+```
+
+- *Type:* string
+
+---
+
 ### NvidiaNIMSupportedModels <a name="NvidiaNIMSupportedModels" id="xpander-sdk.NvidiaNIMSupportedModels"></a>
 
 Contains constants representing various models supported by Nvidia NIM.
@@ -1467,7 +1529,7 @@ new RealTimeOpenAISupportedModels()
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_AUDIO_PREVIEW">GPT_4_O_AUDIO_PREVIEW</a></code> | <code>string</code> | OpenAI GPT-4o Audio Preview model. |
 | <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_REALTIME_PREVIEW">GPT_4_O_REALTIME_PREVIEW</a></code> | <code>string</code> | OpenAI GPT-4o Realtime Preview model. |
-| <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.WHISPER_1">WHISPER_1</a></code> | <code>string</code> | OpenAI Whisper model. |
+| <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.WHISPER_1">WHISPER_1</a></code> | <code>string</code> | OpenAI Whisper model for speech-to-text tasks. |
 
 ---
 
@@ -1503,7 +1565,7 @@ public readonly WHISPER_1: string;
 
 - *Type:* string
 
-OpenAI Whisper model.
+OpenAI Whisper model for speech-to-text tasks.
 
 ---
 
@@ -3283,6 +3345,7 @@ selection of the desired LLM provider for specific tasks.
 | <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.AMAZON_BEDROCK">AMAZON_BEDROCK</a></code> | Represents the 'amazonBedrock' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.OLLAMA">OLLAMA</a></code> | Represents the 'ollama' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.FRIENDLI_AI">FRIENDLI_AI</a></code> | Represents the 'FriendliAI' provider. |
 
 ---
 
@@ -3324,6 +3387,13 @@ Represents the 'amazonBedrock' provider.
 ##### `OLLAMA` <a name="OLLAMA" id="xpander-sdk.LLMProvider.OLLAMA"></a>
 
 Represents the 'ollama' provider.
+
+---
+
+
+##### `FRIENDLI_AI` <a name="FRIENDLI_AI" id="xpander-sdk.LLMProvider.FRIENDLI_AI"></a>
+
+Represents the 'FriendliAI' provider.
 
 ---
 
