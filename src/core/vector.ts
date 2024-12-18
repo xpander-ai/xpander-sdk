@@ -123,5 +123,5 @@ export function vectorSearchWithBubble(
   const snippetStart = Math.max(0, startOffset - windowSize);
   const snippetEnd = Math.min(text.length, endOffset + windowSize);
 
-  return text.slice(snippetStart, snippetEnd);
+  return text.slice(snippetStart < windowSize ? 0 : snippetStart, snippetEnd);
 }

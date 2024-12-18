@@ -1,5 +1,6 @@
 // Import providers
 import { AmazonBedrock } from './amazonBedrock';
+import { FriendliAI } from './friendliAI';
 import { LangChain } from './langchain';
 import { NvidiaNIM } from './nvidiaNim';
 import { Ollama } from './ollama';
@@ -9,6 +10,7 @@ import { RealTimeOpenAI } from './rtOpenAI';
 const allProviders = [
   OpenAI,
   RealTimeOpenAI,
+  FriendliAI,
   LangChain,
   AmazonBedrock,
   NvidiaNIM,
