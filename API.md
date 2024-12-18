@@ -1157,9 +1157,9 @@ new FriendliAISupportedModels()
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_70B_INSTRUCT">META_LLAMA_3_1_70B_INSTRUCT</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_8B_INSTRUCT">META_LLAMA_3_1_8B_INSTRUCT</a></code> | <code>string</code> | OpenAI GPT-4o Realtime Preview model. |
-| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.MISTRAL_8X_7B_INSTRUCT">MISTRAL_8X_7B_INSTRUCT</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_70B_INSTRUCT">META_LLAMA_3_1_70B_INSTRUCT</a></code> | <code>string</code> | Meta LLaMA 3.1 70B Instruct model. |
+| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_8B_INSTRUCT">META_LLAMA_3_1_8B_INSTRUCT</a></code> | <code>string</code> | Meta LLaMA 3.1 8B Instruct model. |
+| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.MISTRAL_8X_7B_INSTRUCT">MISTRAL_8X_7B_INSTRUCT</a></code> | <code>string</code> | Mistral 8x7B Instruct model (version 0.1). |
 
 ---
 
@@ -1171,6 +1171,8 @@ public readonly META_LLAMA_3_1_70B_INSTRUCT: string;
 
 - *Type:* string
 
+Meta LLaMA 3.1 70B Instruct model.
+
 ---
 
 ##### `META_LLAMA_3_1_8B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA_3_1_8B_INSTRUCT" id="xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_8B_INSTRUCT"></a>
@@ -1181,7 +1183,7 @@ public readonly META_LLAMA_3_1_8B_INSTRUCT: string;
 
 - *Type:* string
 
-OpenAI GPT-4o Realtime Preview model.
+Meta LLaMA 3.1 8B Instruct model.
 
 ---
 
@@ -1192,6 +1194,8 @@ public readonly MISTRAL_8X_7B_INSTRUCT: string;
 ```
 
 - *Type:* string
+
+Mistral 8x7B Instruct model (version 0.1).
 
 ---
 
