@@ -163,6 +163,7 @@ Array of agent tools specific to prompt groups.
 | <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.toJson">toJson</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
+| <code><a href="#xpander-sdk.Agent.disableOversizedResponseFunctionality">disableOversizedResponseFunctionality</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with the specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
 | <code><a href="#xpander-sdk.Agent.modifyOversizedResponseCache">modifyOversizedResponseCache</a></code> | *No description.* |
@@ -213,6 +214,12 @@ Adds local tools to the agent with prefixed function names.
 The list of local tools to add.
 
 ---
+
+##### `disableOversizedResponseFunctionality` <a name="disableOversizedResponseFunctionality" id="xpander-sdk.Agent.disableOversizedResponseFunctionality"></a>
+
+```typescript
+public disableOversizedResponseFunctionality(): void
+```
 
 ##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
 

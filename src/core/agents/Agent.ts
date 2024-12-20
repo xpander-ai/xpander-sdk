@@ -56,6 +56,8 @@ export class Agent extends Base {
 
   protected oversizedResponseCache: any = null;
 
+  protected oversizedResponseFunctionalityEnabled: boolean = true;
+
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
 
@@ -366,7 +368,7 @@ export class Agent extends Base {
       }
 
       const isOverSized = isOversizedToolResponse(toolCallResult.result);
-      if (isOverSized) {
+      if (isOverSized && this.oversizedResponseFunctionalityEnabled) {
         this.oversizedResponseCache = toolCallResult.result;
         toolCallResult.result = `the output of tool ${toolCallResult.functionName} is too big (${JSON.stringify(toolCallResult.result).length} chars). you can: 1. get full response. 2. search in the response. 3. skip or continue`;
       }
@@ -491,5 +493,9 @@ export class Agent extends Base {
 
   public modifyOversizedResponseCache(cache: any) {
     return (this.oversizedResponseCache = cache);
+  }
+
+  public disableOversizedResponseFunctionality() {
+    this.oversizedResponseFunctionalityEnabled = false;
   }
 }
