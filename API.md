@@ -275,8 +275,14 @@ public modifyOversizedResponseCache(cache: any): any
 ##### `retrieveAllGraphTools` <a name="retrieveAllGraphTools" id="xpander-sdk.Agent.retrieveAllGraphTools"></a>
 
 ```typescript
-public retrieveAllGraphTools(): any[]
+public retrieveAllGraphTools(llmProvider?: LLMProvider): any[]
 ```
+
+###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Agent.retrieveAllGraphTools.parameter.llmProvider"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+---
 
 ##### `retrieveOversizedResponseCache` <a name="retrieveOversizedResponseCache" id="xpander-sdk.Agent.retrieveOversizedResponseCache"></a>
 

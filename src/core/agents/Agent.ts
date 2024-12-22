@@ -499,7 +499,12 @@ export class Agent extends Base {
     this.oversizedResponseFunctionalityEnabled = false;
   }
 
-  retrieveAllGraphTools(): any[] {
-    return this.graphs.map(({ graph }) => Object.keys(graph)).flat();
+  retrieveAllGraphTools(llmProvider: LLMProvider = LLMProvider.OPEN_AI): any[] {
+    const tools = new Set(
+      this.graphs.map(({ graph }) => Object.keys(graph)).flat(),
+    );
+    return this.getTools(llmProvider, true).filter(
+      (tool) => tools.has(tool?.function?.name) || tool?.toolSpec?.name,
+    );
   }
 }
