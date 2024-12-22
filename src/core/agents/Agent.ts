@@ -499,7 +499,7 @@ export class Agent extends Base {
     this.oversizedResponseFunctionalityEnabled = false;
   }
 
-  getAllGraphTools(): any[] {
+  retrieveAllGraphTools(): any[] {
     return this.graphs.map(({ graph }) => Object.keys(graph)).flat();
   }
 }

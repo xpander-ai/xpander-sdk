@@ -167,6 +167,7 @@ Array of agent tools specific to prompt groups.
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with the specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
 | <code><a href="#xpander-sdk.Agent.modifyOversizedResponseCache">modifyOversizedResponseCache</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.retrieveAllGraphTools">retrieveAllGraphTools</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.retrieveOversizedResponseCache">retrieveOversizedResponseCache</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
@@ -270,6 +271,12 @@ public modifyOversizedResponseCache(cache: any): any
 - *Type:* any
 
 ---
+
+##### `retrieveAllGraphTools` <a name="retrieveAllGraphTools" id="xpander-sdk.Agent.retrieveAllGraphTools"></a>
+
+```typescript
+public retrieveAllGraphTools(): any[]
+```
 
 ##### `retrieveOversizedResponseCache` <a name="retrieveOversizedResponseCache" id="xpander-sdk.Agent.retrieveOversizedResponseCache"></a>
 
