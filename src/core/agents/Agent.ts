@@ -498,4 +498,8 @@ export class Agent extends Base {
   public disableOversizedResponseFunctionality() {
     this.oversizedResponseFunctionalityEnabled = false;
   }
+
+  getAllGraphTools(): any[] {
+    return this.graphs.map(({ graph }) => Object.keys(graph)).flat();
+  }
 }
