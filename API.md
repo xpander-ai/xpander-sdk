@@ -163,12 +163,9 @@ Array of agent tools specific to prompt groups.
 | <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.toJson">toJson</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
-| <code><a href="#xpander-sdk.Agent.disableOversizedResponseFunctionality">disableOversizedResponseFunctionality</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with the specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
-| <code><a href="#xpander-sdk.Agent.modifyOversizedResponseCache">modifyOversizedResponseCache</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.retrieveAllGraphTools">retrieveAllGraphTools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.retrieveOversizedResponseCache">retrieveOversizedResponseCache</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
 | <code><a href="#xpander-sdk.Agent.schemasByNodeName">schemasByNodeName</a></code> | Retrieves schemas grouped by node name based on the active prompt group session. |
@@ -216,12 +213,6 @@ The list of local tools to add.
 
 ---
 
-##### `disableOversizedResponseFunctionality` <a name="disableOversizedResponseFunctionality" id="xpander-sdk.Agent.disableOversizedResponseFunctionality"></a>
-
-```typescript
-public disableOversizedResponseFunctionality(): void
-```
-
 ##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
 
 ```typescript
@@ -260,18 +251,6 @@ The type of source node to load.
 
 ---
 
-##### `modifyOversizedResponseCache` <a name="modifyOversizedResponseCache" id="xpander-sdk.Agent.modifyOversizedResponseCache"></a>
-
-```typescript
-public modifyOversizedResponseCache(cache: any): any
-```
-
-###### `cache`<sup>Required</sup> <a name="cache" id="xpander-sdk.Agent.modifyOversizedResponseCache.parameter.cache"></a>
-
-- *Type:* any
-
----
-
 ##### `retrieveAllGraphTools` <a name="retrieveAllGraphTools" id="xpander-sdk.Agent.retrieveAllGraphTools"></a>
 
 ```typescript
@@ -283,12 +262,6 @@ public retrieveAllGraphTools(llmProvider?: LLMProvider): any[]
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
-
-##### `retrieveOversizedResponseCache` <a name="retrieveOversizedResponseCache" id="xpander-sdk.Agent.retrieveOversizedResponseCache"></a>
-
-```typescript
-public retrieveOversizedResponseCache(): any
-```
 
 ##### `runTool` <a name="runTool" id="xpander-sdk.Agent.runTool"></a>
 

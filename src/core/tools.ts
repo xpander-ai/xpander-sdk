@@ -9,7 +9,7 @@ import {
 } from '../types';
 import { Configuration } from './Configuration';
 import { ToolCall, ToolCallResult } from './toolCalls';
-import { convertKeysToSnakeCase, countTokens, toCamelCase } from './utils';
+import { convertKeysToSnakeCase, toCamelCase } from './utils';
 import { LOCAL_TOOL_PREFIX } from '../constants/tools';
 import { CUSTOM_AGENT_ID } from '../constants/xpanderClient';
 import { INodeSchema, SourceNodeType } from '../types/agents';
@@ -563,11 +563,3 @@ export function appendDescriptionOverride(
   }
   return newTool;
 }
-
-export const isOversizedToolResponse = (response: any) => {
-  try {
-    return countTokens(JSON.stringify(response)) >= 10000; // 10000 tokens
-  } catch (err) {
-    return false;
-  }
-};
