@@ -8,6 +8,7 @@ import {
   IGraphItem,
   ILocalTool,
   IToolCallPayload,
+  KnowledgeBaseStrategy,
   ToolCallType,
 } from '../../types';
 import {
@@ -21,6 +22,7 @@ import {
 } from '../../types/agents';
 import { Base } from '../base';
 import { Configuration } from '../Configuration';
+import { KnowledgeBase } from '../knowledgeBases';
 import { PromptGroupSessionsList } from '../promptGroups/PromptGroupSessionsList';
 import { ToolCall, ToolCallResult } from '../toolCalls';
 import {
@@ -49,6 +51,8 @@ export class Agent extends Base {
 
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
+
+  public knowledgeBases: KnowledgeBase[] = [];
 
   constructor(
     /** Configuration settings for the agent. */
@@ -91,6 +95,8 @@ export class Agent extends Base {
     public pgNodeDescriptionOverride: INodeDescription[] = [],
     public generalInstructions: string = '',
     public judgeInstructions: string = '',
+    public hasKnowledgeBase: boolean = false,
+    public knowledgeBaseStrategy?: KnowledgeBaseStrategy,
   ) {
     super();
     if (this.tools.length !== 0) {
@@ -193,10 +199,51 @@ export class Agent extends Base {
           })) || [],
           agent.generalInstructions || '',
           agent.judgeInstructions || '',
+          agent.hasKnowledgeBase === true,
+          agent.knowledgeBaseStrategy || null,
         );
         Object.assign(this, loadedAgent);
       } catch (err) {
         throw new Error('Failed to load agent');
+      }
+    }
+  }
+
+  /**
+   * Fetches the agent's attached knowledge bases
+   */
+  retrieveKnowledgeBases(): KnowledgeBase[] {
+    if (
+      this.knowledgeBases.length !== 0 ||
+      !this.ready ||
+      !this.hasKnowledgeBase ||
+      this.knowledgeBaseStrategy !== KnowledgeBaseStrategy.VANILLA
+    ) {
+      return this.knowledgeBases;
+    } else {
+      try {
+        const url = `${this.url}/${this.sourceNodeType}/knowledge_base`;
+        const response = request('GET', url, {
+          headers: { 'x-api-key': this.configuration.apiKey },
+        });
+        if (!response.statusCode.toString().startsWith('2')) {
+          throw new Error(response.body.toString());
+        }
+
+        const kbs = JSON.parse(response.getBody('utf8'));
+        this.knowledgeBases = kbs.map(
+          (kb: any) =>
+            new KnowledgeBase(
+              kb.id,
+              kb.name,
+              kb.description,
+              kb.strategy,
+              kb.documents,
+            ),
+        );
+        return this.knowledgeBases;
+      } catch (err) {
+        throw new Error('Failed to get knowledge base');
       }
     }
   }
