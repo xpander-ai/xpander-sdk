@@ -3,7 +3,7 @@ import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
 import { Agent } from '../../core/agents/Agent';
 import { ToolCall } from '../../core/toolCalls';
 import { createTool, modifyPropertiesByRemoteSettings } from '../../core/tools';
-import { IToolInstructions } from '../../types';
+import { IToolInstructions, KnowledgeBaseStrategy } from '../../types';
 
 /**
  * BaseLLMProvider serves as the foundational class for integrating different
@@ -72,6 +72,16 @@ export class BaseLLMProvider {
       ];
     }
 
+    let knowledgeBaseTools: any[] = [];
+    if (
+      this.agent.hasKnowledgeBase &&
+      this.agent.knowledgeBaseStrategy === KnowledgeBaseStrategy.AGENTIC_RAG
+    ) {
+      knowledgeBaseTools = allTools.filter((tool) =>
+        tool.function.name.startsWith('xpkb'),
+      );
+    }
+
     // For prompt group selection
     const pgSessions = this.agent.promptGroupSessions;
     if (!pgSessions.activeSession) {
@@ -80,6 +90,7 @@ export class BaseLLMProvider {
         ...(this.agent.hasLocalTools
           ? this.postProcessTools(this.agent.localTools)
           : []),
+        ...knowledgeBaseTools,
       ];
     }
 
@@ -130,6 +141,7 @@ export class BaseLLMProvider {
         ...(this.agent.hasLocalTools
           ? this.postProcessTools(this.agent.localTools)
           : []),
+        ...knowledgeBaseTools,
       ];
     }
 

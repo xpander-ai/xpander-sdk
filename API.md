@@ -16,7 +16,7 @@ and managing prompt group sessions.
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean, pgSchemas?: IPGSchema[], pgNodeDescriptionOverride?: INodeDescription[], generalInstructions?: string, judgeInstructions?: string)
+new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean, pgSchemas?: IPGSchema[], pgNodeDescriptionOverride?: INodeDescription[], generalInstructions?: string, judgeInstructions?: string, hasKnowledgeBase?: boolean, knowledgeBaseStrategy?: KnowledgeBaseStrategy)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -36,6 +36,8 @@ new Agent(configuration: Configuration, id: string, organizationId: string, stat
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgNodeDescriptionOverride">pgNodeDescriptionOverride</a></code> | <code><a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]</code> | Array of agent tools specific to prompt groups. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.generalInstructions">generalInstructions</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.judgeInstructions">judgeInstructions</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.hasKnowledgeBase">hasKnowledgeBase</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.knowledgeBaseStrategy">knowledgeBaseStrategy</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a></code> | *No description.* |
 
 ---
 
@@ -155,6 +157,18 @@ Array of agent tools specific to prompt groups.
 
 ---
 
+##### `hasKnowledgeBase`<sup>Optional</sup> <a name="hasKnowledgeBase" id="xpander-sdk.Agent.Initializer.parameter.hasKnowledgeBase"></a>
+
+- *Type:* boolean
+
+---
+
+##### `knowledgeBaseStrategy`<sup>Optional</sup> <a name="knowledgeBaseStrategy" id="xpander-sdk.Agent.Initializer.parameter.knowledgeBaseStrategy"></a>
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -166,6 +180,7 @@ Array of agent tools specific to prompt groups.
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with the specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
 | <code><a href="#xpander-sdk.Agent.retrieveAllGraphTools">retrieveAllGraphTools</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.retrieveKnowledgeBases">retrieveKnowledgeBases</a></code> | Fetches the agent's attached knowledge bases. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
 | <code><a href="#xpander-sdk.Agent.schemasByNodeName">schemasByNodeName</a></code> | Retrieves schemas grouped by node name based on the active prompt group session. |
@@ -262,6 +277,14 @@ public retrieveAllGraphTools(llmProvider?: LLMProvider): any[]
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
+
+##### `retrieveKnowledgeBases` <a name="retrieveKnowledgeBases" id="xpander-sdk.Agent.retrieveKnowledgeBases"></a>
+
+```typescript
+public retrieveKnowledgeBases(): KnowledgeBase[]
+```
+
+Fetches the agent's attached knowledge bases.
 
 ##### `runTool` <a name="runTool" id="xpander-sdk.Agent.runTool"></a>
 
@@ -364,8 +387,10 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.generalInstructions">generalInstructions</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Array of graph items related to the agent. |
+| <code><a href="#xpander-sdk.Agent.property.hasKnowledgeBase">hasKnowledgeBase</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | Unique identifier for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.judgeInstructions">judgeInstructions</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | Collection of local tools specific to this agent. |
 | <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
@@ -378,6 +403,7 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | List of source nodes associated with the agent. |
 | <code><a href="#xpander-sdk.Agent.property.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | Current status of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of tools available to the agent. |
+| <code><a href="#xpander-sdk.Agent.property.knowledgeBaseStrategy">knowledgeBaseStrategy</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a></code> | *No description.* |
 
 ---
 
@@ -463,6 +489,16 @@ Array of graph items related to the agent.
 
 ---
 
+##### `hasKnowledgeBase`<sup>Required</sup> <a name="hasKnowledgeBase" id="xpander-sdk.Agent.property.hasKnowledgeBase"></a>
+
+```typescript
+public readonly hasKnowledgeBase: boolean;
+```
+
+- *Type:* boolean
+
+---
+
 ##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.Agent.property.id"></a>
 
 ```typescript
@@ -482,6 +518,16 @@ public readonly judgeInstructions: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `knowledgeBases`<sup>Required</sup> <a name="knowledgeBases" id="xpander-sdk.Agent.property.knowledgeBases"></a>
+
+```typescript
+public readonly knowledgeBases: KnowledgeBase[];
+```
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]
 
 ---
 
@@ -626,6 +672,16 @@ public readonly tools: IAgentTool[];
 - *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
 
 Array of tools available to the agent.
+
+---
+
+##### `knowledgeBaseStrategy`<sup>Optional</sup> <a name="knowledgeBaseStrategy" id="xpander-sdk.Agent.property.knowledgeBaseStrategy"></a>
+
+```typescript
+public readonly knowledgeBaseStrategy: KnowledgeBaseStrategy;
+```
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
 
 ---
 
@@ -1191,6 +1247,175 @@ public readonly MISTRAL_8X_7B_INSTRUCT: string;
 Mistral 8x7B Instruct model (version 0.1).
 
 ---
+
+### KnowledgeBase <a name="KnowledgeBase" id="xpander-sdk.KnowledgeBase"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.KnowledgeBase.Initializer"></a>
+
+```typescript
+import { KnowledgeBase } from 'xpander-sdk'
+
+new KnowledgeBase(id: string, name: string, description: string, strategy: KnowledgeBaseStrategy, documents: string[])
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.Initializer.parameter.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.Initializer.parameter.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.Initializer.parameter.strategy">strategy</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.Initializer.parameter.documents">documents</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.KnowledgeBase.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.KnowledgeBase.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.KnowledgeBase.Initializer.parameter.description"></a>
+
+- *Type:* string
+
+---
+
+##### `strategy`<sup>Required</sup> <a name="strategy" id="xpander-sdk.KnowledgeBase.Initializer.parameter.strategy"></a>
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
+
+---
+
+##### `documents`<sup>Required</sup> <a name="documents" id="xpander-sdk.KnowledgeBase.Initializer.parameter.documents"></a>
+
+- *Type:* string[]
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBase.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.KnowledgeBase.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.KnowledgeBase.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.KnowledgeBase.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.KnowledgeBase.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBase.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.KnowledgeBase.fromObject"></a>
+
+```typescript
+import { KnowledgeBase } from 'xpander-sdk'
+
+KnowledgeBase.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.KnowledgeBase.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBase.property.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.property.documents">documents</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.property.strategy">strategy</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a></code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.KnowledgeBase.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+---
+
+##### `documents`<sup>Required</sup> <a name="documents" id="xpander-sdk.KnowledgeBase.property.documents"></a>
+
+```typescript
+public readonly documents: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.KnowledgeBase.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.KnowledgeBase.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `strategy`<sup>Required</sup> <a name="strategy" id="xpander-sdk.KnowledgeBase.property.strategy"></a>
+
+```typescript
+public readonly strategy: KnowledgeBaseStrategy;
+```
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
+
+---
+
 
 ### NvidiaNIMSupportedModels <a name="NvidiaNIMSupportedModels" id="xpander-sdk.NvidiaNIMSupportedModels"></a>
 
@@ -3321,6 +3546,27 @@ Enum representing the possible statuses of an agent.
 
 
 ##### `INACTIVE` <a name="INACTIVE" id="xpander-sdk.AgentStatus.INACTIVE"></a>
+
+---
+
+
+### KnowledgeBaseStrategy <a name="KnowledgeBaseStrategy" id="xpander-sdk.KnowledgeBaseStrategy"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseStrategy.VANILLA">VANILLA</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBaseStrategy.AGENTIC_RAG">AGENTIC_RAG</a></code> | *No description.* |
+
+---
+
+##### `VANILLA` <a name="VANILLA" id="xpander-sdk.KnowledgeBaseStrategy.VANILLA"></a>
+
+---
+
+
+##### `AGENTIC_RAG` <a name="AGENTIC_RAG" id="xpander-sdk.KnowledgeBaseStrategy.AGENTIC_RAG"></a>
 
 ---
 
