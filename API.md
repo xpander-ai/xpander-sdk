@@ -6,10 +6,9 @@
 
 ### Agent <a name="Agent" id="xpander-sdk.Agent"></a>
 
-Represents an agent in xpanderAI, managing the tools, sessions, and operations associated with the agent.
+Represents an agent in xpanderAI, managing tools, sessions, and operational workflows.
 
-This class enables loading agents, handling tool executions,
-and managing prompt group sessions.
+This class facilitates loading agents, handling tool executions, and managing prompt groups.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.Agent.Initializer"></a>
 
@@ -21,20 +20,20 @@ new Agent(configuration: Configuration, id: string, name: string, organizationId
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.id">id</a></code> | <code>string</code> | Unique identifier for the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | Current status of the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.prompts">prompts</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of tools available to the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.id">id</a></code> | <code>string</code> | - Unique identifier for the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.name">name</a></code> | <code>string</code> | - Human-readable name of the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | - Organization ID to which the agent belongs. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | - Current status of the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | - Type of memory the agent utilizes. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | - Strategy for memory management. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | - Scope of the agent's access permissions. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | - Source nodes associated with the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.prompts">prompts</a></code> | <code>string[]</code> | - Prompts used by the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | - Tools available to the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | - Graph structure representing the agent's operational flow. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | - Knowledge bases associated with the agent. |
 
 ---
 
@@ -82,11 +81,15 @@ Current status of the agent.
 
 - *Type:* <a href="#xpander-sdk.MemoryType">MemoryType</a>
 
+Type of memory the agent utilizes.
+
 ---
 
 ##### `memoryStrategy`<sup>Required</sup> <a name="memoryStrategy" id="xpander-sdk.Agent.Initializer.parameter.memoryStrategy"></a>
 
 - *Type:* <a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a>
+
+Strategy for memory management.
 
 ---
 
@@ -94,11 +97,15 @@ Current status of the agent.
 
 - *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
 
+Instructions for the agent's operation.
+
 ---
 
 ##### `accessScope`<sup>Required</sup> <a name="accessScope" id="xpander-sdk.Agent.Initializer.parameter.accessScope"></a>
 
 - *Type:* <a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a>
+
+Scope of the agent's access permissions.
 
 ---
 
@@ -106,11 +113,15 @@ Current status of the agent.
 
 - *Type:* <a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]
 
+Source nodes associated with the agent.
+
 ---
 
 ##### `prompts`<sup>Required</sup> <a name="prompts" id="xpander-sdk.Agent.Initializer.parameter.prompts"></a>
 
 - *Type:* string[]
+
+Prompts used by the agent.
 
 ---
 
@@ -118,7 +129,7 @@ Current status of the agent.
 
 - *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
 
-Array of tools available to the agent.
+Tools available to the agent.
 
 ---
 
@@ -126,11 +137,15 @@ Array of tools available to the agent.
 
 - *Type:* <a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]
 
+Graph structure representing the agent's operational flow.
+
 ---
 
 ##### `knowledgeBases`<sup>Optional</sup> <a name="knowledgeBases" id="xpander-sdk.Agent.Initializer.parameter.knowledgeBases"></a>
 
 - *Type:* <a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]
+
+Knowledge bases associated with the agent.
 
 ---
 
@@ -142,13 +157,14 @@ Array of tools available to the agent.
 | <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.toJson">toJson</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
-| <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with the specified LLM provider. |
-| <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
-| <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
+| <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
+| <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from its source node type. |
+| <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | Retrieves a node from the graph by its ID. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
-| <code><a href="#xpander-sdk.Agent.updateUserDetails">updateUserDetails</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.updateUserDetails">updateUserDetails</a></code> | Updates the user details for the agent. |
 
 ---
 
@@ -198,13 +214,13 @@ The list of local tools to add.
 public getTools(llmProvider?: LLMProvider): any[]
 ```
 
-Retrieves tools compatible with the specified LLM provider.
+Retrieves tools compatible with a specified LLM provider.
 
 ###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Agent.getTools.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
-The LLM provider to filter tools by.
+The LLM provider to filter tools by (default: `OPEN_AI`).
 
 ---
 
@@ -214,11 +230,21 @@ The LLM provider to filter tools by.
 public initTask(execution: any): void
 ```
 
+Initializes the task execution for the agent.
+
 ###### `execution`<sup>Required</sup> <a name="execution" id="xpander-sdk.Agent.initTask.parameter.execution"></a>
 
 - *Type:* any
 
+The execution details.
+
 ---
+
+##### `isFinished` <a name="isFinished" id="xpander-sdk.Agent.isFinished"></a>
+
+```typescript
+public isFinished(): boolean
+```
 
 ##### `load` <a name="load" id="xpander-sdk.Agent.load"></a>
 
@@ -226,7 +252,7 @@ public initTask(execution: any): void
 public load(): void
 ```
 
-Loads the agent data from the specified source node type.
+Loads the agent data from its source node type.
 
 ##### `retrieveNodeFromGraph` <a name="retrieveNodeFromGraph" id="xpander-sdk.Agent.retrieveNodeFromGraph"></a>
 
@@ -234,9 +260,13 @@ Loads the agent data from the specified source node type.
 public retrieveNodeFromGraph(itemId: string): IAgentGraphItem
 ```
 
+Retrieves a node from the graph by its ID.
+
 ###### `itemId`<sup>Required</sup> <a name="itemId" id="xpander-sdk.Agent.retrieveNodeFromGraph.parameter.itemId"></a>
 
 - *Type:* string
+
+The ID of the graph node to retrieve.
 
 ---
 
@@ -260,6 +290,8 @@ The tool call to execute.
 
 - *Type:* any
 
+Additional payload data to merge.
+
 ---
 
 ##### `runTools` <a name="runTools" id="xpander-sdk.Agent.runTools"></a>
@@ -282,6 +314,8 @@ The list of tool calls to execute.
 
 - *Type:* any
 
+Additional payload data to merge.
+
 ---
 
 ##### `updateUserDetails` <a name="updateUserDetails" id="xpander-sdk.Agent.updateUserDetails"></a>
@@ -290,9 +324,13 @@ The list of tool calls to execute.
 public updateUserDetails(userDetails: any): void
 ```
 
+Updates the user details for the agent.
+
 ###### `userDetails`<sup>Required</sup> <a name="userDetails" id="xpander-sdk.Agent.updateUserDetails.parameter.userDetails"></a>
 
 - *Type:* any
+
+The user details to update.
 
 ---
 
@@ -322,28 +360,28 @@ Agent.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Agent.property.hasKnowledgeBase">hasKnowledgeBase</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has any local tools loaded. |
-| <code><a href="#xpander-sdk.Agent.property.knowledgeBaseStrategy">knowledgeBaseStrategy</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.hasKnowledgeBase">hasKnowledgeBase</a></code> | <code>boolean</code> | Checks if the agent has an associated knowledge base. |
+| <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has local tools loaded. |
+| <code><a href="#xpander-sdk.Agent.property.knowledgeBaseStrategy">knowledgeBaseStrategy</a></code> | <code>string</code> | Retrieves the knowledge base strategy of the agent. |
+| <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | Retrieves the memory instance for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Retrieves the type of source node for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.url">url</a></code> | <code>string</code> | Constructs the API URL for this agent. |
-| <code><a href="#xpander-sdk.Agent.property.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the agent. |
-| <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | Unique identifier for the agent. |
-| <code><a href="#xpander-sdk.Agent.property.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | - Scope of the agent's access permissions. |
+| <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | - Graph structure representing the agent's operational flow. |
+| <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | - Unique identifier for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
+| <code><a href="#xpander-sdk.Agent.property.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | - Knowledge bases associated with the agent. |
 | <code><a href="#xpander-sdk.Agent.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | Collection of local tools specific to this agent. |
-| <code><a href="#xpander-sdk.Agent.property.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
-| <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
-| <code><a href="#xpander-sdk.Agent.property.prompts">prompts</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.ready">ready</a></code> | <code>boolean</code> | Indicates whether the agent is ready with tools loaded. |
-| <code><a href="#xpander-sdk.Agent.property.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | Current status of the agent. |
-| <code><a href="#xpander-sdk.Agent.property.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of tools available to the agent. |
+| <code><a href="#xpander-sdk.Agent.property.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | - Strategy for memory management. |
+| <code><a href="#xpander-sdk.Agent.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | - Type of memory the agent utilizes. |
+| <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | - Human-readable name of the agent. |
+| <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | - Organization ID to which the agent belongs. |
+| <code><a href="#xpander-sdk.Agent.property.prompts">prompts</a></code> | <code>string[]</code> | - Prompts used by the agent. |
+| <code><a href="#xpander-sdk.Agent.property.ready">ready</a></code> | <code>boolean</code> | Indicates if the agent is ready and tools are loaded. |
+| <code><a href="#xpander-sdk.Agent.property.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | - Source nodes associated with the agent. |
+| <code><a href="#xpander-sdk.Agent.property.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | - Current status of the agent. |
+| <code><a href="#xpander-sdk.Agent.property.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | - Tools available to the agent. |
 | <code><a href="#xpander-sdk.Agent.property.execution">execution</a></code> | <code><a href="#xpander-sdk.Execution">Execution</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.executionMemory">executionMemory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.userDetails">userDetails</a></code> | <code><a href="#xpander-sdk.IUserDetails">IUserDetails</a></code> | *No description.* |
@@ -358,6 +396,8 @@ public readonly hasKnowledgeBase: boolean;
 
 - *Type:* boolean
 
+Checks if the agent has an associated knowledge base.
+
 ---
 
 ##### `hasLocalTools`<sup>Required</sup> <a name="hasLocalTools" id="xpander-sdk.Agent.property.hasLocalTools"></a>
@@ -368,17 +408,19 @@ public readonly hasLocalTools: boolean;
 
 - *Type:* boolean
 
-Checks if the agent has any local tools loaded.
+Checks if the agent has local tools loaded.
 
 ---
 
 ##### `knowledgeBaseStrategy`<sup>Required</sup> <a name="knowledgeBaseStrategy" id="xpander-sdk.Agent.property.knowledgeBaseStrategy"></a>
 
 ```typescript
-public readonly knowledgeBaseStrategy: KnowledgeBaseStrategy;
+public readonly knowledgeBaseStrategy: string;
 ```
 
-- *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
+- *Type:* string
+
+Retrieves the knowledge base strategy of the agent.
 
 ---
 
@@ -389,6 +431,8 @@ public readonly memory: Memory;
 ```
 
 - *Type:* <a href="#xpander-sdk.Memory">Memory</a>
+
+Retrieves the memory instance for the agent.
 
 ---
 
@@ -424,6 +468,8 @@ public readonly accessScope: AgentAccessScope;
 
 - *Type:* <a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a>
 
+Scope of the agent's access permissions.
+
 ---
 
 ##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.Agent.property.configuration"></a>
@@ -445,6 +491,8 @@ public readonly graph: IAgentGraphItem[];
 ```
 
 - *Type:* <a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]
+
+Graph structure representing the agent's operational flow.
 
 ---
 
@@ -468,6 +516,8 @@ public readonly instructions: IAgentInstructions;
 
 - *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
 
+Instructions for the agent's operation.
+
 ---
 
 ##### `knowledgeBases`<sup>Required</sup> <a name="knowledgeBases" id="xpander-sdk.Agent.property.knowledgeBases"></a>
@@ -477,6 +527,8 @@ public readonly knowledgeBases: KnowledgeBase[];
 ```
 
 - *Type:* <a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]
+
+Knowledge bases associated with the agent.
 
 ---
 
@@ -500,6 +552,8 @@ public readonly memoryStrategy: MemoryStrategy;
 
 - *Type:* <a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a>
 
+Strategy for memory management.
+
 ---
 
 ##### `memoryType`<sup>Required</sup> <a name="memoryType" id="xpander-sdk.Agent.property.memoryType"></a>
@@ -509,6 +563,8 @@ public readonly memoryType: MemoryType;
 ```
 
 - *Type:* <a href="#xpander-sdk.MemoryType">MemoryType</a>
+
+Type of memory the agent utilizes.
 
 ---
 
@@ -544,6 +600,8 @@ public readonly prompts: string[];
 
 - *Type:* string[]
 
+Prompts used by the agent.
+
 ---
 
 ##### `ready`<sup>Required</sup> <a name="ready" id="xpander-sdk.Agent.property.ready"></a>
@@ -554,7 +612,7 @@ public readonly ready: boolean;
 
 - *Type:* boolean
 
-Indicates whether the agent is ready with tools loaded.
+Indicates if the agent is ready and tools are loaded.
 
 ---
 
@@ -565,6 +623,8 @@ public readonly sourceNodes: ISourceNode[];
 ```
 
 - *Type:* <a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]
+
+Source nodes associated with the agent.
 
 ---
 
@@ -588,7 +648,7 @@ public readonly tools: IAgentTool[];
 
 - *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
 
-Array of tools available to the agent.
+Tools available to the agent.
 
 ---
 
@@ -625,7 +685,7 @@ public readonly userDetails: IUserDetails;
 
 ### Agents <a name="Agents" id="xpander-sdk.Agents"></a>
 
-Manages a collection of Agent instances in xpanderAI, providing methods to list, retrieve, and initialize specific agents including custom agents.
+Manages a collection of Agent instances in xpanderAI, providing methods to list, retrieve, and initialize agents, including custom agents.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.Agents.Initializer"></a>
 
@@ -637,7 +697,7 @@ new Agents(configuration: Configuration)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Agents.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agents.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for managing agents. |
 
 ---
 
@@ -645,14 +705,16 @@ new Agents(configuration: Configuration)
 
 - *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
 
+Configuration settings for managing agents.
+
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#xpander-sdk.Agents.get">get</a></code> | Retrieves an agent by ID and initializes it with the given source node type. |
-| <code><a href="#xpander-sdk.Agents.list">list</a></code> | Retrieves the list of agents. |
+| <code><a href="#xpander-sdk.Agents.get">get</a></code> | Retrieves a specific agent by its ID and initializes it. |
+| <code><a href="#xpander-sdk.Agents.list">list</a></code> | Retrieves the list of agents from the API and populates the local agents list. |
 
 ---
 
@@ -662,13 +724,13 @@ new Agents(configuration: Configuration)
 public get(agentId: string): Agent
 ```
 
-Retrieves an agent by ID and initializes it with the given source node type.
+Retrieves a specific agent by its ID and initializes it.
 
 ###### `agentId`<sup>Required</sup> <a name="agentId" id="xpander-sdk.Agents.get.parameter.agentId"></a>
 
 - *Type:* string
 
-The ID of the agent to retrieve.
+The unique identifier of the agent to retrieve.
 
 ---
 
@@ -678,10 +740,7 @@ The ID of the agent to retrieve.
 public list(): Agent[]
 ```
 
-Retrieves the list of agents.
-
-If `refetch` is true, it re-fetches the list
-from the API even if agents are already loaded.
+Retrieves the list of agents from the API and populates the local agents list.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -689,7 +748,7 @@ from the API even if agents are already loaded.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Agents.property.agentsList">agentsList</a></code> | <code><a href="#xpander-sdk.Agent">Agent</a>[]</code> | Collection of Agent instances managed by this class. |
-| <code><a href="#xpander-sdk.Agents.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agents.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for managing agents. |
 
 ---
 
@@ -712,6 +771,8 @@ public readonly configuration: Configuration;
 ```
 
 - *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+Configuration settings for managing agents.
 
 ---
 
@@ -948,7 +1009,10 @@ Base.fromObject(data: any)
 
 ### Configuration <a name="Configuration" id="xpander-sdk.Configuration"></a>
 
-Manages the configuration settings for the xpanderAI client, including API key, base URL, metrics reporting, and custom parameters.
+Manages the configuration settings for the xpanderAI client.
+
+This class encapsulates settings such as the API key, base URL,
+metrics reporting, and optional organization-specific parameters.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.Configuration.Initializer"></a>
 
@@ -960,13 +1024,15 @@ new Configuration(__0: IConfiguration)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Configuration.Initializer.parameter.__0">__0</a></code> | <code><a href="#xpander-sdk.IConfiguration">IConfiguration</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Configuration.Initializer.parameter.__0">__0</a></code> | <code><a href="#xpander-sdk.IConfiguration">IConfiguration</a></code> | - The API key for xpanderAI. |
 
 ---
 
 ##### `__0`<sup>Required</sup> <a name="__0" id="xpander-sdk.Configuration.Initializer.parameter.__0"></a>
 
 - *Type:* <a href="#xpander-sdk.IConfiguration">IConfiguration</a>
+
+The API key for xpanderAI.
 
 ---
 
@@ -1030,11 +1096,11 @@ Configuration.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Configuration.property.url">url</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Configuration.property.url">url</a></code> | <code>string</code> | Constructs the full API endpoint URL. |
 | <code><a href="#xpander-sdk.Configuration.property.apiKey">apiKey</a></code> | <code>string</code> | API key for authenticating requests to xpanderAI. |
 | <code><a href="#xpander-sdk.Configuration.property.baseUrl">baseUrl</a></code> | <code>string</code> | Base URL for the xpanderAI API requests. |
 | <code><a href="#xpander-sdk.Configuration.property.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | Flag to enable or disable metrics reporting. |
-| <code><a href="#xpander-sdk.Configuration.property.organizationId">organizationId</a></code> | <code>string</code> | Custom parameters for additional configuration options. |
+| <code><a href="#xpander-sdk.Configuration.property.organizationId">organizationId</a></code> | <code>string</code> | Optional organization ID for scoped API requests. |
 
 ---
 
@@ -1045,6 +1111,10 @@ public readonly url: string;
 ```
 
 - *Type:* string
+
+Constructs the full API endpoint URL.
+
+The URL combines the base URL with the optional organization ID if provided.
 
 ---
 
@@ -1092,12 +1162,14 @@ public readonly organizationId: string;
 
 - *Type:* string
 
-Custom parameters for additional configuration options.
+Optional organization ID for scoped API requests.
 
 ---
 
 
 ### Execution <a name="Execution" id="xpander-sdk.Execution"></a>
+
+Represents an execution of an agent in xpanderAI, including its input, status, memory, and other related details.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.Execution.Initializer"></a>
 
@@ -1109,13 +1181,13 @@ new Execution(id: string, agentId: string, organizationId: string, input: IExecu
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Execution.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.Initializer.parameter.agentId">agentId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.Initializer.parameter.input">input</a></code> | <code><a href="#xpander-sdk.IExecutionInput">IExecutionInput</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.Initializer.parameter.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.Initializer.parameter.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.id">id</a></code> | <code>string</code> | - Unique identifier of the execution. |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.agentId">agentId</a></code> | <code>string</code> | - Identifier of the agent performing the execution. |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | - Identifier of the organization associated with the execution. |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.input">input</a></code> | <code><a href="#xpander-sdk.IExecutionInput">IExecutionInput</a></code> | - Input provided for the execution. |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a></code> | - Current status of the execution. |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | - Identifier of the last executed node. |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | - Identifier of the memory thread associated with the execution. |
 
 ---
 
@@ -1123,11 +1195,15 @@ new Execution(id: string, agentId: string, organizationId: string, input: IExecu
 
 - *Type:* string
 
+Unique identifier of the execution.
+
 ---
 
 ##### `agentId`<sup>Required</sup> <a name="agentId" id="xpander-sdk.Execution.Initializer.parameter.agentId"></a>
 
 - *Type:* string
+
+Identifier of the agent performing the execution.
 
 ---
 
@@ -1135,11 +1211,15 @@ new Execution(id: string, agentId: string, organizationId: string, input: IExecu
 
 - *Type:* string
 
+Identifier of the organization associated with the execution.
+
 ---
 
 ##### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Execution.Initializer.parameter.input"></a>
 
 - *Type:* <a href="#xpander-sdk.IExecutionInput">IExecutionInput</a>
+
+Input provided for the execution.
 
 ---
 
@@ -1147,17 +1227,23 @@ new Execution(id: string, agentId: string, organizationId: string, input: IExecu
 
 - *Type:* <a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a>
 
+Current status of the execution.
+
 ---
 
 ##### `lastExecutedNodeId`<sup>Optional</sup> <a name="lastExecutedNodeId" id="xpander-sdk.Execution.Initializer.parameter.lastExecutedNodeId"></a>
 
 - *Type:* string
 
+Identifier of the last executed node.
+
 ---
 
 ##### `memoryThreadId`<sup>Optional</sup> <a name="memoryThreadId" id="xpander-sdk.Execution.Initializer.parameter.memoryThreadId"></a>
 
 - *Type:* string
+
+Identifier of the memory thread associated with the execution.
 
 ---
 
@@ -1200,7 +1286,7 @@ public toJson(): string
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.Execution.fromObject">fromObject</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.update">update</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.update">update</a></code> | Updates an execution with the specified delta changes. |
 
 ---
 
@@ -1226,9 +1312,13 @@ import { Execution } from 'xpander-sdk'
 Execution.update(agent: Agent, execution_id: string, delta: {[ key: string ]: any})
 ```
 
+Updates an execution with the specified delta changes.
+
 ###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Execution.update.parameter.agent"></a>
 
 - *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+The agent associated with the execution.
 
 ---
 
@@ -1236,11 +1326,15 @@ Execution.update(agent: Agent, execution_id: string, delta: {[ key: string ]: an
 
 - *Type:* string
 
+The ID of the execution to update.
+
 ---
 
 ###### `delta`<sup>Required</sup> <a name="delta" id="xpander-sdk.Execution.update.parameter.delta"></a>
 
 - *Type:* {[ key: string ]: any}
+
+A record of changes to apply to the execution.
 
 ---
 
@@ -1248,14 +1342,14 @@ Execution.update(agent: Agent, execution_id: string, delta: {[ key: string ]: an
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Execution.property.inputMessage">inputMessage</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.property.agentId">agentId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.property.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.property.input">input</a></code> | <code><a href="#xpander-sdk.IExecutionInput">IExecutionInput</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.property.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.property.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.property.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Execution.property.status">status</a></code> | <code><a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.inputMessage">inputMessage</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a></code> | Retrieves the input message formatted as a memory message. |
+| <code><a href="#xpander-sdk.Execution.property.agentId">agentId</a></code> | <code>string</code> | - Identifier of the agent performing the execution. |
+| <code><a href="#xpander-sdk.Execution.property.id">id</a></code> | <code>string</code> | - Unique identifier of the execution. |
+| <code><a href="#xpander-sdk.Execution.property.input">input</a></code> | <code><a href="#xpander-sdk.IExecutionInput">IExecutionInput</a></code> | - Input provided for the execution. |
+| <code><a href="#xpander-sdk.Execution.property.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | - Identifier of the last executed node. |
+| <code><a href="#xpander-sdk.Execution.property.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | - Identifier of the memory thread associated with the execution. |
+| <code><a href="#xpander-sdk.Execution.property.organizationId">organizationId</a></code> | <code>string</code> | - Identifier of the organization associated with the execution. |
+| <code><a href="#xpander-sdk.Execution.property.status">status</a></code> | <code><a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a></code> | - Current status of the execution. |
 
 ---
 
@@ -1267,6 +1361,10 @@ public readonly inputMessage: IMemoryMessage;
 
 - *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>
 
+Retrieves the input message formatted as a memory message.
+
+Combines text and file references into a single message object.
+
 ---
 
 ##### `agentId`<sup>Required</sup> <a name="agentId" id="xpander-sdk.Execution.property.agentId"></a>
@@ -1276,6 +1374,8 @@ public readonly agentId: string;
 ```
 
 - *Type:* string
+
+Identifier of the agent performing the execution.
 
 ---
 
@@ -1287,6 +1387,8 @@ public readonly id: string;
 
 - *Type:* string
 
+Unique identifier of the execution.
+
 ---
 
 ##### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Execution.property.input"></a>
@@ -1296,6 +1398,8 @@ public readonly input: IExecutionInput;
 ```
 
 - *Type:* <a href="#xpander-sdk.IExecutionInput">IExecutionInput</a>
+
+Input provided for the execution.
 
 ---
 
@@ -1307,6 +1411,8 @@ public readonly lastExecutedNodeId: string;
 
 - *Type:* string
 
+Identifier of the last executed node.
+
 ---
 
 ##### `memoryThreadId`<sup>Required</sup> <a name="memoryThreadId" id="xpander-sdk.Execution.property.memoryThreadId"></a>
@@ -1316,6 +1422,8 @@ public readonly memoryThreadId: string;
 ```
 
 - *Type:* string
+
+Identifier of the memory thread associated with the execution.
 
 ---
 
@@ -1327,6 +1435,8 @@ public readonly organizationId: string;
 
 - *Type:* string
 
+Identifier of the organization associated with the execution.
+
 ---
 
 ##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.Execution.property.status"></a>
@@ -1336,6 +1446,8 @@ public readonly status: ExecutionStatus;
 ```
 
 - *Type:* <a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a>
+
+Current status of the execution.
 
 ---
 
@@ -1577,6 +1689,8 @@ public readonly strategy: KnowledgeBaseStrategy;
 
 ### Memory <a name="Memory" id="xpander-sdk.Memory"></a>
 
+Represents a memory thread in xpanderAI, handling storage, retrieval, and processing of memory messages and related operations.
+
 #### Initializers <a name="Initializers" id="xpander-sdk.Memory.Initializer"></a>
 
 ```typescript
@@ -1632,12 +1746,12 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 | <code><a href="#xpander-sdk.Memory.from">from</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.toJson">toJson</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.addMessages">addMessages</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.addToolCallResults">addToolCallResults</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.initializeThread">initializeThread</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.initInstructions">initInstructions</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.retrieveMessages">retrieveMessages</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.selectLLMProvider">selectLLMProvider</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.addMessages">addMessages</a></code> | Adds messages to the memory thread. |
+| <code><a href="#xpander-sdk.Memory.addToolCallResults">addToolCallResults</a></code> | Adds tool call results as messages to the memory thread. |
+| <code><a href="#xpander-sdk.Memory.initializeThread">initializeThread</a></code> | Initializes a new memory thread with input and instructions. |
+| <code><a href="#xpander-sdk.Memory.initInstructions">initInstructions</a></code> | Initializes the memory thread with system instructions if no messages exist. |
+| <code><a href="#xpander-sdk.Memory.retrieveMessages">retrieveMessages</a></code> | Retrieves the messages stored in the memory thread. |
+| <code><a href="#xpander-sdk.Memory.selectLLMProvider">selectLLMProvider</a></code> | Sets the LLM provider for processing memory messages. |
 
 ---
 
@@ -1671,9 +1785,15 @@ public toJson(): string
 public addMessages(_messages: any): void
 ```
 
+Adds messages to the memory thread.
+
+Converts non-standard messages to a compatible format before storing.
+
 ###### `_messages`<sup>Required</sup> <a name="_messages" id="xpander-sdk.Memory.addMessages.parameter._messages"></a>
 
 - *Type:* any
+
+An array of messages to be added to the memory thread.
 
 ---
 
@@ -1683,9 +1803,13 @@ public addMessages(_messages: any): void
 public addToolCallResults(toolCallResults: ToolCallResult[]): void
 ```
 
+Adds tool call results as messages to the memory thread.
+
 ###### `toolCallResults`<sup>Required</sup> <a name="toolCallResults" id="xpander-sdk.Memory.addToolCallResults.parameter.toolCallResults"></a>
 
 - *Type:* <a href="#xpander-sdk.ToolCallResult">ToolCallResult</a>[]
+
+An array of tool call results to be added as messages.
 
 ---
 
@@ -1695,15 +1819,21 @@ public addToolCallResults(toolCallResults: ToolCallResult[]): void
 public initializeThread(input: IMemoryMessage, instructions: IAgentInstructions): void
 ```
 
+Initializes a new memory thread with input and instructions.
+
 ###### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Memory.initializeThread.parameter.input"></a>
 
 - *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>
+
+Initial user input message.
 
 ---
 
 ###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initializeThread.parameter.instructions"></a>
 
 - *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+
+Instructions to initialize the memory thread.
 
 ---
 
@@ -1713,9 +1843,13 @@ public initializeThread(input: IMemoryMessage, instructions: IAgentInstructions)
 public initInstructions(instructions: IAgentInstructions): void
 ```
 
+Initializes the memory thread with system instructions if no messages exist.
+
 ###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initInstructions.parameter.instructions"></a>
 
 - *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+
+Instructions to initialize the memory thread.
 
 ---
 
@@ -1725,15 +1859,23 @@ public initInstructions(instructions: IAgentInstructions): void
 public retrieveMessages(): any[]
 ```
 
+Retrieves the messages stored in the memory thread.
+
+Applies the agent's memory strategy to refresh the messages if needed.
+
 ##### `selectLLMProvider` <a name="selectLLMProvider" id="xpander-sdk.Memory.selectLLMProvider"></a>
 
 ```typescript
 public selectLLMProvider(llmProvider: LLMProvider): void
 ```
 
+Sets the LLM provider for processing memory messages.
+
 ###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.Memory.selectLLMProvider.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+The LLM provider to use.
 
 ---
 
@@ -1742,8 +1884,8 @@ public selectLLMProvider(llmProvider: LLMProvider): void
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.Memory.fromObject">fromObject</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.create">create</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.fetch">fetch</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.create">create</a></code> | Creates a new memory thread for the specified agent. |
+| <code><a href="#xpander-sdk.Memory.fetch">fetch</a></code> | Fetches an existing memory thread by its ID. |
 
 ---
 
@@ -1769,15 +1911,21 @@ import { Memory } from 'xpander-sdk'
 Memory.create(agent: Agent, userDetails?: IUserDetails)
 ```
 
+Creates a new memory thread for the specified agent.
+
 ###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.create.parameter.agent"></a>
 
 - *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+The agent for which the memory thread is created.
 
 ---
 
 ###### `userDetails`<sup>Optional</sup> <a name="userDetails" id="xpander-sdk.Memory.create.parameter.userDetails"></a>
 
 - *Type:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
+
+Optional user details associated with the memory thread.
 
 ---
 
@@ -1789,15 +1937,21 @@ import { Memory } from 'xpander-sdk'
 Memory.fetch(agent: Agent, threadId: string)
 ```
 
+Fetches an existing memory thread by its ID.
+
 ###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.fetch.parameter.agent"></a>
 
 - *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+The agent associated with the memory thread.
 
 ---
 
 ###### `threadId`<sup>Required</sup> <a name="threadId" id="xpander-sdk.Memory.fetch.parameter.threadId"></a>
 
 - *Type:* string
+
+The ID of the memory thread to fetch.
 
 ---
 
@@ -1806,7 +1960,7 @@ Memory.fetch(agent: Agent, threadId: string)
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Memory.property.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Memory.property.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.property.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | The LLM provider to be used for message processing. |
 | <code><a href="#xpander-sdk.Memory.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.property.messages">messages</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.property.userDetails">userDetails</a></code> | <code>string</code> | *No description.* |
@@ -1830,6 +1984,8 @@ public readonly llmProvider: LLMProvider;
 ```
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+The LLM provider to be used for message processing.
 
 ---
 
@@ -3954,6 +4110,7 @@ Represents the result of a tool execution, including status, data, and success i
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.IToolExecutionResult.property.data">data</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolExecutionResult.property.headers">headers</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
 | <code><a href="#xpander-sdk.IToolExecutionResult.property.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.IToolExecutionResult.property.statusCode">statusCode</a></code> | <code>number</code> | *No description.* |
 
@@ -3966,6 +4123,16 @@ public readonly data: any;
 ```
 
 - *Type:* any
+
+---
+
+##### `headers`<sup>Required</sup> <a name="headers" id="xpander-sdk.IToolExecutionResult.property.headers"></a>
+
+```typescript
+public readonly headers: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
 
 ---
 

@@ -15,14 +15,14 @@ export class Agents {
 
   /**
    * Constructs an instance of the Agents manager.
-   * 
+   *
    * @param configuration - Configuration settings for managing agents.
    */
   constructor(public configuration: Configuration) {}
 
   /**
    * Retrieves the list of agents from the API and populates the local agents list.
-   * 
+   *
    * @returns An array of Agent instances.
    */
   public list(): Agent[] {
@@ -63,7 +63,7 @@ export class Agents {
 
   /**
    * Retrieves a specific agent by its ID and initializes it.
-   * 
+   *
    * @param agentId - The unique identifier of the agent to retrieve.
    * @returns The requested Agent instance.
    */
