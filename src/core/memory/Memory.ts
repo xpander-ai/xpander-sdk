@@ -10,9 +10,6 @@ import { convertKeysToCamelCase, convertKeysToSnakeCase } from '../utils';
  * and processing of memory messages and related operations.
  */
 export class Memory extends Base {
-  /** The LLM provider to be used for message processing. */
-  public llmProvider: LLMProvider = LLMProvider.OPEN_AI;
-
   /**
    * Creates a new memory thread for the specified agent.
    *
@@ -80,6 +77,9 @@ export class Memory extends Base {
       agent.memoryType,
     );
   }
+
+  /** The LLM provider to be used for message processing. */
+  public llmProvider: LLMProvider = LLMProvider.OPEN_AI;
 
   constructor(
     private agent: Agent,

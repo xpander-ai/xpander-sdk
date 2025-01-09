@@ -180,6 +180,7 @@ export interface IToolExecutionResult {
   statusCode: number; // HTTP status code of the tool execution response
   data: any; // Response data from the tool execution
   isSuccess: boolean; // Indicates whether the execution was successful
+  headers: Record<string, any>; // headers returned by the tool
 }
 
 /**

@@ -62,6 +62,7 @@ export function executeTool(
     statusCode: 200,
     data: null,
     isSuccess: true,
+    headers: {},
   };
 
   try {
@@ -77,6 +78,7 @@ export function executeTool(
       headers: { 'x-api-key': configuration.apiKey },
     });
     result.statusCode = response.statusCode || 0;
+    result.headers = response.headers;
 
     if (!response.statusCode.toString().startsWith('2')) {
       result.data = response.body.toString();

@@ -1,6 +1,6 @@
 import request from 'sync-request';
 import { LLMProvider } from '../../constants/llmProvider';
-import { LOCAL_TOOL_PREFIX } from '../../constants/tools';
+import { AGENT_FINISH_TOOL_ID, LOCAL_TOOL_PREFIX } from '../../constants/tools';
 import { allProviders } from '../../llmProviders';
 import { ILocalTool, IToolCallPayload, ToolCallType } from '../../types';
 import {
@@ -42,6 +42,7 @@ export class Agent extends Base {
   public execution?: Execution;
   public userDetails?: IUserDetails;
   public executionMemory?: Memory;
+  private shouldStop: boolean = false;
 
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
@@ -258,6 +259,11 @@ export class Agent extends Base {
       toolCallResult.statusCode = executionResult.statusCode;
       toolCallResult.result = executionResult.data;
 
+      // backend asked to stop the execution
+      if (executionResult?.headers?.['xpander-agent-stop'] === 'true') {
+        this.shouldStop = true;
+      }
+
       if (!executionResult.isSuccess) {
         throw new Error(toolCallResult.result);
       }
@@ -371,6 +377,17 @@ export class Agent extends Base {
       return memory;
     } else {
       return Memory.fetch(this, this.execution.memoryThreadId);
+    }
+  }
+
+  public isFinished() {
+    if (this.shouldStop) return true;
+    if (!this.memory) {
+      return false;
+    } else {
+      return this.memory.messages.some((msg) =>
+        msg.toolCalls?.some((tc) => tc.name === AGENT_FINISH_TOOL_ID),
+      );
     }
   }
 }
