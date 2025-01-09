@@ -9,10 +9,9 @@ import {
 } from '../types';
 import { Configuration } from './Configuration';
 import { ToolCall, ToolCallResult } from './toolCalls';
-import { convertKeysToSnakeCase, toCamelCase } from './utils';
+import { toCamelCase } from './utils';
 import { LOCAL_TOOL_PREFIX } from '../constants/tools';
-import { CUSTOM_AGENT_ID } from '../constants/xpanderClient';
-import { INodeSchema, SourceNodeType } from '../types/agents';
+import { IAgentGraphItem, IAgentGraphItemSchema } from '../types/agents';
 
 /**
  * Creates a tool representation for xpanderAI based on tool instructions,
@@ -57,7 +56,7 @@ export function executeTool(
   tool: ToolCall,
   agentUrl: string,
   configuration: Configuration,
-  sourceNodeType: SourceNodeType,
+  executionId: string,
 ): IToolExecutionResult {
   const result: IToolExecutionResult = {
     statusCode: 200,
@@ -66,15 +65,8 @@ export function executeTool(
   };
 
   try {
-    const url = `${agentUrl}/${sourceNodeType}/operations/${tool.name}`;
+    const url = `${agentUrl}/${executionId}/operations/${tool.name}`;
     const requestPayload = {
-      ...(configuration?.customParams?.connectors
-        ? {
-            [CUSTOM_AGENT_ID]: convertKeysToSnakeCase(
-              configuration.customParams,
-            ),
-          }
-        : {}),
       body_params: tool?.payload?.bodyParams || {},
       path_params: tool?.payload?.pathParams || {},
       query_params: tool?.payload?.queryParams || {},
@@ -113,8 +105,7 @@ export function executeTool(
 }
 
 /**
- * Generates the base signature for a tool, identifying tool type and presence of
- * prompt group (Pg) functionality based on the tool name.
+ * Generates the base signature for a tool, identifying tool type.
  *
  * @param toolName - The name of the tool.
  * @param toolCallId - Unique identifier for the tool call.
@@ -125,7 +116,6 @@ export function getToolBaseSignature(toolName: string, toolCallId: string) {
     name: toolName.startsWith(LOCAL_TOOL_PREFIX)
       ? toolName.slice(LOCAL_TOOL_PREFIX.length)
       : toolName,
-    isPg: toolName.startsWith('Pg'),
     type: toolName.startsWith(LOCAL_TOOL_PREFIX)
       ? ToolCallType.LOCAL
       : ToolCallType.XPANDER,
@@ -352,11 +342,11 @@ export function deletePropertyByPath(obj: any, path: string): void {
  */
 export function modifyPropertiesByRemoteSettings(
   tool: any,
-  schemasByNodeName: Record<string, INodeSchema>,
   kind: 'input' | 'output',
+  graphItem?: IAgentGraphItem,
 ): any {
   const newTool = JSON.parse(JSON.stringify({ ...tool })); // deep copy
-  const matchedSchemas = schemasByNodeName?.[newTool.function.name]?.[kind];
+  const matchedSchemas = graphItem?.settings?.schemas?.[kind];
   if (matchedSchemas) {
     let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
     if (
@@ -376,7 +366,7 @@ export function modifyPropertiesByRemoteSettings(
       });
       for (const prop of simplifiedSchema) {
         if (!!prop.description) {
-          appendDescriptionOverride(newTool, schemasByNodeName);
+          appendDescriptionOverride(newTool, graphItem);
         }
         // if is blocked or has sticky value - llm shouldn't know about it
         if (prop.isBlocked || !!prop.permanentValue) {
@@ -441,10 +431,10 @@ export function setValueByPath<T extends object>(
  */
 export function appendPermanentValues(
   tool: ToolCall,
-  schemasByNodeName: Record<string, INodeSchema>,
+  schemas: IAgentGraphItemSchema,
 ): ToolCall {
   const newTool = ToolCall.fromObject(tool.toDict());
-  const matchedSchemas = schemasByNodeName?.[newTool.name]?.input;
+  const matchedSchemas = schemas?.input;
   if (matchedSchemas) {
     let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
     if (
@@ -482,11 +472,10 @@ export function appendPermanentValues(
  */
 export function appendPermanentValuesToResult(
   toolCallResult: ToolCallResult,
-  schemasByNodeName: Record<string, INodeSchema>,
+  schemas: IAgentGraphItemSchema,
 ): ToolCallResult {
   const newToolCallResult = ToolCallResult.fromObject(toolCallResult.toDict());
-  const matchedSchemas =
-    schemasByNodeName?.[newToolCallResult.functionName]?.output;
+  const matchedSchemas = schemas?.output;
   if (matchedSchemas) {
     let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
     if (
@@ -533,10 +522,10 @@ export function appendPermanentValuesToResult(
  */
 export function appendDescriptionOverride(
   tool: any,
-  schemasByNodeName: Record<string, INodeSchema>,
+  graphItem: IAgentGraphItem,
 ): any {
   const newTool = { ...tool };
-  const matchedSchemas = schemasByNodeName?.[newTool.function.name]?.input;
+  const matchedSchemas = graphItem?.settings?.schemas?.input;
   if (matchedSchemas) {
     let simplifiedSchema = extractSimplifiedSchemaProps(matchedSchemas);
     if (simplifiedSchema.some((prop) => !!prop.description)) {

@@ -16,28 +16,25 @@ and managing prompt group sessions.
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, organizationId: string, status: AgentStatus, name: string, sourceNodes: ISourceNode[], pgSwitchAllowed?: boolean, tools?: IAgentTool[], graphs?: IGraphItem[], pgOas?: IAgentTool[], autoLoad?: boolean, pgSchemas?: IPGSchema[], pgNodeDescriptionOverride?: INodeDescription[], generalInstructions?: string, judgeInstructions?: string, hasKnowledgeBase?: boolean, knowledgeBaseStrategy?: KnowledgeBaseStrategy)
+new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], graph?: IAgentGraphItem[], knowledgeBases?: KnowledgeBase[])
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.id">id</a></code> | <code>string</code> | Unique identifier for the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | Current status of the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | List of source nodes associated with the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | Whether prompt group switching is allowed for the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.prompts">prompts</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of tools available to the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Array of graph items related to the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.autoLoad">autoLoad</a></code> | <code>boolean</code> | Whether the agent should automatically load its resources. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgSchemas">pgSchemas</a></code> | <code><a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]</code> | Array of agent tools specific to prompt groups. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.pgNodeDescriptionOverride">pgNodeDescriptionOverride</a></code> | <code><a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]</code> | Array of agent tools specific to prompt groups. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.generalInstructions">generalInstructions</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.judgeInstructions">judgeInstructions</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.hasKnowledgeBase">hasKnowledgeBase</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.knowledgeBaseStrategy">knowledgeBaseStrategy</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | *No description.* |
 
 ---
 
@@ -57,6 +54,14 @@ Unique identifier for the agent.
 
 ---
 
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.Agent.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+Human-readable name of the agent.
+
+---
+
 ##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.Agent.Initializer.parameter.organizationId"></a>
 
 - *Type:* string
@@ -73,11 +78,27 @@ Current status of the agent.
 
 ---
 
-##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.Agent.Initializer.parameter.name"></a>
+##### `memoryType`<sup>Required</sup> <a name="memoryType" id="xpander-sdk.Agent.Initializer.parameter.memoryType"></a>
 
-- *Type:* string
+- *Type:* <a href="#xpander-sdk.MemoryType">MemoryType</a>
 
-Human-readable name of the agent.
+---
+
+##### `memoryStrategy`<sup>Required</sup> <a name="memoryStrategy" id="xpander-sdk.Agent.Initializer.parameter.memoryStrategy"></a>
+
+- *Type:* <a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a>
+
+---
+
+##### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Agent.Initializer.parameter.instructions"></a>
+
+- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+
+---
+
+##### `accessScope`<sup>Required</sup> <a name="accessScope" id="xpander-sdk.Agent.Initializer.parameter.accessScope"></a>
+
+- *Type:* <a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a>
 
 ---
 
@@ -85,15 +106,11 @@ Human-readable name of the agent.
 
 - *Type:* <a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]
 
-List of source nodes associated with the agent.
-
 ---
 
-##### `pgSwitchAllowed`<sup>Optional</sup> <a name="pgSwitchAllowed" id="xpander-sdk.Agent.Initializer.parameter.pgSwitchAllowed"></a>
+##### `prompts`<sup>Required</sup> <a name="prompts" id="xpander-sdk.Agent.Initializer.parameter.prompts"></a>
 
-- *Type:* boolean
-
-Whether prompt group switching is allowed for the agent.
+- *Type:* string[]
 
 ---
 
@@ -105,67 +122,15 @@ Array of tools available to the agent.
 
 ---
 
-##### `graphs`<sup>Optional</sup> <a name="graphs" id="xpander-sdk.Agent.Initializer.parameter.graphs"></a>
+##### `graph`<sup>Optional</sup> <a name="graph" id="xpander-sdk.Agent.Initializer.parameter.graph"></a>
 
-- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]
-
-Array of graph items related to the agent.
+- *Type:* <a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]
 
 ---
 
-##### `pgOas`<sup>Optional</sup> <a name="pgOas" id="xpander-sdk.Agent.Initializer.parameter.pgOas"></a>
+##### `knowledgeBases`<sup>Optional</sup> <a name="knowledgeBases" id="xpander-sdk.Agent.Initializer.parameter.knowledgeBases"></a>
 
-- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
-
-Array of agent tools specific to prompt groups.
-
----
-
-##### `autoLoad`<sup>Optional</sup> <a name="autoLoad" id="xpander-sdk.Agent.Initializer.parameter.autoLoad"></a>
-
-- *Type:* boolean
-
-Whether the agent should automatically load its resources.
-
----
-
-##### `pgSchemas`<sup>Optional</sup> <a name="pgSchemas" id="xpander-sdk.Agent.Initializer.parameter.pgSchemas"></a>
-
-- *Type:* <a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]
-
-Array of agent tools specific to prompt groups.
-
----
-
-##### `pgNodeDescriptionOverride`<sup>Optional</sup> <a name="pgNodeDescriptionOverride" id="xpander-sdk.Agent.Initializer.parameter.pgNodeDescriptionOverride"></a>
-
-- *Type:* <a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]
-
-Array of agent tools specific to prompt groups.
-
----
-
-##### `generalInstructions`<sup>Optional</sup> <a name="generalInstructions" id="xpander-sdk.Agent.Initializer.parameter.generalInstructions"></a>
-
-- *Type:* string
-
----
-
-##### `judgeInstructions`<sup>Optional</sup> <a name="judgeInstructions" id="xpander-sdk.Agent.Initializer.parameter.judgeInstructions"></a>
-
-- *Type:* string
-
----
-
-##### `hasKnowledgeBase`<sup>Optional</sup> <a name="hasKnowledgeBase" id="xpander-sdk.Agent.Initializer.parameter.hasKnowledgeBase"></a>
-
-- *Type:* boolean
-
----
-
-##### `knowledgeBaseStrategy`<sup>Optional</sup> <a name="knowledgeBaseStrategy" id="xpander-sdk.Agent.Initializer.parameter.knowledgeBaseStrategy"></a>
-
-- *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
+- *Type:* <a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]
 
 ---
 
@@ -178,13 +143,12 @@ Array of agent tools specific to prompt groups.
 | <code><a href="#xpander-sdk.Agent.toJson">toJson</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with the specified LLM provider. |
+| <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from the specified source node type. |
-| <code><a href="#xpander-sdk.Agent.retrieveAllGraphTools">retrieveAllGraphTools</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.retrieveKnowledgeBases">retrieveKnowledgeBases</a></code> | Fetches the agent's attached knowledge bases. |
+| <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
-| <code><a href="#xpander-sdk.Agent.schemasByNodeName">schemasByNodeName</a></code> | Retrieves schemas grouped by node name based on the active prompt group session. |
-| <code><a href="#xpander-sdk.Agent.selectPromptGroup">selectPromptGroup</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.updateUserDetails">updateUserDetails</a></code> | *No description.* |
 
 ---
 
@@ -231,7 +195,7 @@ The list of local tools to add.
 ##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
 
 ```typescript
-public getTools(llmProvider?: LLMProvider, returnAllTools?: boolean): any[]
+public getTools(llmProvider?: LLMProvider): any[]
 ```
 
 Retrieves tools compatible with the specified LLM provider.
@@ -244,47 +208,37 @@ The LLM provider to filter tools by.
 
 ---
 
-###### `returnAllTools`<sup>Optional</sup> <a name="returnAllTools" id="xpander-sdk.Agent.getTools.parameter.returnAllTools"></a>
+##### `initTask` <a name="initTask" id="xpander-sdk.Agent.initTask"></a>
 
-- *Type:* boolean
+```typescript
+public initTask(execution: any): void
+```
+
+###### `execution`<sup>Required</sup> <a name="execution" id="xpander-sdk.Agent.initTask.parameter.execution"></a>
+
+- *Type:* any
 
 ---
 
 ##### `load` <a name="load" id="xpander-sdk.Agent.load"></a>
 
 ```typescript
-public load(sourceNodeType?: SourceNodeType): void
+public load(): void
 ```
 
 Loads the agent data from the specified source node type.
 
-###### `sourceNodeType`<sup>Optional</sup> <a name="sourceNodeType" id="xpander-sdk.Agent.load.parameter.sourceNodeType"></a>
-
-- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
-
-The type of source node to load.
-
----
-
-##### `retrieveAllGraphTools` <a name="retrieveAllGraphTools" id="xpander-sdk.Agent.retrieveAllGraphTools"></a>
+##### `retrieveNodeFromGraph` <a name="retrieveNodeFromGraph" id="xpander-sdk.Agent.retrieveNodeFromGraph"></a>
 
 ```typescript
-public retrieveAllGraphTools(llmProvider?: LLMProvider): any[]
+public retrieveNodeFromGraph(itemId: string): IAgentGraphItem
 ```
 
-###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Agent.retrieveAllGraphTools.parameter.llmProvider"></a>
+###### `itemId`<sup>Required</sup> <a name="itemId" id="xpander-sdk.Agent.retrieveNodeFromGraph.parameter.itemId"></a>
 
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+- *Type:* string
 
 ---
-
-##### `retrieveKnowledgeBases` <a name="retrieveKnowledgeBases" id="xpander-sdk.Agent.retrieveKnowledgeBases"></a>
-
-```typescript
-public retrieveKnowledgeBases(): KnowledgeBase[]
-```
-
-Fetches the agent's attached knowledge bases.
 
 ##### `runTool` <a name="runTool" id="xpander-sdk.Agent.runTool"></a>
 
@@ -330,27 +284,15 @@ The list of tool calls to execute.
 
 ---
 
-##### `schemasByNodeName` <a name="schemasByNodeName" id="xpander-sdk.Agent.schemasByNodeName"></a>
+##### `updateUserDetails` <a name="updateUserDetails" id="xpander-sdk.Agent.updateUserDetails"></a>
 
 ```typescript
-public schemasByNodeName(): {[ key: string ]: INodeSchema}
+public updateUserDetails(userDetails: any): void
 ```
 
-Retrieves schemas grouped by node name based on the active prompt group session.
+###### `userDetails`<sup>Required</sup> <a name="userDetails" id="xpander-sdk.Agent.updateUserDetails.parameter.userDetails"></a>
 
-This method returns an object where each key is a node name, and the value is the corresponding schema.
-It ensures that schemas are only fetched if there is an active session with a valid `promptGroupId`
-and if `pgSchemas` is not empty.
-
-##### `selectPromptGroup` <a name="selectPromptGroup" id="xpander-sdk.Agent.selectPromptGroup"></a>
-
-```typescript
-public selectPromptGroup(promptGroupName: string): void
-```
-
-###### `promptGroupName`<sup>Required</sup> <a name="promptGroupName" id="xpander-sdk.Agent.selectPromptGroup.parameter.promptGroupName"></a>
-
-- *Type:* string
+- *Type:* any
 
 ---
 
@@ -380,30 +322,41 @@ Agent.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#xpander-sdk.Agent.property.hasKnowledgeBase">hasKnowledgeBase</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has any local tools loaded. |
-| <code><a href="#xpander-sdk.Agent.property.isCustom">isCustom</a></code> | <code>boolean</code> | Checks if the agent is a custom-defined agent. |
+| <code><a href="#xpander-sdk.Agent.property.knowledgeBaseStrategy">knowledgeBaseStrategy</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Retrieves the type of source node for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.url">url</a></code> | <code>string</code> | Constructs the API URL for this agent. |
+| <code><a href="#xpander-sdk.Agent.property.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the agent. |
-| <code><a href="#xpander-sdk.Agent.property.generalInstructions">generalInstructions</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Array of graph items related to the agent. |
-| <code><a href="#xpander-sdk.Agent.property.hasKnowledgeBase">hasKnowledgeBase</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | Unique identifier for the agent. |
-| <code><a href="#xpander-sdk.Agent.property.judgeInstructions">judgeInstructions</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | Collection of local tools specific to this agent. |
+| <code><a href="#xpander-sdk.Agent.property.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | Human-readable name of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | Organization ID to which the agent belongs. |
-| <code><a href="#xpander-sdk.Agent.property.pgNodeDescriptionOverride">pgNodeDescriptionOverride</a></code> | <code><a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]</code> | Array of agent tools specific to prompt groups. |
-| <code><a href="#xpander-sdk.Agent.property.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
-| <code><a href="#xpander-sdk.Agent.property.pgSchemas">pgSchemas</a></code> | <code><a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]</code> | Array of agent tools specific to prompt groups. |
-| <code><a href="#xpander-sdk.Agent.property.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | Whether prompt group switching is allowed for the agent. |
-| <code><a href="#xpander-sdk.Agent.property.promptGroupSessions">promptGroupSessions</a></code> | <code><a href="#xpander-sdk.PromptGroupSessionsList">PromptGroupSessionsList</a></code> | Manages prompt group sessions for this agent. |
+| <code><a href="#xpander-sdk.Agent.property.prompts">prompts</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.ready">ready</a></code> | <code>boolean</code> | Indicates whether the agent is ready with tools loaded. |
-| <code><a href="#xpander-sdk.Agent.property.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | List of source nodes associated with the agent. |
+| <code><a href="#xpander-sdk.Agent.property.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | Current status of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of tools available to the agent. |
-| <code><a href="#xpander-sdk.Agent.property.knowledgeBaseStrategy">knowledgeBaseStrategy</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.execution">execution</a></code> | <code><a href="#xpander-sdk.Execution">Execution</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.executionMemory">executionMemory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.userDetails">userDetails</a></code> | <code><a href="#xpander-sdk.IUserDetails">IUserDetails</a></code> | *No description.* |
+
+---
+
+##### `hasKnowledgeBase`<sup>Required</sup> <a name="hasKnowledgeBase" id="xpander-sdk.Agent.property.hasKnowledgeBase"></a>
+
+```typescript
+public readonly hasKnowledgeBase: boolean;
+```
+
+- *Type:* boolean
 
 ---
 
@@ -419,15 +372,23 @@ Checks if the agent has any local tools loaded.
 
 ---
 
-##### `isCustom`<sup>Required</sup> <a name="isCustom" id="xpander-sdk.Agent.property.isCustom"></a>
+##### `knowledgeBaseStrategy`<sup>Required</sup> <a name="knowledgeBaseStrategy" id="xpander-sdk.Agent.property.knowledgeBaseStrategy"></a>
 
 ```typescript
-public readonly isCustom: boolean;
+public readonly knowledgeBaseStrategy: KnowledgeBaseStrategy;
 ```
 
-- *Type:* boolean
+- *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
 
-Checks if the agent is a custom-defined agent.
+---
+
+##### `memory`<sup>Required</sup> <a name="memory" id="xpander-sdk.Agent.property.memory"></a>
+
+```typescript
+public readonly memory: Memory;
+```
+
+- *Type:* <a href="#xpander-sdk.Memory">Memory</a>
 
 ---
 
@@ -455,6 +416,16 @@ Constructs the API URL for this agent.
 
 ---
 
+##### `accessScope`<sup>Required</sup> <a name="accessScope" id="xpander-sdk.Agent.property.accessScope"></a>
+
+```typescript
+public readonly accessScope: AgentAccessScope;
+```
+
+- *Type:* <a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a>
+
+---
+
 ##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.Agent.property.configuration"></a>
 
 ```typescript
@@ -467,35 +438,13 @@ Configuration settings for the agent.
 
 ---
 
-##### `generalInstructions`<sup>Required</sup> <a name="generalInstructions" id="xpander-sdk.Agent.property.generalInstructions"></a>
+##### `graph`<sup>Required</sup> <a name="graph" id="xpander-sdk.Agent.property.graph"></a>
 
 ```typescript
-public readonly generalInstructions: string;
+public readonly graph: IAgentGraphItem[];
 ```
 
-- *Type:* string
-
----
-
-##### `graphs`<sup>Required</sup> <a name="graphs" id="xpander-sdk.Agent.property.graphs"></a>
-
-```typescript
-public readonly graphs: IGraphItem[];
-```
-
-- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]
-
-Array of graph items related to the agent.
-
----
-
-##### `hasKnowledgeBase`<sup>Required</sup> <a name="hasKnowledgeBase" id="xpander-sdk.Agent.property.hasKnowledgeBase"></a>
-
-```typescript
-public readonly hasKnowledgeBase: boolean;
-```
-
-- *Type:* boolean
+- *Type:* <a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]
 
 ---
 
@@ -511,13 +460,13 @@ Unique identifier for the agent.
 
 ---
 
-##### `judgeInstructions`<sup>Required</sup> <a name="judgeInstructions" id="xpander-sdk.Agent.property.judgeInstructions"></a>
+##### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Agent.property.instructions"></a>
 
 ```typescript
-public readonly judgeInstructions: string;
+public readonly instructions: IAgentInstructions;
 ```
 
-- *Type:* string
+- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
 
 ---
 
@@ -540,6 +489,26 @@ public readonly localTools: ILocalTool[];
 - *Type:* <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
 
 Collection of local tools specific to this agent.
+
+---
+
+##### `memoryStrategy`<sup>Required</sup> <a name="memoryStrategy" id="xpander-sdk.Agent.property.memoryStrategy"></a>
+
+```typescript
+public readonly memoryStrategy: MemoryStrategy;
+```
+
+- *Type:* <a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a>
+
+---
+
+##### `memoryType`<sup>Required</sup> <a name="memoryType" id="xpander-sdk.Agent.property.memoryType"></a>
+
+```typescript
+public readonly memoryType: MemoryType;
+```
+
+- *Type:* <a href="#xpander-sdk.MemoryType">MemoryType</a>
 
 ---
 
@@ -567,63 +536,13 @@ Organization ID to which the agent belongs.
 
 ---
 
-##### `pgNodeDescriptionOverride`<sup>Required</sup> <a name="pgNodeDescriptionOverride" id="xpander-sdk.Agent.property.pgNodeDescriptionOverride"></a>
+##### `prompts`<sup>Required</sup> <a name="prompts" id="xpander-sdk.Agent.property.prompts"></a>
 
 ```typescript
-public readonly pgNodeDescriptionOverride: INodeDescription[];
+public readonly prompts: string[];
 ```
 
-- *Type:* <a href="#xpander-sdk.INodeDescription">INodeDescription</a>[]
-
-Array of agent tools specific to prompt groups.
-
----
-
-##### `pgOas`<sup>Required</sup> <a name="pgOas" id="xpander-sdk.Agent.property.pgOas"></a>
-
-```typescript
-public readonly pgOas: IAgentTool[];
-```
-
-- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
-
-Array of agent tools specific to prompt groups.
-
----
-
-##### `pgSchemas`<sup>Required</sup> <a name="pgSchemas" id="xpander-sdk.Agent.property.pgSchemas"></a>
-
-```typescript
-public readonly pgSchemas: IPGSchema[];
-```
-
-- *Type:* <a href="#xpander-sdk.IPGSchema">IPGSchema</a>[]
-
-Array of agent tools specific to prompt groups.
-
----
-
-##### `pgSwitchAllowed`<sup>Required</sup> <a name="pgSwitchAllowed" id="xpander-sdk.Agent.property.pgSwitchAllowed"></a>
-
-```typescript
-public readonly pgSwitchAllowed: boolean;
-```
-
-- *Type:* boolean
-
-Whether prompt group switching is allowed for the agent.
-
----
-
-##### `promptGroupSessions`<sup>Required</sup> <a name="promptGroupSessions" id="xpander-sdk.Agent.property.promptGroupSessions"></a>
-
-```typescript
-public readonly promptGroupSessions: PromptGroupSessionsList;
-```
-
-- *Type:* <a href="#xpander-sdk.PromptGroupSessionsList">PromptGroupSessionsList</a>
-
-Manages prompt group sessions for this agent.
+- *Type:* string[]
 
 ---
 
@@ -646,8 +565,6 @@ public readonly sourceNodes: ISourceNode[];
 ```
 
 - *Type:* <a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]
-
-List of source nodes associated with the agent.
 
 ---
 
@@ -675,13 +592,33 @@ Array of tools available to the agent.
 
 ---
 
-##### `knowledgeBaseStrategy`<sup>Optional</sup> <a name="knowledgeBaseStrategy" id="xpander-sdk.Agent.property.knowledgeBaseStrategy"></a>
+##### `execution`<sup>Optional</sup> <a name="execution" id="xpander-sdk.Agent.property.execution"></a>
 
 ```typescript
-public readonly knowledgeBaseStrategy: KnowledgeBaseStrategy;
+public readonly execution: Execution;
 ```
 
-- *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
+- *Type:* <a href="#xpander-sdk.Execution">Execution</a>
+
+---
+
+##### `executionMemory`<sup>Optional</sup> <a name="executionMemory" id="xpander-sdk.Agent.property.executionMemory"></a>
+
+```typescript
+public readonly executionMemory: Memory;
+```
+
+- *Type:* <a href="#xpander-sdk.Memory">Memory</a>
+
+---
+
+##### `userDetails`<sup>Optional</sup> <a name="userDetails" id="xpander-sdk.Agent.property.userDetails"></a>
+
+```typescript
+public readonly userDetails: IUserDetails;
+```
+
+- *Type:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
 
 ---
 
@@ -715,7 +652,6 @@ new Agents(configuration: Configuration)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.Agents.get">get</a></code> | Retrieves an agent by ID and initializes it with the given source node type. |
-| <code><a href="#xpander-sdk.Agents.getCustomAgent">getCustomAgent</a></code> | Retrieves the custom agent instance, initializing it with the given source node type. |
 | <code><a href="#xpander-sdk.Agents.list">list</a></code> | Retrieves the list of agents. |
 
 ---
@@ -723,7 +659,7 @@ new Agents(configuration: Configuration)
 ##### `get` <a name="get" id="xpander-sdk.Agents.get"></a>
 
 ```typescript
-public get(agentId: string, sourceNodeType?: SourceNodeType): Agent
+public get(agentId: string): Agent
 ```
 
 Retrieves an agent by ID and initializes it with the given source node type.
@@ -736,48 +672,16 @@ The ID of the agent to retrieve.
 
 ---
 
-###### `sourceNodeType`<sup>Optional</sup> <a name="sourceNodeType" id="xpander-sdk.Agents.get.parameter.sourceNodeType"></a>
-
-- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
-
-The source node type for the agent, default is SDK.
-
----
-
-##### `getCustomAgent` <a name="getCustomAgent" id="xpander-sdk.Agents.getCustomAgent"></a>
-
-```typescript
-public getCustomAgent(sourceNodeType?: SourceNodeType): Agent
-```
-
-Retrieves the custom agent instance, initializing it with the given source node type.
-
-###### `sourceNodeType`<sup>Optional</sup> <a name="sourceNodeType" id="xpander-sdk.Agents.getCustomAgent.parameter.sourceNodeType"></a>
-
-- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
-
-The source node type for the custom agent, default is SDK.
-
----
-
 ##### `list` <a name="list" id="xpander-sdk.Agents.list"></a>
 
 ```typescript
-public list(refetch?: boolean): Agent[]
+public list(): Agent[]
 ```
 
 Retrieves the list of agents.
 
 If `refetch` is true, it re-fetches the list
 from the API even if agents are already loaded.
-
-###### `refetch`<sup>Optional</sup> <a name="refetch" id="xpander-sdk.Agents.list.parameter.refetch"></a>
-
-- *Type:* boolean
-
-If true, forces a re-fetch of the agent list from the API.
-
----
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1126,10 +1030,21 @@ Configuration.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#xpander-sdk.Configuration.property.url">url</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Configuration.property.apiKey">apiKey</a></code> | <code>string</code> | API key for authenticating requests to xpanderAI. |
 | <code><a href="#xpander-sdk.Configuration.property.baseUrl">baseUrl</a></code> | <code>string</code> | Base URL for the xpanderAI API requests. |
-| <code><a href="#xpander-sdk.Configuration.property.customParams">customParams</a></code> | <code><a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a></code> | Custom parameters for additional configuration options. |
 | <code><a href="#xpander-sdk.Configuration.property.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | Flag to enable or disable metrics reporting. |
+| <code><a href="#xpander-sdk.Configuration.property.organizationId">organizationId</a></code> | <code>string</code> | Custom parameters for additional configuration options. |
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="xpander-sdk.Configuration.property.url"></a>
+
+```typescript
+public readonly url: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -1157,18 +1072,6 @@ Base URL for the xpanderAI API requests.
 
 ---
 
-##### `customParams`<sup>Required</sup> <a name="customParams" id="xpander-sdk.Configuration.property.customParams"></a>
-
-```typescript
-public readonly customParams: IXpanderClientCustomParams;
-```
-
-- *Type:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
-
-Custom parameters for additional configuration options.
-
----
-
 ##### `withMetricsReport`<sup>Required</sup> <a name="withMetricsReport" id="xpander-sdk.Configuration.property.withMetricsReport"></a>
 
 ```typescript
@@ -1178,6 +1081,261 @@ public readonly withMetricsReport: boolean;
 - *Type:* boolean
 
 Flag to enable or disable metrics reporting.
+
+---
+
+##### `organizationId`<sup>Optional</sup> <a name="organizationId" id="xpander-sdk.Configuration.property.organizationId"></a>
+
+```typescript
+public readonly organizationId: string;
+```
+
+- *Type:* string
+
+Custom parameters for additional configuration options.
+
+---
+
+
+### Execution <a name="Execution" id="xpander-sdk.Execution"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.Execution.Initializer"></a>
+
+```typescript
+import { Execution } from 'xpander-sdk'
+
+new Execution(id: string, agentId: string, organizationId: string, input: IExecutionInput, status: ExecutionStatus, lastExecutedNodeId?: string, memoryThreadId?: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.agentId">agentId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.input">input</a></code> | <code><a href="#xpander-sdk.IExecutionInput">IExecutionInput</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.Execution.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `agentId`<sup>Required</sup> <a name="agentId" id="xpander-sdk.Execution.Initializer.parameter.agentId"></a>
+
+- *Type:* string
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.Execution.Initializer.parameter.organizationId"></a>
+
+- *Type:* string
+
+---
+
+##### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Execution.Initializer.parameter.input"></a>
+
+- *Type:* <a href="#xpander-sdk.IExecutionInput">IExecutionInput</a>
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.Execution.Initializer.parameter.status"></a>
+
+- *Type:* <a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a>
+
+---
+
+##### `lastExecutedNodeId`<sup>Optional</sup> <a name="lastExecutedNodeId" id="xpander-sdk.Execution.Initializer.parameter.lastExecutedNodeId"></a>
+
+- *Type:* string
+
+---
+
+##### `memoryThreadId`<sup>Optional</sup> <a name="memoryThreadId" id="xpander-sdk.Execution.Initializer.parameter.memoryThreadId"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Execution.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.Execution.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Execution.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Execution.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.Execution.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Execution.fromObject">fromObject</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.update">update</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.Execution.fromObject"></a>
+
+```typescript
+import { Execution } from 'xpander-sdk'
+
+Execution.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Execution.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+##### `update` <a name="update" id="xpander-sdk.Execution.update"></a>
+
+```typescript
+import { Execution } from 'xpander-sdk'
+
+Execution.update(agent: Agent, execution_id: string, delta: {[ key: string ]: any})
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Execution.update.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `execution_id`<sup>Required</sup> <a name="execution_id" id="xpander-sdk.Execution.update.parameter.execution_id"></a>
+
+- *Type:* string
+
+---
+
+###### `delta`<sup>Required</sup> <a name="delta" id="xpander-sdk.Execution.update.parameter.delta"></a>
+
+- *Type:* {[ key: string ]: any}
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Execution.property.inputMessage">inputMessage</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.agentId">agentId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.input">input</a></code> | <code><a href="#xpander-sdk.IExecutionInput">IExecutionInput</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.status">status</a></code> | <code><a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a></code> | *No description.* |
+
+---
+
+##### `inputMessage`<sup>Required</sup> <a name="inputMessage" id="xpander-sdk.Execution.property.inputMessage"></a>
+
+```typescript
+public readonly inputMessage: IMemoryMessage;
+```
+
+- *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>
+
+---
+
+##### `agentId`<sup>Required</sup> <a name="agentId" id="xpander-sdk.Execution.property.agentId"></a>
+
+```typescript
+public readonly agentId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.Execution.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Execution.property.input"></a>
+
+```typescript
+public readonly input: IExecutionInput;
+```
+
+- *Type:* <a href="#xpander-sdk.IExecutionInput">IExecutionInput</a>
+
+---
+
+##### `lastExecutedNodeId`<sup>Required</sup> <a name="lastExecutedNodeId" id="xpander-sdk.Execution.property.lastExecutedNodeId"></a>
+
+```typescript
+public readonly lastExecutedNodeId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `memoryThreadId`<sup>Required</sup> <a name="memoryThreadId" id="xpander-sdk.Execution.property.memoryThreadId"></a>
+
+```typescript
+public readonly memoryThreadId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.Execution.property.organizationId"></a>
+
+```typescript
+public readonly organizationId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.Execution.property.status"></a>
+
+```typescript
+public readonly status: ExecutionStatus;
+```
+
+- *Type:* <a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a>
 
 ---
 
@@ -1417,6 +1575,295 @@ public readonly strategy: KnowledgeBaseStrategy;
 ---
 
 
+### Memory <a name="Memory" id="xpander-sdk.Memory"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.Memory.Initializer"></a>
+
+```typescript
+import { Memory } from 'xpander-sdk'
+
+new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: string, memoryType: MemoryType)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Memory.Initializer.parameter.agent">agent</a></code> | <code><a href="#xpander-sdk.Agent">Agent</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.Initializer.parameter.messages">messages</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.Initializer.parameter.userDetails">userDetails</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.Initializer.parameter.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
+
+---
+
+##### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.Initializer.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.Memory.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `messages`<sup>Required</sup> <a name="messages" id="xpander-sdk.Memory.Initializer.parameter.messages"></a>
+
+- *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]
+
+---
+
+##### `userDetails`<sup>Required</sup> <a name="userDetails" id="xpander-sdk.Memory.Initializer.parameter.userDetails"></a>
+
+- *Type:* string
+
+---
+
+##### `memoryType`<sup>Required</sup> <a name="memoryType" id="xpander-sdk.Memory.Initializer.parameter.memoryType"></a>
+
+- *Type:* <a href="#xpander-sdk.MemoryType">MemoryType</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Memory.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.addMessages">addMessages</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.addToolCallResults">addToolCallResults</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.initializeThread">initializeThread</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.initInstructions">initInstructions</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.retrieveMessages">retrieveMessages</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.selectLLMProvider">selectLLMProvider</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.Memory.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Memory.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Memory.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.Memory.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `addMessages` <a name="addMessages" id="xpander-sdk.Memory.addMessages"></a>
+
+```typescript
+public addMessages(_messages: any): void
+```
+
+###### `_messages`<sup>Required</sup> <a name="_messages" id="xpander-sdk.Memory.addMessages.parameter._messages"></a>
+
+- *Type:* any
+
+---
+
+##### `addToolCallResults` <a name="addToolCallResults" id="xpander-sdk.Memory.addToolCallResults"></a>
+
+```typescript
+public addToolCallResults(toolCallResults: ToolCallResult[]): void
+```
+
+###### `toolCallResults`<sup>Required</sup> <a name="toolCallResults" id="xpander-sdk.Memory.addToolCallResults.parameter.toolCallResults"></a>
+
+- *Type:* <a href="#xpander-sdk.ToolCallResult">ToolCallResult</a>[]
+
+---
+
+##### `initializeThread` <a name="initializeThread" id="xpander-sdk.Memory.initializeThread"></a>
+
+```typescript
+public initializeThread(input: IMemoryMessage, instructions: IAgentInstructions): void
+```
+
+###### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Memory.initializeThread.parameter.input"></a>
+
+- *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>
+
+---
+
+###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initializeThread.parameter.instructions"></a>
+
+- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+
+---
+
+##### `initInstructions` <a name="initInstructions" id="xpander-sdk.Memory.initInstructions"></a>
+
+```typescript
+public initInstructions(instructions: IAgentInstructions): void
+```
+
+###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initInstructions.parameter.instructions"></a>
+
+- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+
+---
+
+##### `retrieveMessages` <a name="retrieveMessages" id="xpander-sdk.Memory.retrieveMessages"></a>
+
+```typescript
+public retrieveMessages(): any[]
+```
+
+##### `selectLLMProvider` <a name="selectLLMProvider" id="xpander-sdk.Memory.selectLLMProvider"></a>
+
+```typescript
+public selectLLMProvider(llmProvider: LLMProvider): void
+```
+
+###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.Memory.selectLLMProvider.parameter.llmProvider"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Memory.fromObject">fromObject</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.create">create</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.fetch">fetch</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.Memory.fromObject"></a>
+
+```typescript
+import { Memory } from 'xpander-sdk'
+
+Memory.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Memory.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+##### `create` <a name="create" id="xpander-sdk.Memory.create"></a>
+
+```typescript
+import { Memory } from 'xpander-sdk'
+
+Memory.create(agent: Agent, userDetails?: IUserDetails)
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.create.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `userDetails`<sup>Optional</sup> <a name="userDetails" id="xpander-sdk.Memory.create.parameter.userDetails"></a>
+
+- *Type:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
+
+---
+
+##### `fetch` <a name="fetch" id="xpander-sdk.Memory.fetch"></a>
+
+```typescript
+import { Memory } from 'xpander-sdk'
+
+Memory.fetch(agent: Agent, threadId: string)
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.fetch.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `threadId`<sup>Required</sup> <a name="threadId" id="xpander-sdk.Memory.fetch.parameter.threadId"></a>
+
+- *Type:* string
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Memory.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.property.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.property.messages">messages</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.property.userDetails">userDetails</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.Memory.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.Memory.property.llmProvider"></a>
+
+```typescript
+public readonly llmProvider: LLMProvider;
+```
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+---
+
+##### `memoryType`<sup>Required</sup> <a name="memoryType" id="xpander-sdk.Memory.property.memoryType"></a>
+
+```typescript
+public readonly memoryType: MemoryType;
+```
+
+- *Type:* <a href="#xpander-sdk.MemoryType">MemoryType</a>
+
+---
+
+##### `messages`<sup>Required</sup> <a name="messages" id="xpander-sdk.Memory.property.messages"></a>
+
+```typescript
+public readonly messages: IMemoryMessage[];
+```
+
+- *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]
+
+---
+
+##### `userDetails`<sup>Required</sup> <a name="userDetails" id="xpander-sdk.Memory.property.userDetails"></a>
+
+```typescript
+public readonly userDetails: string;
+```
+
+- *Type:* string
+
+---
+
+
 ### NvidiaNIMSupportedModels <a name="NvidiaNIMSupportedModels" id="xpander-sdk.NvidiaNIMSupportedModels"></a>
 
 Contains constants representing various models supported by Nvidia NIM.
@@ -1523,208 +1970,6 @@ OpenAI GPT-4o Mini model.
 
 ---
 
-### PromptGroupSession <a name="PromptGroupSession" id="xpander-sdk.PromptGroupSession"></a>
-
-Represents a session within a prompt group in xpanderAI, managing the graph item and tracking the last processed node.
-
-#### Initializers <a name="Initializers" id="xpander-sdk.PromptGroupSession.Initializer"></a>
-
-```typescript
-import { PromptGroupSession } from 'xpander-sdk'
-
-new PromptGroupSession(pg: IGraphItem, lastNode?: string)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.PromptGroupSession.Initializer.parameter.pg">pg</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a></code> | The graph item associated with the prompt group session. |
-| <code><a href="#xpander-sdk.PromptGroupSession.Initializer.parameter.lastNode">lastNode</a></code> | <code>string</code> | Identifier for the last node accessed in the session. |
-
----
-
-##### `pg`<sup>Required</sup> <a name="pg" id="xpander-sdk.PromptGroupSession.Initializer.parameter.pg"></a>
-
-- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>
-
-The graph item associated with the prompt group session.
-
----
-
-##### `lastNode`<sup>Optional</sup> <a name="lastNode" id="xpander-sdk.PromptGroupSession.Initializer.parameter.lastNode"></a>
-
-- *Type:* string
-
-Identifier for the last node accessed in the session.
-
----
-
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.PromptGroupSession.property.lastNode">lastNode</a></code> | <code>string</code> | Identifier for the last node accessed in the session. |
-| <code><a href="#xpander-sdk.PromptGroupSession.property.pg">pg</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a></code> | The graph item associated with the prompt group session. |
-
----
-
-##### `lastNode`<sup>Required</sup> <a name="lastNode" id="xpander-sdk.PromptGroupSession.property.lastNode"></a>
-
-```typescript
-public readonly lastNode: string;
-```
-
-- *Type:* string
-
-Identifier for the last node accessed in the session.
-
----
-
-##### `pg`<sup>Required</sup> <a name="pg" id="xpander-sdk.PromptGroupSession.property.pg"></a>
-
-```typescript
-public readonly pg: IGraphItem;
-```
-
-- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>
-
-The graph item associated with the prompt group session.
-
----
-
-
-### PromptGroupSessionsList <a name="PromptGroupSessionsList" id="xpander-sdk.PromptGroupSessionsList"></a>
-
-Manages a collection of prompt group sessions, providing functionalities to start, manage, and retrieve tools for active sessions in xpanderAI.
-
-#### Initializers <a name="Initializers" id="xpander-sdk.PromptGroupSessionsList.Initializer"></a>
-
-```typescript
-import { PromptGroupSessionsList } from 'xpander-sdk'
-
-new PromptGroupSessionsList(graphs: IGraphItem[], pgOas: IAgentTool[], sessions?: PromptGroupSession[])
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.PromptGroupSessionsList.Initializer.parameter.graphs">graphs</a></code> | <code><a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]</code> | Collection of graph items associated with prompt groups. |
-| <code><a href="#xpander-sdk.PromptGroupSessionsList.Initializer.parameter.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
-| <code><a href="#xpander-sdk.PromptGroupSessionsList.Initializer.parameter.sessions">sessions</a></code> | <code><a href="#xpander-sdk.PromptGroupSession">PromptGroupSession</a>[]</code> | List of active prompt group sessions. |
-
----
-
-##### `graphs`<sup>Required</sup> <a name="graphs" id="xpander-sdk.PromptGroupSessionsList.Initializer.parameter.graphs"></a>
-
-- *Type:* <a href="#xpander-sdk.IGraphItem">IGraphItem</a>[]
-
-Collection of graph items associated with prompt groups.
-
----
-
-##### `pgOas`<sup>Required</sup> <a name="pgOas" id="xpander-sdk.PromptGroupSessionsList.Initializer.parameter.pgOas"></a>
-
-- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
-
-Array of agent tools specific to prompt groups.
-
----
-
-##### `sessions`<sup>Optional</sup> <a name="sessions" id="xpander-sdk.PromptGroupSessionsList.Initializer.parameter.sessions"></a>
-
-- *Type:* <a href="#xpander-sdk.PromptGroupSession">PromptGroupSession</a>[]
-
-List of active prompt group sessions.
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#xpander-sdk.PromptGroupSessionsList.getToolsForActiveSession">getToolsForActiveSession</a></code> | Retrieves the available tools for the currently active session, filtering tools based on their position in the graph and local tool prefix. |
-| <code><a href="#xpander-sdk.PromptGroupSessionsList.resetSessions">resetSessions</a></code> | Resets all active prompt group sessions. |
-| <code><a href="#xpander-sdk.PromptGroupSessionsList.startPgSession">startPgSession</a></code> | Starts a new session for a specified tool call, associating it with a prompt group. |
-
----
-
-##### `getToolsForActiveSession` <a name="getToolsForActiveSession" id="xpander-sdk.PromptGroupSessionsList.getToolsForActiveSession"></a>
-
-```typescript
-public getToolsForActiveSession(allTools: any[]): any[]
-```
-
-Retrieves the available tools for the currently active session, filtering tools based on their position in the graph and local tool prefix.
-
-###### `allTools`<sup>Required</sup> <a name="allTools" id="xpander-sdk.PromptGroupSessionsList.getToolsForActiveSession.parameter.allTools"></a>
-
-- *Type:* any[]
-
-A list of all tools available for the session.
-
----
-
-##### `resetSessions` <a name="resetSessions" id="xpander-sdk.PromptGroupSessionsList.resetSessions"></a>
-
-```typescript
-public resetSessions(): void
-```
-
-Resets all active prompt group sessions.
-
-##### `startPgSession` <a name="startPgSession" id="xpander-sdk.PromptGroupSessionsList.startPgSession"></a>
-
-```typescript
-public startPgSession(tool: ToolCall): string
-```
-
-Starts a new session for a specified tool call, associating it with a prompt group.
-
-If the prompt group or graph cannot be matched, an error is thrown.
-
-###### `tool`<sup>Required</sup> <a name="tool" id="xpander-sdk.PromptGroupSessionsList.startPgSession.parameter.tool"></a>
-
-- *Type:* <a href="#xpander-sdk.ToolCall">ToolCall</a>
-
-The tool call used to start the prompt group session.
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.PromptGroupSessionsList.property.activeSession">activeSession</a></code> | <code><a href="#xpander-sdk.PromptGroupSession">PromptGroupSession</a></code> | Returns the currently active session, if one exists. |
-| <code><a href="#xpander-sdk.PromptGroupSessionsList.property.pgOas">pgOas</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | Array of agent tools specific to prompt groups. |
-
----
-
-##### `activeSession`<sup>Required</sup> <a name="activeSession" id="xpander-sdk.PromptGroupSessionsList.property.activeSession"></a>
-
-```typescript
-public readonly activeSession: PromptGroupSession;
-```
-
-- *Type:* <a href="#xpander-sdk.PromptGroupSession">PromptGroupSession</a>
-
-Returns the currently active session, if one exists.
-
----
-
-##### `pgOas`<sup>Required</sup> <a name="pgOas" id="xpander-sdk.PromptGroupSessionsList.property.pgOas"></a>
-
-```typescript
-public readonly pgOas: IAgentTool[];
-```
-
-- *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
-
-Array of agent tools specific to prompt groups.
-
----
-
-
 ### RealTimeOpenAISupportedModels <a name="RealTimeOpenAISupportedModels" id="xpander-sdk.RealTimeOpenAISupportedModels"></a>
 
 Contains constants representing various models supported by OpenAI.
@@ -1798,7 +2043,7 @@ OpenAI Whisper model for speech-to-text tasks.
 ```typescript
 import { ToolCall } from 'xpander-sdk'
 
-new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: string, isPg?: boolean)
+new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: string)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1807,7 +2052,6 @@ new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: str
 | <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.type">type</a></code> | <code><a href="#xpander-sdk.ToolCallType">ToolCallType</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.payload">payload</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.isPg">isPg</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -1832,12 +2076,6 @@ new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: str
 ##### `toolCallId`<sup>Optional</sup> <a name="toolCallId" id="xpander-sdk.ToolCall.Initializer.parameter.toolCallId"></a>
 
 - *Type:* string
-
----
-
-##### `isPg`<sup>Optional</sup> <a name="isPg" id="xpander-sdk.ToolCall.Initializer.parameter.isPg"></a>
-
-- *Type:* boolean
 
 ---
 
@@ -1901,21 +2139,10 @@ ToolCall.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ToolCall.property.isPg">isPg</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.property.name">name</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.property.payload">payload</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.property.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.property.type">type</a></code> | <code><a href="#xpander-sdk.ToolCallType">ToolCallType</a></code> | *No description.* |
-
----
-
-##### `isPg`<sup>Required</sup> <a name="isPg" id="xpander-sdk.ToolCall.property.isPg"></a>
-
-```typescript
-public readonly isPg: boolean;
-```
-
-- *Type:* boolean
 
 ---
 
@@ -2174,7 +2401,7 @@ XpanderClient provides methods for configuring and interacting with xpanderAI to
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, customParams?: any)
+new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, organizationId?: string)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -2182,7 +2409,7 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, cu
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.apiKey">apiKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.baseUrl">baseUrl</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.customParams">customParams</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -2204,9 +2431,9 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, cu
 
 ---
 
-##### `customParams`<sup>Optional</sup> <a name="customParams" id="xpander-sdk.XpanderClient.Initializer.parameter.customParams"></a>
+##### `organizationId`<sup>Optional</sup> <a name="organizationId" id="xpander-sdk.XpanderClient.Initializer.parameter.organizationId"></a>
 
-- *Type:* any
+- *Type:* string
 
 ---
 
@@ -2280,6 +2507,264 @@ Configuration settings for the xpanderAI client.
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IAgentGraphItem <a name="IAgentGraphItem" id="xpander-sdk.IAgentGraphItem"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IAgentGraphItem.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItem.property.itemId">itemId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItem.property.targets">targets</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItem.property.type">type</a></code> | <code><a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItem.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItem.property.settings">settings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItem.property.subType">subType</a></code> | <code><a href="#xpander-sdk.AgentGraphItemSubType">AgentGraphItemSubType</a></code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.IAgentGraphItem.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `itemId`<sup>Required</sup> <a name="itemId" id="xpander-sdk.IAgentGraphItem.property.itemId"></a>
+
+```typescript
+public readonly itemId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `targets`<sup>Required</sup> <a name="targets" id="xpander-sdk.IAgentGraphItem.property.targets"></a>
+
+```typescript
+public readonly targets: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.IAgentGraphItem.property.type"></a>
+
+```typescript
+public readonly type: AgentGraphItemType;
+```
+
+- *Type:* <a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a>
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="xpander-sdk.IAgentGraphItem.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `settings`<sup>Optional</sup> <a name="settings" id="xpander-sdk.IAgentGraphItem.property.settings"></a>
+
+```typescript
+public readonly settings: IAgentGraphItemSettings;
+```
+
+- *Type:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
+
+---
+
+##### `subType`<sup>Optional</sup> <a name="subType" id="xpander-sdk.IAgentGraphItem.property.subType"></a>
+
+```typescript
+public readonly subType: AgentGraphItemSubType;
+```
+
+- *Type:* <a href="#xpander-sdk.AgentGraphItemSubType">AgentGraphItemSubType</a>
+
+---
+
+### IAgentGraphItemAdvancedFilteringOption <a name="IAgentGraphItemAdvancedFilteringOption" id="xpander-sdk.IAgentGraphItemAdvancedFilteringOption"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IAgentGraphItemAdvancedFilteringOption">IAgentGraphItemAdvancedFilteringOption</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IAgentGraphItemAdvancedFilteringOption.property.returnables">returnables</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemAdvancedFilteringOption.property.searchables">searchables</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `returnables`<sup>Optional</sup> <a name="returnables" id="xpander-sdk.IAgentGraphItemAdvancedFilteringOption.property.returnables"></a>
+
+```typescript
+public readonly returnables: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `searchables`<sup>Optional</sup> <a name="searchables" id="xpander-sdk.IAgentGraphItemAdvancedFilteringOption.property.searchables"></a>
+
+```typescript
+public readonly searchables: string[];
+```
+
+- *Type:* string[]
+
+---
+
+### IAgentGraphItemSchema <a name="IAgentGraphItemSchema" id="xpander-sdk.IAgentGraphItemSchema"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IAgentGraphItemSchema">IAgentGraphItemSchema</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IAgentGraphItemSchema.property.input">input</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemSchema.property.output">output</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
+
+---
+
+##### `input`<sup>Optional</sup> <a name="input" id="xpander-sdk.IAgentGraphItemSchema.property.input"></a>
+
+```typescript
+public readonly input: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+---
+
+##### `output`<sup>Optional</sup> <a name="output" id="xpander-sdk.IAgentGraphItemSchema.property.output"></a>
+
+```typescript
+public readonly output: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+---
+
+### IAgentGraphItemSettings <a name="IAgentGraphItemSettings" id="xpander-sdk.IAgentGraphItemSettings"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.advancedFilteringOptions">advancedFilteringOptions</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemAdvancedFilteringOption">IAgentGraphItemAdvancedFilteringOption</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.instructions">instructions</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.schemas">schemas</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSchema">IAgentGraphItemSchema</a></code> | *No description.* |
+
+---
+
+##### `advancedFilteringOptions`<sup>Optional</sup> <a name="advancedFilteringOptions" id="xpander-sdk.IAgentGraphItemSettings.property.advancedFilteringOptions"></a>
+
+```typescript
+public readonly advancedFilteringOptions: IAgentGraphItemAdvancedFilteringOption[];
+```
+
+- *Type:* <a href="#xpander-sdk.IAgentGraphItemAdvancedFilteringOption">IAgentGraphItemAdvancedFilteringOption</a>[]
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="xpander-sdk.IAgentGraphItemSettings.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+---
+
+##### `instructions`<sup>Optional</sup> <a name="instructions" id="xpander-sdk.IAgentGraphItemSettings.property.instructions"></a>
+
+```typescript
+public readonly instructions: string;
+```
+
+- *Type:* string
+
+---
+
+##### `schemas`<sup>Optional</sup> <a name="schemas" id="xpander-sdk.IAgentGraphItemSettings.property.schemas"></a>
+
+```typescript
+public readonly schemas: IAgentGraphItemSchema;
+```
+
+- *Type:* <a href="#xpander-sdk.IAgentGraphItemSchema">IAgentGraphItemSchema</a>
+
+---
+
+### IAgentInstructions <a name="IAgentInstructions" id="xpander-sdk.IAgentInstructions"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IAgentInstructions.property.general">general</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentInstructions.property.goal">goal</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentInstructions.property.role">role</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `general`<sup>Required</sup> <a name="general" id="xpander-sdk.IAgentInstructions.property.general"></a>
+
+```typescript
+public readonly general: string;
+```
+
+- *Type:* string
+
+---
+
+##### `goal`<sup>Required</sup> <a name="goal" id="xpander-sdk.IAgentInstructions.property.goal"></a>
+
+```typescript
+public readonly goal: string;
+```
+
+- *Type:* string
+
+---
+
+##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.IAgentInstructions.property.role"></a>
+
+```typescript
+public readonly role: string;
+```
+
+- *Type:* string
+
+---
 
 ### IAgentTool <a name="IAgentTool" id="xpander-sdk.IAgentTool"></a>
 
@@ -2584,8 +3069,8 @@ Interface representing configuration settings for the xpanderAI client.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.IConfiguration.property.apiKey">apiKey</a></code> | <code>string</code> | API key for authenticating with xpanderAI. |
-| <code><a href="#xpander-sdk.IConfiguration.property.customParams">customParams</a></code> | <code><a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a></code> | Custom parameters for client-specific settings. |
 | <code><a href="#xpander-sdk.IConfiguration.property.baseUrl">baseUrl</a></code> | <code>string</code> | Optional base URL for the xpanderAI API. |
+| <code><a href="#xpander-sdk.IConfiguration.property.organizationId">organizationId</a></code> | <code>string</code> | Custom parameters for client-specific settings. |
 | <code><a href="#xpander-sdk.IConfiguration.property.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | Optional flag to enable metrics reporting. |
 
 ---
@@ -2602,18 +3087,6 @@ API key for authenticating with xpanderAI.
 
 ---
 
-##### `customParams`<sup>Required</sup> <a name="customParams" id="xpander-sdk.IConfiguration.property.customParams"></a>
-
-```typescript
-public readonly customParams: IXpanderClientCustomParams;
-```
-
-- *Type:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
-
-Custom parameters for client-specific settings.
-
----
-
 ##### `baseUrl`<sup>Optional</sup> <a name="baseUrl" id="xpander-sdk.IConfiguration.property.baseUrl"></a>
 
 ```typescript
@@ -2626,6 +3099,18 @@ Optional base URL for the xpanderAI API.
 
 ---
 
+##### `organizationId`<sup>Optional</sup> <a name="organizationId" id="xpander-sdk.IConfiguration.property.organizationId"></a>
+
+```typescript
+public readonly organizationId: string;
+```
+
+- *Type:* string
+
+Custom parameters for client-specific settings.
+
+---
+
 ##### `withMetricsReport`<sup>Optional</sup> <a name="withMetricsReport" id="xpander-sdk.IConfiguration.property.withMetricsReport"></a>
 
 ```typescript
@@ -2635,6 +3120,51 @@ public readonly withMetricsReport: boolean;
 - *Type:* boolean
 
 Optional flag to enable metrics reporting.
+
+---
+
+### IExecutionInput <a name="IExecutionInput" id="xpander-sdk.IExecutionInput"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IExecutionInput">IExecutionInput</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IExecutionInput.property.user">user</a></code> | <code><a href="#xpander-sdk.IUserDetails">IUserDetails</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IExecutionInput.property.files">files</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IExecutionInput.property.text">text</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `user`<sup>Required</sup> <a name="user" id="xpander-sdk.IExecutionInput.property.user"></a>
+
+```typescript
+public readonly user: IUserDetails;
+```
+
+- *Type:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
+
+---
+
+##### `files`<sup>Optional</sup> <a name="files" id="xpander-sdk.IExecutionInput.property.files"></a>
+
+```typescript
+public readonly files: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `text`<sup>Optional</sup> <a name="text" id="xpander-sdk.IExecutionInput.property.text"></a>
+
+```typescript
+public readonly text: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -2818,6 +3348,73 @@ public readonly parameters: any;
 - *Type:* any
 
 Parameters used by the local tool function.
+
+---
+
+### IMemoryMessage <a name="IMemoryMessage" id="xpander-sdk.IMemoryMessage"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IMemoryMessage.property.role">role</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMemoryMessage.property.content">content</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMemoryMessage.property.nodeName">nodeName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMemoryMessage.property.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMemoryMessage.property.toolCalls">toolCalls</a></code> | <code><a href="#xpander-sdk.IToolCall">IToolCall</a>[]</code> | *No description.* |
+
+---
+
+##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.IMemoryMessage.property.role"></a>
+
+```typescript
+public readonly role: string;
+```
+
+- *Type:* string
+
+---
+
+##### `content`<sup>Optional</sup> <a name="content" id="xpander-sdk.IMemoryMessage.property.content"></a>
+
+```typescript
+public readonly content: string;
+```
+
+- *Type:* string
+
+---
+
+##### `nodeName`<sup>Optional</sup> <a name="nodeName" id="xpander-sdk.IMemoryMessage.property.nodeName"></a>
+
+```typescript
+public readonly nodeName: string;
+```
+
+- *Type:* string
+
+---
+
+##### `toolCallId`<sup>Optional</sup> <a name="toolCallId" id="xpander-sdk.IMemoryMessage.property.toolCallId"></a>
+
+```typescript
+public readonly toolCallId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `toolCalls`<sup>Optional</sup> <a name="toolCalls" id="xpander-sdk.IMemoryMessage.property.toolCalls"></a>
+
+```typescript
+public readonly toolCalls: IToolCall[];
+```
+
+- *Type:* <a href="#xpander-sdk.IToolCall">IToolCall</a>[]
 
 ---
 
@@ -3128,8 +3725,6 @@ Interface representing a source node in the agent's graph.
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.ISourceNode.property.id">id</a></code> | <code>string</code> | Unique identifier for the source node. |
 | <code><a href="#xpander-sdk.ISourceNode.property.metadata">metadata</a></code> | <code>any</code> | Metadata associated with the source node. |
-| <code><a href="#xpander-sdk.ISourceNode.property.pgSwitchAllowed">pgSwitchAllowed</a></code> | <code>boolean</code> | Flag indicating if switching prompt groups is allowed for this node. |
-| <code><a href="#xpander-sdk.ISourceNode.property.targets">targets</a></code> | <code>string[]</code> | List of target nodes connected to this source node. |
 | <code><a href="#xpander-sdk.ISourceNode.property.type">type</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Type of the source node (e.g., SDK, TASK). |
 
 ---
@@ -3155,30 +3750,6 @@ public readonly metadata: any;
 - *Type:* any
 
 Metadata associated with the source node.
-
----
-
-##### `pgSwitchAllowed`<sup>Required</sup> <a name="pgSwitchAllowed" id="xpander-sdk.ISourceNode.property.pgSwitchAllowed"></a>
-
-```typescript
-public readonly pgSwitchAllowed: boolean;
-```
-
-- *Type:* boolean
-
-Flag indicating if switching prompt groups is allowed for this node.
-
----
-
-##### `targets`<sup>Required</sup> <a name="targets" id="xpander-sdk.ISourceNode.property.targets"></a>
-
-```typescript
-public readonly targets: string[];
-```
-
-- *Type:* string[]
-
-List of target nodes connected to this source node.
 
 ---
 
@@ -3257,6 +3828,51 @@ public readonly parameters: {[ key: string ]: IToolParameter};
 - *Type:* {[ key: string ]: <a href="#xpander-sdk.IToolParameter">IToolParameter</a>}
 
 Parameters required by the tool.
+
+---
+
+### IToolCall <a name="IToolCall" id="xpander-sdk.IToolCall"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IToolCall">IToolCall</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IToolCall.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolCall.property.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IToolCall.property.payload">payload</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IToolCall.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `toolCallId`<sup>Required</sup> <a name="toolCallId" id="xpander-sdk.IToolCall.property.toolCallId"></a>
+
+```typescript
+public readonly toolCallId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `payload`<sup>Optional</sup> <a name="payload" id="xpander-sdk.IToolCall.property.payload"></a>
+
+```typescript
+public readonly payload: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -3479,47 +4095,173 @@ List of required properties within this parameter, if any.
 
 ---
 
-### IXpanderClientCustomParams <a name="IXpanderClientCustomParams" id="xpander-sdk.IXpanderClientCustomParams"></a>
+### IUserDetails <a name="IUserDetails" id="xpander-sdk.IUserDetails"></a>
 
-- *Implemented By:* <a href="#xpander-sdk.IXpanderClientCustomParams">IXpanderClientCustomParams</a>
-
-Interface representing optional custom parameters for configuring the xpanderAI client.
+- *Implemented By:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IXpanderClientCustomParams.property.connectors">connectors</a></code> | <code>any[]</code> | Optional array of connectors associated with the client. |
-| <code><a href="#xpander-sdk.IXpanderClientCustomParams.property.organizationId">organizationId</a></code> | <code>string</code> | Optional organization ID associated with the client. |
+| <code><a href="#xpander-sdk.IUserDetails.property.additionalAttributes">additionalAttributes</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
+| <code><a href="#xpander-sdk.IUserDetails.property.email">email</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IUserDetails.property.firstName">firstName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IUserDetails.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IUserDetails.property.lastName">lastName</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `connectors`<sup>Optional</sup> <a name="connectors" id="xpander-sdk.IXpanderClientCustomParams.property.connectors"></a>
+##### `additionalAttributes`<sup>Optional</sup> <a name="additionalAttributes" id="xpander-sdk.IUserDetails.property.additionalAttributes"></a>
 
 ```typescript
-public readonly connectors: any[];
+public readonly additionalAttributes: {[ key: string ]: any};
 ```
 
-- *Type:* any[]
-
-Optional array of connectors associated with the client.
+- *Type:* {[ key: string ]: any}
 
 ---
 
-##### `organizationId`<sup>Optional</sup> <a name="organizationId" id="xpander-sdk.IXpanderClientCustomParams.property.organizationId"></a>
+##### `email`<sup>Optional</sup> <a name="email" id="xpander-sdk.IUserDetails.property.email"></a>
 
 ```typescript
-public readonly organizationId: string;
+public readonly email: string;
 ```
 
 - *Type:* string
 
-Optional organization ID associated with the client.
+---
+
+##### `firstName`<sup>Optional</sup> <a name="firstName" id="xpander-sdk.IUserDetails.property.firstName"></a>
+
+```typescript
+public readonly firstName: string;
+```
+
+- *Type:* string
+
+---
+
+##### `id`<sup>Optional</sup> <a name="id" id="xpander-sdk.IUserDetails.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `lastName`<sup>Optional</sup> <a name="lastName" id="xpander-sdk.IUserDetails.property.lastName"></a>
+
+```typescript
+public readonly lastName: string;
+```
+
+- *Type:* string
 
 ---
 
 ## Enums <a name="Enums" id="Enums"></a>
+
+### AgentAccessScope <a name="AgentAccessScope" id="xpander-sdk.AgentAccessScope"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentAccessScope.PERSONAL">PERSONAL</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentAccessScope.ORGANIZATIONAL">ORGANIZATIONAL</a></code> | *No description.* |
+
+---
+
+##### `PERSONAL` <a name="PERSONAL" id="xpander-sdk.AgentAccessScope.PERSONAL"></a>
+
+---
+
+
+##### `ORGANIZATIONAL` <a name="ORGANIZATIONAL" id="xpander-sdk.AgentAccessScope.ORGANIZATIONAL"></a>
+
+---
+
+
+### AgentGraphItemSubType <a name="AgentGraphItemSubType" id="xpander-sdk.AgentGraphItemSubType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentGraphItemSubType.SDK">SDK</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemSubType.TASK">TASK</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemSubType.ASSISTANT">ASSISTANT</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemSubType.WEBHOOK">WEBHOOK</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemSubType.OPERATION">OPERATION</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemSubType.CUSTOM_FUNCTION">CUSTOM_FUNCTION</a></code> | *No description.* |
+
+---
+
+##### `SDK` <a name="SDK" id="xpander-sdk.AgentGraphItemSubType.SDK"></a>
+
+---
+
+
+##### `TASK` <a name="TASK" id="xpander-sdk.AgentGraphItemSubType.TASK"></a>
+
+---
+
+
+##### `ASSISTANT` <a name="ASSISTANT" id="xpander-sdk.AgentGraphItemSubType.ASSISTANT"></a>
+
+---
+
+
+##### `WEBHOOK` <a name="WEBHOOK" id="xpander-sdk.AgentGraphItemSubType.WEBHOOK"></a>
+
+---
+
+
+##### `OPERATION` <a name="OPERATION" id="xpander-sdk.AgentGraphItemSubType.OPERATION"></a>
+
+---
+
+
+##### `CUSTOM_FUNCTION` <a name="CUSTOM_FUNCTION" id="xpander-sdk.AgentGraphItemSubType.CUSTOM_FUNCTION"></a>
+
+---
+
+
+### AgentGraphItemType <a name="AgentGraphItemType" id="xpander-sdk.AgentGraphItemType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentGraphItemType.SOURCE_NODE">SOURCE_NODE</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemType.AGENT">AGENT</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemType.TOOL">TOOL</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemType.HUMAN_IN_THE_LOOP">HUMAN_IN_THE_LOOP</a></code> | *No description.* |
+
+---
+
+##### `SOURCE_NODE` <a name="SOURCE_NODE" id="xpander-sdk.AgentGraphItemType.SOURCE_NODE"></a>
+
+---
+
+
+##### `AGENT` <a name="AGENT" id="xpander-sdk.AgentGraphItemType.AGENT"></a>
+
+---
+
+
+##### `TOOL` <a name="TOOL" id="xpander-sdk.AgentGraphItemType.TOOL"></a>
+
+---
+
+
+##### `HUMAN_IN_THE_LOOP` <a name="HUMAN_IN_THE_LOOP" id="xpander-sdk.AgentGraphItemType.HUMAN_IN_THE_LOOP"></a>
+
+---
+
 
 ### AgentStatus <a name="AgentStatus" id="xpander-sdk.AgentStatus"></a>
 
@@ -3546,6 +4288,45 @@ Enum representing the possible statuses of an agent.
 
 
 ##### `INACTIVE` <a name="INACTIVE" id="xpander-sdk.AgentStatus.INACTIVE"></a>
+
+---
+
+
+### ExecutionStatus <a name="ExecutionStatus" id="xpander-sdk.ExecutionStatus"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ExecutionStatus.PENDING">PENDING</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionStatus.EXECUTING">EXECUTING</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionStatus.PAUSED">PAUSED</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionStatus.ERROR">ERROR</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionStatus.COMPLETED">COMPLETED</a></code> | *No description.* |
+
+---
+
+##### `PENDING` <a name="PENDING" id="xpander-sdk.ExecutionStatus.PENDING"></a>
+
+---
+
+
+##### `EXECUTING` <a name="EXECUTING" id="xpander-sdk.ExecutionStatus.EXECUTING"></a>
+
+---
+
+
+##### `PAUSED` <a name="PAUSED" id="xpander-sdk.ExecutionStatus.PAUSED"></a>
+
+---
+
+
+##### `ERROR` <a name="ERROR" id="xpander-sdk.ExecutionStatus.ERROR"></a>
+
+---
+
+
+##### `COMPLETED` <a name="COMPLETED" id="xpander-sdk.ExecutionStatus.COMPLETED"></a>
 
 ---
 
@@ -3637,6 +4418,66 @@ Represents the 'ollama' provider.
 ##### `FRIENDLI_AI` <a name="FRIENDLI_AI" id="xpander-sdk.LLMProvider.FRIENDLI_AI"></a>
 
 Represents the 'FriendliAI' provider.
+
+---
+
+
+### MemoryStrategy <a name="MemoryStrategy" id="xpander-sdk.MemoryStrategy"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.MemoryStrategy.FULL">FULL</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryStrategy.SUMMARIZATION">SUMMARIZATION</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryStrategy.BUFFERING">BUFFERING</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryStrategy.MOVING_WINDOW">MOVING_WINDOW</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryStrategy.CONTEXT">CONTEXT</a></code> | *No description.* |
+
+---
+
+##### `FULL` <a name="FULL" id="xpander-sdk.MemoryStrategy.FULL"></a>
+
+---
+
+
+##### `SUMMARIZATION` <a name="SUMMARIZATION" id="xpander-sdk.MemoryStrategy.SUMMARIZATION"></a>
+
+---
+
+
+##### `BUFFERING` <a name="BUFFERING" id="xpander-sdk.MemoryStrategy.BUFFERING"></a>
+
+---
+
+
+##### `MOVING_WINDOW` <a name="MOVING_WINDOW" id="xpander-sdk.MemoryStrategy.MOVING_WINDOW"></a>
+
+---
+
+
+##### `CONTEXT` <a name="CONTEXT" id="xpander-sdk.MemoryStrategy.CONTEXT"></a>
+
+---
+
+
+### MemoryType <a name="MemoryType" id="xpander-sdk.MemoryType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.MemoryType.LONG_TERM">LONG_TERM</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryType.SHORT_TERM">SHORT_TERM</a></code> | *No description.* |
+
+---
+
+##### `LONG_TERM` <a name="LONG_TERM" id="xpander-sdk.MemoryType.LONG_TERM"></a>
+
+---
+
+
+##### `SHORT_TERM` <a name="SHORT_TERM" id="xpander-sdk.MemoryType.SHORT_TERM"></a>
 
 ---
 

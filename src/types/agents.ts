@@ -17,6 +17,51 @@ export enum AgentStatus {
   INACTIVE = 'INACTIVE',
 }
 
+export interface IAgentGraphItemAdvancedFilteringOption {
+  returnables?: string[];
+  searchables?: string[];
+}
+
+export enum AgentGraphItemType {
+  SOURCE_NODE = 'source_node',
+  AGENT = 'agent',
+  TOOL = 'tool',
+  HUMAN_IN_THE_LOOP = 'human_in_the_loop',
+}
+
+export enum AgentGraphItemSubType {
+  // source nodes
+  SDK = 'sdk',
+  TASK = 'task',
+  ASSISTANT = 'assistant',
+  WEBHOOK = 'webhook',
+  // tools
+  OPERATION = 'operation',
+  CUSTOM_FUNCTION = 'custom_function',
+}
+
+export interface IAgentGraphItemSchema {
+  input?: Record<string, any>;
+  output?: Record<string, any>;
+}
+
+export interface IAgentGraphItemSettings {
+  instructions?: string;
+  description?: string;
+  schemas?: IAgentGraphItemSchema;
+  advancedFilteringOptions?: IAgentGraphItemAdvancedFilteringOption[];
+}
+
+export interface IAgentGraphItem {
+  id: string;
+  itemId: string;
+  name?: string;
+  type: AgentGraphItemType;
+  subType?: AgentGraphItemSubType;
+  targets: string[];
+  settings?: IAgentGraphItemSettings;
+}
+
 /**
  * Interface representing a source node in the agent's graph.
  */
@@ -26,12 +71,6 @@ export interface ISourceNode {
 
   /** Type of the source node (e.g., SDK, TASK). */
   type: SourceNodeType;
-
-  /** List of target nodes connected to this source node. */
-  targets: string[];
-
-  /** Flag indicating if switching prompt groups is allowed for this node. */
-  pgSwitchAllowed: boolean;
 
   /** Metadata associated with the source node. */
   metadata: any;
@@ -94,4 +133,15 @@ export interface INodeDescription {
   readonly promptGroupId: string; // Unique identifier of the prompt group
   readonly nodeName: string; // Node name to apply the description to
   readonly description: string; // The description override
+}
+
+export enum AgentAccessScope {
+  PERSONAL = 'personal',
+  ORGANIZATIONAL = 'organizational',
+}
+
+export interface IAgentInstructions {
+  role: string;
+  goal: string;
+  general: string;
 }

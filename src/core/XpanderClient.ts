@@ -4,7 +4,6 @@ import { ToolCall } from './toolCalls';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
-import { IXpanderClientCustomParams } from '../types';
 import { ensureToolCallPayloadStructure } from './tools';
 
 /**
@@ -54,14 +53,14 @@ export class XpanderClient {
     apiKey: string,
     baseUrl: any = DEFAULT_BASE_URL,
     withMetricsReport: boolean = false,
-    customParams: any | IXpanderClientCustomParams = {},
+    organizationId?: string,
   ) {
     this.configuration = new Configuration({
       apiKey,
       baseUrl:
         baseUrl && typeof baseUrl === 'string' ? baseUrl : DEFAULT_BASE_URL,
       withMetricsReport,
-      customParams,
+      organizationId,
     });
 
     this.agents = new Agents(this.configuration);
