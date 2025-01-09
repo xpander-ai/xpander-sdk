@@ -1,29 +1,23 @@
-import request, { HttpVerb } from 'sync-request';
+import request from 'sync-request';
 import { LLMProvider } from '../../constants/llmProvider';
 import { LOCAL_TOOL_PREFIX } from '../../constants/tools';
-import { CUSTOM_AGENT_ID } from '../../constants/xpanderClient';
-
 import { allProviders } from '../../llmProviders';
-import {
-  IGraphItem,
-  ILocalTool,
-  IToolCallPayload,
-  KnowledgeBaseStrategy,
-  ToolCallType,
-} from '../../types';
+import { ILocalTool, IToolCallPayload, ToolCallType } from '../../types';
 import {
   AgentStatus,
   IAgentTool,
   ISourceNode,
-  INodeSchema,
-  IPGSchema,
   SourceNodeType,
-  INodeDescription,
+  IAgentInstructions,
+  AgentAccessScope,
+  IAgentGraphItem,
 } from '../../types/agents';
+import { IUserDetails, MemoryStrategy, MemoryType } from '../../types/memory';
 import { Base } from '../base';
 import { Configuration } from '../Configuration';
+import { Execution } from '../executions/Execution';
 import { KnowledgeBase } from '../knowledgeBases';
-import { PromptGroupSessionsList } from '../promptGroups/PromptGroupSessionsList';
+import { Memory } from '../memory';
 import { ToolCall, ToolCallResult } from '../toolCalls';
 import {
   appendPermanentValues,
@@ -32,239 +26,144 @@ import {
   executeTool,
   mergeDeep,
 } from '../tools';
-import { convertKeysToCamelCase, convertKeysToSnakeCase } from '../utils';
+import { convertKeysToCamelCase } from '../utils';
 
 /**
- * Represents an agent in xpanderAI, managing the tools, sessions, and operations
- * associated with the agent. This class enables loading agents, handling tool executions,
- * and managing prompt group sessions.
+ * Represents an agent in xpanderAI, managing tools, sessions, and operational workflows.
+ * This class facilitates loading agents, handling tool executions, and managing prompt groups.
  */
 export class Agent extends Base {
-  /** Indicates whether the agent is ready with tools loaded. */
+  /** Indicates if the agent is ready and tools are loaded. */
   ready: boolean = false;
 
   /** Collection of local tools specific to this agent. */
   localTools: ILocalTool[] = [];
 
-  /** Manages prompt group sessions for this agent. */
-  public promptGroupSessions: PromptGroupSessionsList;
+  public execution?: Execution;
+  public userDetails?: IUserDetails;
+  public executionMemory?: Memory;
 
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
 
-  public knowledgeBases: KnowledgeBase[] = [];
-
+  /**
+   * Constructs a new Agent instance.
+   *
+   * @param configuration - Configuration settings for the agent.
+   * @param id - Unique identifier for the agent.
+   * @param name - Human-readable name of the agent.
+   * @param organizationId - Organization ID to which the agent belongs.
+   * @param status - Current status of the agent.
+   * @param memoryType - Type of memory the agent utilizes.
+   * @param memoryStrategy - Strategy for memory management.
+   * @param instructions - Instructions for the agent's operation.
+   * @param accessScope - Scope of the agent's access permissions.
+   * @param sourceNodes - Source nodes associated with the agent.
+   * @param prompts - Prompts used by the agent.
+   * @param tools - Tools available to the agent.
+   * @param graph - Graph structure representing the agent's operational flow.
+   * @param knowledgeBases - Knowledge bases associated with the agent.
+   */
   constructor(
-    /** Configuration settings for the agent. */
     public configuration: Configuration,
-
-    /** Unique identifier for the agent. */
     public id: string,
-
-    /** Organization ID to which the agent belongs. */
-    public organizationId: string,
-
-    /** Current status of the agent. */
-    public status: AgentStatus,
-
-    /** Human-readable name of the agent. */
     public name: string,
-
-    /** List of source nodes associated with the agent. */
+    public organizationId: string,
+    public status: AgentStatus,
+    public memoryType: MemoryType,
+    public memoryStrategy: MemoryStrategy,
+    public instructions: IAgentInstructions,
+    public accessScope: AgentAccessScope,
     public sourceNodes: ISourceNode[],
-
-    /** Whether prompt group switching is allowed for the agent. */
-    public pgSwitchAllowed: boolean = false,
-
-    /** Array of tools available to the agent. */
+    public prompts: string[],
     public tools: IAgentTool[] = [],
-
-    /** Array of graph items related to the agent. */
-    public graphs: IGraphItem[] = [],
-
-    /** Array of agent tools specific to prompt groups. */
-    public pgOas: IAgentTool[] = [],
-
-    /** Whether the agent should automatically load its resources. */
-    autoLoad: boolean = true,
-
-    /** Array of agent tools specific to prompt groups. */
-    public pgSchemas: IPGSchema[] = [],
-
-    /** Array of agent tools specific to prompt groups. */
-    public pgNodeDescriptionOverride: INodeDescription[] = [],
-    public generalInstructions: string = '',
-    public judgeInstructions: string = '',
-    public hasKnowledgeBase: boolean = false,
-    public knowledgeBaseStrategy?: KnowledgeBaseStrategy,
+    public graph: IAgentGraphItem[] = [],
+    public knowledgeBases: KnowledgeBase[] = [],
   ) {
     super();
     if (this.tools.length !== 0) {
       this.ready = true;
     }
-    if (autoLoad && !this.ready) {
+    if (!this.ready) {
       this.load();
     }
-    this.promptGroupSessions = new PromptGroupSessionsList(
-      this.graphs,
-      this.pgOas,
-    );
   }
 
-  /** Checks if the agent is a custom-defined agent. */
-  get isCustom() {
-    return this.id === CUSTOM_AGENT_ID;
-  }
+  /** Loads the agent data from its source node type. */
+  load(): void {
+    if (this.ready) return;
 
-  /**
-   * Loads the agent data from the specified source node type.
-   * @param sourceNodeType - The type of source node to load.
-   */
-  load(sourceNodeType: SourceNodeType = SourceNodeType.SDK): void {
-    if (this.ready) {
-      return;
-    } else {
-      try {
-        const url = `${this.url}/${sourceNodeType}`;
-        const response = request(
-          this.isCustom ? 'POST' : ('GET' as HttpVerb),
-          url,
-          {
-            json: this.isCustom
-              ? {
-                  __custom__: convertKeysToSnakeCase(
-                    this.configuration.customParams,
-                  ),
-                }
-              : undefined,
-            headers: { 'x-api-key': this.configuration.apiKey },
-          },
-        );
-        if (!response.statusCode.toString().startsWith('2')) {
-          throw new Error(response.body.toString());
-        }
+    try {
+      const response = request('GET', this.url, {
+        headers: { 'x-api-key': this.configuration.apiKey },
+      });
 
-        const rawAgent = JSON.parse(response.getBody('utf8'));
-        const agent = convertKeysToCamelCase(rawAgent);
+      if (!response.statusCode.toString().startsWith('2')) {
+        throw new Error(response.body.toString());
+      }
 
-        // keep original tools structure
-        if ('tools' in agent) {
-          for (const tool of agent.tools) {
-            const matchedRawTool = rawAgent.tools.find(
-              (t: any) => t.id === tool.id,
-            );
-            tool.bodySchema = matchedRawTool.body_schema;
-            tool.bodyParams = matchedRawTool.body_params;
-            tool.queryParams = matchedRawTool.query_params;
-            tool.pathParams = matchedRawTool.path_params;
-            if (!!tool?.parameters) {
-              tool.parameters = {
-                type: 'object',
-                properties: {
-                  bodyParams: matchedRawTool.parameters.properties.body_params,
-                  queryParams:
-                    matchedRawTool.parameters.properties.query_params,
-                  pathParams: matchedRawTool.parameters.properties.path_params,
-                },
-                required: ['bodyParams', 'queryParams', 'pathParams'],
-              };
-            }
+      const rawAgent = JSON.parse(response.getBody('utf8'));
+      const agent = convertKeysToCamelCase(rawAgent);
+
+      if ('tools' in agent) {
+        for (const tool of agent.tools) {
+          const matchedRawTool = rawAgent.tools.find(
+            (t: any) => t.id === tool.id,
+          );
+          tool.bodySchema = matchedRawTool.body_schema;
+          tool.bodyParams = matchedRawTool.body_params;
+          tool.queryParams = matchedRawTool.query_params;
+          tool.pathParams = matchedRawTool.path_params;
+          if (!!tool?.parameters) {
+            tool.parameters = {
+              type: 'object',
+              properties: {
+                bodyParams: matchedRawTool.parameters.properties.body_params,
+                queryParams: matchedRawTool.parameters.properties.query_params,
+                pathParams: matchedRawTool.parameters.properties.path_params,
+              },
+              required: ['bodyParams', 'queryParams', 'pathParams'],
+            };
           }
         }
-
-        const loadedAgent = new Agent(
-          this.configuration,
-          agent.id,
-          agent.organizationId,
-          AgentStatus.ACTIVE,
-          agent.name,
-          agent.sourceNode ? [agent.sourceNode] : [],
-          agent.pgSwitchAllowed,
-          agent.tools,
-          agent.graphs,
-          agent.pgOas,
-          true,
-          rawAgent?.schemas?.map((schema: any) => ({
-            id: schema.id,
-            schemas: schema.schemas.map((nodeSchema: any) => ({
-              nodeName: nodeSchema.node_name,
-              input: nodeSchema.schemas.input,
-              output: nodeSchema.schemas.output,
-            })),
-          })) || [],
-          rawAgent?.pgs_tools_descriptions?.map((ptd: any) => ({
-            promptGroupId: ptd.prompt_group_id,
-            nodeName: ptd.node_name,
-            description: ptd.description,
-          })) || [],
-          agent.generalInstructions || '',
-          agent.judgeInstructions || '',
-          agent.hasKnowledgeBase === true,
-          agent.knowledgeBaseStrategy || null,
-        );
-        Object.assign(this, loadedAgent);
-      } catch (err) {
-        throw new Error('Failed to load agent');
       }
+
+      const loadedAgent = new Agent(
+        this.configuration,
+        agent.id,
+        agent.name,
+        agent.status,
+        agent.organizationId,
+        agent.memoryType,
+        agent.memoryStrategy,
+        agent.enrichedInstructions,
+        agent.accessScope,
+        agent.sourceNodes,
+        agent.enrichedPrompts,
+        agent.tools,
+        agent.graph,
+        agent.knowledgeBases,
+      );
+      Object.assign(this, loadedAgent);
+    } catch (err) {
+      throw new Error('Failed to load agent');
     }
   }
 
   /**
-   * Fetches the agent's attached knowledge bases
+   * Retrieves tools compatible with a specified LLM provider.
+   *
+   * @param llmProvider - The LLM provider to filter tools by (default: `OPEN_AI`).
+   * @returns A list of tools matching the specified provider.
    */
-  retrieveKnowledgeBases(): KnowledgeBase[] {
-    if (
-      this.knowledgeBases.length !== 0 ||
-      !this.ready ||
-      !this.hasKnowledgeBase ||
-      this.knowledgeBaseStrategy !== KnowledgeBaseStrategy.VANILLA
-    ) {
-      return this.knowledgeBases;
-    } else {
-      try {
-        const url = `${this.url}/${this.sourceNodeType}/knowledge_base`;
-        const response = request('GET', url, {
-          headers: { 'x-api-key': this.configuration.apiKey },
-        });
-        if (!response.statusCode.toString().startsWith('2')) {
-          throw new Error(response.body.toString());
-        }
-
-        const kbs = JSON.parse(response.getBody('utf8'));
-        this.knowledgeBases = kbs.map(
-          (kb: any) =>
-            new KnowledgeBase(
-              kb.id,
-              kb.name,
-              kb.description,
-              kb.strategy,
-              kb.documents,
-            ),
-        );
-        return this.knowledgeBases;
-      } catch (err) {
-        throw new Error('Failed to get knowledge base');
-      }
-    }
-  }
-
-  /**
-   * Retrieves tools compatible with the specified LLM provider.
-   * @param llmProvider - The LLM provider to filter tools by.
-   * @returns A list of tools that match the specified provider.
-   */
-  getTools(
-    llmProvider: LLMProvider = LLMProvider.OPEN_AI,
-    returnAllTools: boolean = false,
-  ): any[] {
+  getTools(llmProvider: LLMProvider = LLMProvider.OPEN_AI): any[] {
     const provider = allProviders.find((p) => p.shouldHandle(llmProvider));
     if (!provider) {
-      throw new Error(`provider (${llmProvider}) not found`);
+      throw new Error(`Provider (${llmProvider}) not found`);
     }
     const providerInstance = new provider(this);
-    const tools = providerInstance.getTools(returnAllTools);
+    const tools = providerInstance.getTools();
 
-    // mainly for AWS Bedrock resource ID conventions
     this.originalToolNamesReMapping = {
       ...(this.originalToolNamesReMapping || {}),
       ...(providerInstance.originalToolNamesReMapping || {}),
@@ -274,12 +173,13 @@ export class Agent extends Base {
   }
 
   /** Constructs the API URL for this agent. */
-  public get url() {
-    return `${this.configuration.baseUrl}/agents/${this.id}`;
+  public get url(): string {
+    return `${this.configuration.url}/agents/${this.id}`;
   }
 
   /**
    * Adds local tools to the agent with prefixed function names.
+   *
    * @param tools - The list of local tools to add.
    */
   public addLocalTools(tools: any[] | ILocalTool[]): void {
@@ -292,17 +192,23 @@ export class Agent extends Base {
     }));
   }
 
-  /** Checks if the agent has any local tools loaded. */
-  public get hasLocalTools() {
+  /** Checks if the agent has local tools loaded. */
+  public get hasLocalTools(): boolean {
     return this.localTools.length !== 0;
   }
 
   /**
    * Executes a single tool call and returns the result.
+   *
    * @param tool - The tool call to execute.
+   * @param payloadExtension - Additional payload data to merge.
    * @returns The result of the tool execution.
    */
   public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult {
+    if (!this.execution) {
+      throw new Error('Agent cannot run tool without execution');
+    }
+
     let clonedTool = ToolCall.fromObject(tool.toDict());
     let toolCallResult = ToolCallResult.fromObject({
       functionName: clonedTool.name,
@@ -310,24 +216,10 @@ export class Agent extends Base {
       toolCallId: clonedTool.toolCallId,
     });
 
-    if (clonedTool.isPg) {
-      // start session
-      try {
-        toolCallResult.result =
-          this.promptGroupSessions.startPgSession(clonedTool);
-        toolCallResult.isSuccess = true;
-      } catch (err: any) {
-        toolCallResult.isError = true;
-        toolCallResult.result = `Error: ${err.toString()}`;
-      }
-      return toolCallResult;
-    }
-
     if (clonedTool.type !== ToolCallType.XPANDER) {
       return toolCallResult;
     }
 
-    // run tool
     try {
       if (payloadExtension && typeof payloadExtension === 'object') {
         if (!clonedTool.payload) {
@@ -339,22 +231,20 @@ export class Agent extends Base {
         );
       }
 
-      // append permanent values
-      const schemasByNodeName = this.schemasByNodeName();
       const originalToolName =
         this.originalToolNamesReMapping?.[clonedTool.name] || clonedTool.name;
 
-      const shouldEnforceSchema = !!schemasByNodeName?.[originalToolName];
-
-      if (shouldEnforceSchema) {
+      const graphItem = this.retrieveNodeFromGraph(originalToolName);
+      if (graphItem?.settings?.schemas) {
         clonedTool = appendPermanentValues(
           ToolCall.fromObject({
             ...clonedTool.toDict(),
             name: originalToolName,
           }),
-          schemasByNodeName,
+          graphItem.settings?.schemas,
         );
       }
+
       const executionResult = executeTool(
         ToolCall.fromObject({
           ...clonedTool,
@@ -362,23 +252,21 @@ export class Agent extends Base {
         }),
         this.url,
         this.configuration,
-        this.sourceNodeType,
+        this.execution.id,
       );
+
       toolCallResult.statusCode = executionResult.statusCode;
       toolCallResult.result = executionResult.data;
+
       if (!executionResult.isSuccess) {
         throw new Error(toolCallResult.result);
       }
 
-      if (shouldEnforceSchema) {
+      if (graphItem?.settings?.schemas) {
         toolCallResult = appendPermanentValuesToResult(
           toolCallResult,
-          schemasByNodeName,
+          graphItem.settings?.schemas,
         );
-      }
-
-      if (!!this.promptGroupSessions.activeSession) {
-        this.promptGroupSessions.activeSession.lastNode = clonedTool.name;
       }
 
       toolCallResult.isSuccess = true;
@@ -392,20 +280,15 @@ export class Agent extends Base {
 
   /**
    * Executes multiple tool calls sequentially and returns their results.
+   *
    * @param toolCalls - The list of tool calls to execute.
+   * @param payloadExtension - Additional payload data to merge.
    * @returns A list of results for each tool execution.
    */
   public runTools(
     toolCalls: ToolCall[],
     payloadExtension?: any,
   ): ToolCallResult[] {
-    if (
-      toolCalls.length === 0 &&
-      !!this.promptGroupSessions.activeSession &&
-      this.pgSwitchAllowed
-    ) {
-      this.promptGroupSessions.resetSessions();
-    }
     return toolCalls.map((toolCall) =>
       this.runTool(toolCall, payloadExtension),
     );
@@ -416,58 +299,78 @@ export class Agent extends Base {
     return this.sourceNodes[0].type || SourceNodeType.SDK;
   }
 
-  // used in hybrid agents for cross instance messaging and clients
-  public selectPromptGroup(promptGroupName: string): void {
-    const pgTool = this.pgOas.find((pg) => pg.id === promptGroupName);
-    if (!pgTool) {
-      throw new Error(`Prompt group ${promptGroupName} not found`);
-    }
-    this.promptGroupSessions.startPgSession(
-      ToolCall.fromObject({
-        name: pgTool.id,
-      }),
+  /**
+   * Retrieves a node from the graph by its ID.
+   *
+   * @param itemId - The ID of the graph node to retrieve.
+   * @returns The matching graph node, or undefined if not found.
+   */
+  public retrieveNodeFromGraph(itemId: string): IAgentGraphItem | undefined {
+    return this.graph.find((gi) => gi.itemId === itemId);
+  }
+
+  /**
+   * Initializes the task execution for the agent.
+   *
+   * @param execution - The execution details.
+   */
+  public initTask(execution: any): void {
+    const camelCasedExecution = convertKeysToCamelCase(execution);
+    this.execution = new Execution(
+      camelCasedExecution.id,
+      camelCasedExecution.agentId,
+      camelCasedExecution.organizationId,
+      camelCasedExecution.input,
+      camelCasedExecution.status,
+      camelCasedExecution.lastExecutedNodeId,
+      camelCasedExecution.memoryThreadId,
     );
   }
 
   /**
-   * Retrieves schemas grouped by node name based on the active prompt group session.
+   * Updates the user details for the agent.
    *
-   * This method returns an object where each key is a node name, and the value is the corresponding schema.
-   * It ensures that schemas are only fetched if there is an active session with a valid `promptGroupId`
-   * and if `pgSchemas` is not empty.
-   *
-   * @returns {Record<string, INodeSchema>} A record of schemas indexed by their node name, or an empty object if conditions are not met.
+   * @param userDetails - The user details to update.
    */
-  public schemasByNodeName(): Record<string, INodeSchema> {
-    if (
-      !!this?.promptGroupSessions?.activeSession?.pg?.promptGroupId &&
-      this?.pgSchemas?.length !== 0
-    ) {
-      const schemasByNodeName =
-        this.pgSchemas
-          .find(
-            (schema) =>
-              schema.id ===
-              this.promptGroupSessions.activeSession.pg.promptGroupId,
-          )
-          ?.schemas.reduce(
-            (all, item) => {
-              all[item.nodeName] = item;
-              return all;
-            },
-            {} as Record<string, INodeSchema>,
-          ) || {};
-
-      return schemasByNodeName;
-    }
-    return {};
+  public updateUserDetails(userDetails: any): void {
+    const camelCasedUserDetails = convertKeysToCamelCase(userDetails);
+    this.userDetails = camelCasedUserDetails;
   }
-  retrieveAllGraphTools(llmProvider: LLMProvider = LLMProvider.OPEN_AI): any[] {
-    const tools = new Set(
-      this.graphs.map(({ graph }) => Object.keys(graph)).flat(),
-    );
-    return this.getTools(llmProvider, true).filter(
-      (tool) => tools.has(tool?.function?.name) || tool?.toolSpec?.name,
-    );
+
+  /** Checks if the agent has an associated knowledge base. */
+  public get hasKnowledgeBase(): boolean {
+    return this.knowledgeBases.length !== 0;
+  }
+
+  /** Retrieves the knowledge base strategy of the agent. */
+  public get knowledgeBaseStrategy(): string {
+    return this.knowledgeBases[0].strategy;
+  }
+
+  /** Retrieves the memory instance for the agent. */
+  public get memory(): Memory {
+    if (!this.executionMemory) {
+      this.executionMemory = this.initializeMemory();
+    }
+    return this.executionMemory as Memory;
+  }
+
+  /** Initializes the memory instance for the agent. */
+  private initializeMemory(): Memory {
+    if (!this.execution) {
+      throw new Error('Execution is not initialized');
+    }
+
+    if (!this.execution.memoryThreadId) {
+      const memory = Memory.create(this, this.userDetails);
+      this.execution.from(
+        Execution.update(this, this.execution.id, {
+          memory_thread_id: memory.id,
+        }),
+      );
+      return memory;
+    } else {
+      return Memory.fetch(this, this.execution.memoryThreadId);
+    }
   }
 }

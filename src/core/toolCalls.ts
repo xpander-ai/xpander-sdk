@@ -12,7 +12,6 @@ export class ToolCall extends Base {
       headers: {},
     },
     public toolCallId: string = '',
-    public isPg: boolean = false,
   ) {
     super();
   }

@@ -1,4 +1,5 @@
 import { BaseLLMProvider } from './baseProvider';
+import { IMemoryMessage } from '../..';
 import { LLMProvider } from '../../constants/llmProvider';
 import { ToolCall } from '../../core/toolCalls';
 import { getToolBaseSignature } from '../../core/tools';
@@ -14,6 +15,48 @@ export class BaseOpenAISDKHandler extends BaseLLMProvider {
    */
   static shouldHandle(llmProvider: LLMProvider): boolean {
     return llmProvider === LLMProvider.OPEN_AI;
+  }
+
+  /**
+   * Utility functions for converting LLM responses and xpanderAI messages into compatible formats.
+   */
+  static extractMessages(llmResponse: any): IMemoryMessage[] {
+    const messages: IMemoryMessage[] = [];
+    const choices = llmResponse.choices;
+
+    for (const choice of choices) {
+      const llmMessage = choice.message;
+      messages.push({
+        role: llmMessage.role,
+        content: llmMessage.content,
+        toolCalls: llmMessage?.tool_calls?.map((tc: any) => ({
+          name: tc.function.name,
+          payload: tc.function.arguments,
+          toolCallId: tc.id,
+        })),
+      });
+    }
+
+    return messages;
+  }
+
+  /**
+   * Converts xpanderAI memory messages into LLM-compatible message formats.
+   *
+   * @param xpanderMessages - An array of xpanderAI memory messages.
+   * @returns An array of messages formatted for LLM compatibility.
+   */
+  static convertMessages(xpanderMessages: IMemoryMessage[]): any[] {
+    return xpanderMessages.map((msg) => ({
+      role: msg.role,
+      content: msg.content,
+      tool_calls: msg.toolCalls?.map((tc) => ({
+        id: tc.toolCallId,
+        type: 'function',
+        function: { name: tc.name, arguments: tc.payload },
+      })),
+      tool_call_id: msg.toolCallId,
+    }));
   }
 
   /**

@@ -35,3 +35,5 @@ export const DEFAULT_TOOL_PARAMETERS = Object.freeze({
 
 /** Prefix for identifying local tools in xpanderAI. */
 export const LOCAL_TOOL_PREFIX = 'xpLocal_';
+
+export const AGENT_FINISH_TOOL_ID = 'xpfinish-agent-execution-finished';
