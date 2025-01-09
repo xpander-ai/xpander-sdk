@@ -187,19 +187,17 @@ export class Memory extends Base {
    * @param instructions - Instructions to initialize the memory thread.
    */
   public initInstructions(instructions: IAgentInstructions): void {
-    if (this.messages.length === 0) {
-      this.addMessages([
-        {
-          role: 'system',
-          content: [
-            `Your General instructions: ${instructions.general}`,
-            `Your Role instructions: ${instructions.role}`,
-            `Your Goal instructions: ${instructions.goal}`,
-            `IMPORTANT: When done or unable to proceed after attempts, use "xpfinish-agent-execution-finished" to mark success or failure.`,
-          ].join('\n'),
-        },
-      ]);
-    }
+    this.addMessages([
+      {
+        role: 'system',
+        content: [
+          `Your General instructions: ${instructions.general}`,
+          `Your Role instructions: ${instructions.role}`,
+          `Your Goal instructions: ${instructions.goal}`,
+          `IMPORTANT: When done or unable to proceed after attempts, use "xpfinish-agent-execution-finished" to mark success or failure.`,
+        ].join('\n'),
+      },
+    ]);
   }
 
   /**
@@ -212,8 +210,10 @@ export class Memory extends Base {
     input: IMemoryMessage,
     instructions: IAgentInstructions,
   ): void {
-    this.initInstructions(instructions);
-    this.addMessages([input]);
+    if (this.messages.length === 0) {
+      this.initInstructions(instructions);
+      this.addMessages([input]);
+    }
   }
 
   /**

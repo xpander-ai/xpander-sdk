@@ -75,7 +75,10 @@ export function executeTool(
     };
     const response = request('POST' as HttpVerb, url, {
       json: requestPayload,
-      headers: { 'x-api-key': configuration.apiKey },
+      headers: {
+        'x-api-key': configuration.apiKey,
+        'x-xpander-tool-call-id': tool.toolCallId,
+      },
     });
     result.statusCode = response.statusCode || 0;
     result.headers = response.headers;
