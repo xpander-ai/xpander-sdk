@@ -2564,15 +2564,21 @@ XpanderClient provides methods for configuring and interacting with xpanderAI to
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, organizationId?: string)
+new XpanderClient(organizationId: string, apiKey: string, baseUrl?: any, withMetricsReport?: boolean)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.apiKey">apiKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.baseUrl">baseUrl</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.XpanderClient.Initializer.parameter.organizationId"></a>
+
+- *Type:* string
 
 ---
 
@@ -2591,12 +2597,6 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, or
 ##### `withMetricsReport`<sup>Optional</sup> <a name="withMetricsReport" id="xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport"></a>
 
 - *Type:* boolean
-
----
-
-##### `organizationId`<sup>Optional</sup> <a name="organizationId" id="xpander-sdk.XpanderClient.Initializer.parameter.organizationId"></a>
-
-- *Type:* string
 
 ---
 
