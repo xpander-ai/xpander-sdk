@@ -390,4 +390,8 @@ export class Agent extends Base {
       );
     }
   }
+
+  public stop() {
+    this.shouldStop = true;
+  }
 }

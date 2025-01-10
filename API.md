@@ -164,6 +164,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | Retrieves a node from the graph by its ID. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
+| <code><a href="#xpander-sdk.Agent.stop">stop</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.updateUserDetails">updateUserDetails</a></code> | Updates the user details for the agent. |
 
 ---
@@ -317,6 +318,12 @@ The list of tool calls to execute.
 Additional payload data to merge.
 
 ---
+
+##### `stop` <a name="stop" id="xpander-sdk.Agent.stop"></a>
+
+```typescript
+public stop(): void
+```
 
 ##### `updateUserDetails` <a name="updateUserDetails" id="xpander-sdk.Agent.updateUserDetails"></a>
 
