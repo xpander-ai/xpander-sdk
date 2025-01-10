@@ -18,7 +18,7 @@ export class Memory extends Base {
    * @returns A new instance of the Memory class.
    */
   public static create(agent: Agent, userDetails?: IUserDetails): Memory {
-    const response = request('POST', `${agent.configuration.baseUrl}/memory`, {
+    const response = request('POST', `${agent.configuration.url}/memory`, {
       json: {
         organization_id: agent.organizationId,
         user_details: userDetails
@@ -55,7 +55,7 @@ export class Memory extends Base {
   public static fetch(agent: Agent, threadId: string): Memory {
     const response = request(
       'GET',
-      `${agent.configuration.baseUrl}/memory/${threadId}`,
+      `${agent.configuration.url}/memory/${threadId}`,
       {
         headers: { 'x-api-key': agent.configuration.apiKey },
       },
@@ -95,7 +95,7 @@ export class Memory extends Base {
   private runStrategy(): void {
     const response = request(
       'GET',
-      `${this.agent.configuration.baseUrl}/memory/${this.id}/${this.agent.memoryStrategy}`,
+      `${this.agent.configuration.url}/memory/${this.id}/${this.agent.memoryStrategy}`,
       {
         headers: { 'x-api-key': this.agent.configuration.apiKey },
       },
@@ -164,7 +164,7 @@ export class Memory extends Base {
 
     const response = request(
       'PUT',
-      `${this.agent.configuration.baseUrl}/memory/${this.id}`,
+      `${this.agent.configuration.url}/memory/${this.id}`,
       {
         json: convertKeysToSnakeCase(messages),
         headers: { 'x-api-key': this.agent.configuration.apiKey },
