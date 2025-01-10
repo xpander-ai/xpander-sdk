@@ -23,7 +23,7 @@ export class Execution extends Base {
   ): any {
     const response = request(
       'PATCH',
-      `${agent.configuration.baseUrl}/agent-execution/${execution_id}/update`,
+      `${agent.configuration.url}/agent-execution/${execution_id}/update`,
       {
         json: delta,
         headers: { 'x-api-key': agent.configuration.apiKey },

@@ -77,7 +77,7 @@ const ARTICLES_TASK = {
 };
 
 const TEMP_TASK = {
-  id: 'b522ab16-05c5-4b37-941a-de3282bf782c',
+  id: 'e5ba3ad8-3435-4215-8f6d-e63e247bf633',
   agent_id: '840fd394-3d3e-4ec8-9089-3b2f37ed5c2d',
   organization_id: '6f3a8d1a-00e4-4ae7-bb1f-907b8704d4e2',
   input: {
@@ -88,11 +88,11 @@ const TEMP_TASK = {
   status: 'error',
   last_executed_node_id: null,
   memory_thread_id: null,
-  created_at: '2025-01-10T09:49:13.405568Z',
-  started_at: '2025-01-10T09:49:14.367283Z',
+  created_at: '2025-01-10T10:00:28.811014Z',
+  started_at: '2025-01-10T10:00:31.487758Z',
   paused_at: null,
-  finished_at: '2025-01-10T09:49:18.283154Z',
-  result: 'Error: Failed to retrieve agent',
+  finished_at: '2025-01-10T10:00:36.720412Z',
+  result: 'Error: {"detail":"Not Found"}',
   parent_execution: null,
   tool_call_id: null,
   is_manually_stopped: false,
