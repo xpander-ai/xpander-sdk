@@ -77,23 +77,25 @@ const ARTICLES_TASK = {
 };
 
 const TEMP_TASK = {
-  id: 'cd0f9611-1549-481b-b6d3-7d8cf97cbb8b',
-  agent_id: '840fd394-3d3e-4ec8-9089-3b2f37ed5c2f',
+  id: 'b522ab16-05c5-4b37-941a-de3282bf782c',
+  agent_id: '840fd394-3d3e-4ec8-9089-3b2f37ed5c2d',
   organization_id: '6f3a8d1a-00e4-4ae7-bb1f-907b8704d4e2',
   input: {
-    text: 'Get 5 longest tags',
+    text: 'get tags',
     files: [],
     user: null,
   },
-  status: 'pending',
+  status: 'error',
   last_executed_node_id: null,
   memory_thread_id: null,
-  created_at: '2025-01-09T15:38:09.799369Z',
-  started_at: null,
+  created_at: '2025-01-10T09:49:13.405568Z',
+  started_at: '2025-01-10T09:49:14.367283Z',
   paused_at: null,
-  finished_at: null,
-  result: null,
+  finished_at: '2025-01-10T09:49:18.283154Z',
+  result: 'Error: Failed to retrieve agent',
   parent_execution: null,
+  tool_call_id: null,
+  is_manually_stopped: false,
 };
 
 const TASK = TEMP_TASK;
@@ -103,6 +105,7 @@ console.log(MANAGER_TASK, TAGS_TASK, ARTICLES_TASK, TEMP_TASK);
 describe('Test OpenAI using xpander.ai', () => {
   it('get tools for openai provider', async () => {
     const xpanderClient = new XpanderClient(
+      TASK.organization_id,
       xpanderAPIKey,
       localAgentControllerURL,
       false,
