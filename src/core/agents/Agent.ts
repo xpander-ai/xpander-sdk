@@ -205,7 +205,11 @@ export class Agent extends Base {
    * @param payloadExtension - Additional payload data to merge.
    * @returns The result of the tool execution.
    */
-  public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult {
+  public runTool(
+    tool: ToolCall,
+    payloadExtension?: any,
+    isMultiple?: boolean = false,
+  ): ToolCallResult {
     if (!this.execution) {
       throw new Error('Agent cannot run tool without execution');
     }
@@ -254,6 +258,7 @@ export class Agent extends Base {
         this.url,
         this.configuration,
         this.execution.id,
+        isMultiple,
       );
 
       toolCallResult.statusCode = executionResult.statusCode;
@@ -296,7 +301,7 @@ export class Agent extends Base {
     payloadExtension?: any,
   ): ToolCallResult[] {
     return toolCalls.map((toolCall) =>
-      this.runTool(toolCall, payloadExtension),
+      this.runTool(toolCall, payloadExtension, toolCalls.length > 1),
     );
   }
 

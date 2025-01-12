@@ -57,6 +57,7 @@ export function executeTool(
   agentUrl: string,
   configuration: Configuration,
   executionId: string,
+  isMultiple: boolean = false,
 ): IToolExecutionResult {
   const result: IToolExecutionResult = {
     statusCode: 200,
@@ -78,6 +79,7 @@ export function executeTool(
       headers: {
         'x-api-key': configuration.apiKey,
         'x-xpander-tool-call-id': tool.toolCallId,
+        'x-xpander-parallel': isMultiple ? 'true' : 'false',
       },
     });
     result.statusCode = response.statusCode || 0;
