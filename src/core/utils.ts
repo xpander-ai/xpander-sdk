@@ -75,3 +75,11 @@ export const convertKeysToSnakeCase = (
   }
   return obj;
 };
+
+export const generateUUIDv4 = (): string => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+    const random = Math.floor(Math.random() * 16);
+    const value = char === 'x' ? random : Math.floor(random % 4) + 8;
+    return value.toString(16);
+  });
+};

@@ -77,24 +77,26 @@ const ARTICLES_TASK = {
 };
 
 const TEMP_TASK = {
-  id: 'e5ba3ad8-3435-4215-8f6d-e63e247bf633',
-  agent_id: '840fd394-3d3e-4ec8-9089-3b2f37ed5c2d',
+  id: '1b07822f-7b31-4982-9a19-d89b81da1552',
+  agent_id: '840fd394-3d3e-4ec8-9089-3b2f37ed5c2f',
   organization_id: '6f3a8d1a-00e4-4ae7-bb1f-907b8704d4e2',
   input: {
-    text: 'get tags',
+    text: 'Retrieve all tags to find the longest readable tag.',
     files: [],
     user: null,
   },
-  status: 'error',
+  status: 'pending',
   last_executed_node_id: null,
   memory_thread_id: null,
-  created_at: '2025-01-10T10:00:28.811014Z',
-  started_at: '2025-01-10T10:00:31.487758Z',
+  created_at: '2025-01-13T11:35:38.811846Z',
+  started_at: null,
   paused_at: null,
-  finished_at: '2025-01-10T10:00:36.720412Z',
-  result: 'Error: {"detail":"Not Found"}',
-  parent_execution: null,
-  tool_call_id: null,
+  finished_at: null,
+  result: null,
+  parent_execution: '0d655b9c-b5e4-42f0-b47a-e7f3cbfc01f1',
+  pending_sub_executions: [],
+  tool_call_id: 'call_FfYFkMt9P1xS91urK0V2nVxJ',
+  worker_id: null,
   is_manually_stopped: false,
 };
 
@@ -102,8 +104,8 @@ const TASK = TEMP_TASK;
 
 console.log(MANAGER_TASK, TAGS_TASK, ARTICLES_TASK, TEMP_TASK);
 
-describe('Test OpenAI using xpander.ai', () => {
-  it('get tools for openai provider', async () => {
+describe('Test xpander.ai SDK (Worker Mode)', () => {
+  it('Get Task and handle', async () => {
     const xpanderClient = new XpanderClient(
       TASK.organization_id,
       xpanderAPIKey,
