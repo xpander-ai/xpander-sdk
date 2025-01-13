@@ -162,6 +162,8 @@ export class Memory extends Base {
       messages = this.convertLLMResponseToMessages(messages);
     }
 
+    console.debug(`adding messages to thread ${this.id}`, messages);
+
     const response = request(
       'PUT',
       `${this.agent.configuration.url}/memory/${this.id}`,
@@ -187,6 +189,14 @@ export class Memory extends Base {
    * @param instructions - Instructions to initialize the memory thread.
    */
   public initInstructions(instructions: IAgentInstructions): void {
+    // temporary workaround for input_task issue (not passing all required data)
+    if (instructions.general) {
+      instructions.general += `
+        IMPORTANT: when making a sub-task (with input_task), make sure to append all related 
+        information relevant for the sub-task. For instance, if the sub-task is about sending 
+        an email with tags, ensure the tags and any required data are included in the input_task.
+        `;
+    }
     this.addMessages([
       {
         role: 'system',

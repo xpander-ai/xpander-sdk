@@ -12,7 +12,12 @@ import {
   AgentAccessScope,
   IAgentGraphItem,
 } from '../../types/agents';
-import { IUserDetails, MemoryStrategy, MemoryType } from '../../types/memory';
+import {
+  IMemoryMessage,
+  IUserDetails,
+  MemoryStrategy,
+  MemoryType,
+} from '../../types/memory';
 import { Base } from '../base';
 import { Configuration } from '../Configuration';
 import { Execution } from '../executions/Execution';
@@ -26,7 +31,7 @@ import {
   executeTool,
   mergeDeep,
 } from '../tools';
-import { convertKeysToCamelCase } from '../utils';
+import { convertKeysToCamelCase, generateUUIDv4 } from '../utils';
 
 /**
  * Represents an agent in xpanderAI, managing tools, sessions, and operational workflows.
@@ -43,6 +48,7 @@ export class Agent extends Base {
   public userDetails?: IUserDetails;
   public executionMemory?: Memory;
   private shouldStop: boolean = false;
+  private isLocalRun: boolean = false;
 
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
@@ -91,8 +97,10 @@ export class Agent extends Base {
   }
 
   /** Loads the agent data from its source node type. */
-  load(): void {
-    if (this.ready) return;
+  load(agentId?: string): void {
+    if (this.ready && !agentId) return;
+
+    console.debug(`loading agent ${this.id}`);
 
     try {
       const response = request('GET', this.url, {
@@ -207,12 +215,22 @@ export class Agent extends Base {
    */
   public runTool(
     tool: ToolCall,
-    payloadExtension?: any,
-    isMultiple?: boolean = false,
+    payloadExtension: any = {},
+    isMultiple: boolean = false,
   ): ToolCallResult {
     if (!this.execution) {
       throw new Error('Agent cannot run tool without execution');
     }
+
+    console.debug(
+      `running tool ${tool.name} on agent ${this.id} with execution ${this.execution.id}`,
+    );
+
+    // append execution id
+    if (!payloadExtension?.headers) {
+      payloadExtension.headers = {};
+    }
+    payloadExtension.headers['x-xpander-execution-id'] = this.execution.id;
 
     let clonedTool = ToolCall.fromObject(tool.toDict());
     let toolCallResult = ToolCallResult.fromObject({
@@ -298,7 +316,7 @@ export class Agent extends Base {
    */
   public runTools(
     toolCalls: ToolCall[],
-    payloadExtension?: any,
+    payloadExtension: any = {},
   ): ToolCallResult[] {
     return toolCalls.map((toolCall) =>
       this.runTool(toolCall, payloadExtension, toolCalls.length > 1),
@@ -386,14 +404,67 @@ export class Agent extends Base {
   }
 
   public isFinished() {
-    if (this.shouldStop) return true;
-    if (!this.memory) {
-      return false;
+    let shouldStop = false;
+    if (this.shouldStop) {
+      shouldStop = true;
     } else {
-      return this.memory.messages.some((msg) =>
-        msg.toolCalls?.some((tc) => tc.name === AGENT_FINISH_TOOL_ID),
-      );
+      if (!this.memory) {
+        shouldStop = false;
+      } else {
+        shouldStop = this.memory.messages.some((msg) =>
+          msg.toolCalls?.some((tc) => tc.name === AGENT_FINISH_TOOL_ID),
+        );
+      }
     }
+
+    // check if has sub executions
+    if (shouldStop && this.isLocalRun && this?.execution?.workerId) {
+      const pendingExecution: Execution = Execution.retrievePendingExecution(
+        this,
+        this.execution.workerId,
+      );
+      if (pendingExecution) {
+        console.debug(
+          `switching from execution ${this.execution.id} to ${pendingExecution.id}`,
+        );
+        // re-load agent if needed (switch agent)
+        if (this.id !== pendingExecution.agentId) {
+          this.id = pendingExecution.agentId;
+          this.load(pendingExecution.agentId);
+          this.isLocalRun = true;
+        }
+        this.initTask(pendingExecution);
+
+        // reload memory
+        this.executionMemory = this.initializeMemory();
+        this.memory.selectLLMProvider(LLMProvider.OPEN_AI); // only if not openai..
+        this.memory.initializeThread(
+          this.execution?.inputMessage as IMemoryMessage,
+          this.instructions,
+        );
+        shouldStop = false;
+      } else if (this.execution.parentExecution) {
+        // fetch execution result
+        console.debug(
+          `switching from execution ${this.execution.id} to parent execution ${this.execution.parentExecution}`,
+        );
+        this.execution = Execution.fetch(this, this.execution.parentExecution);
+      }
+    }
+
+    return shouldStop;
+  }
+
+  public invokeAgent(
+    input: string = '',
+    files: string[] = [],
+    useWorker: boolean = false,
+  ): Execution {
+    const localWorkerId = !useWorker ? generateUUIDv4() : undefined;
+    const execution = Execution.create(this, input, files, localWorkerId);
+    this.initTask(execution);
+    this.isLocalRun = true;
+    return execution;
   }
 
   public stop() {

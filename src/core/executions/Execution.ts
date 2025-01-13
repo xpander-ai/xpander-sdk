@@ -8,6 +8,20 @@ import { convertKeysToCamelCase } from '../utils';
  * status, memory, and other related details.
  */
 export class Execution extends Base {
+  public static initExecution(createdExecution: any) {
+    return new Execution(
+      createdExecution.id,
+      createdExecution.agentId,
+      createdExecution.organizationId,
+      createdExecution.input,
+      createdExecution.status,
+      createdExecution.lastExecutedNodeId,
+      createdExecution.memoryThreadId,
+      createdExecution.parentExecution,
+      createdExecution.workerId,
+      createdExecution.result,
+    );
+  }
   /**
    * Updates an execution with the specified delta changes.
    *
@@ -41,6 +55,83 @@ export class Execution extends Base {
     return updatedExecution;
   }
 
+  public static create(
+    agent: Agent,
+    input: string,
+    files: string[],
+    workerId?: string,
+  ): any {
+    const payload = {
+      input: {
+        text: input || '',
+        files: files || [],
+      },
+      worker_id: workerId || undefined,
+    };
+    const response = request(
+      'POST',
+      `${agent.configuration.url}/agent-execution/${agent.id}`,
+      {
+        json: payload,
+        headers: { 'x-api-key': agent.configuration.apiKey },
+      },
+    );
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      throw new Error(response.body.toString());
+    }
+
+    const createdExecution = convertKeysToCamelCase(
+      JSON.parse(response.getBody('utf8')),
+    );
+
+    return this.initExecution(createdExecution);
+  }
+
+  public static fetch(agent: Agent, executionId: string): any {
+    const response = request(
+      'GET',
+      `${agent.configuration.url}/agent-execution/${executionId}/status`,
+      {
+        headers: { 'x-api-key': agent.configuration.apiKey },
+      },
+    );
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      throw new Error(response.body.toString());
+    }
+
+    const execution = convertKeysToCamelCase(
+      JSON.parse(response.getBody('utf8')),
+    );
+
+    return this.initExecution(execution);
+  }
+
+  public static retrievePendingExecution(agent: Agent, workerId: string): any {
+    const response = request(
+      'GET',
+      `${agent.configuration.url}/agent-execution/pending-executions/${workerId}`,
+      {
+        headers: { 'x-api-key': agent.configuration.apiKey },
+      },
+    );
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      throw new Error(response.body.toString());
+    }
+
+    const createdExecution = convertKeysToCamelCase(
+      JSON.parse(response.getBody('utf8')),
+    );
+
+    if (!createdExecution) {
+      return null;
+    }
+
+    return this.initExecution(createdExecution);
+  }
+
   /**
    * Constructs a new Execution instance.
    *
@@ -51,6 +142,7 @@ export class Execution extends Base {
    * @param status - Current status of the execution.
    * @param lastExecutedNodeId - Identifier of the last executed node.
    * @param memoryThreadId - Identifier of the memory thread associated with the execution.
+   * @param workerId - Identifier of the worker associated with the execution.
    */
   constructor(
     public id: string,
@@ -60,6 +152,9 @@ export class Execution extends Base {
     public status: ExecutionStatus,
     public lastExecutedNodeId: string = '',
     public memoryThreadId: string = '',
+    public parentExecution: string = '',
+    public workerId: string = '',
+    public result: string = '',
   ) {
     super();
   }

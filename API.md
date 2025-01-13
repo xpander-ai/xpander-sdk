@@ -159,6 +159,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
+| <code><a href="#xpander-sdk.Agent.invokeAgent">invokeAgent</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from its source node type. |
 | <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | Retrieves a node from the graph by its ID. |
@@ -241,6 +242,30 @@ The execution details.
 
 ---
 
+##### `invokeAgent` <a name="invokeAgent" id="xpander-sdk.Agent.invokeAgent"></a>
+
+```typescript
+public invokeAgent(input?: string, files?: string[], useWorker?: boolean): Execution
+```
+
+###### `input`<sup>Optional</sup> <a name="input" id="xpander-sdk.Agent.invokeAgent.parameter.input"></a>
+
+- *Type:* string
+
+---
+
+###### `files`<sup>Optional</sup> <a name="files" id="xpander-sdk.Agent.invokeAgent.parameter.files"></a>
+
+- *Type:* string[]
+
+---
+
+###### `useWorker`<sup>Optional</sup> <a name="useWorker" id="xpander-sdk.Agent.invokeAgent.parameter.useWorker"></a>
+
+- *Type:* boolean
+
+---
+
 ##### `isFinished` <a name="isFinished" id="xpander-sdk.Agent.isFinished"></a>
 
 ```typescript
@@ -250,10 +275,16 @@ public isFinished(): boolean
 ##### `load` <a name="load" id="xpander-sdk.Agent.load"></a>
 
 ```typescript
-public load(): void
+public load(agentId?: string): void
 ```
 
 Loads the agent data from its source node type.
+
+###### `agentId`<sup>Optional</sup> <a name="agentId" id="xpander-sdk.Agent.load.parameter.agentId"></a>
+
+- *Type:* string
+
+---
 
 ##### `retrieveNodeFromGraph` <a name="retrieveNodeFromGraph" id="xpander-sdk.Agent.retrieveNodeFromGraph"></a>
 
@@ -274,7 +305,7 @@ The ID of the graph node to retrieve.
 ##### `runTool` <a name="runTool" id="xpander-sdk.Agent.runTool"></a>
 
 ```typescript
-public runTool(tool: ToolCall, payloadExtension?: any): ToolCallResult
+public runTool(tool: ToolCall, payloadExtension?: any, isMultiple?: boolean): ToolCallResult
 ```
 
 Executes a single tool call and returns the result.
@@ -292,6 +323,12 @@ The tool call to execute.
 - *Type:* any
 
 Additional payload data to merge.
+
+---
+
+###### `isMultiple`<sup>Optional</sup> <a name="isMultiple" id="xpander-sdk.Agent.runTool.parameter.isMultiple"></a>
+
+- *Type:* boolean
 
 ---
 
@@ -1183,7 +1220,7 @@ Represents an execution of an agent in xpanderAI, including its input, status, m
 ```typescript
 import { Execution } from 'xpander-sdk'
 
-new Execution(id: string, agentId: string, organizationId: string, input: IExecutionInput, status: ExecutionStatus, lastExecutedNodeId?: string, memoryThreadId?: string)
+new Execution(id: string, agentId: string, organizationId: string, input: IExecutionInput, status: ExecutionStatus, lastExecutedNodeId?: string, memoryThreadId?: string, parentExecution?: string, workerId?: string, result?: string)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1195,6 +1232,9 @@ new Execution(id: string, agentId: string, organizationId: string, input: IExecu
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a></code> | - Current status of the execution. |
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | - Identifier of the last executed node. |
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | - Identifier of the memory thread associated with the execution. |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.parentExecution">parentExecution</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.workerId">workerId</a></code> | <code>string</code> | - Identifier of the worker associated with the execution. |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.result">result</a></code> | <code>string</code> | *No description.* |
 
 ---
 
@@ -1254,6 +1294,26 @@ Identifier of the memory thread associated with the execution.
 
 ---
 
+##### `parentExecution`<sup>Optional</sup> <a name="parentExecution" id="xpander-sdk.Execution.Initializer.parameter.parentExecution"></a>
+
+- *Type:* string
+
+---
+
+##### `workerId`<sup>Optional</sup> <a name="workerId" id="xpander-sdk.Execution.Initializer.parameter.workerId"></a>
+
+- *Type:* string
+
+Identifier of the worker associated with the execution.
+
+---
+
+##### `result`<sup>Optional</sup> <a name="result" id="xpander-sdk.Execution.Initializer.parameter.result"></a>
+
+- *Type:* string
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -1293,6 +1353,10 @@ public toJson(): string
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.Execution.fromObject">fromObject</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.create">create</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.fetch">fetch</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.initExecution">initExecution</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.retrievePendingExecution">retrievePendingExecution</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Execution.update">update</a></code> | Updates an execution with the specified delta changes. |
 
 ---
@@ -1308,6 +1372,92 @@ Execution.fromObject(data: any)
 ###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Execution.fromObject.parameter.data"></a>
 
 - *Type:* any
+
+---
+
+##### `create` <a name="create" id="xpander-sdk.Execution.create"></a>
+
+```typescript
+import { Execution } from 'xpander-sdk'
+
+Execution.create(agent: Agent, input: string, files: string[], workerId?: string)
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Execution.create.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Execution.create.parameter.input"></a>
+
+- *Type:* string
+
+---
+
+###### `files`<sup>Required</sup> <a name="files" id="xpander-sdk.Execution.create.parameter.files"></a>
+
+- *Type:* string[]
+
+---
+
+###### `workerId`<sup>Optional</sup> <a name="workerId" id="xpander-sdk.Execution.create.parameter.workerId"></a>
+
+- *Type:* string
+
+---
+
+##### `fetch` <a name="fetch" id="xpander-sdk.Execution.fetch"></a>
+
+```typescript
+import { Execution } from 'xpander-sdk'
+
+Execution.fetch(agent: Agent, executionId: string)
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Execution.fetch.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `executionId`<sup>Required</sup> <a name="executionId" id="xpander-sdk.Execution.fetch.parameter.executionId"></a>
+
+- *Type:* string
+
+---
+
+##### `initExecution` <a name="initExecution" id="xpander-sdk.Execution.initExecution"></a>
+
+```typescript
+import { Execution } from 'xpander-sdk'
+
+Execution.initExecution(createdExecution: any)
+```
+
+###### `createdExecution`<sup>Required</sup> <a name="createdExecution" id="xpander-sdk.Execution.initExecution.parameter.createdExecution"></a>
+
+- *Type:* any
+
+---
+
+##### `retrievePendingExecution` <a name="retrievePendingExecution" id="xpander-sdk.Execution.retrievePendingExecution"></a>
+
+```typescript
+import { Execution } from 'xpander-sdk'
+
+Execution.retrievePendingExecution(agent: Agent, workerId: string)
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Execution.retrievePendingExecution.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `workerId`<sup>Required</sup> <a name="workerId" id="xpander-sdk.Execution.retrievePendingExecution.parameter.workerId"></a>
+
+- *Type:* string
 
 ---
 
@@ -1356,7 +1506,10 @@ A record of changes to apply to the execution.
 | <code><a href="#xpander-sdk.Execution.property.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | - Identifier of the last executed node. |
 | <code><a href="#xpander-sdk.Execution.property.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | - Identifier of the memory thread associated with the execution. |
 | <code><a href="#xpander-sdk.Execution.property.organizationId">organizationId</a></code> | <code>string</code> | - Identifier of the organization associated with the execution. |
+| <code><a href="#xpander-sdk.Execution.property.parentExecution">parentExecution</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.property.result">result</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Execution.property.status">status</a></code> | <code><a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a></code> | - Current status of the execution. |
+| <code><a href="#xpander-sdk.Execution.property.workerId">workerId</a></code> | <code>string</code> | - Identifier of the worker associated with the execution. |
 
 ---
 
@@ -1446,6 +1599,26 @@ Identifier of the organization associated with the execution.
 
 ---
 
+##### `parentExecution`<sup>Required</sup> <a name="parentExecution" id="xpander-sdk.Execution.property.parentExecution"></a>
+
+```typescript
+public readonly parentExecution: string;
+```
+
+- *Type:* string
+
+---
+
+##### `result`<sup>Required</sup> <a name="result" id="xpander-sdk.Execution.property.result"></a>
+
+```typescript
+public readonly result: string;
+```
+
+- *Type:* string
+
+---
+
 ##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.Execution.property.status"></a>
 
 ```typescript
@@ -1455,6 +1628,18 @@ public readonly status: ExecutionStatus;
 - *Type:* <a href="#xpander-sdk.ExecutionStatus">ExecutionStatus</a>
 
 Current status of the execution.
+
+---
+
+##### `workerId`<sup>Required</sup> <a name="workerId" id="xpander-sdk.Execution.property.workerId"></a>
+
+```typescript
+public readonly workerId: string;
+```
+
+- *Type:* string
+
+Identifier of the worker associated with the execution.
 
 ---
 
