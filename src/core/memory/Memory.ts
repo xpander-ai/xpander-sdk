@@ -197,6 +197,13 @@ export class Memory extends Base {
         an email with tags, ensure the tags and any required data are included in the input_task.
         `;
     }
+    // faileover
+    if (instructions.general) {
+      instructions.general += `
+        - Execute tools as needed to complete tasks.  
+        - If a tool fails **3 times**, execution stalls, or no tool is called for an extended period, stop immediately and report the issue along with any relevant results or errors.
+        `;
+    }
     this.addMessages([
       {
         role: 'system',
