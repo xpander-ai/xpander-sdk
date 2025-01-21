@@ -38,7 +38,6 @@ export class KnowledgeBase extends Base {
     } catch (err) {
       console.error('failed to load agent knowledge bases', err);
     }
-    console.log(agent);
     return [];
   }
   constructor(
