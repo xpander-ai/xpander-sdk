@@ -2,7 +2,12 @@ import request from 'sync-request';
 import { LLMProvider } from '../../constants/llmProvider';
 import { AGENT_FINISH_TOOL_ID, LOCAL_TOOL_PREFIX } from '../../constants/tools';
 import { allProviders } from '../../llmProviders';
-import { ILocalTool, IToolCallPayload, ToolCallType } from '../../types';
+import {
+  ILocalTool,
+  IToolCallPayload,
+  KnowledgeBaseStrategy,
+  ToolCallType,
+} from '../../types';
 import {
   AgentStatus,
   IAgentTool,
@@ -153,6 +158,9 @@ export class Agent extends Base {
         agent.graph,
         agent.knowledgeBases,
       );
+      if (agent?.knowledgeBases && agent.knowledgeBases.length !== 0) {
+        loadedAgent.knowledgeBases = KnowledgeBase.loadByAgent(loadedAgent);
+      }
       Object.assign(this, loadedAgent);
     } catch (err) {
       throw new Error('Failed to load agent');
@@ -366,14 +374,11 @@ export class Agent extends Base {
     this.userDetails = camelCasedUserDetails;
   }
 
-  /** Checks if the agent has an associated knowledge base. */
-  public get hasKnowledgeBase(): boolean {
-    return this.knowledgeBases.length !== 0;
-  }
-
-  /** Retrieves the knowledge base strategy of the agent. */
-  public get knowledgeBaseStrategy(): string {
-    return this.knowledgeBases[0].strategy;
+  /** Retrieves the vanilla knowledge bases of the agent. */
+  public get vanillaKnowledgeBases(): KnowledgeBase[] {
+    return this.knowledgeBases.filter(
+      (kb) => kb.strategy === KnowledgeBaseStrategy.VANILLA,
+    );
   }
 
   /** Retrieves the memory instance for the agent. */

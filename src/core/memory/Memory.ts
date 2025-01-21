@@ -1,5 +1,11 @@
 import request from 'sync-request';
-import { Agent, IAgentInstructions, LLMProvider, ToolCallResult } from '../..';
+import {
+  Agent,
+  IAgentInstructions,
+  KnowledgeBaseStrategy,
+  LLMProvider,
+  ToolCallResult,
+} from '../..';
 import { BaseOpenAISDKHandler } from '../../llmProviders/shared/baseOpenAI';
 import { IMemoryMessage, IUserDetails, MemoryType } from '../../types/memory';
 import { Base } from '../base';
@@ -230,6 +236,30 @@ export class Memory extends Base {
     if (this.messages.length === 0) {
       this.initInstructions(instructions);
       this.addMessages([input]);
+      this.addKnowledgeBase();
+    }
+  }
+
+  public addKnowledgeBase() {
+    if (
+      this.agent?.vanillaKnowledgeBases &&
+      this.agent.vanillaKnowledgeBases.length !== 0
+    ) {
+      const messages: IMemoryMessage[] = [];
+
+      for (const kb of this.agent.vanillaKnowledgeBases) {
+        // double check
+        if (kb.strategy === KnowledgeBaseStrategy.VANILLA) {
+          messages.push({
+            role: 'system',
+            content: `Here's ${kb.name} knowledge base (${kb.description}) documents: ${JSON.stringify(kb.documents)}`,
+          });
+        }
+      }
+
+      if (messages.length !== 0) {
+        this.addMessages(messages);
+      }
     }
   }
 

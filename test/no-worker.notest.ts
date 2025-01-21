@@ -34,9 +34,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
     expect(tools.length).toBeGreaterThanOrEqual(1);
 
     // manually set execution - should come from worker
-    agent.invokeAgent(
-      'Get longest readable tag from my blog. enrich info about this tag from the internet',
-    );
+    agent.invokeAgent('get details about "Anderson" from my users db');
 
     // configure memory
     agent.memory.selectLLMProvider(LLMProvider.OPEN_AI); // only if not openai..
