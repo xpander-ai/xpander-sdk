@@ -404,12 +404,11 @@ Agent.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Agent.property.hasKnowledgeBase">hasKnowledgeBase</a></code> | <code>boolean</code> | Checks if the agent has an associated knowledge base. |
 | <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has local tools loaded. |
-| <code><a href="#xpander-sdk.Agent.property.knowledgeBaseStrategy">knowledgeBaseStrategy</a></code> | <code>string</code> | Retrieves the knowledge base strategy of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | Retrieves the memory instance for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Retrieves the type of source node for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.url">url</a></code> | <code>string</code> | Constructs the API URL for this agent. |
+| <code><a href="#xpander-sdk.Agent.property.vanillaKnowledgeBases">vanillaKnowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | Retrieves the vanilla knowledge bases of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | - Scope of the agent's access permissions. |
 | <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | - Graph structure representing the agent's operational flow. |
@@ -432,18 +431,6 @@ Agent.fromObject(data: any)
 
 ---
 
-##### `hasKnowledgeBase`<sup>Required</sup> <a name="hasKnowledgeBase" id="xpander-sdk.Agent.property.hasKnowledgeBase"></a>
-
-```typescript
-public readonly hasKnowledgeBase: boolean;
-```
-
-- *Type:* boolean
-
-Checks if the agent has an associated knowledge base.
-
----
-
 ##### `hasLocalTools`<sup>Required</sup> <a name="hasLocalTools" id="xpander-sdk.Agent.property.hasLocalTools"></a>
 
 ```typescript
@@ -453,18 +440,6 @@ public readonly hasLocalTools: boolean;
 - *Type:* boolean
 
 Checks if the agent has local tools loaded.
-
----
-
-##### `knowledgeBaseStrategy`<sup>Required</sup> <a name="knowledgeBaseStrategy" id="xpander-sdk.Agent.property.knowledgeBaseStrategy"></a>
-
-```typescript
-public readonly knowledgeBaseStrategy: string;
-```
-
-- *Type:* string
-
-Retrieves the knowledge base strategy of the agent.
 
 ---
 
@@ -501,6 +476,18 @@ public readonly url: string;
 - *Type:* string
 
 Constructs the API URL for this agent.
+
+---
+
+##### `vanillaKnowledgeBases`<sup>Required</sup> <a name="vanillaKnowledgeBases" id="xpander-sdk.Agent.property.vanillaKnowledgeBases"></a>
+
+```typescript
+public readonly vanillaKnowledgeBases: KnowledgeBase[];
+```
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]
+
+Retrieves the vanilla knowledge bases of the agent.
 
 ---
 
@@ -1799,6 +1786,7 @@ public toJson(): string
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.KnowledgeBase.fromObject">fromObject</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBase.loadByAgent">loadByAgent</a></code> | *No description.* |
 
 ---
 
@@ -1813,6 +1801,20 @@ KnowledgeBase.fromObject(data: any)
 ###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.KnowledgeBase.fromObject.parameter.data"></a>
 
 - *Type:* any
+
+---
+
+##### `loadByAgent` <a name="loadByAgent" id="xpander-sdk.KnowledgeBase.loadByAgent"></a>
+
+```typescript
+import { KnowledgeBase } from 'xpander-sdk'
+
+KnowledgeBase.loadByAgent(agent: Agent)
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.KnowledgeBase.loadByAgent.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
 
 ---
 
@@ -1938,6 +1940,7 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 | <code><a href="#xpander-sdk.Memory.from">from</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.addKnowledgeBase">addKnowledgeBase</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.addMessages">addMessages</a></code> | Adds messages to the memory thread. |
 | <code><a href="#xpander-sdk.Memory.addToolCallResults">addToolCallResults</a></code> | Adds tool call results as messages to the memory thread. |
 | <code><a href="#xpander-sdk.Memory.initializeThread">initializeThread</a></code> | Initializes a new memory thread with input and instructions. |
@@ -1969,6 +1972,12 @@ public toDict(): {[ key: string ]: any}
 
 ```typescript
 public toJson(): string
+```
+
+##### `addKnowledgeBase` <a name="addKnowledgeBase" id="xpander-sdk.Memory.addKnowledgeBase"></a>
+
+```typescript
+public addKnowledgeBase(): void
 ```
 
 ##### `addMessages` <a name="addMessages" id="xpander-sdk.Memory.addMessages"></a>
