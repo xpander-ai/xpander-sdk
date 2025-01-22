@@ -110,7 +110,7 @@ export class BaseLLMProvider {
       modifyPropertiesByRemoteSettings(
         tool,
         'input',
-        this.agent.retrieveNodeFromGraph(tool),
+        this.agent.retrieveNodeFromGraph(tool.function.name),
       ),
     );
   }
