@@ -8,7 +8,7 @@ export { Agents, Agent } from './core/agents';
 export { KnowledgeBase } from './core/knowledgeBases';
 export { Base } from './core/base';
 export { ToolCall, ToolCallResult } from './core/toolCalls';
-export { Execution } from './core/executions';
+export { Execution, Tokens, LLMTokens } from './core/executions';
 export { Memory } from './core/memory';
 
 export { AmazonBedrockSupportedModels } from './llmProviders/amazonBedrock';

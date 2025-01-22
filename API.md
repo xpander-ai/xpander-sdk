@@ -162,6 +162,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.invokeAgent">invokeAgent</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from its source node type. |
+| <code><a href="#xpander-sdk.Agent.retrieveExecutionResult">retrieveExecutionResult</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | Retrieves a node from the graph by its ID. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
@@ -285,6 +286,12 @@ Loads the agent data from its source node type.
 - *Type:* string
 
 ---
+
+##### `retrieveExecutionResult` <a name="retrieveExecutionResult" id="xpander-sdk.Agent.retrieveExecutionResult"></a>
+
+```typescript
+public retrieveExecutionResult(): Execution
+```
 
 ##### `retrieveNodeFromGraph` <a name="retrieveNodeFromGraph" id="xpander-sdk.Agent.retrieveNodeFromGraph"></a>
 
@@ -1207,7 +1214,7 @@ Represents an execution of an agent in xpanderAI, including its input, status, m
 ```typescript
 import { Execution } from 'xpander-sdk'
 
-new Execution(id: string, agentId: string, organizationId: string, input: IExecutionInput, status: ExecutionStatus, lastExecutedNodeId?: string, memoryThreadId?: string, parentExecution?: string, workerId?: string, result?: string)
+new Execution(id: string, agentId: string, organizationId: string, input: IExecutionInput, status: ExecutionStatus, lastExecutedNodeId?: string, memoryThreadId?: string, parentExecution?: string, workerId?: string, result?: string, llmTokens?: Tokens)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1222,6 +1229,7 @@ new Execution(id: string, agentId: string, organizationId: string, input: IExecu
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.parentExecution">parentExecution</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.workerId">workerId</a></code> | <code>string</code> | - Identifier of the worker associated with the execution. |
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.result">result</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.llmTokens">llmTokens</a></code> | <code><a href="#xpander-sdk.Tokens">Tokens</a></code> | *No description.* |
 
 ---
 
@@ -1298,6 +1306,12 @@ Identifier of the worker associated with the execution.
 ##### `result`<sup>Optional</sup> <a name="result" id="xpander-sdk.Execution.Initializer.parameter.result"></a>
 
 - *Type:* string
+
+---
+
+##### `llmTokens`<sup>Optional</sup> <a name="llmTokens" id="xpander-sdk.Execution.Initializer.parameter.llmTokens"></a>
+
+- *Type:* <a href="#xpander-sdk.Tokens">Tokens</a>
 
 ---
 
@@ -1491,6 +1505,7 @@ A record of changes to apply to the execution.
 | <code><a href="#xpander-sdk.Execution.property.id">id</a></code> | <code>string</code> | - Unique identifier of the execution. |
 | <code><a href="#xpander-sdk.Execution.property.input">input</a></code> | <code><a href="#xpander-sdk.IExecutionInput">IExecutionInput</a></code> | - Input provided for the execution. |
 | <code><a href="#xpander-sdk.Execution.property.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | - Identifier of the last executed node. |
+| <code><a href="#xpander-sdk.Execution.property.llmTokens">llmTokens</a></code> | <code><a href="#xpander-sdk.Tokens">Tokens</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Execution.property.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | - Identifier of the memory thread associated with the execution. |
 | <code><a href="#xpander-sdk.Execution.property.organizationId">organizationId</a></code> | <code>string</code> | - Identifier of the organization associated with the execution. |
 | <code><a href="#xpander-sdk.Execution.property.parentExecution">parentExecution</a></code> | <code>string</code> | *No description.* |
@@ -1559,6 +1574,16 @@ public readonly lastExecutedNodeId: string;
 - *Type:* string
 
 Identifier of the last executed node.
+
+---
+
+##### `llmTokens`<sup>Required</sup> <a name="llmTokens" id="xpander-sdk.Execution.property.llmTokens"></a>
+
+```typescript
+public readonly llmTokens: Tokens;
+```
+
+- *Type:* <a href="#xpander-sdk.Tokens">Tokens</a>
 
 ---
 
@@ -1877,6 +1902,85 @@ public readonly strategy: KnowledgeBaseStrategy;
 ```
 
 - *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
+
+---
+
+
+### LLMTokens <a name="LLMTokens" id="xpander-sdk.LLMTokens"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.LLMTokens.Initializer"></a>
+
+```typescript
+import { LLMTokens } from 'xpander-sdk'
+
+new LLMTokens(completionTokens?: number, promptTokens?: number, totalTokens?: number)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.LLMTokens.Initializer.parameter.completionTokens">completionTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMTokens.Initializer.parameter.promptTokens">promptTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMTokens.Initializer.parameter.totalTokens">totalTokens</a></code> | <code>number</code> | *No description.* |
+
+---
+
+##### `completionTokens`<sup>Optional</sup> <a name="completionTokens" id="xpander-sdk.LLMTokens.Initializer.parameter.completionTokens"></a>
+
+- *Type:* number
+
+---
+
+##### `promptTokens`<sup>Optional</sup> <a name="promptTokens" id="xpander-sdk.LLMTokens.Initializer.parameter.promptTokens"></a>
+
+- *Type:* number
+
+---
+
+##### `totalTokens`<sup>Optional</sup> <a name="totalTokens" id="xpander-sdk.LLMTokens.Initializer.parameter.totalTokens"></a>
+
+- *Type:* number
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.LLMTokens.property.completionTokens">completionTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMTokens.property.promptTokens">promptTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMTokens.property.totalTokens">totalTokens</a></code> | <code>number</code> | *No description.* |
+
+---
+
+##### `completionTokens`<sup>Required</sup> <a name="completionTokens" id="xpander-sdk.LLMTokens.property.completionTokens"></a>
+
+```typescript
+public readonly completionTokens: number;
+```
+
+- *Type:* number
+
+---
+
+##### `promptTokens`<sup>Required</sup> <a name="promptTokens" id="xpander-sdk.LLMTokens.property.promptTokens"></a>
+
+```typescript
+public readonly promptTokens: number;
+```
+
+- *Type:* number
+
+---
+
+##### `totalTokens`<sup>Required</sup> <a name="totalTokens" id="xpander-sdk.LLMTokens.property.totalTokens"></a>
+
+```typescript
+public readonly totalTokens: number;
+```
+
+- *Type:* number
 
 ---
 
@@ -2392,6 +2496,67 @@ public readonly WHISPER_1: string;
 OpenAI Whisper model for speech-to-text tasks.
 
 ---
+
+### Tokens <a name="Tokens" id="xpander-sdk.Tokens"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.Tokens.Initializer"></a>
+
+```typescript
+import { Tokens } from 'xpander-sdk'
+
+new Tokens(inner?: LLMTokens, worker?: LLMTokens)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Tokens.Initializer.parameter.inner">inner</a></code> | <code><a href="#xpander-sdk.LLMTokens">LLMTokens</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Tokens.Initializer.parameter.worker">worker</a></code> | <code><a href="#xpander-sdk.LLMTokens">LLMTokens</a></code> | *No description.* |
+
+---
+
+##### `inner`<sup>Optional</sup> <a name="inner" id="xpander-sdk.Tokens.Initializer.parameter.inner"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMTokens">LLMTokens</a>
+
+---
+
+##### `worker`<sup>Optional</sup> <a name="worker" id="xpander-sdk.Tokens.Initializer.parameter.worker"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMTokens">LLMTokens</a>
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Tokens.property.inner">inner</a></code> | <code><a href="#xpander-sdk.LLMTokens">LLMTokens</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Tokens.property.worker">worker</a></code> | <code><a href="#xpander-sdk.LLMTokens">LLMTokens</a></code> | *No description.* |
+
+---
+
+##### `inner`<sup>Required</sup> <a name="inner" id="xpander-sdk.Tokens.property.inner"></a>
+
+```typescript
+public readonly inner: LLMTokens;
+```
+
+- *Type:* <a href="#xpander-sdk.LLMTokens">LLMTokens</a>
+
+---
+
+##### `worker`<sup>Required</sup> <a name="worker" id="xpander-sdk.Tokens.property.worker"></a>
+
+```typescript
+public readonly worker: LLMTokens;
+```
+
+- *Type:* <a href="#xpander-sdk.LLMTokens">LLMTokens</a>
+
+---
+
 
 ### ToolCall <a name="ToolCall" id="xpander-sdk.ToolCall"></a>
 
