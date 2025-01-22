@@ -3,6 +3,7 @@ import { LLMProvider } from '../../constants/llmProvider';
 import { AGENT_FINISH_TOOL_ID, LOCAL_TOOL_PREFIX } from '../../constants/tools';
 import { allProviders } from '../../llmProviders';
 import {
+  ExecutionStatus,
   ILocalTool,
   IToolCallPayload,
   KnowledgeBaseStrategy,
@@ -474,5 +475,39 @@ export class Agent extends Base {
 
   public stop() {
     this.shouldStop = true;
+  }
+
+  public retrieveExecutionResult(): Execution {
+    if (!this?.execution?.id) {
+      throw new Error('Execution is missing!');
+    }
+
+    const pollInterval = 2000; // 2 seconds
+    const timeout = 30000; // 30 seconds
+    const startTime = Date.now();
+    let latestExecution: Execution = this.execution;
+
+    while (Date.now() - startTime < timeout) {
+      latestExecution = Execution.fetch(this, this.execution.id); // Synchronous call
+
+      if (
+        [
+          ExecutionStatus.COMPLETED,
+          ExecutionStatus.ERROR,
+          ExecutionStatus.PAUSED,
+        ].includes(latestExecution.status)
+      ) {
+        return latestExecution; // Return immediately if status is terminal
+      }
+
+      // Sleep synchronously for the poll interval
+      const now = Date.now();
+      while (Date.now() - now < pollInterval) {
+        // Busy wait to simulate synchronous sleep
+      }
+    }
+
+    // Return the latest execution if timeout occurs
+    return latestExecution;
   }
 }

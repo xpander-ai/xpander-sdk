@@ -1,5 +1,11 @@
 import request from 'sync-request';
-import { Agent, ExecutionStatus, IExecutionInput, IMemoryMessage } from '../..';
+import {
+  Agent,
+  ExecutionStatus,
+  IExecutionInput,
+  IMemoryMessage,
+  Tokens,
+} from '../..';
 import { Base } from '../base';
 import { convertKeysToCamelCase } from '../utils';
 
@@ -20,6 +26,7 @@ export class Execution extends Base {
       createdExecution.parentExecution,
       createdExecution.workerId,
       createdExecution.result,
+      createdExecution.llmTokens,
     );
   }
   /**
@@ -155,6 +162,7 @@ export class Execution extends Base {
     public parentExecution: string = '',
     public workerId: string = '',
     public result: string = '',
+    public llmTokens: Tokens = new Tokens(),
   ) {
     super();
   }

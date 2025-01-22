@@ -9,7 +9,7 @@ import {
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const xpanderAgentId = process.env.XPANDER_AGENT_ID || '';
+const xpanderAgentId = '840fd394-3d3e-4ec8-9089-3b2f37ed5c3d';
 const openAIKey = process.env.OPENAI_API_KEY || '';
 const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
 const organizationId = process.env.ORGANIZATION_ID || '';
@@ -34,7 +34,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
     expect(tools.length).toBeGreaterThanOrEqual(1);
 
     // manually set execution - should come from worker
-    agent.invokeAgent('get details about "Anderson" from my users db');
+    agent.invokeAgent('Get latest article title');
 
     // configure memory
     agent.memory.selectLLMProvider(LLMProvider.OPEN_AI); // only if not openai..
@@ -67,7 +67,9 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
       // when using local tools
       // memory.addToolCallResults(toolResults);
     }
-    console.log(agent);
-    expect(agent.execution?.result.length).toBeGreaterThanOrEqual(1);
+
+    const executionResult = agent.retrieveExecutionResult();
+
+    expect(executionResult?.result.length).toBeGreaterThanOrEqual(1);
   }, 3000000);
 });
