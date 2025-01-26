@@ -241,7 +241,7 @@ export class Memory extends Base {
       if (!!this.agent?.userDetails) {
         initialMessages.push({
           role: 'system',
-          content: `User Details: ${this.agent.userDetails}`,
+          content: `User Details: ${JSON.stringify(this.agent.userDetails)}`,
         });
       }
 
