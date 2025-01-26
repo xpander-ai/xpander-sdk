@@ -235,7 +235,17 @@ export class Memory extends Base {
   ): void {
     if (this.messages.length === 0) {
       this.initInstructions(instructions);
-      this.addMessages([input]);
+
+      const initialMessages = [input];
+
+      if (!!this.agent?.userDetails) {
+        initialMessages.push({
+          role: 'system',
+          content: `User Details: ${this.agent.userDetails}`,
+        });
+      }
+
+      this.addMessages(initialMessages);
       this.addKnowledgeBase();
     }
   }
