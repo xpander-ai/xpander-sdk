@@ -9,7 +9,7 @@ import {
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const xpanderAgentId = '840fd394-3d3e-4ec8-9089-3b2f37ed5c3d';
+const xpanderAgentId = '47ec6aaa-8be7-4c99-a39a-837ae0173c74';
 const openAIKey = process.env.OPENAI_API_KEY || '';
 const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
 const organizationId = process.env.ORGANIZATION_ID || '';
@@ -34,7 +34,9 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
     expect(tools.length).toBeGreaterThanOrEqual(1);
 
     // manually set execution - should come from worker
-    agent.invokeAgent('Get latest article title');
+    agent.invokeAgent(
+      'create an AI Agent called "Moriel Builder Test" with instructions of standard AI Agent',
+    );
 
     // configure memory
     agent.memory.selectLLMProvider(LLMProvider.OPEN_AI); // only if not openai..
@@ -53,7 +55,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
         model: OpenAISupportedModels.GPT_4_O,
         messages: agent.memory.retrieveMessages() as any,
         tools: agent.getTools(),
-        tool_choice: 'auto',
+        tool_choice: 'required',
         temperature: 0.0,
       });
 
@@ -62,7 +64,9 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
       // extract tool calls
       const toolCalls = XpanderClient.extractToolCalls(response);
-      agent.runTools(toolCalls);
+      agent.runTools(toolCalls, {
+        bodyParams: { organization_id: organizationId },
+      });
 
       // when using local tools
       // memory.addToolCallResults(toolResults);

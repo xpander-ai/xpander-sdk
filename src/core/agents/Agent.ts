@@ -156,7 +156,10 @@ export class Agent extends Base {
         agent.sourceNodes,
         agent.enrichedPrompts,
         agent.tools,
-        agent.graph,
+        agent.graph.map((gi: any, idx: number) => ({
+          ...gi,
+          settings: rawAgent.graph[idx].settings,
+        })),
         agent.knowledgeBases,
       );
       if (agent?.knowledgeBases && agent.knowledgeBases.length !== 0) {
@@ -253,16 +256,6 @@ export class Agent extends Base {
     }
 
     try {
-      if (payloadExtension && typeof payloadExtension === 'object') {
-        if (!clonedTool.payload) {
-          clonedTool.payload = {} as IToolCallPayload;
-        }
-        toolCallResult.payload = clonedTool.payload = mergeDeep(
-          clonedTool.payload,
-          payloadExtension,
-        );
-      }
-
       const originalToolName =
         this.originalToolNamesReMapping?.[clonedTool.name] || clonedTool.name;
 
@@ -274,6 +267,16 @@ export class Agent extends Base {
             name: originalToolName,
           }),
           graphItem.settings?.schemas,
+        );
+      }
+
+      if (payloadExtension && typeof payloadExtension === 'object') {
+        if (!clonedTool.payload) {
+          clonedTool.payload = {} as IToolCallPayload;
+        }
+        toolCallResult.payload = clonedTool.payload = mergeDeep(
+          clonedTool.payload,
+          payloadExtension,
         );
       }
 
