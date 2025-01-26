@@ -277,6 +277,22 @@ export class Agent extends Base {
         );
       }
 
+      // Query params manual fix for arrays
+      if (
+        clonedTool?.payload?.queryParams &&
+        Object.keys(clonedTool.payload.queryParams).length !== 0
+      ) {
+        for (const k in clonedTool.payload.queryParams) {
+          if (
+            k in clonedTool.payload.queryParams &&
+            Array.isArray(clonedTool.payload.queryParams[k])
+          ) {
+            clonedTool.payload.queryParams[`${k}[]`] =
+              clonedTool.payload.queryParams[k];
+          }
+        }
+      }
+
       const executionResult = executeTool(
         ToolCall.fromObject({
           ...clonedTool,
