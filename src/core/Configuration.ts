@@ -50,7 +50,9 @@ export class Configuration extends Base {
    * @returns The constructed API endpoint URL.
    */
   get url(): string {
-    const urlParts = [this.baseUrl, this.organizationId];
+    const urlParts = [this.baseUrl, this.organizationId].filter(
+      (item) => !!item,
+    );
     return urlParts.join('/');
   }
 }

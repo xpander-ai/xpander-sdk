@@ -9,7 +9,7 @@ import {
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const xpanderAgentId = '47ec6aaa-8be7-4c99-a39a-837ae0173c74';
+const xpanderAgentId = '5df2f8c6-b42b-43bd-95b6-76d509b311fd';
 const openAIKey = process.env.OPENAI_API_KEY || '';
 const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
 const organizationId = process.env.ORGANIZATION_ID || '';
@@ -35,7 +35,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
     // manually set execution - should come from worker
     agent.invokeAgent(
-      'create an AI Agent called "Moriel Builder Test" with instructions of standard AI Agent',
+      'update agent 09bd63d3-f6ae-40f1-9fe8-b5abdab637f2 with generic instructions',
     );
 
     // configure memory
