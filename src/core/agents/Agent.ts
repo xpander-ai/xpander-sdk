@@ -392,6 +392,10 @@ export class Agent extends Base {
       camelCasedExecution.status,
       camelCasedExecution.lastExecutedNodeId,
       camelCasedExecution.memoryThreadId,
+      camelCasedExecution.parentExecution,
+      camelCasedExecution.workerId,
+      camelCasedExecution.result,
+      camelCasedExecution.llmTokens,
     );
   }
 
@@ -485,6 +489,7 @@ export class Agent extends Base {
           `switching from execution ${this.execution.id} to parent execution ${this.execution.parentExecution}`,
         );
         this.execution = Execution.fetch(this, this.execution.parentExecution);
+        shouldStop = false;
       }
     }
 
