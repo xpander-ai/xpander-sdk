@@ -346,9 +346,20 @@ export class Agent extends Base {
     toolCalls: ToolCall[],
     payloadExtension: any = {},
   ): ToolCallResult[] {
-    return toolCalls.map((toolCall) =>
+    // kb before other tools
+    const kbToolCalls = toolCalls.filter((tc) => tc.name.startsWith('xpkb'));
+    const nonKbToolCalls = toolCalls.filter(
+      (tc) => !tc.name.startsWith('xpkb'),
+    );
+    const result = kbToolCalls.map((toolCall) =>
       this.runTool(toolCall, payloadExtension, toolCalls.length > 1),
     );
+    result.push(
+      ...nonKbToolCalls.map((toolCall) =>
+        this.runTool(toolCall, payloadExtension, toolCalls.length > 1),
+      ),
+    );
+    return result;
   }
 
   /** Retrieves the type of source node for the agent. */

@@ -9,7 +9,7 @@ import {
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const xpanderAgentId = '5df2f8c6-b42b-43bd-95b6-76d509b311fd';
+const xpanderAgentId = '74df98ef-59f9-4fe9-9cb3-10343d856693';
 const openAIKey = process.env.OPENAI_API_KEY || '';
 const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
 const organizationId = process.env.ORGANIZATION_ID || '';
@@ -35,7 +35,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
     // manually set execution - should come from worker
     agent.invokeAgent(
-      'update agent 09bd63d3-f6ae-40f1-9fe8-b5abdab637f2 with generic instructions',
+      'get the longest readable tag and then get the contact details of Robert Myers. after that get the contract number (not related to anyone)',
     );
 
     // configure memory
