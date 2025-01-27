@@ -25,7 +25,7 @@ export class Execution extends Base {
       createdExecution.memoryThreadId,
       createdExecution.parentExecution,
       createdExecution.workerId,
-      createdExecution.result,
+      createdExecution.result || '',
       createdExecution.llmTokens,
     );
   }
