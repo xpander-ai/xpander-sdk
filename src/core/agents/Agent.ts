@@ -25,6 +25,7 @@ import {
   MemoryType,
 } from '../../types/memory';
 import { Base } from '../base';
+import CacheService from '../CacheService';
 import { Configuration } from '../Configuration';
 import { Execution } from '../executions/Execution';
 import { KnowledgeBase } from '../knowledgeBases';
@@ -109,15 +110,26 @@ export class Agent extends Base {
     console.debug(`loading agent ${this.id}`);
 
     try {
-      const response = request('GET', this.url, {
-        headers: { 'x-api-key': this.configuration.apiKey },
-      });
+      const cache = CacheService.getInstance();
+      const cachedAgent = cache.get(this.id);
 
-      if (!response.statusCode.toString().startsWith('2')) {
-        throw new Error(response.body.toString());
+      let rawAgent: any;
+      if (cachedAgent) {
+        console.debug('Agent loaded from cache');
+        rawAgent = cachedAgent;
+      } else {
+        const response = request('GET', this.url, {
+          headers: { 'x-api-key': this.configuration.apiKey },
+        });
+
+        if (!response.statusCode.toString().startsWith('2')) {
+          throw new Error(response.body.toString());
+        }
+
+        rawAgent = JSON.parse(response.getBody('utf8'));
+        cache.set(this.id, rawAgent);
       }
 
-      const rawAgent = JSON.parse(response.getBody('utf8'));
       const agent = convertKeysToCamelCase(rawAgent);
 
       if ('tools' in agent) {
@@ -477,8 +489,7 @@ export class Agent extends Base {
 
         // reload memory
         this.executionMemory = this.initializeMemory();
-        this.memory.selectLLMProvider(LLMProvider.OPEN_AI); // only if not openai..
-        this.memory.initializeThread(
+        this.memory.initialize(
           this.execution?.inputMessage as IMemoryMessage,
           this.instructions,
         );

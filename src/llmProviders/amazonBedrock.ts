@@ -6,49 +6,6 @@ import { getToolBaseSignature } from '../core/tools';
 import { IBedrockTool } from '../types';
 
 /**
- * Contains constants representing various models supported by Amazon Bedrock.
- */
-export abstract class AmazonBedrockSupportedModels {
-  /** Anthropocene Claude 3 Haiku model (version 2024-03-07). */
-  public static readonly ANTHROPIC_CLAUDE_3_HAIKU_20240307 =
-    'anthropic.claude-3-haiku-20240307-v1:0';
-
-  /** Anthropocene Claude 3.5 Sonnet model (version 2024-06-20). */
-  public static readonly ANTHROPIC_CLAUDE_3_5_SONNET_20240620 =
-    'anthropic.claude-3-5-sonnet-20240620-v1:0';
-
-  /** Cohere Command R model. */
-  public static readonly COHERE_COMMAND_R = 'cohere.command-r-v1:0';
-
-  /** Cohere Command R Plus model. */
-  public static readonly COHERE_COMMAND_R_PLUS = 'cohere.command-r-plus-v1:0';
-
-  /** Meta Llama 3 1.8B Instruct model. */
-  public static readonly META_LLAMA3_1_8B_INSTRUCT =
-    'meta.llama3-1-8b-instruct-v1:0';
-
-  /** Meta Llama 3 1.70B Instruct model. */
-  public static readonly META_LLAMA3_1_70B_INSTRUCT =
-    'meta.llama3-1-70b-instruct-v1:0';
-
-  /** Meta Llama 3 1.405B Instruct model. */
-  public static readonly META_LLAMA3_1_405B_INSTRUCT =
-    'meta.llama3-1-405b-instruct-v1:0';
-
-  /** Mistral Large 2402 model. */
-  public static readonly MISTRAL_MISTRAL_LARGE_2402 =
-    'mistral.mistral-large-2402-v1:0';
-
-  /** Mistral Large 2407 model. */
-  public static readonly MISTRAL_MISTRAL_LARGE_2407 =
-    'mistral.mistral-large-2407-v1:0';
-
-  /** Mistral Small 2402 model. */
-  public static readonly MISTRAL_MISTRAL_SMALL_2402 =
-    'mistral.mistral-small-2402-v1:0';
-}
-
-/**
  * Represents the Amazon Bedrock LLM provider, handling tool calls and model-specific processing.
  */
 export class AmazonBedrock extends BaseLLMProvider {

@@ -168,8 +168,6 @@ export class Memory extends Base {
       messages = this.convertLLMResponseToMessages(messages);
     }
 
-    console.debug(`adding messages to thread ${this.id}`, messages);
-
     const response = request(
       'PUT',
       `${this.agent.configuration.url}/memory/${this.id}`,
@@ -229,10 +227,12 @@ export class Memory extends Base {
    * @param input - Initial user input message.
    * @param instructions - Instructions to initialize the memory thread.
    */
-  public initializeThread(
+  public initialize(
     input: IMemoryMessage,
     instructions: IAgentInstructions,
+    llmProvider: LLMProvider = LLMProvider.OPEN_AI,
   ): void {
+    this.llmProvider = llmProvider;
     if (this.messages.length === 0) {
       this.initInstructions(instructions);
 
@@ -271,15 +271,6 @@ export class Memory extends Base {
         this.addMessages(messages);
       }
     }
-  }
-
-  /**
-   * Sets the LLM provider for processing memory messages.
-   *
-   * @param llmProvider - The LLM provider to use.
-   */
-  public selectLLMProvider(llmProvider: LLMProvider): void {
-    this.llmProvider = llmProvider;
   }
 
   /**
