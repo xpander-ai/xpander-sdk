@@ -3,14 +3,6 @@ import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
 
 /**
- * Contains constants representing various models supported by Nvidia NIM.
- */
-export abstract class NvidiaNIMSupportedModels {
-  /** Meta Llama 3.1 70B Instruct model. */
-  public static readonly LLAMA_3_1_70B_INSTRUCT = 'meta/llama-3.1-70b-instruct';
-}
-
-/**
  * Handles interactions with the Nvidia NIM LLM provider, including tool post-processing
  * to append default parameters when necessary.
  */

@@ -5,14 +5,6 @@ import { getToolBaseSignature } from '../core/tools';
 import { BaseLLMProvider } from './shared/baseProvider';
 
 /**
- * Contains constants representing various models supported by Ollama.
- */
-export abstract class OllamaSupportedModels {
-  /** Qwen2.5-Coder model. */
-  public static readonly QWEN2_5_CODER = 'qwen2.5-coder';
-}
-
-/**
  * Handles interactions with the Ollama LLM provider, including tool post-processing
  * to append default parameters when necessary.
  */

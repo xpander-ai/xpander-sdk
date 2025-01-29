@@ -2,25 +2,6 @@ import { OpenAI } from './openai';
 import { LLMProvider } from '../constants/llmProvider';
 
 /**
- * Contains constants representing various models supported by OpenAI.
- *
- * @remarks
- * This abstract class defines static constants for the supported models
- * by xpanderAI's OpenAI real-time integrations.
- */
-export abstract class FriendliAISupportedModels {
-  /** Meta LLaMA 3.1 8B Instruct model. */
-  public static readonly META_LLAMA_3_1_8B_INSTRUCT: string =
-    'meta-llama-3.1-8b-instruct';
-  /** Meta LLaMA 3.1 70B Instruct model. */
-  public static readonly META_LLAMA_3_1_70B_INSTRUCT: string =
-    'meta-llama-3.1-70b-instruct';
-  /** Mistral 8x7B Instruct model (version 0.1). */
-  public static readonly MISTRAL_8X_7B_INSTRUCT: string =
-    'mixtral-8x7b-instruct-v0-1';
-}
-
-/**
  * Manages interactions with the OpenAI LLM provider, handling tool calls and model-specific settings.
  *
  * @remarks

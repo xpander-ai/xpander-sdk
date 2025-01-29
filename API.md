@@ -815,163 +815,6 @@ Configuration settings for managing agents.
 ---
 
 
-### AmazonBedrockSupportedModels <a name="AmazonBedrockSupportedModels" id="xpander-sdk.AmazonBedrockSupportedModels"></a>
-
-Contains constants representing various models supported by Amazon Bedrock.
-
-#### Initializers <a name="Initializers" id="xpander-sdk.AmazonBedrockSupportedModels.Initializer"></a>
-
-```typescript
-import { AmazonBedrockSupportedModels } from 'xpander-sdk'
-
-new AmazonBedrockSupportedModels()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-
-
-#### Constants <a name="Constants" id="Constants"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_5_SONNET_20240620">ANTHROPIC_CLAUDE_3_5_SONNET_20240620</a></code> | <code>string</code> | Anthropocene Claude 3.5 Sonnet model (version 2024-06-20). |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307">ANTHROPIC_CLAUDE_3_HAIKU_20240307</a></code> | <code>string</code> | Anthropocene Claude 3 Haiku model (version 2024-03-07). |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R">COHERE_COMMAND_R</a></code> | <code>string</code> | Cohere Command R model. |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS">COHERE_COMMAND_R_PLUS</a></code> | <code>string</code> | Cohere Command R Plus model. |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_405B_INSTRUCT">META_LLAMA3_1_405B_INSTRUCT</a></code> | <code>string</code> | Meta Llama 3 1.405B Instruct model. |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT">META_LLAMA3_1_70B_INSTRUCT</a></code> | <code>string</code> | Meta Llama 3 1.70B Instruct model. |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_8B_INSTRUCT">META_LLAMA3_1_8B_INSTRUCT</a></code> | <code>string</code> | Meta Llama 3 1.8B Instruct model. |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402">MISTRAL_MISTRAL_LARGE_2402</a></code> | <code>string</code> | Mistral Large 2402 model. |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2407">MISTRAL_MISTRAL_LARGE_2407</a></code> | <code>string</code> | Mistral Large 2407 model. |
-| <code><a href="#xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402">MISTRAL_MISTRAL_SMALL_2402</a></code> | <code>string</code> | Mistral Small 2402 model. |
-
----
-
-##### `ANTHROPIC_CLAUDE_3_5_SONNET_20240620`<sup>Required</sup> <a name="ANTHROPIC_CLAUDE_3_5_SONNET_20240620" id="xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_5_SONNET_20240620"></a>
-
-```typescript
-public readonly ANTHROPIC_CLAUDE_3_5_SONNET_20240620: string;
-```
-
-- *Type:* string
-
-Anthropocene Claude 3.5 Sonnet model (version 2024-06-20).
-
----
-
-##### `ANTHROPIC_CLAUDE_3_HAIKU_20240307`<sup>Required</sup> <a name="ANTHROPIC_CLAUDE_3_HAIKU_20240307" id="xpander-sdk.AmazonBedrockSupportedModels.property.ANTHROPIC_CLAUDE_3_HAIKU_20240307"></a>
-
-```typescript
-public readonly ANTHROPIC_CLAUDE_3_HAIKU_20240307: string;
-```
-
-- *Type:* string
-
-Anthropocene Claude 3 Haiku model (version 2024-03-07).
-
----
-
-##### `COHERE_COMMAND_R`<sup>Required</sup> <a name="COHERE_COMMAND_R" id="xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R"></a>
-
-```typescript
-public readonly COHERE_COMMAND_R: string;
-```
-
-- *Type:* string
-
-Cohere Command R model.
-
----
-
-##### `COHERE_COMMAND_R_PLUS`<sup>Required</sup> <a name="COHERE_COMMAND_R_PLUS" id="xpander-sdk.AmazonBedrockSupportedModels.property.COHERE_COMMAND_R_PLUS"></a>
-
-```typescript
-public readonly COHERE_COMMAND_R_PLUS: string;
-```
-
-- *Type:* string
-
-Cohere Command R Plus model.
-
----
-
-##### `META_LLAMA3_1_405B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA3_1_405B_INSTRUCT" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_405B_INSTRUCT"></a>
-
-```typescript
-public readonly META_LLAMA3_1_405B_INSTRUCT: string;
-```
-
-- *Type:* string
-
-Meta Llama 3 1.405B Instruct model.
-
----
-
-##### `META_LLAMA3_1_70B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA3_1_70B_INSTRUCT" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_70B_INSTRUCT"></a>
-
-```typescript
-public readonly META_LLAMA3_1_70B_INSTRUCT: string;
-```
-
-- *Type:* string
-
-Meta Llama 3 1.70B Instruct model.
-
----
-
-##### `META_LLAMA3_1_8B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA3_1_8B_INSTRUCT" id="xpander-sdk.AmazonBedrockSupportedModels.property.META_LLAMA3_1_8B_INSTRUCT"></a>
-
-```typescript
-public readonly META_LLAMA3_1_8B_INSTRUCT: string;
-```
-
-- *Type:* string
-
-Meta Llama 3 1.8B Instruct model.
-
----
-
-##### `MISTRAL_MISTRAL_LARGE_2402`<sup>Required</sup> <a name="MISTRAL_MISTRAL_LARGE_2402" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2402"></a>
-
-```typescript
-public readonly MISTRAL_MISTRAL_LARGE_2402: string;
-```
-
-- *Type:* string
-
-Mistral Large 2402 model.
-
----
-
-##### `MISTRAL_MISTRAL_LARGE_2407`<sup>Required</sup> <a name="MISTRAL_MISTRAL_LARGE_2407" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_LARGE_2407"></a>
-
-```typescript
-public readonly MISTRAL_MISTRAL_LARGE_2407: string;
-```
-
-- *Type:* string
-
-Mistral Large 2407 model.
-
----
-
-##### `MISTRAL_MISTRAL_SMALL_2402`<sup>Required</sup> <a name="MISTRAL_MISTRAL_SMALL_2402" id="xpander-sdk.AmazonBedrockSupportedModels.property.MISTRAL_MISTRAL_SMALL_2402"></a>
-
-```typescript
-public readonly MISTRAL_MISTRAL_SMALL_2402: string;
-```
-
-- *Type:* string
-
-Mistral Small 2402 model.
-
----
-
 ### Base <a name="Base" id="xpander-sdk.Base"></a>
 
 #### Initializers <a name="Initializers" id="xpander-sdk.Base.Initializer"></a>
@@ -1656,72 +1499,6 @@ Identifier of the worker associated with the execution.
 ---
 
 
-### FriendliAISupportedModels <a name="FriendliAISupportedModels" id="xpander-sdk.FriendliAISupportedModels"></a>
-
-Contains constants representing various models supported by OpenAI.
-
-#### Initializers <a name="Initializers" id="xpander-sdk.FriendliAISupportedModels.Initializer"></a>
-
-```typescript
-import { FriendliAISupportedModels } from 'xpander-sdk'
-
-new FriendliAISupportedModels()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-
-
-#### Constants <a name="Constants" id="Constants"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_70B_INSTRUCT">META_LLAMA_3_1_70B_INSTRUCT</a></code> | <code>string</code> | Meta LLaMA 3.1 70B Instruct model. |
-| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_8B_INSTRUCT">META_LLAMA_3_1_8B_INSTRUCT</a></code> | <code>string</code> | Meta LLaMA 3.1 8B Instruct model. |
-| <code><a href="#xpander-sdk.FriendliAISupportedModels.property.MISTRAL_8X_7B_INSTRUCT">MISTRAL_8X_7B_INSTRUCT</a></code> | <code>string</code> | Mistral 8x7B Instruct model (version 0.1). |
-
----
-
-##### `META_LLAMA_3_1_70B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA_3_1_70B_INSTRUCT" id="xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_70B_INSTRUCT"></a>
-
-```typescript
-public readonly META_LLAMA_3_1_70B_INSTRUCT: string;
-```
-
-- *Type:* string
-
-Meta LLaMA 3.1 70B Instruct model.
-
----
-
-##### `META_LLAMA_3_1_8B_INSTRUCT`<sup>Required</sup> <a name="META_LLAMA_3_1_8B_INSTRUCT" id="xpander-sdk.FriendliAISupportedModels.property.META_LLAMA_3_1_8B_INSTRUCT"></a>
-
-```typescript
-public readonly META_LLAMA_3_1_8B_INSTRUCT: string;
-```
-
-- *Type:* string
-
-Meta LLaMA 3.1 8B Instruct model.
-
----
-
-##### `MISTRAL_8X_7B_INSTRUCT`<sup>Required</sup> <a name="MISTRAL_8X_7B_INSTRUCT" id="xpander-sdk.FriendliAISupportedModels.property.MISTRAL_8X_7B_INSTRUCT"></a>
-
-```typescript
-public readonly MISTRAL_8X_7B_INSTRUCT: string;
-```
-
-- *Type:* string
-
-Mistral 8x7B Instruct model (version 0.1).
-
----
-
 ### KnowledgeBase <a name="KnowledgeBase" id="xpander-sdk.KnowledgeBase"></a>
 
 #### Initializers <a name="Initializers" id="xpander-sdk.KnowledgeBase.Initializer"></a>
@@ -2047,10 +1824,9 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 | <code><a href="#xpander-sdk.Memory.addKnowledgeBase">addKnowledgeBase</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.addMessages">addMessages</a></code> | Adds messages to the memory thread. |
 | <code><a href="#xpander-sdk.Memory.addToolCallResults">addToolCallResults</a></code> | Adds tool call results as messages to the memory thread. |
-| <code><a href="#xpander-sdk.Memory.initializeThread">initializeThread</a></code> | Initializes a new memory thread with input and instructions. |
+| <code><a href="#xpander-sdk.Memory.initialize">initialize</a></code> | Initializes a new memory thread with input and instructions. |
 | <code><a href="#xpander-sdk.Memory.initInstructions">initInstructions</a></code> | Initializes the memory thread with system instructions if no messages exist. |
 | <code><a href="#xpander-sdk.Memory.retrieveMessages">retrieveMessages</a></code> | Retrieves the messages stored in the memory thread. |
-| <code><a href="#xpander-sdk.Memory.selectLLMProvider">selectLLMProvider</a></code> | Sets the LLM provider for processing memory messages. |
 
 ---
 
@@ -2118,15 +1894,15 @@ An array of tool call results to be added as messages.
 
 ---
 
-##### `initializeThread` <a name="initializeThread" id="xpander-sdk.Memory.initializeThread"></a>
+##### `initialize` <a name="initialize" id="xpander-sdk.Memory.initialize"></a>
 
 ```typescript
-public initializeThread(input: IMemoryMessage, instructions: IAgentInstructions): void
+public initialize(input: IMemoryMessage, instructions: IAgentInstructions, llmProvider?: LLMProvider): void
 ```
 
 Initializes a new memory thread with input and instructions.
 
-###### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Memory.initializeThread.parameter.input"></a>
+###### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Memory.initialize.parameter.input"></a>
 
 - *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>
 
@@ -2134,11 +1910,17 @@ Initial user input message.
 
 ---
 
-###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initializeThread.parameter.instructions"></a>
+###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initialize.parameter.instructions"></a>
 
 - *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
 
 Instructions to initialize the memory thread.
+
+---
+
+###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Memory.initialize.parameter.llmProvider"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
 
@@ -2167,22 +1949,6 @@ public retrieveMessages(): any[]
 Retrieves the messages stored in the memory thread.
 
 Applies the agent's memory strategy to refresh the messages if needed.
-
-##### `selectLLMProvider` <a name="selectLLMProvider" id="xpander-sdk.Memory.selectLLMProvider"></a>
-
-```typescript
-public selectLLMProvider(llmProvider: LLMProvider): void
-```
-
-Sets the LLM provider for processing memory messages.
-
-###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.Memory.selectLLMProvider.parameter.llmProvider"></a>
-
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
-
-The LLM provider to use.
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -2324,178 +2090,6 @@ public readonly userDetails: string;
 
 ---
 
-
-### NvidiaNIMSupportedModels <a name="NvidiaNIMSupportedModels" id="xpander-sdk.NvidiaNIMSupportedModels"></a>
-
-Contains constants representing various models supported by Nvidia NIM.
-
-#### Initializers <a name="Initializers" id="xpander-sdk.NvidiaNIMSupportedModels.Initializer"></a>
-
-```typescript
-import { NvidiaNIMSupportedModels } from 'xpander-sdk'
-
-new NvidiaNIMSupportedModels()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-
-
-#### Constants <a name="Constants" id="Constants"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.NvidiaNIMSupportedModels.property.LLAMA_3_1_70B_INSTRUCT">LLAMA_3_1_70B_INSTRUCT</a></code> | <code>string</code> | Meta Llama 3.1 70B Instruct model. |
-
----
-
-##### `LLAMA_3_1_70B_INSTRUCT`<sup>Required</sup> <a name="LLAMA_3_1_70B_INSTRUCT" id="xpander-sdk.NvidiaNIMSupportedModels.property.LLAMA_3_1_70B_INSTRUCT"></a>
-
-```typescript
-public readonly LLAMA_3_1_70B_INSTRUCT: string;
-```
-
-- *Type:* string
-
-Meta Llama 3.1 70B Instruct model.
-
----
-
-### OpenAISupportedModels <a name="OpenAISupportedModels" id="xpander-sdk.OpenAISupportedModels"></a>
-
-Contains constants representing various models supported by OpenAI.
-
-#### Initializers <a name="Initializers" id="xpander-sdk.OpenAISupportedModels.Initializer"></a>
-
-```typescript
-import { OpenAISupportedModels } from 'xpander-sdk'
-
-new OpenAISupportedModels()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-
-
-#### Constants <a name="Constants" id="Constants"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4">GPT_4</a></code> | <code>string</code> | OpenAI GPT-4 model. |
-| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O">GPT_4_O</a></code> | <code>string</code> | OpenAI GPT-4o model. |
-| <code><a href="#xpander-sdk.OpenAISupportedModels.property.GPT_4_O_MINI">GPT_4_O_MINI</a></code> | <code>string</code> | OpenAI GPT-4o Mini model. |
-
----
-
-##### `GPT_4`<sup>Required</sup> <a name="GPT_4" id="xpander-sdk.OpenAISupportedModels.property.GPT_4"></a>
-
-```typescript
-public readonly GPT_4: string;
-```
-
-- *Type:* string
-
-OpenAI GPT-4 model.
-
----
-
-##### `GPT_4_O`<sup>Required</sup> <a name="GPT_4_O" id="xpander-sdk.OpenAISupportedModels.property.GPT_4_O"></a>
-
-```typescript
-public readonly GPT_4_O: string;
-```
-
-- *Type:* string
-
-OpenAI GPT-4o model.
-
----
-
-##### `GPT_4_O_MINI`<sup>Required</sup> <a name="GPT_4_O_MINI" id="xpander-sdk.OpenAISupportedModels.property.GPT_4_O_MINI"></a>
-
-```typescript
-public readonly GPT_4_O_MINI: string;
-```
-
-- *Type:* string
-
-OpenAI GPT-4o Mini model.
-
----
-
-### RealTimeOpenAISupportedModels <a name="RealTimeOpenAISupportedModels" id="xpander-sdk.RealTimeOpenAISupportedModels"></a>
-
-Contains constants representing various models supported by OpenAI.
-
-#### Initializers <a name="Initializers" id="xpander-sdk.RealTimeOpenAISupportedModels.Initializer"></a>
-
-```typescript
-import { RealTimeOpenAISupportedModels } from 'xpander-sdk'
-
-new RealTimeOpenAISupportedModels()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-
-
-#### Constants <a name="Constants" id="Constants"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_AUDIO_PREVIEW">GPT_4_O_AUDIO_PREVIEW</a></code> | <code>string</code> | OpenAI GPT-4o Audio Preview model. |
-| <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_REALTIME_PREVIEW">GPT_4_O_REALTIME_PREVIEW</a></code> | <code>string</code> | OpenAI GPT-4o Realtime Preview model. |
-| <code><a href="#xpander-sdk.RealTimeOpenAISupportedModels.property.WHISPER_1">WHISPER_1</a></code> | <code>string</code> | OpenAI Whisper model for speech-to-text tasks. |
-
----
-
-##### `GPT_4_O_AUDIO_PREVIEW`<sup>Required</sup> <a name="GPT_4_O_AUDIO_PREVIEW" id="xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_AUDIO_PREVIEW"></a>
-
-```typescript
-public readonly GPT_4_O_AUDIO_PREVIEW: string;
-```
-
-- *Type:* string
-
-OpenAI GPT-4o Audio Preview model.
-
----
-
-##### `GPT_4_O_REALTIME_PREVIEW`<sup>Required</sup> <a name="GPT_4_O_REALTIME_PREVIEW" id="xpander-sdk.RealTimeOpenAISupportedModels.property.GPT_4_O_REALTIME_PREVIEW"></a>
-
-```typescript
-public readonly GPT_4_O_REALTIME_PREVIEW: string;
-```
-
-- *Type:* string
-
-OpenAI GPT-4o Realtime Preview model.
-
----
-
-##### `WHISPER_1`<sup>Required</sup> <a name="WHISPER_1" id="xpander-sdk.RealTimeOpenAISupportedModels.property.WHISPER_1"></a>
-
-```typescript
-public readonly WHISPER_1: string;
-```
-
-- *Type:* string
-
-OpenAI Whisper model for speech-to-text tasks.
-
----
 
 ### Tokens <a name="Tokens" id="xpander-sdk.Tokens"></a>
 

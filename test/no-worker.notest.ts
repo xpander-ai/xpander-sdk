@@ -1,11 +1,6 @@
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
-import {
-  IMemoryMessage,
-  LLMProvider,
-  OpenAISupportedModels,
-  XpanderClient,
-} from '../src';
+import { IMemoryMessage, XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
@@ -18,6 +13,10 @@ const openaiClient = new OpenAI({
   apiKey: openAIKey,
 });
 
+const getStartTime = () => performance.now();
+const announceTiming = (start: number, label: string) =>
+  console.log(`${label} took ${(performance.now() - start).toFixed(2)} ms`);
+
 describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
   it('Get Task and handle', async () => {
     const xpanderClient = new XpanderClient(
@@ -26,7 +25,11 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
       localAgentControllerURL,
       false,
     );
+
+    let startTime = getStartTime();
     const agent = xpanderClient.agents.get(xpanderAgentId);
+    announceTiming(startTime, 'Get Agent');
+
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
@@ -34,16 +37,17 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
     expect(tools.length).toBeGreaterThanOrEqual(1);
 
     // manually set execution - should come from worker
-    agent.invokeAgent(
-      'get the longest readable tag and then get the contact details of Robert Myers. after that get the contract number (not related to anyone)',
-    );
+    startTime = getStartTime();
+    agent.invokeAgent('get longest readable tag');
+    announceTiming(startTime, 'Invoke Agent');
 
     // configure memory
-    agent.memory.selectLLMProvider(LLMProvider.OPEN_AI); // only if not openai..
-    agent.memory.initializeThread(
+    startTime = getStartTime();
+    agent.memory.initialize(
       agent.execution?.inputMessage as IMemoryMessage,
       agent.instructions,
-    ); // add input and instructions
+    );
+    announceTiming(startTime, 'Memory intialization');
 
     let shouldSkip = false;
     while (!agent.isFinished()) {
@@ -51,28 +55,39 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
         shouldSkip = false;
         continue;
       }
+      startTime = getStartTime();
       const response: any = await openaiClient.chat.completions.create({
-        model: OpenAISupportedModels.GPT_4_O,
+        model: 'gpt-4o',
         messages: agent.memory.retrieveMessages() as any,
         tools: agent.getTools(),
         tool_choice: 'required',
         temperature: 0.0,
       });
+      announceTiming(startTime, 'LLM Completion');
 
       // add messages from the LLM (auto extraction)
+      startTime = getStartTime();
       agent.memory.addMessages(response);
+      announceTiming(startTime, 'Adding messages');
 
       // extract tool calls
+      startTime = getStartTime();
       const toolCalls = XpanderClient.extractToolCalls(response);
+      announceTiming(startTime, 'Toolcall Extractions');
+
+      startTime = getStartTime();
       agent.runTools(toolCalls, {
         bodyParams: { organization_id: organizationId },
       });
+      announceTiming(startTime, 'Running tools');
 
       // when using local tools
       // memory.addToolCallResults(toolResults);
     }
 
+    startTime = getStartTime();
     const executionResult = agent.retrieveExecutionResult();
+    announceTiming(startTime, 'Retrieve execution result');
 
     expect(executionResult?.result.length).toBeGreaterThanOrEqual(1);
   }, 3000000);
