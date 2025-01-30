@@ -225,6 +225,14 @@ export class Agent extends Base {
     return this.memory.retrieveMessages();
   }
 
+  /**
+   * Gets the tool choice mode.
+   * @returns {'required' | 'auto'} Returns 'required' if `withAgentEndTool` is true, otherwise 'auto'.
+   */
+  public get toolChoice(): 'required' | 'auto' {
+    return this.withAgentEndTool ? 'required' : 'auto';
+  }
+
   /** Constructs the API URL for this agent. */
   public get url(): string {
     return `${this.configuration.url}/agents/${this.id}`;

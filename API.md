@@ -447,6 +447,7 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | Retrieves the memory instance for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.messages">messages</a></code> | <code>any[]</code> | Retrieves list of messages. |
 | <code><a href="#xpander-sdk.Agent.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Retrieves the type of source node for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.toolChoice">toolChoice</a></code> | <code>string</code> | Gets the tool choice mode. |
 | <code><a href="#xpander-sdk.Agent.property.url">url</a></code> | <code>string</code> | Constructs the API URL for this agent. |
 | <code><a href="#xpander-sdk.Agent.property.vanillaKnowledgeBases">vanillaKnowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | Retrieves the vanilla knowledge bases of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | - Scope of the agent's access permissions. |
@@ -516,6 +517,18 @@ public readonly sourceNodeType: SourceNodeType;
 - *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
 
 Retrieves the type of source node for the agent.
+
+---
+
+##### `toolChoice`<sup>Required</sup> <a name="toolChoice" id="xpander-sdk.Agent.property.toolChoice"></a>
+
+```typescript
+public readonly toolChoice: string;
+```
+
+- *Type:* string
+
+Gets the tool choice mode.
 
 ---
 
