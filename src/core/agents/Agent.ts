@@ -56,6 +56,7 @@ export class Agent extends Base {
   public executionMemory?: Memory;
   private shouldStop: boolean = false;
   private isLocalRun: boolean = false;
+  private withAgentEndTool: boolean = true;
 
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
@@ -195,7 +196,7 @@ export class Agent extends Base {
       throw new Error(`Provider (${llmProvider}) not found`);
     }
     const providerInstance = new provider(this);
-    const tools = providerInstance.getTools();
+    const tools = providerInstance.getTools(this.withAgentEndTool);
 
     this.originalToolNamesReMapping = {
       ...(this.originalToolNamesReMapping || {}),
@@ -431,7 +432,14 @@ export class Agent extends Base {
   /** Retrieves the memory instance for the agent. */
   public get memory(): Memory {
     if (!this.executionMemory) {
+      // create thread
       this.executionMemory = this.initializeMemory();
+
+      // set initial messages
+      this.executionMemory.initMessages(
+        this.execution?.inputMessage as IMemoryMessage,
+        this.instructions,
+      );
     }
     return this.executionMemory as Memory;
   }
@@ -482,14 +490,21 @@ export class Agent extends Base {
         // re-load agent if needed (switch agent)
         if (this.id !== pendingExecution.agentId) {
           this.id = pendingExecution.agentId;
+
+          const withAgentEndTool = this.withAgentEndTool;
+
           this.load(pendingExecution.agentId);
+          if (!withAgentEndTool) {
+            this.disableAgentEndTool();
+          }
+
           this.isLocalRun = true;
         }
         this.initTask(pendingExecution);
 
         // reload memory
         this.executionMemory = this.initializeMemory();
-        this.memory.initialize(
+        this.memory.initMessages(
           this.execution?.inputMessage as IMemoryMessage,
           this.instructions,
         );
@@ -507,13 +522,20 @@ export class Agent extends Base {
     return shouldStop;
   }
 
-  public invokeAgent(
+  public addTask(
     input: string = '',
     files: string[] = [],
     useWorker: boolean = false,
+    threadId?: string,
   ): Execution {
     const localWorkerId = !useWorker ? generateUUIDv4() : undefined;
-    const execution = Execution.create(this, input, files, localWorkerId);
+    const execution = Execution.create(
+      this,
+      input,
+      files,
+      localWorkerId,
+      threadId,
+    );
     this.initTask(execution);
     this.isLocalRun = true;
     return execution;
@@ -523,7 +545,16 @@ export class Agent extends Base {
     this.shouldStop = true;
   }
 
+  public disableAgentEndTool(): void {
+    this.withAgentEndTool = false;
+  }
+
   public retrieveExecutionResult(): Execution {
+    if (!this.withAgentEndTool) {
+      throw new Error(
+        'When an agent runs without an end tool, execution cannot be marked as completed or failed, resulting in no execution output. Handle this accordingly.',
+      );
+    }
     if (!this?.execution?.id) {
       throw new Error('Execution is missing!');
     }

@@ -222,12 +222,12 @@ export class Memory extends Base {
   }
 
   /**
-   * Initializes a new memory thread with input and instructions.
+   * Initializes the thread with input and instructions.
    *
    * @param input - Initial user input message.
    * @param instructions - Instructions to initialize the memory thread.
    */
-  public initialize(
+  public initMessages(
     input: IMemoryMessage,
     instructions: IAgentInstructions,
     llmProvider: LLMProvider = LLMProvider.OPEN_AI,

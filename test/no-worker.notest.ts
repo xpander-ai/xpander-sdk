@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
-import { IMemoryMessage, XpanderClient } from '../src';
+import { XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
@@ -29,25 +29,16 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
     let startTime = getStartTime();
     const agent = xpanderClient.agents.get(xpanderAgentId);
     announceTiming(startTime, 'Get Agent');
-
     expect(agent).toHaveProperty('id');
     expect(agent.tools.length).toBeGreaterThanOrEqual(1);
 
     const tools = agent.getTools();
     expect(tools.length).toBeGreaterThanOrEqual(1);
 
-    // manually set execution - should come from worker
     startTime = getStartTime();
-    agent.invokeAgent('get longest readable tag');
+    // manually set execution - should come from worker when running in cloud/on-prem
+    agent.addTask('get longest readable tag');
     announceTiming(startTime, 'Invoke Agent');
-
-    // configure memory
-    startTime = getStartTime();
-    agent.memory.initialize(
-      agent.execution?.inputMessage as IMemoryMessage,
-      agent.instructions,
-    );
-    announceTiming(startTime, 'Memory intialization');
 
     let shouldSkip = false;
     while (!agent.isFinished()) {

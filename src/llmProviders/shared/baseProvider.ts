@@ -1,4 +1,5 @@
 import { LLMProvider } from '../../constants/llmProvider';
+import { AGENT_FINISH_TOOL_ID } from '../../constants/tools';
 import { Agent } from '../../core/agents/Agent';
 import { ToolCall } from '../../core/toolCalls';
 import { createTool, modifyPropertiesByRemoteSettings } from '../../core/tools';
@@ -41,10 +42,10 @@ export class BaseLLMProvider {
    * @returns An array of processed tools ready for use.
    * @throws Error if no tools are found for the agent.
    */
-  getTools(): any[] {
+  getTools(withAgentEndTool: boolean = true): any[] {
     const agentTools: IToolInstructions[] = this.agent
       .tools as IToolInstructions[];
-    const toolset: any[] = [];
+    let toolset: any[] = [];
 
     // Add local tools
     if (this.agent.hasLocalTools) {
@@ -81,6 +82,12 @@ export class BaseLLMProvider {
         );
         tool.function.description += addon;
       }
+    }
+
+    if (!withAgentEndTool) {
+      toolset = toolset.filter(
+        (tool) => tool.function.name !== AGENT_FINISH_TOOL_ID,
+      );
     }
 
     return this.postProcessTools(toolset);
