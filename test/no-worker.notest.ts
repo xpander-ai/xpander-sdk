@@ -20,10 +20,10 @@ const announceTiming = (start: number, label: string) =>
 describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
   it('Get Task and handle', async () => {
     const xpanderClient = new XpanderClient(
-      organizationId,
       xpanderAPIKey,
       localAgentControllerURL,
       false,
+      organizationId,
     );
 
     let startTime = getStartTime();

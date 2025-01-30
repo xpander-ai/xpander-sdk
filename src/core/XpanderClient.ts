@@ -50,10 +50,10 @@ export class XpanderClient {
    * @throws Will throw an error if an invalid API key is specified.
    */
   constructor(
-    organizationId: string,
     apiKey: string,
     baseUrl: any = DEFAULT_BASE_URL,
     withMetricsReport: boolean = false,
+    organizationId: string = '',
   ) {
     this.configuration = new Configuration({
       organizationId,
