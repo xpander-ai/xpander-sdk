@@ -157,9 +157,10 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.toJson">toJson</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
+| <code><a href="#xpander-sdk.Agent.addTask">addTask</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.disableAgentEndTool">disableAgentEndTool</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
-| <code><a href="#xpander-sdk.Agent.invokeAgent">invokeAgent</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from its source node type. |
 | <code><a href="#xpander-sdk.Agent.retrieveExecutionResult">retrieveExecutionResult</a></code> | *No description.* |
@@ -211,6 +212,42 @@ The list of local tools to add.
 
 ---
 
+##### `addTask` <a name="addTask" id="xpander-sdk.Agent.addTask"></a>
+
+```typescript
+public addTask(input?: string, files?: string[], useWorker?: boolean, threadId?: string): Execution
+```
+
+###### `input`<sup>Optional</sup> <a name="input" id="xpander-sdk.Agent.addTask.parameter.input"></a>
+
+- *Type:* string
+
+---
+
+###### `files`<sup>Optional</sup> <a name="files" id="xpander-sdk.Agent.addTask.parameter.files"></a>
+
+- *Type:* string[]
+
+---
+
+###### `useWorker`<sup>Optional</sup> <a name="useWorker" id="xpander-sdk.Agent.addTask.parameter.useWorker"></a>
+
+- *Type:* boolean
+
+---
+
+###### `threadId`<sup>Optional</sup> <a name="threadId" id="xpander-sdk.Agent.addTask.parameter.threadId"></a>
+
+- *Type:* string
+
+---
+
+##### `disableAgentEndTool` <a name="disableAgentEndTool" id="xpander-sdk.Agent.disableAgentEndTool"></a>
+
+```typescript
+public disableAgentEndTool(): void
+```
+
 ##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
 
 ```typescript
@@ -240,30 +277,6 @@ Initializes the task execution for the agent.
 - *Type:* any
 
 The execution details.
-
----
-
-##### `invokeAgent` <a name="invokeAgent" id="xpander-sdk.Agent.invokeAgent"></a>
-
-```typescript
-public invokeAgent(input?: string, files?: string[], useWorker?: boolean): Execution
-```
-
-###### `input`<sup>Optional</sup> <a name="input" id="xpander-sdk.Agent.invokeAgent.parameter.input"></a>
-
-- *Type:* string
-
----
-
-###### `files`<sup>Optional</sup> <a name="files" id="xpander-sdk.Agent.invokeAgent.parameter.files"></a>
-
-- *Type:* string[]
-
----
-
-###### `useWorker`<sup>Optional</sup> <a name="useWorker" id="xpander-sdk.Agent.invokeAgent.parameter.useWorker"></a>
-
-- *Type:* boolean
 
 ---
 
@@ -1224,7 +1237,7 @@ Execution.fromObject(data: any)
 ```typescript
 import { Execution } from 'xpander-sdk'
 
-Execution.create(agent: Agent, input: string, files: string[], workerId?: string)
+Execution.create(agent: Agent, input: string, files: string[], workerId?: string, threadId?: string)
 ```
 
 ###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Execution.create.parameter.agent"></a>
@@ -1246,6 +1259,12 @@ Execution.create(agent: Agent, input: string, files: string[], workerId?: string
 ---
 
 ###### `workerId`<sup>Optional</sup> <a name="workerId" id="xpander-sdk.Execution.create.parameter.workerId"></a>
+
+- *Type:* string
+
+---
+
+###### `threadId`<sup>Optional</sup> <a name="threadId" id="xpander-sdk.Execution.create.parameter.threadId"></a>
 
 - *Type:* string
 
@@ -1824,8 +1843,8 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 | <code><a href="#xpander-sdk.Memory.addKnowledgeBase">addKnowledgeBase</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.addMessages">addMessages</a></code> | Adds messages to the memory thread. |
 | <code><a href="#xpander-sdk.Memory.addToolCallResults">addToolCallResults</a></code> | Adds tool call results as messages to the memory thread. |
-| <code><a href="#xpander-sdk.Memory.initialize">initialize</a></code> | Initializes a new memory thread with input and instructions. |
 | <code><a href="#xpander-sdk.Memory.initInstructions">initInstructions</a></code> | Initializes the memory thread with system instructions if no messages exist. |
+| <code><a href="#xpander-sdk.Memory.initMessages">initMessages</a></code> | Initializes the thread with input and instructions. |
 | <code><a href="#xpander-sdk.Memory.retrieveMessages">retrieveMessages</a></code> | Retrieves the messages stored in the memory thread. |
 
 ---
@@ -1894,36 +1913,6 @@ An array of tool call results to be added as messages.
 
 ---
 
-##### `initialize` <a name="initialize" id="xpander-sdk.Memory.initialize"></a>
-
-```typescript
-public initialize(input: IMemoryMessage, instructions: IAgentInstructions, llmProvider?: LLMProvider): void
-```
-
-Initializes a new memory thread with input and instructions.
-
-###### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Memory.initialize.parameter.input"></a>
-
-- *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>
-
-Initial user input message.
-
----
-
-###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initialize.parameter.instructions"></a>
-
-- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
-
-Instructions to initialize the memory thread.
-
----
-
-###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Memory.initialize.parameter.llmProvider"></a>
-
-- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
-
----
-
 ##### `initInstructions` <a name="initInstructions" id="xpander-sdk.Memory.initInstructions"></a>
 
 ```typescript
@@ -1937,6 +1926,36 @@ Initializes the memory thread with system instructions if no messages exist.
 - *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
 
 Instructions to initialize the memory thread.
+
+---
+
+##### `initMessages` <a name="initMessages" id="xpander-sdk.Memory.initMessages"></a>
+
+```typescript
+public initMessages(input: IMemoryMessage, instructions: IAgentInstructions, llmProvider?: LLMProvider): void
+```
+
+Initializes the thread with input and instructions.
+
+###### `input`<sup>Required</sup> <a name="input" id="xpander-sdk.Memory.initMessages.parameter.input"></a>
+
+- *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>
+
+Initial user input message.
+
+---
+
+###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initMessages.parameter.instructions"></a>
+
+- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+
+Instructions to initialize the memory thread.
+
+---
+
+###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Memory.initMessages.parameter.llmProvider"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
 

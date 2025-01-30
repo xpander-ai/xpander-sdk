@@ -67,6 +67,7 @@ export class Execution extends Base {
     input: string,
     files: string[],
     workerId?: string,
+    threadId?: string,
   ): any {
     const payload = {
       input: {
@@ -74,6 +75,7 @@ export class Execution extends Base {
         files: files || [],
       },
       worker_id: workerId || undefined,
+      memory_thread_id: threadId || undefined,
     };
     const response = request(
       'POST',
