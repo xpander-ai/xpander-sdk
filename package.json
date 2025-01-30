@@ -65,11 +65,9 @@
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "axios": "^1.7.2",
     "sync-request": "^6.1.0"
   },
   "bundledDependencies": [
-    "axios",
     "sync-request"
   ],
   "main": "lib/index.js",

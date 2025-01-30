@@ -21,15 +21,6 @@ const project = new cdk.JsiiProject({
     distName: 'xpander-sdk',
     module: 'xpander_sdk',
   },
-  // publishToMaven: {
-  //   javaPackage: 'ai.xpander.sdk',
-  //   mavenGroupId: 'ai.xpander',
-  //   mavenArtifactId: 'sdk',
-  // },
-  // publishToNuget: {
-  //   dotNetNamespace: 'Xpander.AI.Sdk',
-  //   packageId: 'Xpander.AI.Sdk',
-  // },
   publishDryRun: false,
   prettier: true,
   prettierOptions: {
@@ -45,7 +36,7 @@ const project = new cdk.JsiiProject({
     'dotenv',
     '@aws-sdk/client-bedrock-runtime',
   ],
-  bundledDeps: ['sync-request', 'axios'],
+  bundledDeps: ['sync-request'],
   jestOptions: {
     jestConfig: {
       detectOpenHandles: true,

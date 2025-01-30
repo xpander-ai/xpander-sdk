@@ -206,6 +206,25 @@ export class Agent extends Base {
     return tools;
   }
 
+  /**
+   * Adds messages to the memory thread.
+   * Converts non-standard messages to a compatible format before storing.
+   *
+   * @param messages - An array of messages to be added to the memory thread.
+   */
+  public addMessages(messages: any): void {
+    return this.memory.addMessages(messages);
+  }
+
+  /**
+   * Retrieves list of messages.
+   *
+   * @returns A list of messages according to the agent's llm provider.
+   */
+  public get messages() {
+    return this.memory.retrieveMessages();
+  }
+
   /** Constructs the API URL for this agent. */
   public get url(): string {
     return `${this.configuration.url}/agents/${this.id}`;

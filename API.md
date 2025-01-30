@@ -157,6 +157,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.toJson">toJson</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
+| <code><a href="#xpander-sdk.Agent.addMessages">addMessages</a></code> | Adds messages to the memory thread. |
 | <code><a href="#xpander-sdk.Agent.addTask">addTask</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.disableAgentEndTool">disableAgentEndTool</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
@@ -209,6 +210,24 @@ Adds local tools to the agent with prefixed function names.
 - *Type:* any[] | <a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]
 
 The list of local tools to add.
+
+---
+
+##### `addMessages` <a name="addMessages" id="xpander-sdk.Agent.addMessages"></a>
+
+```typescript
+public addMessages(messages: any): void
+```
+
+Adds messages to the memory thread.
+
+Converts non-standard messages to a compatible format before storing.
+
+###### `messages`<sup>Required</sup> <a name="messages" id="xpander-sdk.Agent.addMessages.parameter.messages"></a>
+
+- *Type:* any
+
+An array of messages to be added to the memory thread.
 
 ---
 
@@ -426,6 +445,7 @@ Agent.fromObject(data: any)
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has local tools loaded. |
 | <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | Retrieves the memory instance for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.messages">messages</a></code> | <code>any[]</code> | Retrieves list of messages. |
 | <code><a href="#xpander-sdk.Agent.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Retrieves the type of source node for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.url">url</a></code> | <code>string</code> | Constructs the API URL for this agent. |
 | <code><a href="#xpander-sdk.Agent.property.vanillaKnowledgeBases">vanillaKnowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | Retrieves the vanilla knowledge bases of the agent. |
@@ -472,6 +492,18 @@ public readonly memory: Memory;
 - *Type:* <a href="#xpander-sdk.Memory">Memory</a>
 
 Retrieves the memory instance for the agent.
+
+---
+
+##### `messages`<sup>Required</sup> <a name="messages" id="xpander-sdk.Agent.property.messages"></a>
+
+```typescript
+public readonly messages: any[];
+```
+
+- *Type:* any[]
+
+Retrieves list of messages.
 
 ---
 

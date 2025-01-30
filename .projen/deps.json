@@ -118,10 +118,6 @@
       "type": "build"
     },
     {
-      "name": "axios",
-      "type": "bundled"
-    },
-    {
       "name": "sync-request",
       "type": "bundled"
     }
