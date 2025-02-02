@@ -217,6 +217,15 @@ export class Agent extends Base {
   }
 
   /**
+   * Adds tool call results as messages to the memory thread.
+   *
+   * @param toolCallResults - An array of tool call results to be added as messages.
+   */
+  public addToolCallResults(toolCallResults: ToolCallResult[]): void {
+    return this.memory.addToolCallResults(toolCallResults);
+  }
+
+  /**
    * Retrieves list of messages.
    *
    * @returns A list of messages according to the agent's llm provider.
@@ -287,7 +296,10 @@ export class Agent extends Base {
     let clonedTool = ToolCall.fromObject(tool.toDict());
     let toolCallResult = ToolCallResult.fromObject({
       functionName: clonedTool.name,
-      payload: ensureToolCallPayloadStructure(clonedTool?.payload || {}),
+      payload: ensureToolCallPayloadStructure(
+        clonedTool.type === ToolCallType.LOCAL,
+        clonedTool?.payload || {},
+      ),
       toolCallId: clonedTool.toolCallId,
     });
 

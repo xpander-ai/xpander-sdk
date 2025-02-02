@@ -159,6 +159,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.addLocalTools">addLocalTools</a></code> | Adds local tools to the agent with prefixed function names. |
 | <code><a href="#xpander-sdk.Agent.addMessages">addMessages</a></code> | Adds messages to the memory thread. |
 | <code><a href="#xpander-sdk.Agent.addTask">addTask</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.addToolCallResults">addToolCallResults</a></code> | Adds tool call results as messages to the memory thread. |
 | <code><a href="#xpander-sdk.Agent.disableAgentEndTool">disableAgentEndTool</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
@@ -258,6 +259,22 @@ public addTask(input?: string, files?: string[], useWorker?: boolean, threadId?:
 ###### `threadId`<sup>Optional</sup> <a name="threadId" id="xpander-sdk.Agent.addTask.parameter.threadId"></a>
 
 - *Type:* string
+
+---
+
+##### `addToolCallResults` <a name="addToolCallResults" id="xpander-sdk.Agent.addToolCallResults"></a>
+
+```typescript
+public addToolCallResults(toolCallResults: ToolCallResult[]): void
+```
+
+Adds tool call results as messages to the memory thread.
+
+###### `toolCallResults`<sup>Required</sup> <a name="toolCallResults" id="xpander-sdk.Agent.addToolCallResults.parameter.toolCallResults"></a>
+
+- *Type:* <a href="#xpander-sdk.ToolCallResult">ToolCallResult</a>[]
+
+An array of tool call results to be added as messages.
 
 ---
 
@@ -2623,6 +2640,7 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, or
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.extractToolCalls">extractToolCalls</a></code> | Extracts tool calls from an LLM response based on the specified LLM provider. |
+| <code><a href="#xpander-sdk.XpanderClient.retrievePendingLocalToolCalls">retrievePendingLocalToolCalls</a></code> | Filters and retrieves local tool calls from a given list of tool calls. |
 
 ---
 
@@ -2649,6 +2667,24 @@ The LLM response to analyze for tool calls.
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 The LLM provider, defaults to OPEN_AI.
+
+---
+
+##### `retrievePendingLocalToolCalls` <a name="retrievePendingLocalToolCalls" id="xpander-sdk.XpanderClient.retrievePendingLocalToolCalls"></a>
+
+```typescript
+import { XpanderClient } from 'xpander-sdk'
+
+XpanderClient.retrievePendingLocalToolCalls(toolCalls: ToolCall[])
+```
+
+Filters and retrieves local tool calls from a given list of tool calls.
+
+###### `toolCalls`<sup>Required</sup> <a name="toolCalls" id="xpander-sdk.XpanderClient.retrievePendingLocalToolCalls.parameter.toolCalls"></a>
+
+- *Type:* <a href="#xpander-sdk.ToolCall">ToolCall</a>[]
+
+The list of tool calls to filter.
 
 ---
 
