@@ -114,6 +114,10 @@ export class Agent extends Base {
 
     console.debug(`loading agent ${this.id}`);
 
+    // keep local tools
+    const localTools = JSON.parse(JSON.stringify(this.localTools));
+    const shouldKeepLocalTools = this.id === agentId;
+
     try {
       const cache = CacheService.getInstance();
       const cachedAgent = cache.get(this.id);
@@ -197,6 +201,9 @@ export class Agent extends Base {
         loadedAgent.knowledgeBases = KnowledgeBase.loadByAgent(loadedAgent);
       }
       Object.assign(this, loadedAgent);
+      if (shouldKeepLocalTools) {
+        this.localTools = localTools;
+      }
     } catch (err) {
       throw new Error('Failed to load agent');
     }
