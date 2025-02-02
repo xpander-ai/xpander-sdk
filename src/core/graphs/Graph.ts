@@ -3,6 +3,7 @@ import { AgentGraphItemSubType, AgentGraphItemType } from '../../types';
 import { Agent } from '../agents';
 import { Base } from '../base';
 import { GraphItem } from './GraphItem';
+import CacheService from '../CacheService';
 
 export class Graph extends Base {
   constructor(
@@ -77,6 +78,29 @@ export class Graph extends Base {
       return gi;
     } catch (err) {
       throw new Error('Failed to add graph item');
+    }
+  }
+
+  public reset() {
+    try {
+      const url = `${this.agent.configuration.url}/agents-crud/tools/crud/update`;
+      const response = request('PATCH' as HttpVerb, url, {
+        json: {
+          agent_id: this.agent.id,
+          should_reset_graph: true,
+        },
+        headers: { 'x-api-key': this.agent.configuration.apiKey },
+      });
+
+      if (!response.statusCode.toString().startsWith('2')) {
+        throw new Error(response.body.toString());
+      }
+
+      CacheService.getInstance().delete(this.agent.id);
+      this.items = []; // reset graph
+      this.agent.load(this.agent.id); // reload the agent
+    } catch (err) {
+      throw new Error('Failed to reset agent graph');
     }
   }
 }
