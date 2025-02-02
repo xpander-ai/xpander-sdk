@@ -1,4 +1,4 @@
-import request from 'sync-request';
+import request, { HttpVerb } from 'sync-request';
 import { LLMProvider } from '../../constants/llmProvider';
 import { AGENT_FINISH_TOOL_ID, LOCAL_TOOL_PREFIX } from '../../constants/tools';
 import { allProviders } from '../../llmProviders';
@@ -16,7 +16,7 @@ import {
   SourceNodeType,
   IAgentInstructions,
   AgentAccessScope,
-  IAgentGraphItem,
+  AgentGraphItemSubType,
 } from '../../types/agents';
 import {
   IMemoryMessage,
@@ -28,6 +28,7 @@ import { Base } from '../base';
 import CacheService from '../CacheService';
 import { Configuration } from '../Configuration';
 import { Execution } from '../executions/Execution';
+import { Graph, GraphItem } from '../graphs';
 import { KnowledgeBase } from '../knowledgeBases';
 import { Memory } from '../memory';
 import { ToolCall, ToolCallResult } from '../toolCalls';
@@ -37,6 +38,7 @@ import {
   ensureToolCallPayloadStructure,
   executeTool,
   mergeDeep,
+  testToolGraphPosition,
 } from '../tools';
 import { convertKeysToCamelCase, generateUUIDv4 } from '../utils';
 
@@ -57,6 +59,7 @@ export class Agent extends Base {
   private shouldStop: boolean = false;
   private isLocalRun: boolean = false;
   private withAgentEndTool: boolean = true;
+  public graph: Graph;
 
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
@@ -92,7 +95,7 @@ export class Agent extends Base {
     public sourceNodes: ISourceNode[],
     public prompts: string[],
     public tools: IAgentTool[] = [],
-    public graph: IAgentGraphItem[] = [],
+    private _graph: any[],
     public knowledgeBases: KnowledgeBase[] = [],
   ) {
     super();
@@ -102,6 +105,7 @@ export class Agent extends Base {
     if (!this.ready) {
       this.load();
     }
+    this.graph = new Graph(this, this._graph);
   }
 
   /** Loads the agent data from its source node type. */
@@ -169,10 +173,24 @@ export class Agent extends Base {
         agent.sourceNodes,
         agent.enrichedPrompts,
         agent.tools,
-        agent.graph.map((gi: any, idx: number) => ({
-          ...gi,
-          settings: rawAgent.graph[idx].settings,
-        })),
+        agent.graph
+          .map((gi: any, idx: number) => ({
+            ...gi,
+            settings: rawAgent.graph[idx].settings,
+          }))
+          .map(
+            (gi: any) =>
+              new GraphItem(
+                this,
+                gi.id,
+                gi.itemId,
+                gi.name,
+                gi.type,
+                gi.subType === AgentGraphItemSubType.LOCAL_TOOL,
+                gi.targets,
+                gi.settings,
+              ),
+          ),
         agent.knowledgeBases,
       );
       if (agent?.knowledgeBases && agent.knowledgeBases.length !== 0) {
@@ -304,6 +322,19 @@ export class Agent extends Base {
     });
 
     if (clonedTool.type !== ToolCallType.XPANDER) {
+      // in case of local tool check HEAD to approve graph position
+      if (!this.graph.isEmpty) {
+        const canProceed = testToolGraphPosition(
+          ToolCall.fromObject({
+            ...clonedTool,
+          }),
+          this.url,
+          this.configuration,
+          this.execution.id,
+        );
+        toolCallResult.graphApproved = tool.graphApproved = canProceed;
+      }
+
       return toolCallResult;
     }
 
@@ -411,6 +442,7 @@ export class Agent extends Base {
         this.runTool(toolCall, payloadExtension, toolCalls.length > 1),
       ),
     );
+
     return result;
   }
 
@@ -425,8 +457,8 @@ export class Agent extends Base {
    * @param itemId - The ID of the graph node to retrieve.
    * @returns The matching graph node, or undefined if not found.
    */
-  public retrieveNodeFromGraph(itemId: string): IAgentGraphItem | undefined {
-    return this.graph.find((gi) => gi.itemId === itemId);
+  public retrieveNodeFromGraph(itemId: string): GraphItem | undefined {
+    return this.graph.findNodeByItemId(itemId);
   }
 
   /**
@@ -625,5 +657,63 @@ export class Agent extends Base {
 
     // Return the latest execution if timeout occurs
     return latestExecution;
+  }
+
+  /**
+   * @function update
+   * @description Updates the agent with the current instance's properties.
+   * @returns {Agent} The updated agent's details.
+   * @throws {Error} If the update process fails.
+   * @memberof xpanderAI
+   */
+  public update(): Agent {
+    try {
+      const url = `${this.configuration.url}/agents-crud/tools/crud/update`;
+      const response = request('PATCH' as HttpVerb, url, {
+        json: {
+          agent_id: this.id,
+          name: this.name,
+          instructions: this.instructions,
+        },
+        headers: { 'x-api-key': this.configuration.apiKey },
+      });
+
+      if (!response.statusCode.toString().startsWith('2')) {
+        throw new Error(response.body.toString());
+      }
+
+      CacheService.getInstance().delete(this.id);
+      this.load(this.id);
+      return this;
+    } catch (err) {
+      throw new Error('Failed to update agent');
+    }
+  }
+
+  /**
+   * @function sync
+   * @description Syncs and deploys the agent along with its related assets.
+   * @returns {Agent} The deployed agent's details.
+   * @throws {Error} If the sync process fails.
+   * @memberof xpanderAI
+   */
+  public sync(): Agent {
+    try {
+      const url = `${this.configuration.url}/agents-crud/tools/crud/deploy`;
+      const response = request('PUT' as HttpVerb, url, {
+        json: { agent_id: this.id },
+        headers: { 'x-api-key': this.configuration.apiKey },
+      });
+
+      if (!response.statusCode.toString().startsWith('2')) {
+        throw new Error(response.body.toString());
+      }
+
+      CacheService.getInstance().delete(this.id);
+      this.load(this.id);
+      return this;
+    } catch (err) {
+      throw new Error('Failed to sync agent');
+    }
   }
 }

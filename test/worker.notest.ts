@@ -1,11 +1,6 @@
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
-import {
-  IMemoryMessage,
-  LLMProvider,
-  OpenAISupportedModels,
-  XpanderClient,
-} from '../src';
+import { IMemoryMessage, XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
@@ -107,10 +102,10 @@ console.log(MANAGER_TASK, TAGS_TASK, ARTICLES_TASK, TEMP_TASK);
 describe('Test xpander.ai SDK (Worker Mode)', () => {
   it('Get Task and handle', async () => {
     const xpanderClient = new XpanderClient(
-      TASK.organization_id,
       xpanderAPIKey,
       localAgentControllerURL,
       false,
+      TASK.organization_id,
     );
     const agent = xpanderClient.agents.get(TASK.agent_id);
     expect(agent).toHaveProperty('id');
@@ -124,31 +119,28 @@ describe('Test xpander.ai SDK (Worker Mode)', () => {
 
     // configure memory
     const memory = agent.memory;
-    memory.selectLLMProvider(LLMProvider.OPEN_AI); // only if not openai..
-    memory.initializeThread(
+    memory.initMessages(
       agent.execution?.inputMessage as IMemoryMessage,
       agent.instructions,
-    ); // add input and instructions
+    );
 
     while (!agent.isFinished()) {
       const response: any = await openaiClient.chat.completions.create({
-        model: OpenAISupportedModels.GPT_4_O,
-        messages: memory.retrieveMessages() as any,
+        model: 'gpt-4o',
+        messages: agent.messages as any,
         tools: agent.getTools(),
         tool_choice: 'auto',
         temperature: 0.0,
       });
 
       // add messages from the LLM (auto extraction)
-      memory.addMessages(response);
+      agent.addMessages(response);
 
       // extract tool calls
       const toolCalls = XpanderClient.extractToolCalls(response);
       agent.runTools(toolCalls);
 
       // when using local tools
-      // memory.addToolCallResults(toolResults);
-      console.log(agent.memory);
     }
 
     expect(memory.messages[memory.messages.length - 1].role).toEqual(

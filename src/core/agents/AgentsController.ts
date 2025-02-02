@@ -1,6 +1,6 @@
 import request, { HttpVerb } from 'sync-request';
 import { Agent } from './Agent';
-import { AgentAccessScope, AgentStatus } from '../../types/agents';
+import { AgentAccessScope, AgentStatus, AgentType } from '../../types/agents';
 import { MemoryStrategy, MemoryType } from '../../types/memory';
 import { Configuration } from '../Configuration';
 import { convertKeysToCamelCase } from '../utils';
@@ -88,6 +88,33 @@ export class Agents {
       return agent;
     } catch (err) {
       throw new Error('Failed to retrieve agent');
+    }
+  }
+  /**
+   * @function create
+   * @description Creates a new agent with the given name and type.
+   * @param {string} name - The name of the agent to be created.
+   * @param {AgentType} [type=AgentType.Regular] - The type of the agent, defaults to Regular.
+   * @returns {Agent} The created agent's details.
+   * @throws {Error} If the creation process fails.
+   * @memberof xpanderAI
+   */
+  public create(name: string, type: AgentType = AgentType.Regular): Agent {
+    try {
+      const url = `${this.configuration.url}/agents-crud/tools/crud/create`;
+      const response = request('POST' as HttpVerb, url, {
+        json: { name, type },
+        headers: { 'x-api-key': this.configuration.apiKey },
+      });
+
+      if (!response.statusCode.toString().startsWith('2')) {
+        throw new Error(response.body.toString());
+      }
+
+      const createdAgent = JSON.parse(response.getBody('utf8'));
+      return this.get(createdAgent.id);
+    } catch (err: any) {
+      throw new Error(`Failed to create agent - ${err.toString()}`);
     }
   }
 }

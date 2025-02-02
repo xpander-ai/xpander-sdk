@@ -12,6 +12,7 @@ export class ToolCall extends Base {
       headers: {},
     },
     public toolCallId: string = '',
+    public graphApproved: boolean = false,
   ) {
     super();
   }
@@ -31,6 +32,7 @@ export class ToolCallResult extends Base {
     public result: any = null,
     public isSuccess: boolean = false,
     public isError: boolean = false,
+    public graphApproved: boolean = false,
   ) {
     super();
   }
