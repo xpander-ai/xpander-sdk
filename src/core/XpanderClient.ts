@@ -46,7 +46,9 @@ export class XpanderClient {
   public static retrievePendingLocalToolCalls(
     toolCalls: ToolCall[],
   ): ToolCall[] {
-    return toolCalls.filter((tc) => tc.type === ToolCallType.LOCAL);
+    return toolCalls.filter(
+      (tc) => tc.type === ToolCallType.LOCAL && tc.graphApproved,
+    );
   }
 
   /** Configuration settings for the xpanderAI client. */

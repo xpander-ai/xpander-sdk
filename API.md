@@ -15,7 +15,7 @@ This class facilitates loading agents, handling tool executions, and managing pr
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], graph?: IAgentGraphItem[], knowledgeBases?: KnowledgeBase[])
+new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[])
 ```
 
 | **Name** | **Type** | **Description** |
@@ -32,7 +32,7 @@ new Agent(configuration: Configuration, id: string, name: string, organizationId
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | - Source nodes associated with the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.prompts">prompts</a></code> | <code>string[]</code> | - Prompts used by the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | - Tools available to the agent. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | - Graph structure representing the agent's operational flow. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter._graph">_graph</a></code> | <code>any[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | - Knowledge bases associated with the agent. |
 
 ---
@@ -133,11 +133,9 @@ Tools available to the agent.
 
 ---
 
-##### `graph`<sup>Optional</sup> <a name="graph" id="xpander-sdk.Agent.Initializer.parameter.graph"></a>
+##### `_graph`<sup>Optional</sup> <a name="_graph" id="xpander-sdk.Agent.Initializer.parameter._graph"></a>
 
-- *Type:* <a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]
-
-Graph structure representing the agent's operational flow.
+- *Type:* any[]
 
 ---
 
@@ -170,6 +168,8 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
 | <code><a href="#xpander-sdk.Agent.stop">stop</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.sync">sync</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.update">update</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.updateUserDetails">updateUserDetails</a></code> | Updates the user details for the agent. |
 
 ---
@@ -345,7 +345,7 @@ public retrieveExecutionResult(): Execution
 ##### `retrieveNodeFromGraph` <a name="retrieveNodeFromGraph" id="xpander-sdk.Agent.retrieveNodeFromGraph"></a>
 
 ```typescript
-public retrieveNodeFromGraph(itemId: string): IAgentGraphItem
+public retrieveNodeFromGraph(itemId: string): GraphItem
 ```
 
 Retrieves a node from the graph by its ID.
@@ -418,6 +418,18 @@ Additional payload data to merge.
 public stop(): void
 ```
 
+##### `sync` <a name="sync" id="xpander-sdk.Agent.sync"></a>
+
+```typescript
+public sync(): Agent
+```
+
+##### `update` <a name="update" id="xpander-sdk.Agent.update"></a>
+
+```typescript
+public update(): Agent
+```
+
 ##### `updateUserDetails` <a name="updateUserDetails" id="xpander-sdk.Agent.updateUserDetails"></a>
 
 ```typescript
@@ -469,7 +481,7 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.vanillaKnowledgeBases">vanillaKnowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | Retrieves the vanilla knowledge bases of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | - Scope of the agent's access permissions. |
 | <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for the agent. |
-| <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]</code> | - Graph structure representing the agent's operational flow. |
+| <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.Graph">Graph</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | - Unique identifier for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
 | <code><a href="#xpander-sdk.Agent.property.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | - Knowledge bases associated with the agent. |
@@ -600,12 +612,10 @@ Configuration settings for the agent.
 ##### `graph`<sup>Required</sup> <a name="graph" id="xpander-sdk.Agent.property.graph"></a>
 
 ```typescript
-public readonly graph: IAgentGraphItem[];
+public readonly graph: Graph;
 ```
 
-- *Type:* <a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>[]
-
-Graph structure representing the agent's operational flow.
+- *Type:* <a href="#xpander-sdk.Graph">Graph</a>
 
 ---
 
@@ -826,8 +836,31 @@ Configuration settings for managing agents.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#xpander-sdk.Agents.create">create</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agents.get">get</a></code> | Retrieves a specific agent by its ID and initializes it. |
 | <code><a href="#xpander-sdk.Agents.list">list</a></code> | Retrieves the list of agents from the API and populates the local agents list. |
+
+---
+
+##### `create` <a name="create" id="xpander-sdk.Agents.create"></a>
+
+```typescript
+public create(name: string, type?: AgentType): Agent
+```
+
+###### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.Agents.create.parameter.name"></a>
+
+- *Type:* string
+
+The name of the agent to be created.
+
+---
+
+###### `type`<sup>Optional</sup> <a name="type" id="xpander-sdk.Agents.create.parameter.type"></a>
+
+- *Type:* <a href="#xpander-sdk.AgentType">AgentType</a>
+
+The type of the agent, defaults to Regular.
 
 ---
 
@@ -1580,6 +1613,403 @@ Identifier of the worker associated with the execution.
 ---
 
 
+### Graph <a name="Graph" id="xpander-sdk.Graph"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.Graph.Initializer"></a>
+
+```typescript
+import { Graph } from 'xpander-sdk'
+
+new Graph(agent: Agent, items: GraphItem[])
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Graph.Initializer.parameter.agent">agent</a></code> | <code><a href="#xpander-sdk.Agent">Agent</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.Initializer.parameter.items">items</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | *No description.* |
+
+---
+
+##### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Graph.Initializer.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+##### `items`<sup>Required</sup> <a name="items" id="xpander-sdk.Graph.Initializer.parameter.items"></a>
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Graph.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.addNode">addNode</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.findNodeByItemId">findNodeByItemId</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.findNodeByNodeId">findNodeByNodeId</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.Graph.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Graph.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Graph.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.Graph.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `addNode` <a name="addNode" id="xpander-sdk.Graph.addNode"></a>
+
+```typescript
+public addNode(node: GraphItem | Agent): GraphItem
+```
+
+###### `node`<sup>Required</sup> <a name="node" id="xpander-sdk.Graph.addNode.parameter.node"></a>
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a> | <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+##### `findNodeByItemId` <a name="findNodeByItemId" id="xpander-sdk.Graph.findNodeByItemId"></a>
+
+```typescript
+public findNodeByItemId(itemId: string): GraphItem
+```
+
+###### `itemId`<sup>Required</sup> <a name="itemId" id="xpander-sdk.Graph.findNodeByItemId.parameter.itemId"></a>
+
+- *Type:* string
+
+---
+
+##### `findNodeByNodeId` <a name="findNodeByNodeId" id="xpander-sdk.Graph.findNodeByNodeId"></a>
+
+```typescript
+public findNodeByNodeId(nodeId: string): GraphItem
+```
+
+###### `nodeId`<sup>Required</sup> <a name="nodeId" id="xpander-sdk.Graph.findNodeByNodeId.parameter.nodeId"></a>
+
+- *Type:* string
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Graph.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.Graph.fromObject"></a>
+
+```typescript
+import { Graph } from 'xpander-sdk'
+
+Graph.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Graph.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.Graph.property.isEmpty">isEmpty</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | *No description.* |
+
+---
+
+##### `isEmpty`<sup>Required</sup> <a name="isEmpty" id="xpander-sdk.Graph.property.isEmpty"></a>
+
+```typescript
+public readonly isEmpty: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `lastNode`<sup>Required</sup> <a name="lastNode" id="xpander-sdk.Graph.property.lastNode"></a>
+
+```typescript
+public readonly lastNode: GraphItem;
+```
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>
+
+---
+
+##### `nodes`<sup>Required</sup> <a name="nodes" id="xpander-sdk.Graph.property.nodes"></a>
+
+```typescript
+public readonly nodes: GraphItem[];
+```
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
+
+---
+
+
+### GraphItem <a name="GraphItem" id="xpander-sdk.GraphItem"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.GraphItem.Initializer"></a>
+
+```typescript
+import { GraphItem } from 'xpander-sdk'
+
+new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: AgentGraphItemType, isLocalTool?: boolean, targets?: string[], settings?: IAgentGraphItemSettings)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.agent">agent</a></code> | <code><a href="#xpander-sdk.Agent">Agent</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.itemId">itemId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.type">type</a></code> | <code><a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.isLocalTool">isLocalTool</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.targets">targets</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.settings">settings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a></code> | *No description.* |
+
+---
+
+##### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.GraphItem.Initializer.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+##### `id`<sup>Optional</sup> <a name="id" id="xpander-sdk.GraphItem.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `itemId`<sup>Optional</sup> <a name="itemId" id="xpander-sdk.GraphItem.Initializer.parameter.itemId"></a>
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="xpander-sdk.GraphItem.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+##### `type`<sup>Optional</sup> <a name="type" id="xpander-sdk.GraphItem.Initializer.parameter.type"></a>
+
+- *Type:* <a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a>
+
+---
+
+##### `isLocalTool`<sup>Optional</sup> <a name="isLocalTool" id="xpander-sdk.GraphItem.Initializer.parameter.isLocalTool"></a>
+
+- *Type:* boolean
+
+---
+
+##### `targets`<sup>Optional</sup> <a name="targets" id="xpander-sdk.GraphItem.Initializer.parameter.targets"></a>
+
+- *Type:* string[]
+
+---
+
+##### `settings`<sup>Optional</sup> <a name="settings" id="xpander-sdk.GraphItem.Initializer.parameter.settings"></a>
+
+- *Type:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.GraphItem.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.connect">connect</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.save">save</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.GraphItem.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.GraphItem.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.GraphItem.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.GraphItem.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `connect` <a name="connect" id="xpander-sdk.GraphItem.connect"></a>
+
+```typescript
+public connect(targets: GraphItem[]): GraphItem
+```
+
+###### `targets`<sup>Required</sup> <a name="targets" id="xpander-sdk.GraphItem.connect.parameter.targets"></a>
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
+
+---
+
+##### `save` <a name="save" id="xpander-sdk.GraphItem.save"></a>
+
+```typescript
+public save(): GraphItem
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.GraphItem.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.GraphItem.fromObject"></a>
+
+```typescript
+import { GraphItem } from 'xpander-sdk'
+
+GraphItem.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.GraphItem.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.GraphItem.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.property.isLocalTool">isLocalTool</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.property.itemId">itemId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.property.targets">targets</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.property.type">type</a></code> | <code><a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.property.settings">settings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a></code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.GraphItem.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `isLocalTool`<sup>Required</sup> <a name="isLocalTool" id="xpander-sdk.GraphItem.property.isLocalTool"></a>
+
+```typescript
+public readonly isLocalTool: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `itemId`<sup>Required</sup> <a name="itemId" id="xpander-sdk.GraphItem.property.itemId"></a>
+
+```typescript
+public readonly itemId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.GraphItem.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `targets`<sup>Required</sup> <a name="targets" id="xpander-sdk.GraphItem.property.targets"></a>
+
+```typescript
+public readonly targets: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.GraphItem.property.type"></a>
+
+```typescript
+public readonly type: AgentGraphItemType;
+```
+
+- *Type:* <a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a>
+
+---
+
+##### `settings`<sup>Optional</sup> <a name="settings" id="xpander-sdk.GraphItem.property.settings"></a>
+
+```typescript
+public readonly settings: IAgentGraphItemSettings;
+```
+
+- *Type:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
+
+---
+
+
 ### KnowledgeBase <a name="KnowledgeBase" id="xpander-sdk.KnowledgeBase"></a>
 
 #### Initializers <a name="Initializers" id="xpander-sdk.KnowledgeBase.Initializer"></a>
@@ -2240,7 +2670,7 @@ public readonly worker: LLMTokens;
 ```typescript
 import { ToolCall } from 'xpander-sdk'
 
-new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: string)
+new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: string, graphApproved?: boolean)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -2249,6 +2679,7 @@ new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: str
 | <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.type">type</a></code> | <code><a href="#xpander-sdk.ToolCallType">ToolCallType</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.payload">payload</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCall.Initializer.parameter.graphApproved">graphApproved</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -2273,6 +2704,12 @@ new ToolCall(name?: string, type?: ToolCallType, payload?: any, toolCallId?: str
 ##### `toolCallId`<sup>Optional</sup> <a name="toolCallId" id="xpander-sdk.ToolCall.Initializer.parameter.toolCallId"></a>
 
 - *Type:* string
+
+---
+
+##### `graphApproved`<sup>Optional</sup> <a name="graphApproved" id="xpander-sdk.ToolCall.Initializer.parameter.graphApproved"></a>
+
+- *Type:* boolean
 
 ---
 
@@ -2336,10 +2773,21 @@ ToolCall.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#xpander-sdk.ToolCall.property.graphApproved">graphApproved</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.property.name">name</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.property.payload">payload</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.property.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCall.property.type">type</a></code> | <code><a href="#xpander-sdk.ToolCallType">ToolCallType</a></code> | *No description.* |
+
+---
+
+##### `graphApproved`<sup>Required</sup> <a name="graphApproved" id="xpander-sdk.ToolCall.property.graphApproved"></a>
+
+```typescript
+public readonly graphApproved: boolean;
+```
+
+- *Type:* boolean
 
 ---
 
@@ -2391,7 +2839,7 @@ public readonly type: ToolCallType;
 ```typescript
 import { ToolCallResult } from 'xpander-sdk'
 
-new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, statusCode?: number, result?: any, isSuccess?: boolean, isError?: boolean)
+new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, statusCode?: number, result?: any, isSuccess?: boolean, isError?: boolean, graphApproved?: boolean)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -2403,6 +2851,7 @@ new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, st
 | <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.result">result</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.isError">isError</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.graphApproved">graphApproved</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -2443,6 +2892,12 @@ new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, st
 ---
 
 ##### `isError`<sup>Optional</sup> <a name="isError" id="xpander-sdk.ToolCallResult.Initializer.parameter.isError"></a>
+
+- *Type:* boolean
+
+---
+
+##### `graphApproved`<sup>Optional</sup> <a name="graphApproved" id="xpander-sdk.ToolCallResult.Initializer.parameter.graphApproved"></a>
 
 - *Type:* boolean
 
@@ -2509,6 +2964,7 @@ ToolCallResult.fromObject(data: any)
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.ToolCallResult.property.functionName">functionName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.property.graphApproved">graphApproved</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.property.isError">isError</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.property.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.property.payload">payload</a></code> | <code>any</code> | *No description.* |
@@ -2525,6 +2981,16 @@ public readonly functionName: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `graphApproved`<sup>Required</sup> <a name="graphApproved" id="xpander-sdk.ToolCallResult.property.graphApproved"></a>
+
+```typescript
+public readonly graphApproved: boolean;
+```
+
+- *Type:* boolean
 
 ---
 
@@ -2723,95 +3189,6 @@ Configuration settings for the xpanderAI client.
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IAgentGraphItem <a name="IAgentGraphItem" id="xpander-sdk.IAgentGraphItem"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IAgentGraphItem">IAgentGraphItem</a>
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IAgentGraphItem.property.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IAgentGraphItem.property.itemId">itemId</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IAgentGraphItem.property.targets">targets</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.IAgentGraphItem.property.type">type</a></code> | <code><a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.IAgentGraphItem.property.name">name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IAgentGraphItem.property.settings">settings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.IAgentGraphItem.property.subType">subType</a></code> | <code><a href="#xpander-sdk.AgentGraphItemSubType">AgentGraphItemSubType</a></code> | *No description.* |
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.IAgentGraphItem.property.id"></a>
-
-```typescript
-public readonly id: string;
-```
-
-- *Type:* string
-
----
-
-##### `itemId`<sup>Required</sup> <a name="itemId" id="xpander-sdk.IAgentGraphItem.property.itemId"></a>
-
-```typescript
-public readonly itemId: string;
-```
-
-- *Type:* string
-
----
-
-##### `targets`<sup>Required</sup> <a name="targets" id="xpander-sdk.IAgentGraphItem.property.targets"></a>
-
-```typescript
-public readonly targets: string[];
-```
-
-- *Type:* string[]
-
----
-
-##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.IAgentGraphItem.property.type"></a>
-
-```typescript
-public readonly type: AgentGraphItemType;
-```
-
-- *Type:* <a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a>
-
----
-
-##### `name`<sup>Optional</sup> <a name="name" id="xpander-sdk.IAgentGraphItem.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
----
-
-##### `settings`<sup>Optional</sup> <a name="settings" id="xpander-sdk.IAgentGraphItem.property.settings"></a>
-
-```typescript
-public readonly settings: IAgentGraphItemSettings;
-```
-
-- *Type:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
-
----
-
-##### `subType`<sup>Optional</sup> <a name="subType" id="xpander-sdk.IAgentGraphItem.property.subType"></a>
-
-```typescript
-public readonly subType: AgentGraphItemSubType;
-```
-
-- *Type:* <a href="#xpander-sdk.AgentGraphItemSubType">AgentGraphItemSubType</a>
-
----
 
 ### IAgentGraphItemAdvancedFilteringOption <a name="IAgentGraphItemAdvancedFilteringOption" id="xpander-sdk.IAgentGraphItemAdvancedFilteringOption"></a>
 
@@ -4424,6 +4801,7 @@ public readonly lastName: string;
 | <code><a href="#xpander-sdk.AgentGraphItemSubType.WEBHOOK">WEBHOOK</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.AgentGraphItemSubType.OPERATION">OPERATION</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.AgentGraphItemSubType.CUSTOM_FUNCTION">CUSTOM_FUNCTION</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemSubType.LOCAL_TOOL">LOCAL_TOOL</a></code> | *No description.* |
 
 ---
 
@@ -4453,6 +4831,11 @@ public readonly lastName: string;
 
 
 ##### `CUSTOM_FUNCTION` <a name="CUSTOM_FUNCTION" id="xpander-sdk.AgentGraphItemSubType.CUSTOM_FUNCTION"></a>
+
+---
+
+
+##### `LOCAL_TOOL` <a name="LOCAL_TOOL" id="xpander-sdk.AgentGraphItemSubType.LOCAL_TOOL"></a>
 
 ---
 
@@ -4515,6 +4898,27 @@ Enum representing the possible statuses of an agent.
 
 
 ##### `INACTIVE` <a name="INACTIVE" id="xpander-sdk.AgentStatus.INACTIVE"></a>
+
+---
+
+
+### AgentType <a name="AgentType" id="xpander-sdk.AgentType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentType.REGULAR">REGULAR</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentType.MANAGER">MANAGER</a></code> | *No description.* |
+
+---
+
+##### `REGULAR` <a name="REGULAR" id="xpander-sdk.AgentType.REGULAR"></a>
+
+---
+
+
+##### `MANAGER` <a name="MANAGER" id="xpander-sdk.AgentType.MANAGER"></a>
 
 ---
 

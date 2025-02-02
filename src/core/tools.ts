@@ -8,10 +8,11 @@ import {
   ToolCallType,
 } from '../types';
 import { Configuration } from './Configuration';
+import { GraphItem } from './graphs';
 import { ToolCall, ToolCallResult } from './toolCalls';
 import { toCamelCase } from './utils';
 import { LOCAL_TOOL_PREFIX } from '../constants/tools';
-import { IAgentGraphItem, IAgentGraphItemSchema } from '../types/agents';
+import { IAgentGraphItemSchema } from '../types/agents';
 
 /**
  * Creates a tool representation for xpanderAI based on tool instructions,
@@ -109,6 +110,38 @@ export function executeTool(
     result.data = err.toString();
   }
   return result;
+}
+
+export function testToolGraphPosition(
+  tool: ToolCall,
+  agentUrl: string,
+  configuration: Configuration,
+  executionId: string,
+): boolean {
+  try {
+    const url = `${agentUrl}/${executionId}/operations/${tool.name}`;
+    const requestPayload = {
+      body_params: {},
+      path_params: {},
+      query_params: {},
+      headers: {},
+    };
+    const response = request('HEAD' as HttpVerb, url, {
+      json: requestPayload,
+      headers: {
+        'x-api-key': configuration.apiKey,
+        'x-xpander-tool-call-id': tool.toolCallId,
+      },
+    });
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (err: any) {
+    return false;
+  }
 }
 
 /**
@@ -356,7 +389,7 @@ export function deletePropertyByPath(obj: any, path: string): void {
 export function modifyPropertiesByRemoteSettings(
   tool: any,
   kind: 'input' | 'output',
-  graphItem?: IAgentGraphItem,
+  graphItem?: GraphItem,
 ): any {
   const newTool = JSON.parse(JSON.stringify({ ...tool })); // deep copy
   const matchedSchemas = graphItem?.settings?.schemas?.[kind];
@@ -535,7 +568,7 @@ export function appendPermanentValuesToResult(
  */
 export function appendDescriptionOverride(
   tool: any,
-  graphItem: IAgentGraphItem,
+  graphItem: GraphItem,
 ): any {
   const newTool = { ...tool };
   const matchedSchemas = graphItem?.settings?.schemas?.input;

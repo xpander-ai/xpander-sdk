@@ -38,6 +38,7 @@ export enum AgentGraphItemSubType {
   // tools
   OPERATION = 'operation',
   CUSTOM_FUNCTION = 'custom_function',
+  LOCAL_TOOL = 'local_tool',
 }
 
 export interface IAgentGraphItemSchema {
@@ -50,16 +51,6 @@ export interface IAgentGraphItemSettings {
   description?: string;
   schemas?: IAgentGraphItemSchema;
   advancedFilteringOptions?: IAgentGraphItemAdvancedFilteringOption[];
-}
-
-export interface IAgentGraphItem {
-  id: string;
-  itemId: string;
-  name?: string;
-  type: AgentGraphItemType;
-  subType?: AgentGraphItemSubType;
-  targets: string[];
-  settings?: IAgentGraphItemSettings;
 }
 
 /**
@@ -144,4 +135,9 @@ export interface IAgentInstructions {
   role: string;
   goal: string;
   general: string;
+}
+
+export enum AgentType {
+  REGULAR = 'regular',
+  MANAGER = 'manager',
 }
