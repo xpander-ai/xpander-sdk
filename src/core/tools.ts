@@ -170,7 +170,13 @@ export function mergeDeep<T>(target: T, source: T): T {
  * @param payload - The payload object to structure.
  * @returns A structured tool call payload.
  */
-export function ensureToolCallPayloadStructure(payload: any): IToolCallPayload {
+export function ensureToolCallPayloadStructure(
+  isLocal: boolean = false,
+  payload: any,
+): IToolCallPayload {
+  if (isLocal) {
+    return payload;
+  }
   return {
     bodyParams: { ...(payload?.bodyParams || {}) },
     queryParams: { ...(payload?.queryParams || {}) },

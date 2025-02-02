@@ -5,6 +5,7 @@ import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
 import { ensureToolCallPayloadStructure } from './tools';
+import { ToolCallType } from '../types';
 
 /**
  * XpanderClient provides methods for configuring and interacting with xpanderAI tools,
@@ -29,9 +30,23 @@ export class XpanderClient {
     return provider.extractToolCalls(llmResponse).map((toolCall) =>
       ToolCall.fromObject({
         ...toolCall,
-        payload: ensureToolCallPayloadStructure(toolCall?.payload || {}),
+        payload: ensureToolCallPayloadStructure(
+          toolCall.type === ToolCallType.LOCAL,
+          toolCall?.payload || {},
+        ),
       }),
     );
+  }
+
+  /**
+   * Filters and retrieves local tool calls from a given list of tool calls.
+   * @param toolCalls - The list of tool calls to filter.
+   * @returns An array of tool calls that are of type LOCAL.
+   */
+  public static retrievePendingLocalToolCalls(
+    toolCalls: ToolCall[],
+  ): ToolCall[] {
+    return toolCalls.filter((tc) => tc.type === ToolCallType.LOCAL);
   }
 
   /** Configuration settings for the xpanderAI client. */
