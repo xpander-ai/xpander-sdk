@@ -21,14 +21,17 @@ export class Graph extends Base {
   }
 
   public get nodes() {
-    return this.items;
+    return this.items || [];
   }
 
   public get isEmpty() {
     return this.items.length === 0;
   }
 
-  public get lastNode() {
+  public get lastNode(): GraphItem | undefined {
+    if (!this.items || this.items.length === 0) {
+      return;
+    }
     return this.items[this.items.length - 1];
   }
 
