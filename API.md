@@ -1652,6 +1652,7 @@ new Graph(agent: Agent, items: GraphItem[])
 | <code><a href="#xpander-sdk.Graph.addNode">addNode</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.findNodeByItemId">findNodeByItemId</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.findNodeByNodeId">findNodeByNodeId</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.reset">reset</a></code> | *No description.* |
 
 ---
 
@@ -1715,6 +1716,12 @@ public findNodeByNodeId(nodeId: string): GraphItem
 
 ---
 
+##### `reset` <a name="reset" id="xpander-sdk.Graph.reset"></a>
+
+```typescript
+public reset(): void
+```
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
@@ -1742,8 +1749,8 @@ Graph.fromObject(data: any)
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Graph.property.isEmpty">isEmpty</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | *No description.* |
 
 ---
 
@@ -1757,16 +1764,6 @@ public readonly isEmpty: boolean;
 
 ---
 
-##### `lastNode`<sup>Required</sup> <a name="lastNode" id="xpander-sdk.Graph.property.lastNode"></a>
-
-```typescript
-public readonly lastNode: GraphItem;
-```
-
-- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>
-
----
-
 ##### `nodes`<sup>Required</sup> <a name="nodes" id="xpander-sdk.Graph.property.nodes"></a>
 
 ```typescript
@@ -1774,6 +1771,16 @@ public readonly nodes: GraphItem[];
 ```
 
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
+
+---
+
+##### `lastNode`<sup>Optional</sup> <a name="lastNode" id="xpander-sdk.Graph.property.lastNode"></a>
+
+```typescript
+public readonly lastNode: GraphItem;
+```
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>
 
 ---
 
