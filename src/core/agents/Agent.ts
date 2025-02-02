@@ -95,7 +95,7 @@ export class Agent extends Base {
     public sourceNodes: ISourceNode[],
     public prompts: string[],
     public tools: IAgentTool[] = [],
-    private _graph: any[],
+    private _graph: any[] = [],
     public knowledgeBases: KnowledgeBase[] = [],
   ) {
     super();

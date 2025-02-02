@@ -138,6 +138,6 @@ export interface IAgentInstructions {
 }
 
 export enum AgentType {
-  Regular = 'regular',
-  Manager = 'manager',
+  REGULAR = 'regular',
+  MANAGER = 'manager',
 }

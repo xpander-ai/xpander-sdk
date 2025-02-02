@@ -8,8 +8,8 @@ export class GraphItem extends Base {
   constructor(
     private agent: Agent,
     public id: string = '',
-    public itemId: string,
-    public name: string,
+    public itemId: string = '',
+    public name: string = '',
     public type: AgentGraphItemType = AgentGraphItemType.TOOL,
     public isLocalTool: boolean = false,
     public targets: string[] = [],

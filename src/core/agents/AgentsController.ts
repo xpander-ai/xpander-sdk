@@ -99,7 +99,7 @@ export class Agents {
    * @throws {Error} If the creation process fails.
    * @memberof xpanderAI
    */
-  public create(name: string, type: AgentType = AgentType.Regular): Agent {
+  public create(name: string, type: AgentType = AgentType.REGULAR): Agent {
     try {
       const url = `${this.configuration.url}/agents-crud/tools/crud/create`;
       const response = request('POST' as HttpVerb, url, {
