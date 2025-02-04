@@ -330,17 +330,15 @@ export class Agent extends Base {
 
     if (clonedTool.type !== ToolCallType.XPANDER) {
       // in case of local tool check HEAD to approve graph position
-      if (!this.graph.isEmpty) {
-        const canProceed = testToolGraphPosition(
-          ToolCall.fromObject({
-            ...clonedTool,
-          }),
-          this.url,
-          this.configuration,
-          this.execution.id,
-        );
-        toolCallResult.graphApproved = tool.graphApproved = canProceed;
-      }
+      const canProceed = testToolGraphPosition(
+        ToolCall.fromObject({
+          ...clonedTool,
+        }),
+        this.url,
+        this.configuration,
+        this.execution.id,
+      );
+      toolCallResult.graphApproved = tool.graphApproved = canProceed;
 
       return toolCallResult;
     }

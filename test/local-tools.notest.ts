@@ -3,10 +3,10 @@ import { OpenAI } from 'openai'; // Assuming OpenAI is an external library insta
 import { ToolCallResult, XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
-const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const xpanderAgentId = 'ef3ddd31-b2a3-4a1d-8c12-4f3cbee1f43b';
+const xpanderAPIKey = 'A02tKVpMd58Z3gAIDsQ7C8dh7oIRBYBc8Vu6cGFJ';
+const xpanderAgentId = 'b4a788cb-4cf2-473e-bcb0-22faae265d7c';
 const openAIKey = process.env.OPENAI_API_KEY || '';
-const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
+const localAgentControllerURL = 'https://inbound.stg.xpander.ai';
 const organizationId = process.env.ORGANIZATION_ID || '';
 
 const openaiClient = new OpenAI({
@@ -87,7 +87,6 @@ describe('Test xpander.ai SDK (**NO** Worker Mode - Local Tools)', () => {
       xpanderAPIKey,
       localAgentControllerURL,
       false,
-      organizationId,
     );
 
     let startTime = getStartTime();
@@ -137,6 +136,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode - Local Tools)', () => {
       const toolCallResults = agent.runTools(toolCalls, {
         bodyParams: { organization_id: organizationId },
       });
+      console.log(toolCallResults);
       announceTiming(startTime, 'Running tools');
 
       const pendingLocalToolCalls =
