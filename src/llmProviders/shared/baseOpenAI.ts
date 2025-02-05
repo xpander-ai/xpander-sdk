@@ -1,8 +1,7 @@
 import { BaseLLMProvider } from './baseProvider';
 import { IMemoryMessage } from '../..';
 import { LLMProvider } from '../../constants/llmProvider';
-import { ToolCall } from '../../core/toolCalls';
-import { getToolBaseSignature } from '../../core/tools';
+import { ToolCall, getToolBaseSignature } from '../../core/tools';
 
 /**
  * Handles interaction with OpenAI SDK, processing responses to extract tool calls.

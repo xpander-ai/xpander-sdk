@@ -1,8 +1,7 @@
 import { BaseLLMProvider } from './shared/baseProvider';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
-import { ToolCall } from '../core/toolCalls';
-import { getToolBaseSignature } from '../core/tools';
+import { ToolCall, getToolBaseSignature } from '../core/tools';
 import { IBedrockTool } from '../types';
 
 /**

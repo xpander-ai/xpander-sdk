@@ -7,7 +7,7 @@ export { Configuration } from './core/Configuration';
 export { Agents, Agent } from './core/agents';
 export { KnowledgeBase } from './core/knowledgeBases';
 export { Base } from './core/base';
-export { ToolCall, ToolCallResult } from './core/toolCalls';
+export * from './core/tools';
 export { Execution, Tokens, LLMTokens } from './core/executions';
 export { Memory } from './core/memory';
 export * from './core/graphs';

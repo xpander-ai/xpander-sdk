@@ -1,8 +1,11 @@
 import { LLMProvider } from '../../constants/llmProvider';
 import { AGENT_FINISH_TOOL_ID } from '../../constants/tools';
 import { Agent } from '../../core/agents/Agent';
-import { ToolCall } from '../../core/toolCalls';
-import { createTool, modifyPropertiesByRemoteSettings } from '../../core/tools';
+import {
+  ToolCall,
+  createTool,
+  modifyPropertiesByRemoteSettings,
+} from '../../core/tools';
 import { IToolInstructions } from '../../types';
 
 /**

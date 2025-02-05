@@ -1,4 +1,5 @@
 import request, { HttpVerb } from 'sync-request';
+import { LOCAL_TOOL_PREFIX } from '../../constants/tools';
 import {
   ITool,
   IToolCallPayload,
@@ -6,13 +7,12 @@ import {
   IToolInstructions,
   SimplifiedSchemaMatchResult,
   ToolCallType,
-} from '../types';
-import { Configuration } from './Configuration';
-import { GraphItem } from './graphs';
-import { ToolCall, ToolCallResult } from './toolCalls';
-import { toCamelCase } from './utils';
-import { LOCAL_TOOL_PREFIX } from '../constants/tools';
-import { IAgentGraphItemSchema } from '../types/agents';
+} from '../../types';
+import { IAgentGraphItemSchema } from '../../types/agents';
+import { Configuration } from '../Configuration';
+import { GraphItem } from '../graphs';
+import { ToolCall, ToolCallResult } from './ToolCall';
+import { toCamelCase } from '../utils';
 
 /**
  * Creates a tool representation for xpanderAI based on tool instructions,
