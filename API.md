@@ -344,7 +344,7 @@ public isFinished(): boolean
 ##### `load` <a name="load" id="xpander-sdk.Agent.load"></a>
 
 ```typescript
-public load(agentId?: string): void
+public load(agentId?: string, ignoreCache?: boolean): void
 ```
 
 Loads the agent data from its source node type.
@@ -352,6 +352,12 @@ Loads the agent data from its source node type.
 ###### `agentId`<sup>Optional</sup> <a name="agentId" id="xpander-sdk.Agent.load.parameter.agentId"></a>
 
 - *Type:* string
+
+---
+
+###### `ignoreCache`<sup>Optional</sup> <a name="ignoreCache" id="xpander-sdk.Agent.load.parameter.ignoreCache"></a>
+
+- *Type:* boolean
 
 ---
 

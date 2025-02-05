@@ -110,7 +110,7 @@ export class Agent extends Base {
   }
 
   /** Loads the agent data from its source node type. */
-  load(agentId?: string): void {
+  load(agentId: string = '', ignoreCache: boolean = false): void {
     if (this.ready && !agentId) return;
 
     console.debug(`loading agent ${this.id}`);
@@ -124,7 +124,7 @@ export class Agent extends Base {
       const cachedAgent = cache.get(this.id);
 
       let rawAgent: any;
-      if (cachedAgent) {
+      if (cachedAgent && !ignoreCache) {
         console.debug('Agent loaded from cache');
         rawAgent = cachedAgent;
       } else {
@@ -716,7 +716,7 @@ export class Agent extends Base {
       }
 
       CacheService.getInstance().delete(this.id);
-      this.load(this.id);
+      this.load(this.id, true);
       return this;
     } catch (err) {
       throw new Error('Failed to sync agent');
