@@ -31,7 +31,8 @@ import { Execution } from '../executions/Execution';
 import { Graph, GraphItem } from '../graphs';
 import { KnowledgeBase } from '../knowledgeBases';
 import { Memory } from '../memory';
-import { ToolCall, ToolCallResult } from '../toolCalls';
+import { AgenticInterface, AgenticOperation } from '../tools';
+import { ToolCall, ToolCallResult } from '../tools/ToolCall';
 import {
   appendPermanentValues,
   appendPermanentValuesToResult,
@@ -39,7 +40,7 @@ import {
   executeTool,
   mergeDeep,
   testToolGraphPosition,
-} from '../tools';
+} from '../tools/utils';
 import { convertKeysToCamelCase, generateUUIDv4 } from '../utils';
 
 /**
@@ -719,6 +720,195 @@ export class Agent extends Base {
       return this;
     } catch (err) {
       throw new Error('Failed to sync agent');
+    }
+  }
+
+  /**
+   * Retrieves a list of available agentic interfaces.
+   *
+   * @param {boolean} [ignore_cache=false] - Whether to ignore cached data and fetch fresh data.
+   * @returns {AgenticInterface[]} A list of agentic interfaces.
+   * @throws {Error} If retrieval fails.
+   *
+   * @memberof xpander.ai
+   */
+  public retrieveAgenticInterfaces(
+    ignore_cache: boolean = false,
+  ): AgenticInterface[] {
+    const agenticInterfaces: AgenticInterface[] = [];
+    const cacheService = CacheService.getInstance();
+    const cacheKey = 'organization_interfaces';
+
+    // Get from cache if not ignored
+    if (!ignore_cache) {
+      const cachedInterfaces = cacheService.get(cacheKey);
+      if (cachedInterfaces) {
+        return cachedInterfaces as AgenticInterface[];
+      }
+    }
+
+    try {
+      const url = `${this.configuration.url}/agents-crud/tools/agent_tools/search-interfaces`;
+      const response = request('POST' as HttpVerb, url, {
+        json: {
+          search_phrase: '',
+          list_mode: true,
+        },
+        headers: { 'x-api-key': this.configuration.apiKey },
+      });
+
+      if (!response.statusCode.toString().startsWith('2')) {
+        throw new Error(response.body.toString());
+      }
+
+      const rawResponse = convertKeysToCamelCase(
+        JSON.parse(response.getBody('utf8')),
+      );
+
+      agenticInterfaces.push(
+        ...rawResponse.map(
+          (agInterface: any) =>
+            new AgenticInterface(
+              agInterface.id,
+              agInterface.name || agInterface.id,
+              agInterface.summary || '',
+              agInterface.description || '',
+            ),
+        ),
+      );
+
+      cacheService.set(cacheKey, agenticInterfaces);
+    } catch (err) {
+      throw new Error('Failed to retrieve available interfaces');
+    }
+
+    return agenticInterfaces;
+  }
+
+  /**
+   * Retrieves a list of operations for a given agentic interface.
+   *
+   * @param {AgenticInterface} agenticInterface - The agentic interface to retrieve operations for.
+   * @param {boolean} [ignore_cache=false] - Whether to ignore cached data and fetch fresh data.
+   * @returns {AgenticOperation[]} A list of agentic operations.
+   * @throws {Error} If retrieval fails.
+   *
+   * @memberof xpander.ai
+   */
+  public retrieveAgenticOperations(
+    agenticInterface: AgenticInterface,
+    ignore_cache: boolean = false,
+  ): AgenticOperation[] {
+    const agenticOperations: AgenticOperation[] = [];
+    const cacheService = CacheService.getInstance();
+    const cacheKey = `agentic_interface_${agenticInterface.id}_operations`;
+
+    // Get from cache if not ignored
+    if (!ignore_cache) {
+      const cachedOperations = cacheService.get(cacheKey);
+      if (cachedOperations) {
+        return cachedOperations as AgenticOperation[];
+      }
+    }
+
+    try {
+      const url = `${this.configuration.url}/agents-crud/tools/agent_tools/search-operations`;
+      const response = request('POST' as HttpVerb, url, {
+        json: {
+          interfaces: [
+            {
+              type: 'interface',
+              asset_id: agenticInterface.id,
+            },
+          ],
+          search_phrases: [],
+          list_mode: true,
+        },
+        headers: { 'x-api-key': this.configuration.apiKey },
+      });
+
+      if (!response.statusCode.toString().startsWith('2')) {
+        throw new Error(response.body.toString());
+      }
+
+      const rawResponse = convertKeysToCamelCase(
+        JSON.parse(response.getBody('utf8')),
+      );
+
+      agenticOperations.push(
+        ...rawResponse.map(
+          (op: any) =>
+            new AgenticOperation(
+              op.id,
+              op.name || op.id,
+              op.summary || '',
+              op.description || '',
+              op.idToUseOnGraph,
+              op.parentId,
+              op.isFunction || false,
+              op.method || '',
+              op.path || '',
+            ),
+        ),
+      );
+
+      cacheService.set(cacheKey, agenticOperations);
+    } catch (err) {
+      throw new Error('Failed to retrieve interface operations');
+    }
+
+    return agenticOperations;
+  }
+
+  /**
+   * Attaches a list of agentic operations to the agent.
+   *
+   * @param {AgenticOperation[]} operations - The list of agentic operations to attach.
+   * @throws {Error} If the attachment process fails.
+   *
+   * @memberof xpander.ai
+   */
+  public attachOperations(operations: AgenticOperation[]): void {
+    try {
+      const agenticInterfaces = this.retrieveAgenticInterfaces();
+      const tools: Record<string, string[]> = {};
+
+      // Build the tools object
+      for (const operation of operations) {
+        const agenticInterface = agenticInterfaces.find(
+          (agi) => agi.id === operation.interfaceId,
+        );
+
+        if (agenticInterface) {
+          if (!(agenticInterface.id in tools)) {
+            tools[agenticInterface.id] = [operation.id];
+          } else {
+            tools[agenticInterface.id].push(operation.id);
+          }
+        }
+      }
+
+      // Build the payload
+      const payload: any = {
+        agent_id: this.id,
+        tools: Object.keys(tools).map((id) => ({
+          id,
+          operation_ids: tools[id],
+        })),
+      };
+
+      // Attach to the agent
+      const url = `${this.configuration.url}/agents-crud/tools/agent_tools/add`;
+      const response = request('POST' as HttpVerb, url, {
+        json: payload,
+        headers: { 'x-api-key': this.configuration.apiKey },
+      });
+
+      if (!response.statusCode.toString().startsWith('2')) {
+        throw new Error(response.body.toString());
+      }
+    } catch (err) {
+      throw new Error('Failed to attach operations to agent');
     }
   }
 }

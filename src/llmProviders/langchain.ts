@@ -1,7 +1,6 @@
 import { BaseOpenAISDKHandler } from './shared/baseOpenAI';
 import { LLMProvider } from '../constants/llmProvider';
-import { ToolCall } from '../core/toolCalls';
-import { getToolBaseSignature } from '../core/tools';
+import { ToolCall, getToolBaseSignature } from '../core/tools';
 
 /**
  * Handles interactions with the LangChain LLM provider, extracting tool calls from responses.

@@ -5,6 +5,17 @@ import { Base } from '../base';
 import { GraphItem } from './GraphItem';
 import CacheService from '../CacheService';
 
+/**
+ * Represents a graph structure containing nodes related to an agent.
+ *
+ * @class Graph
+ * @extends {Base}
+ *
+ * @param {Agent} agent - The agent associated with this graph.
+ * @param {GraphItem[]} items - The list of graph items (nodes).
+ *
+ * @memberof xpander.ai
+ */
 export class Graph extends Base {
   constructor(
     private agent: Agent,
@@ -13,22 +24,49 @@ export class Graph extends Base {
     super();
   }
 
+  /**
+   * Finds a node in the graph by its item ID.
+   *
+   * @param {string} itemId - The item ID to search for.
+   * @returns {GraphItem | undefined} The found graph item or undefined if not found.
+   */
   public findNodeByItemId(itemId: string): GraphItem | undefined {
     return this.items.find((gi) => gi.itemId === itemId);
   }
 
+  /**
+   * Finds a node in the graph by its node ID.
+   *
+   * @param {string} nodeId - The node ID to search for.
+   * @returns {GraphItem | undefined} The found graph item or undefined if not found.
+   */
   public findNodeByNodeId(nodeId: string): GraphItem | undefined {
     return this.items.find((gi) => gi.id === nodeId);
   }
 
-  public get nodes() {
+  /**
+   * Gets the list of nodes in the graph.
+   *
+   * @returns {GraphItem[]} The list of graph items.
+   */
+  public get nodes(): GraphItem[] {
     return this.items || [];
   }
 
-  public get isEmpty() {
+  /**
+   * Checks whether the graph is empty.
+   *
+   * @returns {boolean} True if the graph is empty, false otherwise.
+   */
+  public get isEmpty(): boolean {
     return this.items.length === 0;
   }
 
+  /**
+   * Gets the last node in the graph.
+   *
+   * @returns {GraphItem | undefined} The last graph item or undefined if the graph is empty.
+   */
   public get lastNode(): GraphItem | undefined {
     if (!this.items || this.items.length === 0) {
       return;
@@ -36,6 +74,13 @@ export class Graph extends Base {
     return this.items[this.items.length - 1];
   }
 
+  /**
+   * Adds a new node to the graph.
+   *
+   * @param {Agent | GraphItem} node - The node to add, which can be an agent or a graph item.
+   * @returns {GraphItem} The newly added graph item.
+   * @throws {Error} If adding the node fails.
+   */
   public addNode(node: Agent | GraphItem): GraphItem {
     try {
       const isAgent = node instanceof Agent;
@@ -81,7 +126,12 @@ export class Graph extends Base {
     }
   }
 
-  public reset() {
+  /**
+   * Resets the graph for the associated agent.
+   *
+   * @throws {Error} If resetting the graph fails.
+   */
+  public reset(): void {
     try {
       const url = `${this.agent.configuration.url}/agents-crud/tools/crud/update`;
       const response = request('PATCH' as HttpVerb, url, {
@@ -97,8 +147,8 @@ export class Graph extends Base {
       }
 
       CacheService.getInstance().delete(this.agent.id);
-      this.items = []; // reset graph
-      this.agent.load(this.agent.id); // reload the agent
+      this.items = []; // Reset graph
+      this.agent.load(this.agent.id); // Reload the agent
     } catch (err) {
       throw new Error('Failed to reset agent graph');
     }

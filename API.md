@@ -158,11 +158,14 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.addMessages">addMessages</a></code> | Adds messages to the memory thread. |
 | <code><a href="#xpander-sdk.Agent.addTask">addTask</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.addToolCallResults">addToolCallResults</a></code> | Adds tool call results as messages to the memory thread. |
+| <code><a href="#xpander-sdk.Agent.attachOperations">attachOperations</a></code> | Attaches a list of agentic operations to the agent. |
 | <code><a href="#xpander-sdk.Agent.disableAgentEndTool">disableAgentEndTool</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
 | <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from its source node type. |
+| <code><a href="#xpander-sdk.Agent.retrieveAgenticInterfaces">retrieveAgenticInterfaces</a></code> | Retrieves a list of available agentic interfaces. |
+| <code><a href="#xpander-sdk.Agent.retrieveAgenticOperations">retrieveAgenticOperations</a></code> | Retrieves a list of operations for a given agentic interface. |
 | <code><a href="#xpander-sdk.Agent.retrieveExecutionResult">retrieveExecutionResult</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | Retrieves a node from the graph by its ID. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
@@ -278,6 +281,22 @@ An array of tool call results to be added as messages.
 
 ---
 
+##### `attachOperations` <a name="attachOperations" id="xpander-sdk.Agent.attachOperations"></a>
+
+```typescript
+public attachOperations(operations: AgenticOperation[]): void
+```
+
+Attaches a list of agentic operations to the agent.
+
+###### `operations`<sup>Required</sup> <a name="operations" id="xpander-sdk.Agent.attachOperations.parameter.operations"></a>
+
+- *Type:* <a href="#xpander-sdk.AgenticOperation">AgenticOperation</a>[]
+
+The list of agentic operations to attach.
+
+---
+
 ##### `disableAgentEndTool` <a name="disableAgentEndTool" id="xpander-sdk.Agent.disableAgentEndTool"></a>
 
 ```typescript
@@ -333,6 +352,46 @@ Loads the agent data from its source node type.
 ###### `agentId`<sup>Optional</sup> <a name="agentId" id="xpander-sdk.Agent.load.parameter.agentId"></a>
 
 - *Type:* string
+
+---
+
+##### `retrieveAgenticInterfaces` <a name="retrieveAgenticInterfaces" id="xpander-sdk.Agent.retrieveAgenticInterfaces"></a>
+
+```typescript
+public retrieveAgenticInterfaces(ignore_cache?: boolean): AgenticInterface[]
+```
+
+Retrieves a list of available agentic interfaces.
+
+###### `ignore_cache`<sup>Optional</sup> <a name="ignore_cache" id="xpander-sdk.Agent.retrieveAgenticInterfaces.parameter.ignore_cache"></a>
+
+- *Type:* boolean
+
+Whether to ignore cached data and fetch fresh data.
+
+---
+
+##### `retrieveAgenticOperations` <a name="retrieveAgenticOperations" id="xpander-sdk.Agent.retrieveAgenticOperations"></a>
+
+```typescript
+public retrieveAgenticOperations(agenticInterface: AgenticInterface, ignore_cache?: boolean): AgenticOperation[]
+```
+
+Retrieves a list of operations for a given agentic interface.
+
+###### `agenticInterface`<sup>Required</sup> <a name="agenticInterface" id="xpander-sdk.Agent.retrieveAgenticOperations.parameter.agenticInterface"></a>
+
+- *Type:* <a href="#xpander-sdk.AgenticInterface">AgenticInterface</a>
+
+The agentic interface to retrieve operations for.
+
+---
+
+###### `ignore_cache`<sup>Optional</sup> <a name="ignore_cache" id="xpander-sdk.Agent.retrieveAgenticOperations.parameter.ignore_cache"></a>
+
+- *Type:* boolean
+
+Whether to ignore cached data and fetch fresh data.
 
 ---
 
@@ -802,6 +861,402 @@ public readonly userDetails: IUserDetails;
 ```
 
 - *Type:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
+
+---
+
+
+### AgenticInterface <a name="AgenticInterface" id="xpander-sdk.AgenticInterface"></a>
+
+Represents an agentic interface with identifying and descriptive properties.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.AgenticInterface.Initializer"></a>
+
+```typescript
+import { AgenticInterface } from 'xpander-sdk'
+
+new AgenticInterface(id: string, name: string, summary: string, description: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.AgenticInterface.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticInterface.Initializer.parameter.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticInterface.Initializer.parameter.summary">summary</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticInterface.Initializer.parameter.description">description</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.AgenticInterface.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.AgenticInterface.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+##### `summary`<sup>Required</sup> <a name="summary" id="xpander-sdk.AgenticInterface.Initializer.parameter.summary"></a>
+
+- *Type:* string
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.AgenticInterface.Initializer.parameter.description"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgenticInterface.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticInterface.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticInterface.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.AgenticInterface.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.AgenticInterface.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.AgenticInterface.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.AgenticInterface.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgenticInterface.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.AgenticInterface.fromObject"></a>
+
+```typescript
+import { AgenticInterface } from 'xpander-sdk'
+
+AgenticInterface.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.AgenticInterface.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.AgenticInterface.property.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticInterface.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticInterface.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticInterface.property.summary">summary</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.AgenticInterface.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.AgenticInterface.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.AgenticInterface.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `summary`<sup>Required</sup> <a name="summary" id="xpander-sdk.AgenticInterface.property.summary"></a>
+
+```typescript
+public readonly summary: string;
+```
+
+- *Type:* string
+
+---
+
+
+### AgenticOperation <a name="AgenticOperation" id="xpander-sdk.AgenticOperation"></a>
+
+Represents an agentic operation with metadata and execution details.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.AgenticOperation.Initializer"></a>
+
+```typescript
+import { AgenticOperation } from 'xpander-sdk'
+
+new AgenticOperation(id: string, name: string, summary: string, description: string, idToUseOnGraph: string, interfaceId: string, isFunction: boolean, method: string, path: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.summary">summary</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.idToUseOnGraph">idToUseOnGraph</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.interfaceId">interfaceId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.isFunction">isFunction</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.method">method</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.Initializer.parameter.path">path</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.AgenticOperation.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.AgenticOperation.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+##### `summary`<sup>Required</sup> <a name="summary" id="xpander-sdk.AgenticOperation.Initializer.parameter.summary"></a>
+
+- *Type:* string
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.AgenticOperation.Initializer.parameter.description"></a>
+
+- *Type:* string
+
+---
+
+##### `idToUseOnGraph`<sup>Required</sup> <a name="idToUseOnGraph" id="xpander-sdk.AgenticOperation.Initializer.parameter.idToUseOnGraph"></a>
+
+- *Type:* string
+
+---
+
+##### `interfaceId`<sup>Required</sup> <a name="interfaceId" id="xpander-sdk.AgenticOperation.Initializer.parameter.interfaceId"></a>
+
+- *Type:* string
+
+---
+
+##### `isFunction`<sup>Required</sup> <a name="isFunction" id="xpander-sdk.AgenticOperation.Initializer.parameter.isFunction"></a>
+
+- *Type:* boolean
+
+---
+
+##### `method`<sup>Required</sup> <a name="method" id="xpander-sdk.AgenticOperation.Initializer.parameter.method"></a>
+
+- *Type:* string
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="xpander-sdk.AgenticOperation.Initializer.parameter.path"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgenticOperation.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.AgenticOperation.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.AgenticOperation.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.AgenticOperation.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.AgenticOperation.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgenticOperation.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.AgenticOperation.fromObject"></a>
+
+```typescript
+import { AgenticOperation } from 'xpander-sdk'
+
+AgenticOperation.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.AgenticOperation.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.AgenticOperation.property.description">description</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.property.idToUseOnGraph">idToUseOnGraph</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.property.interfaceId">interfaceId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.property.isFunction">isFunction</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.property.method">method</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.property.path">path</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgenticOperation.property.summary">summary</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.AgenticOperation.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.AgenticOperation.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `idToUseOnGraph`<sup>Required</sup> <a name="idToUseOnGraph" id="xpander-sdk.AgenticOperation.property.idToUseOnGraph"></a>
+
+```typescript
+public readonly idToUseOnGraph: string;
+```
+
+- *Type:* string
+
+---
+
+##### `interfaceId`<sup>Required</sup> <a name="interfaceId" id="xpander-sdk.AgenticOperation.property.interfaceId"></a>
+
+```typescript
+public readonly interfaceId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `isFunction`<sup>Required</sup> <a name="isFunction" id="xpander-sdk.AgenticOperation.property.isFunction"></a>
+
+```typescript
+public readonly isFunction: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `method`<sup>Required</sup> <a name="method" id="xpander-sdk.AgenticOperation.property.method"></a>
+
+```typescript
+public readonly method: string;
+```
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.AgenticOperation.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="xpander-sdk.AgenticOperation.property.path"></a>
+
+```typescript
+public readonly path: string;
+```
+
+- *Type:* string
+
+---
+
+##### `summary`<sup>Required</sup> <a name="summary" id="xpander-sdk.AgenticOperation.property.summary"></a>
+
+```typescript
+public readonly summary: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -1615,6 +2070,8 @@ Identifier of the worker associated with the execution.
 
 ### Graph <a name="Graph" id="xpander-sdk.Graph"></a>
 
+Represents a graph structure containing nodes related to an agent.
+
 #### Initializers <a name="Initializers" id="xpander-sdk.Graph.Initializer"></a>
 
 ```typescript
@@ -1649,10 +2106,10 @@ new Graph(agent: Agent, items: GraphItem[])
 | <code><a href="#xpander-sdk.Graph.from">from</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.toJson">toJson</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Graph.addNode">addNode</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Graph.findNodeByItemId">findNodeByItemId</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Graph.findNodeByNodeId">findNodeByNodeId</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Graph.reset">reset</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.addNode">addNode</a></code> | Adds a new node to the graph. |
+| <code><a href="#xpander-sdk.Graph.findNodeByItemId">findNodeByItemId</a></code> | Finds a node in the graph by its item ID. |
+| <code><a href="#xpander-sdk.Graph.findNodeByNodeId">findNodeByNodeId</a></code> | Finds a node in the graph by its node ID. |
+| <code><a href="#xpander-sdk.Graph.reset">reset</a></code> | Resets the graph for the associated agent. |
 
 ---
 
@@ -1686,9 +2143,13 @@ public toJson(): string
 public addNode(node: GraphItem | Agent): GraphItem
 ```
 
+Adds a new node to the graph.
+
 ###### `node`<sup>Required</sup> <a name="node" id="xpander-sdk.Graph.addNode.parameter.node"></a>
 
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a> | <a href="#xpander-sdk.Agent">Agent</a>
+
+The node to add, which can be an agent or a graph item.
 
 ---
 
@@ -1698,9 +2159,13 @@ public addNode(node: GraphItem | Agent): GraphItem
 public findNodeByItemId(itemId: string): GraphItem
 ```
 
+Finds a node in the graph by its item ID.
+
 ###### `itemId`<sup>Required</sup> <a name="itemId" id="xpander-sdk.Graph.findNodeByItemId.parameter.itemId"></a>
 
 - *Type:* string
+
+The item ID to search for.
 
 ---
 
@@ -1710,9 +2175,13 @@ public findNodeByItemId(itemId: string): GraphItem
 public findNodeByNodeId(nodeId: string): GraphItem
 ```
 
+Finds a node in the graph by its node ID.
+
 ###### `nodeId`<sup>Required</sup> <a name="nodeId" id="xpander-sdk.Graph.findNodeByNodeId.parameter.nodeId"></a>
 
 - *Type:* string
+
+The node ID to search for.
 
 ---
 
@@ -1721,6 +2190,8 @@ public findNodeByNodeId(nodeId: string): GraphItem
 ```typescript
 public reset(): void
 ```
+
+Resets the graph for the associated agent.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -1748,9 +2219,9 @@ Graph.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Graph.property.isEmpty">isEmpty</a></code> | <code>boolean</code> | *No description.* |
-| <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Graph.property.isEmpty">isEmpty</a></code> | <code>boolean</code> | Checks whether the graph is empty. |
+| <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | Gets the list of nodes in the graph. |
+| <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | Gets the last node in the graph. |
 
 ---
 
@@ -1762,6 +2233,8 @@ public readonly isEmpty: boolean;
 
 - *Type:* boolean
 
+Checks whether the graph is empty.
+
 ---
 
 ##### `nodes`<sup>Required</sup> <a name="nodes" id="xpander-sdk.Graph.property.nodes"></a>
@@ -1771,6 +2244,8 @@ public readonly nodes: GraphItem[];
 ```
 
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
+
+Gets the list of nodes in the graph.
 
 ---
 
@@ -1782,10 +2257,14 @@ public readonly lastNode: GraphItem;
 
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>
 
+Gets the last node in the graph.
+
 ---
 
 
 ### GraphItem <a name="GraphItem" id="xpander-sdk.GraphItem"></a>
+
+Represents a single item (node) in an agent's graph structure.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.GraphItem.Initializer"></a>
 
@@ -1863,8 +2342,8 @@ new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: 
 | <code><a href="#xpander-sdk.GraphItem.from">from</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.toDict">toDict</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.toJson">toJson</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.GraphItem.connect">connect</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.GraphItem.save">save</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.connect">connect</a></code> | Connects this graph item to other graph items, creating edges in the graph. |
+| <code><a href="#xpander-sdk.GraphItem.save">save</a></code> | Saves the current graph item state to the server. |
 
 ---
 
@@ -1898,9 +2377,13 @@ public toJson(): string
 public connect(targets: GraphItem[]): GraphItem
 ```
 
+Connects this graph item to other graph items, creating edges in the graph.
+
 ###### `targets`<sup>Required</sup> <a name="targets" id="xpander-sdk.GraphItem.connect.parameter.targets"></a>
 
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
+
+The target graph items to connect to.
 
 ---
 
@@ -1909,6 +2392,8 @@ public connect(targets: GraphItem[]): GraphItem
 ```typescript
 public save(): GraphItem
 ```
+
+Saves the current graph item state to the server.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -2672,6 +3157,8 @@ public readonly worker: LLMTokens;
 
 ### ToolCall <a name="ToolCall" id="xpander-sdk.ToolCall"></a>
 
+Represents a tool call with its metadata and payload.
+
 #### Initializers <a name="Initializers" id="xpander-sdk.ToolCall.Initializer"></a>
 
 ```typescript
@@ -2840,6 +3327,8 @@ public readonly type: ToolCallType;
 
 
 ### ToolCallResult <a name="ToolCallResult" id="xpander-sdk.ToolCallResult"></a>
+
+Represents the result of a tool call execution.
 
 #### Initializers <a name="Initializers" id="xpander-sdk.ToolCallResult.Initializer"></a>
 

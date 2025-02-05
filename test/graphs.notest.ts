@@ -62,7 +62,7 @@ describe('Test xpander.ai SDK (GRAPHS)', () => {
 
     // update graph item
     const graph = agent.graph;
-    const graphItem = graph.lastNode; // take last
+    const graphItem = graph.lastNode!; // take last
 
     startTime = getStartTime();
     graphItem.name = 'Hello world';

@@ -1,8 +1,7 @@
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
-import { ToolCall } from '../core/toolCalls';
-import { getToolBaseSignature } from '../core/tools';
 import { BaseLLMProvider } from './shared/baseProvider';
+import { ToolCall, getToolBaseSignature } from '../core/tools';
 
 /**
  * Handles interactions with the Ollama LLM provider, including tool post-processing

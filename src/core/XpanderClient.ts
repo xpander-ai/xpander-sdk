@@ -1,11 +1,11 @@
 import { Agents } from './agents/AgentsController';
 import { Configuration } from './Configuration';
-import { ToolCall } from './toolCalls';
+import { ToolCall } from './tools/ToolCall';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
-import { ensureToolCallPayloadStructure } from './tools';
 import { ToolCallType } from '../types';
+import { ensureToolCallPayloadStructure } from './tools/utils';
 
 /**
  * XpanderClient provides methods for configuring and interacting with xpanderAI tools,
