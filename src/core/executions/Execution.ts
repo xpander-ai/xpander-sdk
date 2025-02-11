@@ -23,7 +23,7 @@ export class Execution extends Base {
       createdExecution.status,
       createdExecution.lastExecutedNodeId,
       createdExecution.memoryThreadId,
-      createdExecution.parentExecution,
+      createdExecution.parentExecution || '',
       createdExecution.workerId,
       createdExecution.result || '',
       createdExecution.llmTokens,
