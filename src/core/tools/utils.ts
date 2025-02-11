@@ -598,3 +598,19 @@ export function appendDescriptionOverride(
   }
   return newTool;
 }
+
+export const generateToolCallId = (): string => {
+  const prefix = 'call_';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const length = 24;
+  let randomString = '';
+
+  for (let i = 0; i < length; i++) {
+    randomString += characters.charAt(
+      Math.floor(Math.random() * characters.length),
+    );
+  }
+
+  return prefix + randomString;
+};
