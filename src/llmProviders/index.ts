@@ -1,6 +1,7 @@
 // Import providers
 import { AmazonBedrock } from './amazonBedrock';
 import { FriendliAI } from './friendliAI';
+import { GeminiOpenAI } from './geminiOpenAI';
 import { LangChain } from './langchain';
 import { NvidiaNIM } from './nvidiaNim';
 import { Ollama } from './ollama';
@@ -15,6 +16,7 @@ const allProviders = [
   AmazonBedrock,
   NvidiaNIM,
   Ollama,
+  GeminiOpenAI,
 ] as const;
 
 // Export individual providers and the combined array for flexibility in imports

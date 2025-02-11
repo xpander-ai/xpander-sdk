@@ -128,6 +128,7 @@ export class Memory extends Base {
     let messages: IMemoryMessage[] = this.messages;
     switch (this.llmProvider) {
       case LLMProvider.OPEN_AI:
+      case LLMProvider.GEMINI_OPEN_AI:
       case LLMProvider.NVIDIA_NIM:
       case LLMProvider.FRIENDLI_AI:
         return BaseOpenAISDKHandler.convertMessages(messages);

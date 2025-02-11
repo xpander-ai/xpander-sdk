@@ -1,4 +1,5 @@
 import { Agents } from './agents/AgentsController';
+import CacheService from './CacheService';
 import { Configuration } from './Configuration';
 import { ToolCall } from './tools/ToolCall';
 import { LLMProvider } from '../constants/llmProvider';
@@ -30,6 +31,14 @@ export class XpanderClient {
     if (!provider) {
       throw new Error(`provider (${llmProvider}) not found`);
     }
+
+    const cachedResponse = !!llmResponse?.created
+      ? CacheService.getInstance().get(`llmResponse_${llmResponse.created}`)
+      : null;
+    if (cachedResponse) {
+      llmResponse = cachedResponse;
+    }
+
     return provider.extractToolCalls(llmResponse).map((toolCall) =>
       ToolCall.fromObject({
         ...toolCall,
