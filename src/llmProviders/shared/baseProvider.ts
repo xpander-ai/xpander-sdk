@@ -4,9 +4,10 @@ import { Agent } from '../../core/agents/Agent';
 import {
   ToolCall,
   createTool,
+  getSubAgentNameFromOAS,
   modifyPropertiesByRemoteSettings,
 } from '../../core/tools';
-import { IToolInstructions } from '../../types';
+import { AgentDelegationType, IToolInstructions } from '../../types';
 
 /**
  * BaseLLMProvider serves as the foundational class for integrating different
@@ -91,6 +92,25 @@ export class BaseLLMProvider {
       toolset = toolset.filter(
         (tool) => tool.function.name !== AGENT_FINISH_TOOL_ID,
       );
+    }
+
+    // agent sequence delegation
+    if (this.agent.delegationType === AgentDelegationType.SEQUENCE) {
+      const isFirstIteration = !this.agent.execution?.lastExecutedNodeId;
+      if (!this.agent.graph.rootNode) {
+        throw new Error('Root node not found');
+      }
+
+      // first iteration keep only root node without finish tool
+      if (isFirstIteration) {
+        const rootNodeToolName = getSubAgentNameFromOAS(
+          this.agent.graph.rootNode.itemId,
+          this.agent.oas,
+        );
+        toolset = toolset.filter(
+          (tool) => tool.function.name === rootNodeToolName,
+        );
+      }
     }
 
     return this.postProcessTools(toolset);

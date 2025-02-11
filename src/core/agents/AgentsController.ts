@@ -1,6 +1,11 @@
 import request, { HttpVerb } from 'sync-request';
 import { Agent } from './Agent';
-import { AgentAccessScope, AgentStatus, AgentType } from '../../types/agents';
+import {
+  AgentAccessScope,
+  AgentDelegationType,
+  AgentStatus,
+  AgentType,
+} from '../../types/agents';
 import { MemoryStrategy, MemoryType } from '../../types/memory';
 import { Configuration } from '../Configuration';
 import { convertKeysToCamelCase } from '../utils';
@@ -45,6 +50,7 @@ export class Agents {
             camelCasedAgent.name,
             camelCasedAgent.organizationId,
             camelCasedAgent.status,
+            camelCasedAgent.delegationType,
             camelCasedAgent.memoryType,
             camelCasedAgent.memoryStrategy,
             camelCasedAgent.enrichedInstructions,
@@ -53,6 +59,8 @@ export class Agents {
             camelCasedAgent.enrichedPrompts,
             [],
             [],
+            [],
+            agent.oas,
           );
         }) || [];
       return this.agentsList;
@@ -75,6 +83,7 @@ export class Agents {
         '',
         '',
         AgentStatus.ACTIVE,
+        AgentDelegationType.ROUTER,
         MemoryType.SHORT_TERM,
         MemoryStrategy.FULL,
         { role: '', general: '', goal: '' },
@@ -83,6 +92,8 @@ export class Agents {
         [],
         [],
         [],
+        [],
+        null,
       );
       agent.load();
       return agent;

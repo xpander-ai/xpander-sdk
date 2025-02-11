@@ -17,6 +17,7 @@ import {
   IAgentInstructions,
   AgentAccessScope,
   AgentGraphItemSubType,
+  AgentDelegationType,
 } from '../../types/agents';
 import {
   IMemoryMessage,
@@ -73,6 +74,7 @@ export class Agent extends Base {
    * @param name - Human-readable name of the agent.
    * @param organizationId - Organization ID to which the agent belongs.
    * @param status - Current status of the agent.
+   * @param delegationType - The agent's delegation type (Router/Sequence).
    * @param memoryType - Type of memory the agent utilizes.
    * @param memoryStrategy - Strategy for memory management.
    * @param instructions - Instructions for the agent's operation.
@@ -89,6 +91,7 @@ export class Agent extends Base {
     public name: string,
     public organizationId: string,
     public status: AgentStatus,
+    public delegationType: AgentDelegationType,
     public memoryType: MemoryType,
     public memoryStrategy: MemoryStrategy,
     public instructions: IAgentInstructions,
@@ -98,6 +101,7 @@ export class Agent extends Base {
     public tools: IAgentTool[] = [],
     private _graph: any[] = [],
     public knowledgeBases: KnowledgeBase[] = [],
+    public oas: any = null,
   ) {
     super();
     if (this.tools.length !== 0) {
@@ -169,8 +173,9 @@ export class Agent extends Base {
         this.configuration,
         agent.id,
         agent.name,
-        agent.status,
         agent.organizationId,
+        agent.status,
+        agent.delegationType,
         agent.memoryType,
         agent.memoryStrategy,
         agent.enrichedInstructions,
@@ -197,6 +202,7 @@ export class Agent extends Base {
               ),
           ),
         agent.knowledgeBases,
+        rawAgent.oas,
       );
       if (agent?.knowledgeBases && agent.knowledgeBases.length !== 0) {
         loadedAgent.knowledgeBases = KnowledgeBase.loadByAgent(loadedAgent);
@@ -569,10 +575,17 @@ export class Agent extends Base {
           this.id = pendingExecution.agentId;
 
           const withAgentEndTool = this.withAgentEndTool;
+          const localTools = this.localTools;
 
           this.load(pendingExecution.agentId);
+
+          // preserve agent end tool state
           if (!withAgentEndTool) {
             this.disableAgentEndTool();
+          }
+          // preserve local tools
+          if (localTools && localTools.length !== 0) {
+            this.localTools = localTools;
           }
 
           this.isLocalRun = true;

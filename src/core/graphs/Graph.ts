@@ -153,4 +153,10 @@ export class Graph extends Base {
       throw new Error('Failed to reset agent graph');
     }
   }
+
+  public get rootNode(): GraphItem | undefined {
+    return this.items.find(
+      (gi) => this.items.every((item) => !item.targets.includes(gi.id)), // Not targeted by others
+    );
+  }
 }
