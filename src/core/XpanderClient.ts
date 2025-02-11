@@ -5,7 +5,10 @@ import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
 import { ToolCallType } from '../types';
-import { ensureToolCallPayloadStructure } from './tools/utils';
+import {
+  ensureToolCallPayloadStructure,
+  generateToolCallId,
+} from './tools/utils';
 
 /**
  * XpanderClient provides methods for configuring and interacting with xpanderAI tools,
@@ -34,6 +37,7 @@ export class XpanderClient {
           toolCall.type === ToolCallType.LOCAL,
           toolCall?.payload || {},
         ),
+        toolCallId: toolCall.toolCallId || generateToolCallId(),
       }),
     );
   }
