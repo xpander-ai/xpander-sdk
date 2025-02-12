@@ -11,6 +11,9 @@ export enum LLMProvider {
   /** Represents the 'openai' provider. */
   OPEN_AI = 'openai',
 
+  /** Represents the 'gemini-openai' provider. */
+  GEMINI_OPEN_AI = 'gemini-openai',
+
   /** Represents the 'openai' provider. */
   REAL_TIME_OPEN_AI = 'realtimeopenai',
 

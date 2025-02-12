@@ -5498,6 +5498,7 @@ selection of the desired LLM provider for specific tasks.
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.GEMINI_OPEN_AI">GEMINI_OPEN_AI</a></code> | Represents the 'gemini-openai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.REAL_TIME_OPEN_AI">REAL_TIME_OPEN_AI</a></code> | Represents the 'openai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.AMAZON_BEDROCK">AMAZON_BEDROCK</a></code> | Represents the 'amazonBedrock' provider. |
@@ -5516,6 +5517,13 @@ Represents the 'langchain' provider.
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
 Represents the 'openai' provider.
+
+---
+
+
+##### `GEMINI_OPEN_AI` <a name="GEMINI_OPEN_AI" id="xpander-sdk.LLMProvider.GEMINI_OPEN_AI"></a>
+
+Represents the 'gemini-openai' provider.
 
 ---
 

@@ -1,5 +1,5 @@
 import request, { HttpVerb } from 'sync-request';
-import { AgentGraphItemType, IAgentGraphItemSettings } from '../../types';
+import { AgentGraphItemType } from '../../types';
 import { Agent } from '../agents';
 import { Base } from '../base';
 import { convertKeysToCamelCase } from '../utils';
@@ -30,7 +30,7 @@ export class GraphItem extends Base {
     public type: AgentGraphItemType = AgentGraphItemType.TOOL,
     public isLocalTool: boolean = false,
     public targets: string[] = [],
-    public settings?: IAgentGraphItemSettings,
+    public settings?: any,
   ) {
     super();
   }
