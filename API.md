@@ -2277,7 +2277,7 @@ Represents a single item (node) in an agent's graph structure.
 ```typescript
 import { GraphItem } from 'xpander-sdk'
 
-new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: AgentGraphItemType, isLocalTool?: boolean, targets?: string[], settings?: IAgentGraphItemSettings)
+new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: AgentGraphItemType, isLocalTool?: boolean, targets?: string[], settings?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -2289,7 +2289,7 @@ new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: 
 | <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.type">type</a></code> | <code><a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.isLocalTool">isLocalTool</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.targets">targets</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.settings">settings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.settings">settings</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -2337,7 +2337,7 @@ new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: 
 
 ##### `settings`<sup>Optional</sup> <a name="settings" id="xpander-sdk.GraphItem.Initializer.parameter.settings"></a>
 
-- *Type:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
+- *Type:* any
 
 ---
 
@@ -2433,7 +2433,7 @@ GraphItem.fromObject(data: any)
 | <code><a href="#xpander-sdk.GraphItem.property.name">name</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.property.targets">targets</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.property.type">type</a></code> | <code><a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.GraphItem.property.settings">settings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.property.settings">settings</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -2500,10 +2500,10 @@ public readonly type: AgentGraphItemType;
 ##### `settings`<sup>Optional</sup> <a name="settings" id="xpander-sdk.GraphItem.property.settings"></a>
 
 ```typescript
-public readonly settings: IAgentGraphItemSettings;
+public readonly settings: any;
 ```
 
-- *Type:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
+- *Type:* any
 
 ---
 
