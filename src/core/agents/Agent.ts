@@ -429,7 +429,10 @@ export class Agent extends Base {
       toolCallResult.result = executionResult.data;
 
       // backend asked to stop the execution
-      if (executionResult?.headers?.['xpander-agent-stop'] === 'true') {
+      if (
+        executionResult?.headers?.['xpander-agent-stop'] === 'true' &&
+        this.withAgentEndTool
+      ) {
         this.shouldStop = true;
       }
 
