@@ -537,6 +537,7 @@ Agent.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#xpander-sdk.Agent.property.endToolEnabled">endToolEnabled</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has local tools loaded. |
 | <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | Retrieves the memory instance for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.messages">messages</a></code> | <code>any[]</code> | Retrieves list of messages. |
@@ -563,6 +564,16 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.execution">execution</a></code> | <code><a href="#xpander-sdk.Execution">Execution</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.executionMemory">executionMemory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.userDetails">userDetails</a></code> | <code><a href="#xpander-sdk.IUserDetails">IUserDetails</a></code> | *No description.* |
+
+---
+
+##### `endToolEnabled`<sup>Required</sup> <a name="endToolEnabled" id="xpander-sdk.Agent.property.endToolEnabled"></a>
+
+```typescript
+public readonly endToolEnabled: boolean;
+```
+
+- *Type:* boolean
 
 ---
 

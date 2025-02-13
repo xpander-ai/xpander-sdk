@@ -943,4 +943,8 @@ export class Agent extends Base {
       throw new Error('Failed to attach operations to agent');
     }
   }
+
+  public get endToolEnabled(): boolean {
+    return this.withAgentEndTool;
+  }
 }

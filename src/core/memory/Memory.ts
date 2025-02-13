@@ -216,7 +216,9 @@ export class Memory extends Base {
           `Your General instructions: ${instructions.general}`,
           `Your Role instructions: ${instructions.role}`,
           `Your Goal instructions: ${instructions.goal}`,
-          `IMPORTANT: When done or unable to proceed after attempts, use "xpfinish-agent-execution-finished" to mark success or failure.`,
+          this.agent.endToolEnabled
+            ? `IMPORTANT: When done or unable to proceed after attempts, use "xpfinish-agent-execution-finished" to mark success or failure.`
+            : '',
         ].join('\n'),
       },
     ]);
