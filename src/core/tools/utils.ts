@@ -599,6 +599,7 @@ export function appendDescriptionOverride(
   return newTool;
 }
 
+<<<<<<< HEAD
 export const getSubAgentNameFromOAS = (agentId: string, oas: any) => {
   return oas?.paths?.[`/${agentId}`].get.operationId;
 };
@@ -607,4 +608,20 @@ export const getSubAgentIdFromOASByName = (agentName: string, oas: any) => {
   return Object.keys(oas?.paths)
     ?.find((k) => oas?.paths[k].get.operationId === agentName)
     ?.replace('/', '');
+=======
+export const generateToolCallId = (): string => {
+  const prefix = 'call_';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const length = 24;
+  let randomString = '';
+
+  for (let i = 0; i < length; i++) {
+    randomString += characters.charAt(
+      Math.floor(Math.random() * characters.length),
+    );
+  }
+
+  return prefix + randomString;
+>>>>>>> main
 };

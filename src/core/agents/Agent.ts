@@ -39,6 +39,7 @@ import {
   appendPermanentValuesToResult,
   ensureToolCallPayloadStructure,
   executeTool,
+  generateToolCallId,
   mergeDeep,
   testToolGraphPosition,
 } from '../tools/utils';
@@ -245,6 +246,34 @@ export class Agent extends Base {
    * @param messages - An array of messages to be added to the memory thread.
    */
   public addMessages(messages: any): void {
+    // in case of openai gemini - ensure tool call id exists + content
+    if (Array.isArray(messages?.choices) && messages.created) {
+      let fixed = false;
+      for (const { message } of messages.choices) {
+        if (
+          Array.isArray(message?.tool_calls) &&
+          message?.tool_calls?.length !== 0
+        ) {
+          for (const tc of message.tool_calls) {
+            if (!tc.id || tc.id === '') {
+              fixed = true;
+              tc.id = generateToolCallId();
+              if (!message.content) {
+                message.content = `Calling ${tc.function.name}`;
+              } else {
+                message.content += ` + Calling ${tc.function.name}`;
+              }
+            }
+          }
+        }
+      }
+      if (fixed) {
+        CacheService.getInstance().set(
+          `llmResponse_${messages.created}`,
+          messages,
+        );
+      }
+    }
     return this.memory.addMessages(messages);
   }
 
@@ -406,7 +435,10 @@ export class Agent extends Base {
       toolCallResult.result = executionResult.data;
 
       // backend asked to stop the execution
-      if (executionResult?.headers?.['xpander-agent-stop'] === 'true') {
+      if (
+        executionResult?.headers?.['xpander-agent-stop'] === 'true' &&
+        this.withAgentEndTool
+      ) {
         this.shouldStop = true;
       }
 
@@ -923,5 +955,9 @@ export class Agent extends Base {
     } catch (err) {
       throw new Error('Failed to attach operations to agent');
     }
+  }
+
+  public get endToolEnabled(): boolean {
+    return this.withAgentEndTool;
   }
 }

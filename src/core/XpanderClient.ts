@@ -1,11 +1,15 @@
 import { Agents } from './agents/AgentsController';
+import CacheService from './CacheService';
 import { Configuration } from './Configuration';
 import { ToolCall } from './tools/ToolCall';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
 import { ToolCallType } from '../types';
-import { ensureToolCallPayloadStructure } from './tools/utils';
+import {
+  ensureToolCallPayloadStructure,
+  generateToolCallId,
+} from './tools/utils';
 
 /**
  * XpanderClient provides methods for configuring and interacting with xpanderAI tools,
@@ -27,6 +31,14 @@ export class XpanderClient {
     if (!provider) {
       throw new Error(`provider (${llmProvider}) not found`);
     }
+
+    const cachedResponse = !!llmResponse?.created
+      ? CacheService.getInstance().get(`llmResponse_${llmResponse.created}`)
+      : null;
+    if (cachedResponse) {
+      llmResponse = cachedResponse;
+    }
+
     return provider.extractToolCalls(llmResponse).map((toolCall) =>
       ToolCall.fromObject({
         ...toolCall,
@@ -34,6 +46,7 @@ export class XpanderClient {
           toolCall.type === ToolCallType.LOCAL,
           toolCall?.payload || {},
         ),
+        toolCallId: toolCall.toolCallId || generateToolCallId(),
       }),
     );
   }

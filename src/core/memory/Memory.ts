@@ -128,6 +128,7 @@ export class Memory extends Base {
     let messages: IMemoryMessage[] = this.messages;
     switch (this.llmProvider) {
       case LLMProvider.OPEN_AI:
+      case LLMProvider.GEMINI_OPEN_AI:
       case LLMProvider.NVIDIA_NIM:
       case LLMProvider.FRIENDLI_AI:
         return BaseOpenAISDKHandler.convertMessages(messages);
@@ -215,7 +216,9 @@ export class Memory extends Base {
           `Your General instructions: ${instructions.general}`,
           `Your Role instructions: ${instructions.role}`,
           `Your Goal instructions: ${instructions.goal}`,
-          `IMPORTANT: When done or unable to proceed after attempts, use "xpfinish-agent-execution-finished" to mark success or failure.`,
+          this.agent.endToolEnabled
+            ? `IMPORTANT: When done or unable to proceed after attempts, use "xpfinish-agent-execution-finished" to mark success or failure.`
+            : '',
         ].join('\n'),
       },
     ]);

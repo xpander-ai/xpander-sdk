@@ -537,6 +537,7 @@ Agent.fromObject(data: any)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#xpander-sdk.Agent.property.endToolEnabled">endToolEnabled</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has local tools loaded. |
 | <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | Retrieves the memory instance for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.messages">messages</a></code> | <code>any[]</code> | Retrieves list of messages. |
@@ -563,6 +564,16 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.execution">execution</a></code> | <code><a href="#xpander-sdk.Execution">Execution</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.executionMemory">executionMemory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.userDetails">userDetails</a></code> | <code><a href="#xpander-sdk.IUserDetails">IUserDetails</a></code> | *No description.* |
+
+---
+
+##### `endToolEnabled`<sup>Required</sup> <a name="endToolEnabled" id="xpander-sdk.Agent.property.endToolEnabled"></a>
+
+```typescript
+public readonly endToolEnabled: boolean;
+```
+
+- *Type:* boolean
 
 ---
 
@@ -2277,7 +2288,7 @@ Represents a single item (node) in an agent's graph structure.
 ```typescript
 import { GraphItem } from 'xpander-sdk'
 
-new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: AgentGraphItemType, isLocalTool?: boolean, targets?: string[], settings?: IAgentGraphItemSettings)
+new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: AgentGraphItemType, isLocalTool?: boolean, targets?: string[], settings?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -2289,7 +2300,7 @@ new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: 
 | <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.type">type</a></code> | <code><a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.isLocalTool">isLocalTool</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.targets">targets</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.settings">settings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.Initializer.parameter.settings">settings</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -2337,7 +2348,7 @@ new GraphItem(agent: Agent, id?: string, itemId?: string, name?: string, type?: 
 
 ##### `settings`<sup>Optional</sup> <a name="settings" id="xpander-sdk.GraphItem.Initializer.parameter.settings"></a>
 
-- *Type:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
+- *Type:* any
 
 ---
 
@@ -2433,7 +2444,7 @@ GraphItem.fromObject(data: any)
 | <code><a href="#xpander-sdk.GraphItem.property.name">name</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.property.targets">targets</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.GraphItem.property.type">type</a></code> | <code><a href="#xpander-sdk.AgentGraphItemType">AgentGraphItemType</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.GraphItem.property.settings">settings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.GraphItem.property.settings">settings</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -2500,10 +2511,10 @@ public readonly type: AgentGraphItemType;
 ##### `settings`<sup>Optional</sup> <a name="settings" id="xpander-sdk.GraphItem.property.settings"></a>
 
 ```typescript
-public readonly settings: IAgentGraphItemSettings;
+public readonly settings: any;
 ```
 
-- *Type:* <a href="#xpander-sdk.IAgentGraphItemSettings">IAgentGraphItemSettings</a>
+- *Type:* any
 
 ---
 
@@ -5498,6 +5509,7 @@ selection of the desired LLM provider for specific tasks.
 | --- | --- |
 | <code><a href="#xpander-sdk.LLMProvider.LANG_CHAIN">LANG_CHAIN</a></code> | Represents the 'langchain' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.OPEN_AI">OPEN_AI</a></code> | Represents the 'openai' provider. |
+| <code><a href="#xpander-sdk.LLMProvider.GEMINI_OPEN_AI">GEMINI_OPEN_AI</a></code> | Represents the 'gemini-openai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.REAL_TIME_OPEN_AI">REAL_TIME_OPEN_AI</a></code> | Represents the 'openai' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.NVIDIA_NIM">NVIDIA_NIM</a></code> | Represents the 'nvidiaNim' provider. |
 | <code><a href="#xpander-sdk.LLMProvider.AMAZON_BEDROCK">AMAZON_BEDROCK</a></code> | Represents the 'amazonBedrock' provider. |
@@ -5516,6 +5528,13 @@ Represents the 'langchain' provider.
 ##### `OPEN_AI` <a name="OPEN_AI" id="xpander-sdk.LLMProvider.OPEN_AI"></a>
 
 Represents the 'openai' provider.
+
+---
+
+
+##### `GEMINI_OPEN_AI` <a name="GEMINI_OPEN_AI" id="xpander-sdk.LLMProvider.GEMINI_OPEN_AI"></a>
+
+Represents the 'gemini-openai' provider.
 
 ---
 
