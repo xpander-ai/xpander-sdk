@@ -27,6 +27,8 @@ export class GeminiOpenAI extends OpenAI {
       if (!!tool?.function?.parameters?.properties) {
         for (const property in tool.function.parameters.properties) {
           const isEmpty =
+            'properties' in
+              tool?.function?.parameters?.properties?.[property] &&
             Object.keys(
               tool?.function?.parameters?.properties?.[property]?.properties ||
                 {},
