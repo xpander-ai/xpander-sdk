@@ -40,6 +40,8 @@ import {
   ensureToolCallPayloadStructure,
   executeTool,
   generateToolCallId,
+  getSubAgentIdFromOASByName,
+  getSubAgentNameFromOAS,
   mergeDeep,
   testToolGraphPosition,
 } from '../tools/utils';
@@ -50,6 +52,29 @@ import { convertKeysToCamelCase, generateUUIDv4 } from '../utils';
  * This class facilitates loading agents, handling tool executions, and managing prompt groups.
  */
 export class Agent extends Base {
+  public static getById(configuration: Configuration, agentId: string): Agent {
+    const agent = new Agent(
+      configuration,
+      agentId,
+      '',
+      '',
+      AgentStatus.ACTIVE,
+      AgentDelegationType.ROUTER,
+      MemoryType.SHORT_TERM,
+      MemoryStrategy.FULL,
+      { role: '', general: '', goal: '' },
+      AgentAccessScope.ORGANIZATIONAL,
+      [],
+      [],
+      [],
+      [],
+      [],
+      null,
+    );
+    agent.load();
+    return agent;
+  }
+
   /** Indicates if the agent is ready and tools are loaded. */
   ready: boolean = false;
 
@@ -300,7 +325,10 @@ export class Agent extends Base {
    * @returns {'required' | 'auto'} Returns 'required' if `withAgentEndTool` is true, otherwise 'auto'.
    */
   public get toolChoice(): 'required' | 'auto' {
-    return this.withAgentEndTool ? 'required' : 'auto';
+    return this.withAgentEndTool ||
+      this.delegationType === AgentDelegationType.SEQUENCE
+      ? 'required'
+      : 'auto';
   }
 
   /** Constructs the API URL for this agent. */
@@ -578,17 +606,95 @@ export class Agent extends Base {
     }
   }
 
-  public isFinished() {
+  public isFinished(): boolean {
     let shouldStop = false;
+    let shouldStopBySequence = false;
     if (this.shouldStop) {
       shouldStop = true;
     } else {
-      if (!this.memory) {
-        shouldStop = false;
-      } else {
-        shouldStop = this.memory.messages.some((msg) =>
-          msg.toolCalls?.some((tc) => tc.name === AGENT_FINISH_TOOL_ID),
-        );
+      // sequence delegation manager agent handling
+      if (
+        this.delegationType === AgentDelegationType.SEQUENCE &&
+        !!this?.graph?.rootNode?.itemId &&
+        !!this.execution?.id
+      ) {
+        // is finished by xpfinish?
+        if (
+          this?.messages?.[this?.messages?.length - 2]?.tool_calls?.[0]
+            ?.function?.name === AGENT_FINISH_TOOL_ID
+        ) {
+          return true;
+        }
+
+        // is first iteration?
+        if (!this.execution.lastExecutedNodeId) {
+          // load root agent (1st agent on graph sequence)
+          const firstAgent = Agent.getById(
+            this.configuration,
+            this.graph.rootNode.itemId,
+          );
+          console.debug(
+            `sequence switching from agent ${this.id} to ${firstAgent.id} (first)`,
+          );
+          // create sub execution for the manager (will automatically update the parent execution with the newly created execution)
+          Execution.create(
+            firstAgent,
+            this.execution.input.text || '',
+            this.execution.input.files || [],
+            this.execution.workerId,
+            undefined, // TODO delegation memory strategy
+            this.execution.id,
+            getSubAgentNameFromOAS(firstAgent.id, this.oas),
+          );
+
+          // stop the current agent (stack)
+          shouldStop = shouldStopBySequence = true;
+        } else {
+          // N agent
+          const tools = this.getTools();
+          if (tools.length > 1) {
+            return true; // STOP - ERROR???
+          }
+          if (tools?.[0]?.function?.name === AGENT_FINISH_TOOL_ID) {
+            return false;
+          }
+          const agentId = getSubAgentIdFromOASByName(
+            tools[0].function.name,
+            this.oas,
+          );
+          if (!agentId) {
+            return true; // STOP
+          }
+          // load the next agent (N agent on graph sequence)
+          const nextAgent = Agent.getById(this.configuration, agentId);
+          console.debug(
+            `sequence switching from agent ${this.id} to ${nextAgent.id}`,
+          );
+          // create sub execution for the manager (will automatically update the parent execution with the newly created execution)
+          Execution.create(
+            nextAgent,
+            `${this.execution.input.text}\n${this.messages[this.messages.length - 1].content}` ||
+              '',
+            this.execution.input.files || [],
+            this.execution.workerId,
+            undefined, // TODO delegation memory strategy
+            this.execution.id,
+            getSubAgentNameFromOAS(nextAgent.id, this.oas),
+          );
+
+          // stop the current agent (stack)
+          shouldStop = shouldStopBySequence = true;
+        }
+      }
+
+      if (!shouldStopBySequence) {
+        if (!this.memory) {
+          shouldStop = false;
+        } else {
+          shouldStop = this.memory.messages.some((msg) =>
+            msg.toolCalls?.some((tc) => tc.name === AGENT_FINISH_TOOL_ID),
+          );
+        }
       }
     }
 
@@ -639,6 +745,16 @@ export class Agent extends Base {
         this.execution = Execution.fetch(this, this.execution.parentExecution);
         shouldStop = false;
       }
+    }
+
+    // in case of sequence switch to next agent
+    if (
+      this.delegationType === AgentDelegationType.SEQUENCE &&
+      !!this.execution?.lastExecutedNodeId &&
+      this?.messages?.[this?.messages?.length - 2]?.tool_calls?.[0]?.function
+        ?.name !== AGENT_FINISH_TOOL_ID
+    ) {
+      return this.isFinished();
     }
 
     return shouldStop;

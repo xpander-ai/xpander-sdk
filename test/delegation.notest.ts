@@ -17,7 +17,7 @@ const getStartTime = () => performance.now();
 const announceTiming = (start: number, label: string) =>
   console.log(`${label} took ${(performance.now() - start).toFixed(2)} ms`);
 
-describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
+describe('Test xpander.ai SDK (Sequence Delegation)', () => {
   it('Get Task and handle', async () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
@@ -37,7 +37,14 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
     startTime = getStartTime();
     // manually set execution - should come from worker when running in cloud/on-prem
-    agent.addTask('get longest readable tag');
+    agent.addTask(
+      'get longest readable tag and send me on email (moriel@xpander.ai)',
+    );
+    agent.memory.initMessages(
+      agent.execution?.inputMessage!,
+      agent.instructions,
+    );
+
     announceTiming(startTime, 'Invoke Agent');
 
     let shouldSkip = false;

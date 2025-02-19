@@ -110,6 +110,28 @@ export class BaseLLMProvider {
         toolset = toolset.filter(
           (tool) => tool.function.name === rootNodeToolName,
         );
+      } else if (!!this.agent.execution?.lastExecutedNodeId) {
+        // get only relevant items
+        const lastUsedNode = this.agent.graph.findNodeByNodeId(
+          this.agent.execution?.lastExecutedNodeId,
+        );
+        if (lastUsedNode) {
+          const possibleNodes: string[] = lastUsedNode.targets.map((target) =>
+            getSubAgentNameFromOAS(
+              this.agent.graph.findNodeByNodeId(target)?.itemId!,
+              this.agent.oas,
+            ),
+          );
+
+          // allow end tool (xpfinish)
+          if (possibleNodes.length === 0 && this.agent.endToolEnabled) {
+            possibleNodes.push(AGENT_FINISH_TOOL_ID);
+          }
+
+          toolset = toolset.filter((tool) =>
+            possibleNodes.includes(tool.function.name),
+          );
+        }
       }
     }
 
