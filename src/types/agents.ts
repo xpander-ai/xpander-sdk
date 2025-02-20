@@ -17,6 +17,11 @@ export enum AgentStatus {
   INACTIVE = 'INACTIVE',
 }
 
+export enum AgentDelegationType {
+  ROUTER = 'router',
+  SEQUENCE = 'sequence',
+}
+
 export interface IAgentGraphItemAdvancedFilteringOption {
   returnables?: string[];
   searchables?: string[];

@@ -15,7 +15,7 @@ This class facilitates loading agents, handling tool executions, and managing pr
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[])
+new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, delegationType: AgentDelegationType, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[], oas?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -25,6 +25,7 @@ new Agent(configuration: Configuration, id: string, name: string, organizationId
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.name">name</a></code> | <code>string</code> | - Human-readable name of the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | - Organization ID to which the agent belongs. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | - Current status of the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.delegationType">delegationType</a></code> | <code><a href="#xpander-sdk.AgentDelegationType">AgentDelegationType</a></code> | - The agent's delegation type (Router/Sequence). |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | - Type of memory the agent utilizes. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | - Strategy for memory management. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
@@ -34,6 +35,7 @@ new Agent(configuration: Configuration, id: string, name: string, organizationId
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | - Tools available to the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter._graph">_graph</a></code> | <code>any[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | - Knowledge bases associated with the agent. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.oas">oas</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -74,6 +76,14 @@ Organization ID to which the agent belongs.
 - *Type:* <a href="#xpander-sdk.AgentStatus">AgentStatus</a>
 
 Current status of the agent.
+
+---
+
+##### `delegationType`<sup>Required</sup> <a name="delegationType" id="xpander-sdk.Agent.Initializer.parameter.delegationType"></a>
+
+- *Type:* <a href="#xpander-sdk.AgentDelegationType">AgentDelegationType</a>
+
+The agent's delegation type (Router/Sequence).
 
 ---
 
@@ -144,6 +154,12 @@ Tools available to the agent.
 - *Type:* <a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]
 
 Knowledge bases associated with the agent.
+
+---
+
+##### `oas`<sup>Optional</sup> <a name="oas" id="xpander-sdk.Agent.Initializer.parameter.oas"></a>
+
+- *Type:* any
 
 ---
 
@@ -516,6 +532,7 @@ The user details to update.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#xpander-sdk.Agent.fromObject">fromObject</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.getById">getById</a></code> | *No description.* |
 
 ---
 
@@ -533,6 +550,26 @@ Agent.fromObject(data: any)
 
 ---
 
+##### `getById` <a name="getById" id="xpander-sdk.Agent.getById"></a>
+
+```typescript
+import { Agent } from 'xpander-sdk'
+
+Agent.getById(configuration: Configuration, agentId: string)
+```
+
+###### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.Agent.getById.parameter.configuration"></a>
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+---
+
+###### `agentId`<sup>Required</sup> <a name="agentId" id="xpander-sdk.Agent.getById.parameter.agentId"></a>
+
+- *Type:* string
+
+---
+
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
@@ -547,6 +584,7 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.vanillaKnowledgeBases">vanillaKnowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | Retrieves the vanilla knowledge bases of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | - Scope of the agent's access permissions. |
 | <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.delegationType">delegationType</a></code> | <code><a href="#xpander-sdk.AgentDelegationType">AgentDelegationType</a></code> | - The agent's delegation type (Router/Sequence). |
 | <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.Graph">Graph</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | - Unique identifier for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
@@ -555,6 +593,7 @@ Agent.fromObject(data: any)
 | <code><a href="#xpander-sdk.Agent.property.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | - Strategy for memory management. |
 | <code><a href="#xpander-sdk.Agent.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | - Type of memory the agent utilizes. |
 | <code><a href="#xpander-sdk.Agent.property.name">name</a></code> | <code>string</code> | - Human-readable name of the agent. |
+| <code><a href="#xpander-sdk.Agent.property.oas">oas</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.organizationId">organizationId</a></code> | <code>string</code> | - Organization ID to which the agent belongs. |
 | <code><a href="#xpander-sdk.Agent.property.prompts">prompts</a></code> | <code>string[]</code> | - Prompts used by the agent. |
 | <code><a href="#xpander-sdk.Agent.property.ready">ready</a></code> | <code>boolean</code> | Indicates if the agent is ready and tools are loaded. |
@@ -685,6 +724,18 @@ Configuration settings for the agent.
 
 ---
 
+##### `delegationType`<sup>Required</sup> <a name="delegationType" id="xpander-sdk.Agent.property.delegationType"></a>
+
+```typescript
+public readonly delegationType: AgentDelegationType;
+```
+
+- *Type:* <a href="#xpander-sdk.AgentDelegationType">AgentDelegationType</a>
+
+The agent's delegation type (Router/Sequence).
+
+---
+
 ##### `graph`<sup>Required</sup> <a name="graph" id="xpander-sdk.Agent.property.graph"></a>
 
 ```typescript
@@ -776,6 +827,16 @@ public readonly name: string;
 - *Type:* string
 
 Human-readable name of the agent.
+
+---
+
+##### `oas`<sup>Required</sup> <a name="oas" id="xpander-sdk.Agent.property.oas"></a>
+
+```typescript
+public readonly oas: any;
+```
+
+- *Type:* any
 
 ---
 
@@ -1804,7 +1865,7 @@ Execution.fromObject(data: any)
 ```typescript
 import { Execution } from 'xpander-sdk'
 
-Execution.create(agent: Agent, input: string, files: string[], workerId?: string, threadId?: string)
+Execution.create(agent: Agent, input: string, files: string[], workerId?: string, threadId?: string, parentExecutionId?: string, toolCallName?: string)
 ```
 
 ###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Execution.create.parameter.agent"></a>
@@ -1832,6 +1893,18 @@ Execution.create(agent: Agent, input: string, files: string[], workerId?: string
 ---
 
 ###### `threadId`<sup>Optional</sup> <a name="threadId" id="xpander-sdk.Execution.create.parameter.threadId"></a>
+
+- *Type:* string
+
+---
+
+###### `parentExecutionId`<sup>Optional</sup> <a name="parentExecutionId" id="xpander-sdk.Execution.create.parameter.parentExecutionId"></a>
+
+- *Type:* string
+
+---
+
+###### `toolCallName`<sup>Optional</sup> <a name="toolCallName" id="xpander-sdk.Execution.create.parameter.toolCallName"></a>
 
 - *Type:* string
 
@@ -2239,6 +2312,7 @@ Graph.fromObject(data: any)
 | <code><a href="#xpander-sdk.Graph.property.isEmpty">isEmpty</a></code> | <code>boolean</code> | Checks whether the graph is empty. |
 | <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | Gets the list of nodes in the graph. |
 | <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | Gets the last node in the graph. |
+| <code><a href="#xpander-sdk.Graph.property.rootNode">rootNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | *No description.* |
 
 ---
 
@@ -2275,6 +2349,16 @@ public readonly lastNode: GraphItem;
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>
 
 Gets the last node in the graph.
+
+---
+
+##### `rootNode`<sup>Optional</sup> <a name="rootNode" id="xpander-sdk.Graph.property.rootNode"></a>
+
+```typescript
+public readonly rootNode: GraphItem;
+```
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>
 
 ---
 
@@ -5298,6 +5382,27 @@ public readonly lastName: string;
 
 
 ##### `ORGANIZATIONAL` <a name="ORGANIZATIONAL" id="xpander-sdk.AgentAccessScope.ORGANIZATIONAL"></a>
+
+---
+
+
+### AgentDelegationType <a name="AgentDelegationType" id="xpander-sdk.AgentDelegationType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentDelegationType.ROUTER">ROUTER</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentDelegationType.SEQUENCE">SEQUENCE</a></code> | *No description.* |
+
+---
+
+##### `ROUTER` <a name="ROUTER" id="xpander-sdk.AgentDelegationType.ROUTER"></a>
+
+---
+
+
+##### `SEQUENCE` <a name="SEQUENCE" id="xpander-sdk.AgentDelegationType.SEQUENCE"></a>
 
 ---
 

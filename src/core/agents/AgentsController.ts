@@ -1,7 +1,6 @@
 import request, { HttpVerb } from 'sync-request';
 import { Agent } from './Agent';
-import { AgentAccessScope, AgentStatus, AgentType } from '../../types/agents';
-import { MemoryStrategy, MemoryType } from '../../types/memory';
+import { AgentType } from '../../types/agents';
 import { Configuration } from '../Configuration';
 import { convertKeysToCamelCase } from '../utils';
 
@@ -45,6 +44,7 @@ export class Agents {
             camelCasedAgent.name,
             camelCasedAgent.organizationId,
             camelCasedAgent.status,
+            camelCasedAgent.delegationType,
             camelCasedAgent.memoryType,
             camelCasedAgent.memoryStrategy,
             camelCasedAgent.enrichedInstructions,
@@ -53,6 +53,8 @@ export class Agents {
             camelCasedAgent.enrichedPrompts,
             [],
             [],
+            [],
+            agent.oas,
           );
         }) || [];
       return this.agentsList;
@@ -69,23 +71,7 @@ export class Agents {
    */
   public get(agentId: string): Agent {
     try {
-      const agent = new Agent(
-        this.configuration,
-        agentId,
-        '',
-        '',
-        AgentStatus.ACTIVE,
-        MemoryType.SHORT_TERM,
-        MemoryStrategy.FULL,
-        { role: '', general: '', goal: '' },
-        AgentAccessScope.ORGANIZATIONAL,
-        [],
-        [],
-        [],
-        [],
-      );
-      agent.load();
-      return agent;
+      return Agent.getById(this.configuration, agentId);
     } catch (err) {
       throw new Error('Failed to retrieve agent');
     }
