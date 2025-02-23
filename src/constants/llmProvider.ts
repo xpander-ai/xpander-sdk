@@ -26,3 +26,14 @@ export enum LLMProvider {
   /** Represents the 'FriendliAI' provider. */
   FRIENDLI_AI = 'friendliai',
 }
+
+/**
+ * Maximum token limits for different OpenAI models
+ */
+export const OpenAIModelLimits: { [key: string]: number } = {
+  "gpt-3.5-turbo": 4096,
+  "gpt-4": 8192,
+  "gpt-4-32k": 32768,
+  "text-davinci-003": 4096,
+  // Add more models if OpenAI updates them
+};

@@ -4,7 +4,9 @@ import { XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const xpanderAgentId = '5ee3bfa2-d035-40eb-9037-fe562011ea38';
+const xpanderAgentId = 'ab980afd-706a-44bf-9585-5ea3333ae780';
+// const xpanderAgentId = '3deaa7a1-f430-429a-beff-a84a7113585f'; email
+// const xpanderAgentId = '494cbf75-9bf6-4913-a9d8-19baf500368d'; // notion
 const openAIKey = process.env.OPENAI_API_KEY || '';
 const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
 const organizationId = process.env.ORGANIZATION_ID || '';
@@ -38,11 +40,13 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
     startTime = getStartTime();
     // manually set execution - should come from worker when running in cloud/on-prem
-    //agent.addTask('get longest readable tag');
-    // agent.addTask('Please look at my last two weeks of emails and help me draft responses to the most important ones.');
+    // agent.addTask('get longest readable tag');
+    agent.addTask("Please retrieve the latest 100 articles from Hacker News and summarize the content of each article.");
+    // // agent.addTask("Please retrieve all emails from the last two weeks and summarize each");
 
     // agent.addTask('Please look at my last email and summarize it.');
-    agent.addTask('get the last message from dev channel');
+    // agent.addTask('get the last message from dev channel');
+    // agent.addTask('get the recent 20 messages from each channel in xpander slack');
     announceTiming(startTime, 'Invoke Agent');
 
     console.log(
