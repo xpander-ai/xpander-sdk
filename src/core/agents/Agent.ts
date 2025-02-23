@@ -111,6 +111,7 @@ export class Agent extends Base {
 
   /** Loads the agent data from its source node type. */
   load(agentId: string = '', ignoreCache: boolean = false): void {
+    console.log('Entering Agent.load');
     if (this.ready && !agentId) return;
 
     console.debug(`loading agent ${this.id}`);
@@ -217,6 +218,7 @@ export class Agent extends Base {
    * @returns A list of tools matching the specified provider.
    */
   getTools(llmProvider: LLMProvider = LLMProvider.OPEN_AI): any[] {
+    console.log('Entering Agent.getTools');
     const provider = allProviders.find((p) => p.shouldHandle(llmProvider));
     if (!provider) {
       throw new Error(`Provider (${llmProvider}) not found`);
@@ -239,6 +241,7 @@ export class Agent extends Base {
    * @param messages - An array of messages to be added to the memory thread.
    */
   public addMessages(messages: any): void {
+    console.log('Entering Agent.addMessages');
     return this.memory.addMessages(messages);
   }
 
@@ -248,6 +251,7 @@ export class Agent extends Base {
    * @param toolCallResults - An array of tool call results to be added as messages.
    */
   public addToolCallResults(toolCallResults: ToolCallResult[]): void {
+    console.log('Entering Agent.addToolCallResults');
     return this.memory.addToolCallResults(toolCallResults);
   }
 
@@ -257,6 +261,7 @@ export class Agent extends Base {
    * @returns A list of messages according to the agent's llm provider.
    */
   public get messages() {
+    console.log('Entering Agent.messages');
     return this.memory.retrieveMessages();
   }
 
@@ -279,6 +284,7 @@ export class Agent extends Base {
    * @param tools - The list of local tools to add.
    */
   public addLocalTools(tools: any[] | ILocalTool[]): void {
+    console.log('Entering Agent.addLocalTools');
     this.localTools = tools.map((tool) => ({
       ...tool,
       function: {
@@ -305,6 +311,7 @@ export class Agent extends Base {
     payloadExtension: any = {},
     isMultiple: boolean = false,
   ): ToolCallResult {
+    console.log('Entering Agent.runTool');
     if (!this.execution) {
       throw new Error('Agent cannot run tool without execution');
     }
@@ -435,6 +442,7 @@ export class Agent extends Base {
     toolCalls: ToolCall[],
     payloadExtension: any = {},
   ): ToolCallResult[] {
+    console.log('Entering Agent.runTools');
     // kb before other tools
     const kbToolCalls = toolCalls.filter((tc) => tc.name.startsWith('xpkb'));
     const nonKbToolCalls = toolCalls.filter(
@@ -473,6 +481,7 @@ export class Agent extends Base {
    * @param execution - The execution details.
    */
   public initTask(execution: any): void {
+    console.log('Entering Agent.initTask');
     const camelCasedExecution = convertKeysToCamelCase(execution);
     this.execution = new Execution(
       camelCasedExecution.id,
@@ -495,6 +504,7 @@ export class Agent extends Base {
    * @param userDetails - The user details to update.
    */
   public updateUserDetails(userDetails: any): void {
+    console.log('Entering Agent.updateUserDetails');
     const camelCasedUserDetails = convertKeysToCamelCase(userDetails);
     this.userDetails = camelCasedUserDetails;
   }
@@ -508,6 +518,7 @@ export class Agent extends Base {
 
   /** Retrieves the memory instance for the agent. */
   public get memory(): Memory {
+    console.log('Entering Agent.memory');
     if (!this.executionMemory) {
       // create thread
       this.executionMemory = this.initializeMemory();
@@ -523,6 +534,7 @@ export class Agent extends Base {
 
   /** Initializes the memory instance for the agent. */
   private initializeMemory(): Memory {
+    console.log('Entering Agent.initializeMemory');
     if (!this.execution) {
       throw new Error('Execution is not initialized');
     }
@@ -541,6 +553,7 @@ export class Agent extends Base {
   }
 
   public isFinished() {
+    console.log('Entering Agent.isFinished');
     let shouldStop = false;
     if (this.shouldStop) {
       shouldStop = true;
@@ -555,6 +568,7 @@ export class Agent extends Base {
     }
 
     // check if has sub executions
+    console.log('Checking if has sub executions');
     if (shouldStop && this.isLocalRun && this?.execution?.workerId) {
       const pendingExecution: Execution = Execution.retrievePendingExecution(
         this,
@@ -580,6 +594,7 @@ export class Agent extends Base {
         this.initTask(pendingExecution);
 
         // reload memory
+        console.log('Reloading memory');
         this.executionMemory = this.initializeMemory();
         this.memory.initMessages(
           this.execution?.inputMessage as IMemoryMessage,
@@ -605,6 +620,7 @@ export class Agent extends Base {
     useWorker: boolean = false,
     threadId?: string,
   ): Execution {
+    console.log('Entering Agent.addTask');
     const localWorkerId = !useWorker ? generateUUIDv4() : undefined;
     const execution = Execution.create(
       this,
@@ -619,14 +635,17 @@ export class Agent extends Base {
   }
 
   public stop() {
+    console.log('Entering Agent.stop');
     this.shouldStop = true;
   }
 
   public disableAgentEndTool(): void {
+    console.log('Entering Agent.disableAgentEndTool');
     this.withAgentEndTool = false;
   }
 
   public retrieveExecutionResult(): Execution {
+    console.log('Entering Agent.retrieveExecutionResult');
     if (!this.withAgentEndTool) {
       throw new Error(
         'When an agent runs without an end tool, execution cannot be marked as completed or failed, resulting in no execution output. Handle this accordingly.',
@@ -673,6 +692,7 @@ export class Agent extends Base {
    * @memberof xpanderAI
    */
   public update(): Agent {
+    console.log('Entering Agent.update');
     try {
       const url = `${this.configuration.url}/agents-crud/tools/crud/update`;
       const response = request('PATCH' as HttpVerb, url, {
@@ -704,6 +724,7 @@ export class Agent extends Base {
    * @memberof xpanderAI
    */
   public sync(): Agent {
+    console.log('Entering Agent.sync');
     try {
       const url = `${this.configuration.url}/agents-crud/tools/crud/deploy`;
       const response = request('PUT' as HttpVerb, url, {
@@ -735,6 +756,7 @@ export class Agent extends Base {
   public retrieveAgenticInterfaces(
     ignore_cache: boolean = false,
   ): AgenticInterface[] {
+    console.log('Entering Agent.retrieveAgenticInterfaces');
     const agenticInterfaces: AgenticInterface[] = [];
     const cacheService = CacheService.getInstance();
     const cacheKey = 'organization_interfaces';
@@ -799,6 +821,7 @@ export class Agent extends Base {
     agenticInterface: AgenticInterface,
     ignore_cache: boolean = false,
   ): AgenticOperation[] {
+    console.log('Entering Agent.retrieveAgenticOperations');
     const agenticOperations: AgenticOperation[] = [];
     const cacheService = CacheService.getInstance();
     const cacheKey = `agentic_interface_${agenticInterface.id}_operations`;
@@ -869,6 +892,7 @@ export class Agent extends Base {
    * @memberof xpander.ai
    */
   public attachOperations(operations: AgenticOperation[]): void {
+    console.log('Entering Agent.attachOperations');
     try {
       const agenticInterfaces = this.retrieveAgenticInterfaces();
       const tools: Record<string, string[]> = {};

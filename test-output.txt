@@ -1,0 +1,1083 @@
+
+> xpander-sdk@0.0.0 test
+> npx projen test /Users/laurentobaly/dev/xpander-sdk/test/lauren.test.ts
+
+  console.log
+    Entering Agent.load
+
+      at Agent.load (src/core/agents/Agent.ts:114:13)
+
+  console.debug
+    loading agent 5ee3bfa2-d035-40eb-9037-fe562011ea38
+
+      at Agent.load (src/core/agents/Agent.ts:117:13)
+
+  console.log
+    Entering Agent.load
+
+      at Agent.load (src/core/agents/Agent.ts:114:13)
+
+  console.log
+    Get Agent took 245.56 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Entering Agent.getTools
+
+      at Agent.getTools (src/core/agents/Agent.ts:221:13)
+
+  console.log
+    Tools: [
+      {
+        type: 'function',
+        function: {
+          name: 'SlackConversationManagementGetChannelList',
+          description: 'Lists all channels in a Slack team. If no parameters are missing, proceed with this operation.',
+          parameters: [Object]
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'SlackConversationManagementGetConversationHistory',
+          description: "Retrieves a conversation's history of messages and events. If channel is missing, gather it from a listing operation outside this path.",
+          parameters: [Object]
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'SlackTeamManagementGetUserList',
+          description: 'Lists all users in a Slack team. If no parameters are missing, proceed.',
+          parameters: [Object]
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'SlackConversationManagementGetChannelMembers',
+          description: 'Retrieves members of a conversation. If channel is missing, gather it from a listing operation outside this path.',
+          parameters: [Object]
+        }
+      },
+      {
+        type: 'function',
+        function: {
+          name: 'xpfinish-agent-execution-finished',
+          description: '\n' +
+            'This tool must be selected at the end of the process.\n' +
+            'there are 3 options:\n' +
+            '1. Completed your task successfully -> return True and the results as got in the instructions.\n' +
+            '2. Missing input data and cannot proceed -> return False and the reason why you cannot proceed and what you expect to get as an input.\n' +
+            '3. Cannot proceed due to missing repeated failures, or an inability to solve the problem. -> return False and the reason why you cannot proceed and what is the error.\n' +
+            'This tool must be selected at the end of the process instead of using a text message.\n' +
+            'If you didnt receive the expected input data, use this tool immediately before anything else.\n' +
+            'If you decided you finished the task successfully, return the results as got in the instructions.\n' +
+            '        ',
+          parameters: [Object]
+        }
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:36:13)
+
+  console.log
+    Entering Agent.addTask
+
+      at Agent.addTask (src/core/agents/Agent.ts:619:13)
+
+  console.log
+    Entering Agent.initTask
+
+      at Agent.initTask (src/core/agents/Agent.ts:483:13)
+
+  console.log
+    Invoke Agent took 333.38 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Entering Agent.initializeMemory
+
+      at Agent.initializeMemory (src/core/agents/Agent.ts:535:13)
+
+  console.log
+    Entering Memory.create
+
+      at Function.create (src/core/memory/Memory.ts:27:13)
+
+  console.log
+    [Memory] Creating new memory for Agent ID: 5ee3bfa2-d035-40eb-9037-fe562011ea38
+
+      at Function.create (src/core/memory/Memory.ts:28:13)
+
+  console.log
+    [Memory] Created memory thread with ID: 8e002469-2afd-44db-b779-845629d0a12a
+
+      at Function.create (src/core/memory/Memory.ts:51:13)
+
+  console.log
+    Entering Memory.initMessages
+
+      at Memory.initMessages (src/core/memory/Memory.ts:257:13)
+
+  console.log
+    Entering Memory.initInstructions
+
+      at Memory.initInstructions (src/core/memory/Memory.ts:217:13)
+
+  console.log
+    Entering Memory.addMessages
+
+      at Memory.addMessages (src/core/memory/Memory.ts:180:13)
+
+  console.log
+    Entering Memory.addMessages
+
+      at Memory.addMessages (src/core/memory/Memory.ts:180:13)
+
+  console.log
+    Entering Memory.addKnowledgeBase
+
+      at Memory.addKnowledgeBase (src/core/memory/Memory.ts:277:13)
+
+  console.log
+    Memory Thread after add task: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:48:13)
+
+  console.log
+    Entering Agent.isFinished
+
+      at Agent.isFinished (src/core/agents/Agent.ts:554:13)
+
+  console.log
+    num_loops: 1
+
+      at Object.<anonymous> (test/lauren.test.ts:56:15)
+
+  console.log
+    Entering Memory.retrieveMessages
+
+      at Memory.retrieveMessages (src/core/memory/Memory.ts:145:13)
+
+  console.log
+    Entering Memory.runStrategy
+
+      at Memory.runStrategy (src/core/memory/Memory.ts:119:13)
+
+  console.log
+    Entering Agent.getTools
+
+      at Agent.getTools (src/core/agents/Agent.ts:221:13)
+
+  console.log
+    LLM Completion took 1814.01 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Entering Agent.addMessages
+
+      at Agent.addMessages (src/core/agents/Agent.ts:244:13)
+
+  console.log
+    Entering Memory.addMessages
+
+      at Memory.addMessages (src/core/memory/Memory.ts:180:13)
+
+  console.log
+    Entering Memory.convertLLMResponseToMessages
+
+      at Memory.convertLLMResponseToMessages (src/core/memory/Memory.ts:307:13)
+
+  console.log
+    Adding messages took 164.55 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after adding messages: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:75:15)
+
+  console.log
+    Tool Calls: [
+      {
+        "name": "SlackConversationManagementGetChannelList",
+        "type": "xpander",
+        "payload": {
+          "bodyParams": {},
+          "queryParams": {
+            "exclude_archived": true,
+            "types": "public_channel,private_channel"
+          },
+          "pathParams": {},
+          "headers": {}
+        },
+        "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw",
+        "graphApproved": false
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:80:15)
+
+  console.log
+    Toolcall Extractions took 0.57 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after extracting tool calls: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:84:15)
+
+  console.log
+    Entering Agent.runTools
+
+      at Agent.runTools (src/core/agents/Agent.ts:444:13)
+
+  console.log
+    Entering Agent.runTool
+
+      at Agent.runTool (src/core/agents/Agent.ts:313:13)
+          at Array.map (<anonymous>)
+
+  console.debug
+    running tool SlackConversationManagementGetChannelList on agent 5ee3bfa2-d035-40eb-9037-fe562011ea38 with execution 4dd3444b-b1c3-4563-a9d7-0da66915b285
+
+      at Agent.runTool (src/core/agents/Agent.ts:318:13)
+          at Array.map (<anonymous>)
+
+  console.log
+    Running tools took 4082.99 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after running tools: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:93:15)
+
+  console.log
+    Entering Agent.isFinished
+
+      at Agent.isFinished (src/core/agents/Agent.ts:554:13)
+
+  console.log
+    num_loops: 2
+
+      at Object.<anonymous> (test/lauren.test.ts:56:15)
+
+  console.log
+    Entering Memory.retrieveMessages
+
+      at Memory.retrieveMessages (src/core/memory/Memory.ts:145:13)
+
+  console.log
+    Entering Memory.runStrategy
+
+      at Memory.runStrategy (src/core/memory/Memory.ts:119:13)
+
+  console.log
+    Entering Agent.getTools
+
+      at Agent.getTools (src/core/agents/Agent.ts:221:13)
+
+  console.log
+    LLM Completion took 1892.48 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Entering Agent.addMessages
+
+      at Agent.addMessages (src/core/agents/Agent.ts:244:13)
+
+  console.log
+    Entering Memory.addMessages
+
+      at Memory.addMessages (src/core/memory/Memory.ts:180:13)
+
+  console.log
+    Entering Memory.convertLLMResponseToMessages
+
+      at Memory.convertLLMResponseToMessages (src/core/memory/Memory.ts:307:13)
+
+  console.log
+    Adding messages took 255.02 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after adding messages: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"channels\": [{\"id\": \"C05UMF8G485\", \"name\": \"random\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"random\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734790471390, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This channel is for... well, everything else. It\\u2019s a place for team jokes, spur-of-the-moment ideas, and funny GIFs. Go wild!\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}], \"use_case\": \"random\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C05UQCZQ56W\", \"name\": \"general\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": true, \"unlinked\": 0, \"name_normalized\": \"general\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737299180966, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This is the one channel that will always include everyone. It\\u2019s a great spot for announcements and team-wide conversations.\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}, {\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\", \"label\": \"\"}], \"tabz\": [{\"type\": \"bookmarks\"}, {\"type\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\"}], \"use_case\": \"welcome\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C06081NF54J\", \"name\": \"compete-discussion\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696773535, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"compete-discussion\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1733150193863, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C0617LQBDMF\", \"name\": \"dev\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1697109079, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"dev\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1735918769127, \"parent_conversation\": null, \"creator\": \"U060LL4MJ01\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F0870BEBVGW\", \"quip_thread_id\": \"NUf9AAJCGwd\"}, \"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\", \"label\": \"\"}, {\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}], \"tabz\": [{\"type\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\"}, {\"type\": \"bookmarks\"}]}, \"previous_names\": [], \"num_members\": 9}, {\"id\": \"C06JMRANNSY\", \"name\": \"test\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1707835486, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"test\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739865527859, \"parent_conversation\": null, \"creator\": \"U06JMAURNN5\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06MPTLK804\", \"name\": \"ai-news\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1709419168, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"ai-news\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888470613, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 7}, {\"id\": \"C06TJ1Q2GB0\", \"name\": \"notion-updates\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1712770664, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"notion-updates\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734597563112, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06VCPFJV5Z\", \"name\": \"betterstack-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1713770923, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"betterstack-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1738036470593, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C070L2U6QKZ\", \"name\": \"aws-all-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1714303128, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"aws-all-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888472452, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"aws-prod-alerts\"], \"num_members\": 9}, {\"id\": \"C0731UY8TEW\", \"name\": \"pull-requests\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1715506946, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"pull-requests\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1725445375378, \"parent_conversation\": null, \"creator\": \"U06TY60JNSG\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07KVB5DGN6\", \"is_empty\": true, \"quip_thread_id\": \"LHe9AACoejI\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C074SNZTESU\", \"name\": \"internal-axis\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1716104799, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"internal-axis\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734964236171, \"parent_conversation\": null, \"creator\": \"U06KD2VGZUJ\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"axis-internal\"], \"num_members\": 4}, {\"id\": \"C077MMPGCP3\", \"name\": \"connector-research\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1717939339, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"connector-research\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737832257199, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C07AS96B7JA\", \"name\": \"devops\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1720039751, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"devops\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1727536269984, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07CESG12V8\", \"name\": \"hubspot-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721037307, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"hubspot-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739268504218, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 5}, {\"id\": \"C07CUGJ9M4N\", \"name\": \"custom-connectors-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721309744, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"custom-connectors-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737645954660, \"parent_conversation\": null, \"creator\": \"U06UJF7NSUT\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}, {\"id\": \"C07CWHPEJ9X\", \"name\": \"support\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721071065, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"support\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474145, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C07F7K5P801\", \"name\": \"datadog-staging-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414265, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-staging-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474977, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07F7K6PN1F\", \"name\": \"datadog-production-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414278, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-production-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1726851316454, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"5\", \"creator\": \"U06KD2VGZUJ\", \"last_set\": 1726851316}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07NCNV2526\", \"is_empty\": true, \"quip_thread_id\": \"UPM9AAv7oa5\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}], \"response_metadata\": {\"next_cursor\": \"dGVhbTpDMDdHMVU4NUNBVw==\"}}",
+        "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetConversationHistory",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"channel\":\"C0617LQBDMF\",\"limit\":1}}",
+            "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:75:15)
+
+  console.log
+    Tool Calls: [
+      {
+        "name": "SlackConversationManagementGetConversationHistory",
+        "type": "xpander",
+        "payload": {
+          "bodyParams": {},
+          "queryParams": {
+            "channel": "C0617LQBDMF",
+            "limit": 1
+          },
+          "pathParams": {},
+          "headers": {}
+        },
+        "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z",
+        "graphApproved": false
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:80:15)
+
+  console.log
+    Toolcall Extractions took 0.42 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after extracting tool calls: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"channels\": [{\"id\": \"C05UMF8G485\", \"name\": \"random\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"random\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734790471390, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This channel is for... well, everything else. It\\u2019s a place for team jokes, spur-of-the-moment ideas, and funny GIFs. Go wild!\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}], \"use_case\": \"random\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C05UQCZQ56W\", \"name\": \"general\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": true, \"unlinked\": 0, \"name_normalized\": \"general\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737299180966, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This is the one channel that will always include everyone. It\\u2019s a great spot for announcements and team-wide conversations.\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}, {\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\", \"label\": \"\"}], \"tabz\": [{\"type\": \"bookmarks\"}, {\"type\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\"}], \"use_case\": \"welcome\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C06081NF54J\", \"name\": \"compete-discussion\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696773535, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"compete-discussion\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1733150193863, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C0617LQBDMF\", \"name\": \"dev\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1697109079, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"dev\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1735918769127, \"parent_conversation\": null, \"creator\": \"U060LL4MJ01\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F0870BEBVGW\", \"quip_thread_id\": \"NUf9AAJCGwd\"}, \"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\", \"label\": \"\"}, {\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}], \"tabz\": [{\"type\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\"}, {\"type\": \"bookmarks\"}]}, \"previous_names\": [], \"num_members\": 9}, {\"id\": \"C06JMRANNSY\", \"name\": \"test\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1707835486, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"test\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739865527859, \"parent_conversation\": null, \"creator\": \"U06JMAURNN5\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06MPTLK804\", \"name\": \"ai-news\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1709419168, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"ai-news\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888470613, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 7}, {\"id\": \"C06TJ1Q2GB0\", \"name\": \"notion-updates\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1712770664, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"notion-updates\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734597563112, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06VCPFJV5Z\", \"name\": \"betterstack-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1713770923, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"betterstack-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1738036470593, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C070L2U6QKZ\", \"name\": \"aws-all-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1714303128, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"aws-all-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888472452, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"aws-prod-alerts\"], \"num_members\": 9}, {\"id\": \"C0731UY8TEW\", \"name\": \"pull-requests\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1715506946, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"pull-requests\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1725445375378, \"parent_conversation\": null, \"creator\": \"U06TY60JNSG\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07KVB5DGN6\", \"is_empty\": true, \"quip_thread_id\": \"LHe9AACoejI\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C074SNZTESU\", \"name\": \"internal-axis\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1716104799, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"internal-axis\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734964236171, \"parent_conversation\": null, \"creator\": \"U06KD2VGZUJ\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"axis-internal\"], \"num_members\": 4}, {\"id\": \"C077MMPGCP3\", \"name\": \"connector-research\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1717939339, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"connector-research\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737832257199, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C07AS96B7JA\", \"name\": \"devops\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1720039751, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"devops\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1727536269984, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07CESG12V8\", \"name\": \"hubspot-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721037307, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"hubspot-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739268504218, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 5}, {\"id\": \"C07CUGJ9M4N\", \"name\": \"custom-connectors-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721309744, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"custom-connectors-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737645954660, \"parent_conversation\": null, \"creator\": \"U06UJF7NSUT\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}, {\"id\": \"C07CWHPEJ9X\", \"name\": \"support\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721071065, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"support\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474145, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C07F7K5P801\", \"name\": \"datadog-staging-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414265, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-staging-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474977, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07F7K6PN1F\", \"name\": \"datadog-production-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414278, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-production-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1726851316454, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"5\", \"creator\": \"U06KD2VGZUJ\", \"last_set\": 1726851316}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07NCNV2526\", \"is_empty\": true, \"quip_thread_id\": \"UPM9AAv7oa5\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}], \"response_metadata\": {\"next_cursor\": \"dGVhbTpDMDdHMVU4NUNBVw==\"}}",
+        "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetConversationHistory",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"channel\":\"C0617LQBDMF\",\"limit\":1}}",
+            "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:84:15)
+
+  console.log
+    Entering Agent.runTools
+
+      at Agent.runTools (src/core/agents/Agent.ts:444:13)
+
+  console.log
+    Entering Agent.runTool
+
+      at Agent.runTool (src/core/agents/Agent.ts:313:13)
+          at Array.map (<anonymous>)
+
+  console.debug
+    running tool SlackConversationManagementGetConversationHistory on agent 5ee3bfa2-d035-40eb-9037-fe562011ea38 with execution 4dd3444b-b1c3-4563-a9d7-0da66915b285
+
+      at Agent.runTool (src/core/agents/Agent.ts:318:13)
+          at Array.map (<anonymous>)
+
+  console.log
+    Running tools took 3802.85 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after running tools: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"channels\": [{\"id\": \"C05UMF8G485\", \"name\": \"random\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"random\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734790471390, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This channel is for... well, everything else. It\\u2019s a place for team jokes, spur-of-the-moment ideas, and funny GIFs. Go wild!\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}], \"use_case\": \"random\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C05UQCZQ56W\", \"name\": \"general\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": true, \"unlinked\": 0, \"name_normalized\": \"general\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737299180966, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This is the one channel that will always include everyone. It\\u2019s a great spot for announcements and team-wide conversations.\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}, {\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\", \"label\": \"\"}], \"tabz\": [{\"type\": \"bookmarks\"}, {\"type\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\"}], \"use_case\": \"welcome\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C06081NF54J\", \"name\": \"compete-discussion\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696773535, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"compete-discussion\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1733150193863, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C0617LQBDMF\", \"name\": \"dev\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1697109079, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"dev\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1735918769127, \"parent_conversation\": null, \"creator\": \"U060LL4MJ01\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F0870BEBVGW\", \"quip_thread_id\": \"NUf9AAJCGwd\"}, \"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\", \"label\": \"\"}, {\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}], \"tabz\": [{\"type\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\"}, {\"type\": \"bookmarks\"}]}, \"previous_names\": [], \"num_members\": 9}, {\"id\": \"C06JMRANNSY\", \"name\": \"test\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1707835486, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"test\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739865527859, \"parent_conversation\": null, \"creator\": \"U06JMAURNN5\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06MPTLK804\", \"name\": \"ai-news\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1709419168, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"ai-news\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888470613, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 7}, {\"id\": \"C06TJ1Q2GB0\", \"name\": \"notion-updates\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1712770664, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"notion-updates\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734597563112, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06VCPFJV5Z\", \"name\": \"betterstack-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1713770923, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"betterstack-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1738036470593, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C070L2U6QKZ\", \"name\": \"aws-all-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1714303128, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"aws-all-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888472452, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"aws-prod-alerts\"], \"num_members\": 9}, {\"id\": \"C0731UY8TEW\", \"name\": \"pull-requests\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1715506946, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"pull-requests\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1725445375378, \"parent_conversation\": null, \"creator\": \"U06TY60JNSG\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07KVB5DGN6\", \"is_empty\": true, \"quip_thread_id\": \"LHe9AACoejI\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C074SNZTESU\", \"name\": \"internal-axis\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1716104799, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"internal-axis\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734964236171, \"parent_conversation\": null, \"creator\": \"U06KD2VGZUJ\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"axis-internal\"], \"num_members\": 4}, {\"id\": \"C077MMPGCP3\", \"name\": \"connector-research\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1717939339, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"connector-research\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737832257199, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C07AS96B7JA\", \"name\": \"devops\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1720039751, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"devops\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1727536269984, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07CESG12V8\", \"name\": \"hubspot-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721037307, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"hubspot-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739268504218, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 5}, {\"id\": \"C07CUGJ9M4N\", \"name\": \"custom-connectors-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721309744, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"custom-connectors-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737645954660, \"parent_conversation\": null, \"creator\": \"U06UJF7NSUT\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}, {\"id\": \"C07CWHPEJ9X\", \"name\": \"support\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721071065, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"support\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474145, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C07F7K5P801\", \"name\": \"datadog-staging-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414265, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-staging-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474977, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07F7K6PN1F\", \"name\": \"datadog-production-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414278, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-production-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1726851316454, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"5\", \"creator\": \"U06KD2VGZUJ\", \"last_set\": 1726851316}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07NCNV2526\", \"is_empty\": true, \"quip_thread_id\": \"UPM9AAv7oa5\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}], \"response_metadata\": {\"next_cursor\": \"dGVhbTpDMDdHMVU4NUNBVw==\"}}",
+        "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetConversationHistory",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"channel\":\"C0617LQBDMF\",\"limit\":1}}",
+            "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:93:15)
+
+  console.log
+    Entering Agent.isFinished
+
+      at Agent.isFinished (src/core/agents/Agent.ts:554:13)
+
+  console.log
+    num_loops: 3
+
+      at Object.<anonymous> (test/lauren.test.ts:56:15)
+
+  console.log
+    Entering Memory.retrieveMessages
+
+      at Memory.retrieveMessages (src/core/memory/Memory.ts:145:13)
+
+  console.log
+    Entering Memory.runStrategy
+
+      at Memory.runStrategy (src/core/memory/Memory.ts:119:13)
+
+  console.log
+    Entering Agent.getTools
+
+      at Agent.getTools (src/core/agents/Agent.ts:221:13)
+
+  console.log
+    LLM Completion took 2522.97 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Entering Agent.addMessages
+
+      at Agent.addMessages (src/core/agents/Agent.ts:244:13)
+
+  console.log
+    Entering Memory.addMessages
+
+      at Memory.addMessages (src/core/memory/Memory.ts:180:13)
+
+  console.log
+    Entering Memory.convertLLMResponseToMessages
+
+      at Memory.convertLLMResponseToMessages (src/core/memory/Memory.ts:307:13)
+
+  console.log
+    Adding messages took 245.71 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after adding messages: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"channels\": [{\"id\": \"C05UMF8G485\", \"name\": \"random\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"random\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734790471390, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This channel is for... well, everything else. It\\u2019s a place for team jokes, spur-of-the-moment ideas, and funny GIFs. Go wild!\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}], \"use_case\": \"random\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C05UQCZQ56W\", \"name\": \"general\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": true, \"unlinked\": 0, \"name_normalized\": \"general\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737299180966, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This is the one channel that will always include everyone. It\\u2019s a great spot for announcements and team-wide conversations.\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}, {\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\", \"label\": \"\"}], \"tabz\": [{\"type\": \"bookmarks\"}, {\"type\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\"}], \"use_case\": \"welcome\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C06081NF54J\", \"name\": \"compete-discussion\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696773535, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"compete-discussion\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1733150193863, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C0617LQBDMF\", \"name\": \"dev\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1697109079, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"dev\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1735918769127, \"parent_conversation\": null, \"creator\": \"U060LL4MJ01\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F0870BEBVGW\", \"quip_thread_id\": \"NUf9AAJCGwd\"}, \"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\", \"label\": \"\"}, {\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}], \"tabz\": [{\"type\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\"}, {\"type\": \"bookmarks\"}]}, \"previous_names\": [], \"num_members\": 9}, {\"id\": \"C06JMRANNSY\", \"name\": \"test\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1707835486, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"test\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739865527859, \"parent_conversation\": null, \"creator\": \"U06JMAURNN5\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06MPTLK804\", \"name\": \"ai-news\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1709419168, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"ai-news\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888470613, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 7}, {\"id\": \"C06TJ1Q2GB0\", \"name\": \"notion-updates\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1712770664, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"notion-updates\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734597563112, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06VCPFJV5Z\", \"name\": \"betterstack-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1713770923, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"betterstack-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1738036470593, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C070L2U6QKZ\", \"name\": \"aws-all-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1714303128, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"aws-all-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888472452, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"aws-prod-alerts\"], \"num_members\": 9}, {\"id\": \"C0731UY8TEW\", \"name\": \"pull-requests\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1715506946, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"pull-requests\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1725445375378, \"parent_conversation\": null, \"creator\": \"U06TY60JNSG\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07KVB5DGN6\", \"is_empty\": true, \"quip_thread_id\": \"LHe9AACoejI\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C074SNZTESU\", \"name\": \"internal-axis\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1716104799, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"internal-axis\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734964236171, \"parent_conversation\": null, \"creator\": \"U06KD2VGZUJ\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"axis-internal\"], \"num_members\": 4}, {\"id\": \"C077MMPGCP3\", \"name\": \"connector-research\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1717939339, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"connector-research\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737832257199, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C07AS96B7JA\", \"name\": \"devops\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1720039751, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"devops\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1727536269984, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07CESG12V8\", \"name\": \"hubspot-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721037307, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"hubspot-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739268504218, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 5}, {\"id\": \"C07CUGJ9M4N\", \"name\": \"custom-connectors-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721309744, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"custom-connectors-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737645954660, \"parent_conversation\": null, \"creator\": \"U06UJF7NSUT\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}, {\"id\": \"C07CWHPEJ9X\", \"name\": \"support\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721071065, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"support\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474145, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C07F7K5P801\", \"name\": \"datadog-staging-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414265, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-staging-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474977, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07F7K6PN1F\", \"name\": \"datadog-production-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414278, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-production-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1726851316454, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"5\", \"creator\": \"U06KD2VGZUJ\", \"last_set\": 1726851316}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07NCNV2526\", \"is_empty\": true, \"quip_thread_id\": \"UPM9AAv7oa5\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}], \"response_metadata\": {\"next_cursor\": \"dGVhbTpDMDdHMVU4NUNBVw==\"}}",
+        "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetConversationHistory",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"channel\":\"C0617LQBDMF\",\"limit\":1}}",
+            "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"messages\": [{\"user\": \"U06UJF7NSUT\", \"type\": \"message\", \"ts\": \"1739968078.504459\", \"client_msg_id\": \"935ca63f-072d-441a-b6fe-589aeb6e606c\", \"text\": \"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\", \"team\": \"T05UQA4D5U3\", \"blocks\": [{\"type\": \"rich_text\", \"block_id\": \"PShrw\", \"elements\": [{\"type\": \"rich_text_section\", \"elements\": [{\"type\": \"text\", \"text\": \"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\"}]}]}]}], \"has_more\": true, \"pin_count\": 3, \"channel_actions_ts\": null, \"channel_actions_count\": 0, \"response_metadata\": {\"next_cursor\": \"bmV4dF90czoxNzM5ODYzMjAwODMwMjE5\"}}",
+        "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "xpfinish-agent-execution-finished",
+            "payload": "{\"bodyParams\":{\"result\":\"The last message in the \\\"dev\\\" channel is from user U06UJF7NSUT and reads:\\n\\n\\\"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\\\"\",\"is_success\":true},\"queryParams\":{},\"pathParams\":{}}",
+            "toolCallId": "call_KpqwFeF919FozKbq8TdEqQcz"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:75:15)
+
+  console.log
+    Tool Calls: [
+      {
+        "name": "xpfinish-agent-execution-finished",
+        "type": "xpander",
+        "payload": {
+          "bodyParams": {
+            "result": "The last message in the \"dev\" channel is from user U06UJF7NSUT and reads:\n\n\"Hey everyone im upgrading our stagings supabase cluster\ndowntime for few minutes\"",
+            "is_success": true
+          },
+          "queryParams": {},
+          "pathParams": {},
+          "headers": {}
+        },
+        "toolCallId": "call_KpqwFeF919FozKbq8TdEqQcz",
+        "graphApproved": false
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:80:15)
+
+  console.log
+    Toolcall Extractions took 0.28 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after extracting tool calls: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"channels\": [{\"id\": \"C05UMF8G485\", \"name\": \"random\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"random\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734790471390, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This channel is for... well, everything else. It\\u2019s a place for team jokes, spur-of-the-moment ideas, and funny GIFs. Go wild!\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}], \"use_case\": \"random\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C05UQCZQ56W\", \"name\": \"general\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": true, \"unlinked\": 0, \"name_normalized\": \"general\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737299180966, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This is the one channel that will always include everyone. It\\u2019s a great spot for announcements and team-wide conversations.\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}, {\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\", \"label\": \"\"}], \"tabz\": [{\"type\": \"bookmarks\"}, {\"type\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\"}], \"use_case\": \"welcome\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C06081NF54J\", \"name\": \"compete-discussion\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696773535, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"compete-discussion\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1733150193863, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C0617LQBDMF\", \"name\": \"dev\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1697109079, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"dev\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1735918769127, \"parent_conversation\": null, \"creator\": \"U060LL4MJ01\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F0870BEBVGW\", \"quip_thread_id\": \"NUf9AAJCGwd\"}, \"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\", \"label\": \"\"}, {\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}], \"tabz\": [{\"type\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\"}, {\"type\": \"bookmarks\"}]}, \"previous_names\": [], \"num_members\": 9}, {\"id\": \"C06JMRANNSY\", \"name\": \"test\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1707835486, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"test\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739865527859, \"parent_conversation\": null, \"creator\": \"U06JMAURNN5\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06MPTLK804\", \"name\": \"ai-news\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1709419168, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"ai-news\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888470613, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 7}, {\"id\": \"C06TJ1Q2GB0\", \"name\": \"notion-updates\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1712770664, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"notion-updates\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734597563112, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06VCPFJV5Z\", \"name\": \"betterstack-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1713770923, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"betterstack-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1738036470593, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C070L2U6QKZ\", \"name\": \"aws-all-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1714303128, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"aws-all-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888472452, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"aws-prod-alerts\"], \"num_members\": 9}, {\"id\": \"C0731UY8TEW\", \"name\": \"pull-requests\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1715506946, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"pull-requests\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1725445375378, \"parent_conversation\": null, \"creator\": \"U06TY60JNSG\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07KVB5DGN6\", \"is_empty\": true, \"quip_thread_id\": \"LHe9AACoejI\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C074SNZTESU\", \"name\": \"internal-axis\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1716104799, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"internal-axis\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734964236171, \"parent_conversation\": null, \"creator\": \"U06KD2VGZUJ\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"axis-internal\"], \"num_members\": 4}, {\"id\": \"C077MMPGCP3\", \"name\": \"connector-research\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1717939339, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"connector-research\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737832257199, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C07AS96B7JA\", \"name\": \"devops\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1720039751, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"devops\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1727536269984, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07CESG12V8\", \"name\": \"hubspot-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721037307, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"hubspot-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739268504218, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 5}, {\"id\": \"C07CUGJ9M4N\", \"name\": \"custom-connectors-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721309744, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"custom-connectors-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737645954660, \"parent_conversation\": null, \"creator\": \"U06UJF7NSUT\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}, {\"id\": \"C07CWHPEJ9X\", \"name\": \"support\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721071065, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"support\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474145, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C07F7K5P801\", \"name\": \"datadog-staging-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414265, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-staging-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474977, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07F7K6PN1F\", \"name\": \"datadog-production-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414278, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-production-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1726851316454, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"5\", \"creator\": \"U06KD2VGZUJ\", \"last_set\": 1726851316}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07NCNV2526\", \"is_empty\": true, \"quip_thread_id\": \"UPM9AAv7oa5\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}], \"response_metadata\": {\"next_cursor\": \"dGVhbTpDMDdHMVU4NUNBVw==\"}}",
+        "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetConversationHistory",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"channel\":\"C0617LQBDMF\",\"limit\":1}}",
+            "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"messages\": [{\"user\": \"U06UJF7NSUT\", \"type\": \"message\", \"ts\": \"1739968078.504459\", \"client_msg_id\": \"935ca63f-072d-441a-b6fe-589aeb6e606c\", \"text\": \"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\", \"team\": \"T05UQA4D5U3\", \"blocks\": [{\"type\": \"rich_text\", \"block_id\": \"PShrw\", \"elements\": [{\"type\": \"rich_text_section\", \"elements\": [{\"type\": \"text\", \"text\": \"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\"}]}]}]}], \"has_more\": true, \"pin_count\": 3, \"channel_actions_ts\": null, \"channel_actions_count\": 0, \"response_metadata\": {\"next_cursor\": \"bmV4dF90czoxNzM5ODYzMjAwODMwMjE5\"}}",
+        "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "xpfinish-agent-execution-finished",
+            "payload": "{\"bodyParams\":{\"result\":\"The last message in the \\\"dev\\\" channel is from user U06UJF7NSUT and reads:\\n\\n\\\"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\\\"\",\"is_success\":true},\"queryParams\":{},\"pathParams\":{}}",
+            "toolCallId": "call_KpqwFeF919FozKbq8TdEqQcz"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:84:15)
+
+  console.log
+    Entering Agent.runTools
+
+      at Agent.runTools (src/core/agents/Agent.ts:444:13)
+
+  console.log
+    Entering Agent.runTool
+
+      at Agent.runTool (src/core/agents/Agent.ts:313:13)
+          at Array.map (<anonymous>)
+
+  console.debug
+    running tool xpfinish-agent-execution-finished on agent 5ee3bfa2-d035-40eb-9037-fe562011ea38 with execution 4dd3444b-b1c3-4563-a9d7-0da66915b285
+
+      at Agent.runTool (src/core/agents/Agent.ts:318:13)
+          at Array.map (<anonymous>)
+
+  console.log
+    Running tools took 554.36 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after running tools: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"channels\": [{\"id\": \"C05UMF8G485\", \"name\": \"random\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"random\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734790471390, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This channel is for... well, everything else. It\\u2019s a place for team jokes, spur-of-the-moment ideas, and funny GIFs. Go wild!\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}], \"use_case\": \"random\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C05UQCZQ56W\", \"name\": \"general\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": true, \"unlinked\": 0, \"name_normalized\": \"general\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737299180966, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This is the one channel that will always include everyone. It\\u2019s a great spot for announcements and team-wide conversations.\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}, {\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\", \"label\": \"\"}], \"tabz\": [{\"type\": \"bookmarks\"}, {\"type\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\"}], \"use_case\": \"welcome\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C06081NF54J\", \"name\": \"compete-discussion\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696773535, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"compete-discussion\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1733150193863, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C0617LQBDMF\", \"name\": \"dev\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1697109079, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"dev\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1735918769127, \"parent_conversation\": null, \"creator\": \"U060LL4MJ01\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F0870BEBVGW\", \"quip_thread_id\": \"NUf9AAJCGwd\"}, \"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\", \"label\": \"\"}, {\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}], \"tabz\": [{\"type\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\"}, {\"type\": \"bookmarks\"}]}, \"previous_names\": [], \"num_members\": 9}, {\"id\": \"C06JMRANNSY\", \"name\": \"test\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1707835486, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"test\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739865527859, \"parent_conversation\": null, \"creator\": \"U06JMAURNN5\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06MPTLK804\", \"name\": \"ai-news\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1709419168, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"ai-news\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888470613, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 7}, {\"id\": \"C06TJ1Q2GB0\", \"name\": \"notion-updates\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1712770664, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"notion-updates\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734597563112, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06VCPFJV5Z\", \"name\": \"betterstack-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1713770923, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"betterstack-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1738036470593, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C070L2U6QKZ\", \"name\": \"aws-all-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1714303128, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"aws-all-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888472452, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"aws-prod-alerts\"], \"num_members\": 9}, {\"id\": \"C0731UY8TEW\", \"name\": \"pull-requests\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1715506946, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"pull-requests\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1725445375378, \"parent_conversation\": null, \"creator\": \"U06TY60JNSG\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07KVB5DGN6\", \"is_empty\": true, \"quip_thread_id\": \"LHe9AACoejI\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C074SNZTESU\", \"name\": \"internal-axis\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1716104799, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"internal-axis\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734964236171, \"parent_conversation\": null, \"creator\": \"U06KD2VGZUJ\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"axis-internal\"], \"num_members\": 4}, {\"id\": \"C077MMPGCP3\", \"name\": \"connector-research\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1717939339, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"connector-research\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737832257199, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C07AS96B7JA\", \"name\": \"devops\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1720039751, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"devops\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1727536269984, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07CESG12V8\", \"name\": \"hubspot-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721037307, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"hubspot-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739268504218, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 5}, {\"id\": \"C07CUGJ9M4N\", \"name\": \"custom-connectors-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721309744, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"custom-connectors-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737645954660, \"parent_conversation\": null, \"creator\": \"U06UJF7NSUT\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}, {\"id\": \"C07CWHPEJ9X\", \"name\": \"support\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721071065, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"support\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474145, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C07F7K5P801\", \"name\": \"datadog-staging-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414265, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-staging-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474977, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07F7K6PN1F\", \"name\": \"datadog-production-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414278, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-production-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1726851316454, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"5\", \"creator\": \"U06KD2VGZUJ\", \"last_set\": 1726851316}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07NCNV2526\", \"is_empty\": true, \"quip_thread_id\": \"UPM9AAv7oa5\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}], \"response_metadata\": {\"next_cursor\": \"dGVhbTpDMDdHMVU4NUNBVw==\"}}",
+        "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetConversationHistory",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"channel\":\"C0617LQBDMF\",\"limit\":1}}",
+            "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"messages\": [{\"user\": \"U06UJF7NSUT\", \"type\": \"message\", \"ts\": \"1739968078.504459\", \"client_msg_id\": \"935ca63f-072d-441a-b6fe-589aeb6e606c\", \"text\": \"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\", \"team\": \"T05UQA4D5U3\", \"blocks\": [{\"type\": \"rich_text\", \"block_id\": \"PShrw\", \"elements\": [{\"type\": \"rich_text_section\", \"elements\": [{\"type\": \"text\", \"text\": \"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\"}]}]}]}], \"has_more\": true, \"pin_count\": 3, \"channel_actions_ts\": null, \"channel_actions_count\": 0, \"response_metadata\": {\"next_cursor\": \"bmV4dF90czoxNzM5ODYzMjAwODMwMjE5\"}}",
+        "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "xpfinish-agent-execution-finished",
+            "payload": "{\"bodyParams\":{\"result\":\"The last message in the \\\"dev\\\" channel is from user U06UJF7NSUT and reads:\\n\\n\\\"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\\\"\",\"is_success\":true},\"queryParams\":{},\"pathParams\":{}}",
+            "toolCallId": "call_KpqwFeF919FozKbq8TdEqQcz"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:93:15)
+
+  console.log
+    Entering Agent.isFinished
+
+      at Agent.isFinished (src/core/agents/Agent.ts:554:13)
+
+  console.log
+    Entering Agent.retrieveExecutionResult
+
+      at Agent.retrieveExecutionResult (src/core/agents/Agent.ts:644:13)
+
+  console.log
+    Retrieve execution result took 85.00 ms
+
+      at announceTiming (test/lauren.test.ts:18:11)
+
+  console.log
+    Memory Thread after retrieving execution result: [
+      {
+        "role": "system",
+        "content": "Your General instructions: \nYour Role instructions: \nYour Goal instructions: \nIMPORTANT: When done or unable to proceed after attempts, use \"xpfinish-agent-execution-finished\" to mark success or failure.",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "user",
+        "content": "get the last message from dev channel",
+        "toolCallId": null,
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetChannelList",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"exclude_archived\":true,\"types\":\"public_channel,private_channel\"}}",
+            "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"channels\": [{\"id\": \"C05UMF8G485\", \"name\": \"random\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"random\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734790471390, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This channel is for... well, everything else. It\\u2019s a place for team jokes, spur-of-the-moment ideas, and funny GIFs. Go wild!\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}], \"use_case\": \"random\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C05UQCZQ56W\", \"name\": \"general\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696233873, \"is_archived\": false, \"is_general\": true, \"unlinked\": 0, \"name_normalized\": \"general\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737299180966, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"This is the one channel that will always include everyone. It\\u2019s a great spot for announcements and team-wide conversations.\", \"creator\": \"U05UMF8E90V\", \"last_set\": 1696233873}, \"properties\": {\"tabs\": [{\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}, {\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\", \"label\": \"\"}], \"tabz\": [{\"type\": \"bookmarks\"}, {\"type\": \"files\"}, {\"id\": \"Ct07JX4KGMKP\", \"type\": \"folder\"}], \"use_case\": \"welcome\"}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C06081NF54J\", \"name\": \"compete-discussion\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1696773535, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"compete-discussion\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1733150193863, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C0617LQBDMF\", \"name\": \"dev\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1697109079, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"dev\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1735918769127, \"parent_conversation\": null, \"creator\": \"U060LL4MJ01\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F0870BEBVGW\", \"quip_thread_id\": \"NUf9AAJCGwd\"}, \"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\", \"label\": \"\"}, {\"type\": \"bookmarks\", \"label\": \"\", \"id\": \"bookmarks\"}], \"tabz\": [{\"type\": \"files\"}, {\"id\": \"Ct07JTBV81JA\", \"type\": \"folder\"}, {\"type\": \"bookmarks\"}]}, \"previous_names\": [], \"num_members\": 9}, {\"id\": \"C06JMRANNSY\", \"name\": \"test\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1707835486, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"test\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739865527859, \"parent_conversation\": null, \"creator\": \"U06JMAURNN5\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06MPTLK804\", \"name\": \"ai-news\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1709419168, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"ai-news\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888470613, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 7}, {\"id\": \"C06TJ1Q2GB0\", \"name\": \"notion-updates\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1712770664, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"notion-updates\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734597563112, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C06VCPFJV5Z\", \"name\": \"betterstack-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1713770923, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"betterstack-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1738036470593, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C070L2U6QKZ\", \"name\": \"aws-all-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1714303128, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"aws-all-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888472452, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": true, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"aws-prod-alerts\"], \"num_members\": 9}, {\"id\": \"C0731UY8TEW\", \"name\": \"pull-requests\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1715506946, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"pull-requests\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1725445375378, \"parent_conversation\": null, \"creator\": \"U06TY60JNSG\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07KVB5DGN6\", \"is_empty\": true, \"quip_thread_id\": \"LHe9AACoejI\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C074SNZTESU\", \"name\": \"internal-axis\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1716104799, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"internal-axis\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1734964236171, \"parent_conversation\": null, \"creator\": \"U06KD2VGZUJ\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [\"axis-internal\"], \"num_members\": 4}, {\"id\": \"C077MMPGCP3\", \"name\": \"connector-research\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1717939339, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"connector-research\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737832257199, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 6}, {\"id\": \"C07AS96B7JA\", \"name\": \"devops\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1720039751, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"devops\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1727536269984, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07CESG12V8\", \"name\": \"hubspot-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721037307, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"hubspot-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1739268504218, \"parent_conversation\": null, \"creator\": \"U05VDD99NSU\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 5}, {\"id\": \"C07CUGJ9M4N\", \"name\": \"custom-connectors-notifications\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721309744, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"custom-connectors-notifications\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1737645954660, \"parent_conversation\": null, \"creator\": \"U06UJF7NSUT\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"tabs\": [{\"type\": \"files\", \"label\": \"\", \"id\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}, {\"id\": \"C07CWHPEJ9X\", \"name\": \"support\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1721071065, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"support\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474145, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 8}, {\"id\": \"C07F7K5P801\", \"name\": \"datadog-staging-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414265, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-staging-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1724888474977, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"previous_names\": [], \"num_members\": 3}, {\"id\": \"C07F7K6PN1F\", \"name\": \"datadog-production-alerts\", \"is_channel\": true, \"is_group\": false, \"is_im\": false, \"is_mpim\": false, \"is_private\": false, \"created\": 1722414278, \"is_archived\": false, \"is_general\": false, \"unlinked\": 0, \"name_normalized\": \"datadog-production-alerts\", \"is_shared\": false, \"is_org_shared\": false, \"is_pending_ext_shared\": false, \"pending_shared\": [], \"context_team_id\": \"T05UQA4D5U3\", \"updated\": 1726851316454, \"parent_conversation\": null, \"creator\": \"U05UMF8E90V\", \"is_ext_shared\": false, \"shared_team_ids\": [\"T05UQA4D5U3\"], \"pending_connected_team_ids\": [], \"is_member\": false, \"topic\": {\"value\": \"5\", \"creator\": \"U06KD2VGZUJ\", \"last_set\": 1726851316}, \"purpose\": {\"value\": \"\", \"creator\": \"\", \"last_set\": 0}, \"properties\": {\"canvas\": {\"file_id\": \"F07NCNV2526\", \"is_empty\": true, \"quip_thread_id\": \"UPM9AAv7oa5\"}, \"tabs\": [{\"id\": \"files\", \"label\": \"\", \"type\": \"files\"}], \"tabz\": [{\"type\": \"files\"}]}, \"previous_names\": [], \"num_members\": 4}], \"response_metadata\": {\"next_cursor\": \"dGVhbTpDMDdHMVU4NUNBVw==\"}}",
+        "toolCallId": "call_Cz8ecEbm7xaStSiLFEcv7hgw",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "SlackConversationManagementGetConversationHistory",
+            "payload": "{\"bodyParams\":{},\"queryParams\":{\"channel\":\"C0617LQBDMF\",\"limit\":1}}",
+            "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z"
+          }
+        ],
+        "nodeName": null
+      },
+      {
+        "role": "tool",
+        "content": "{\"ok\": true, \"messages\": [{\"user\": \"U06UJF7NSUT\", \"type\": \"message\", \"ts\": \"1739968078.504459\", \"client_msg_id\": \"935ca63f-072d-441a-b6fe-589aeb6e606c\", \"text\": \"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\", \"team\": \"T05UQA4D5U3\", \"blocks\": [{\"type\": \"rich_text\", \"block_id\": \"PShrw\", \"elements\": [{\"type\": \"rich_text_section\", \"elements\": [{\"type\": \"text\", \"text\": \"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\"}]}]}]}], \"has_more\": true, \"pin_count\": 3, \"channel_actions_ts\": null, \"channel_actions_count\": 0, \"response_metadata\": {\"next_cursor\": \"bmV4dF90czoxNzM5ODYzMjAwODMwMjE5\"}}",
+        "toolCallId": "call_KSA4JAo2sMPyu9QHodT2vx9Z",
+        "toolCalls": null,
+        "nodeName": null
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "toolCallId": null,
+        "toolCalls": [
+          {
+            "name": "xpfinish-agent-execution-finished",
+            "payload": "{\"bodyParams\":{\"result\":\"The last message in the \\\"dev\\\" channel is from user U06UJF7NSUT and reads:\\n\\n\\\"Hey everyone im upgrading our stagings supabase cluster\\ndowntime for few minutes\\\"\",\"is_success\":true},\"queryParams\":{},\"pathParams\":{}}",
+            "toolCallId": "call_KpqwFeF919FozKbq8TdEqQcz"
+          }
+        ],
+        "nodeName": null
+      }
+    ]
+
+      at Object.<anonymous> (test/lauren.test.ts:105:13)
+
+-------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+File                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                                                                                                                                                                                                                       
+-------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+All files                |   69.25 |    54.57 |   51.36 |   69.25 |                                                                                                                                                                                                                                                                                         
+ src                     |     100 |      100 |   18.18 |     100 |                                                                                                                                                                                                                                                                                         
+  index.ts               |     100 |      100 |   18.18 |     100 |                                                                                                                                                                                                                                                                                         
+ src/constants           |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  llmProvider.ts         |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  tools.ts               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  xpanderClient.ts       |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+ src/core                |      80 |    86.66 |   69.56 |      80 |                                                                                                                                                                                                                                                                                         
+  CacheService.ts        |   83.33 |      100 |   57.14 |   83.33 | 26-27,30-31,34-35                                                                                                                                                                                                                                                                       
+  Configuration.ts       |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  XpanderClient.ts       |   90.58 |       50 |   66.66 |   90.58 | 28-29,47-52                                                                                                                                                                                                                                                                             
+  base.ts                |      92 |      100 |      75 |      92 | 23-24                                                                                                                                                                                                                                                                                   
+  knowledgeBases.ts      |   16.66 |      100 |       0 |   16.66 | 10-56,58-65                                                                                                                                                                                                                                                                             
+  utils.ts               |     100 |     92.3 |     100 |     100 | 30,69                                                                                                                                                                                                                                                                                   
+ src/core/agents         |   63.63 |    52.47 |    60.6 |   63.63 |                                                                                                                                                                                                                                                                                         
+  Agent.ts               |   64.56 |    52.04 |   62.06 |   64.56 | 129-130,137-138,203-204,207-208,210-211,224-225,254-256,286-294,315-316,339-351,359-366,370-371,388-390,410-411,414-415,418-422,426-428,464-465,506-509,537-538,549-550,557,560,575-599,601-607,634-636,639-641,646-649,651-652,671-676,678-681,691-713,723-741,753-804,817-880,891-933 
+  AgentsController.ts    |   55.83 |    66.66 |      50 |   55.83 | 29-62,90-91,103-119                                                                                                                                                                                                                                                                     
+  index.ts               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+ src/core/executions     |   89.52 |    47.05 |   77.77 |   89.52 |                                                                                                                                                                                                                                                                                         
+  Execution.ts           |   92.26 |    47.05 |     100 |   92.26 | 55-56,90-91,110-111,130-131,140-142,187-190                                                                                                                                                                                                                                             
+  TokensUsage.ts         |      50 |      100 |       0 |      50 | 3-6,11-13                                                                                                                                                                                                                                                                               
+  index.ts               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+ src/core/graphs         |   55.96 |      100 |   38.46 |   55.96 |                                                                                                                                                                                                                                                                                         
+  Graph.ts               |   51.92 |      100 |      25 |   51.92 | 44-45,53-54,62-63,71-75,85-127,135-155                                                                                                                                                                                                                                                  
+  GraphItem.ts           |   62.35 |      100 |   33.33 |   62.35 | 45-72,81-84                                                                                                                                                                                                                                                                             
+  index.ts               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+ src/core/memory         |   72.23 |       50 |   81.81 |   72.23 |                                                                                                                                                                                                                                                                                         
+  Memory.ts              |   72.15 |       50 |   81.81 |   72.15 | 40-45,70-102,129-130,154-155,163-171,202-203,220-225,228-232,265-269,282-297,314-315                                                                                                                                                                                                    
+  index.ts               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+ src/core/tools          |   47.95 |    29.62 |   47.05 |   47.95 |                                                                                                                                                                                                                                                                                         
+  AgenticInterface.ts    |      72 |      100 |       0 |      72 | 18-24                                                                                                                                                                                                                                                                                   
+  AgenticOperation.ts    |   65.71 |      100 |       0 |   65.71 | 23-34                                                                                                                                                                                                                                                                                   
+  ToolCall.ts            |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  index.ts               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  utils.ts               |    39.5 |    26.92 |   46.15 |    39.5 | 90-91,96-97,104,106-107,109-111,115-145,183-185,211-212,229-294,302-379,397-423,434-470,478-511,519-561,569-600                                                                                                                                                                         
+ src/llmProviders        |   57.56 |      100 |    5.26 |   57.56 |                                                                                                                                                                                                                                                                                         
+  amazonBedrock.ts       |   40.59 |      100 |       0 |   40.59 | 17-18,27-32,41-69,78-100                                                                                                                                                                                                                                                                
+  friendliAI.ts          |   90.47 |      100 |       0 |   90.47 | 19-20                                                                                                                                                                                                                                                                                   
+  index.ts               |     100 |      100 |       0 |     100 |                                                                                                                                                                                                                                                                                         
+  langchain.ts           |   42.59 |      100 |       0 |   42.59 | 15-16,25-53                                                                                                                                                                                                                                                                             
+  nvidiaNim.ts           |   71.87 |      100 |       0 |   71.87 | 16-17,25-31                                                                                                                                                                                                                                                                             
+  ollama.ts              |   45.07 |      100 |       0 |   45.07 | 17-18,27-56,64-70                                                                                                                                                                                                                                                                       
+  openai.ts              |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  rtOpenAI.ts            |   90.47 |      100 |       0 |   90.47 | 19-20                                                                                                                                                                                                                                                                                   
+ src/llmProviders/shared |   84.14 |    40.47 |      70 |   84.14 |                                                                                                                                                                                                                                                                                         
+  baseOpenAI.ts          |      92 |       50 |      75 |      92 | 16-17,69-70,76-77,87-88                                                                                                                                                                                                                                                                 
+  baseProvider.ts        |   77.95 |    33.33 |   66.66 |   77.95 | 23-24,32-36,55-58,63-64,75,77-79,81-87,91-94                                                                                                                                                                                                                                            
+ src/types               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  agents.ts              |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  executions.ts          |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  graphs.ts              |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  index.ts               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  knowledgeBases.ts      |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  memory.ts              |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  tools.ts               |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+  xpanderClient.ts       |     100 |      100 |     100 |     100 |                                                                                                                                                                                                                                                                                         
+-------------------------|---------|----------|---------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

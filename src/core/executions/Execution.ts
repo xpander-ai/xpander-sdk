@@ -42,6 +42,7 @@ export class Execution extends Base {
     execution_id: string,
     delta: Record<string, any>,
   ): any {
+    console.log('update execution_id:', execution_id);
     const response = request(
       'PATCH',
       `${agent.configuration.url}/agent-execution/${execution_id}/update`,
@@ -69,6 +70,7 @@ export class Execution extends Base {
     workerId?: string,
     threadId?: string,
   ): any {
+    console.log('create input:', input);
     const payload = {
       input: {
         text: input || '',

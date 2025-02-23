@@ -1,0 +1,16 @@
+ 1093  projen
+ 1094  yarn
+ 1095  npm i -g projen
+ 1096  projen
+ 1097  brew install projen
+ 1098  projen
+ 1099  yarn add -g projen
+ 1100  ll
+ 1101  \git status
+ 1102  git status
+ 1103  yarn install
+ 1104  projen
+ 1105  npx projen
+ 1106  histroy
+ 1107  history > xpander_debugging.log\n
+ 1108  history | awk -v d="$(date '+%Y-%m-%d')" '$0 ~ d' > today_terminal_logs.txt\n

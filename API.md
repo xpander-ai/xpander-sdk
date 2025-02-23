@@ -5566,6 +5566,7 @@ Represents the 'FriendliAI' provider.
 | <code><a href="#xpander-sdk.MemoryStrategy.BUFFERING">BUFFERING</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.MemoryStrategy.MOVING_WINDOW">MOVING_WINDOW</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.MemoryStrategy.CONTEXT">CONTEXT</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryStrategy.CleanTollCallResponse">MOVING_WINDOW</a></code> | *No description.* |
 
 ---
 

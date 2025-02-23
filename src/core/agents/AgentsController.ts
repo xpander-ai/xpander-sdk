@@ -68,6 +68,7 @@ export class Agents {
    * @returns The requested Agent instance.
    */
   public get(agentId: string): Agent {
+    console.log('get agentId:', agentId);
     try {
       const agent = new Agent(
         this.configuration,
@@ -76,7 +77,7 @@ export class Agents {
         '',
         AgentStatus.ACTIVE,
         MemoryType.SHORT_TERM,
-        MemoryStrategy.FULL,
+        MemoryStrategy.MOVING_WINDOW,
         { role: '', general: '', goal: '' },
         AgentAccessScope.ORGANIZATIONAL,
         [],

@@ -9,6 +9,8 @@ export enum MemoryStrategy {
   BUFFERING = 'buffering',
   MOVING_WINDOW = 'MovingWindow',
   CONTEXT = 'context',
+  CLEAN_TOOL_CALL_RESPONSE = 'CleanToolCallResponse',
+
 }
 
 export interface IUserDetails {

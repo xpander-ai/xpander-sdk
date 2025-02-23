@@ -20,6 +20,7 @@ export class BaseOpenAISDKHandler extends BaseLLMProvider {
    * Utility functions for converting LLM responses and xpanderAI messages into compatible formats.
    */
   static extractMessages(llmResponse: any): IMemoryMessage[] {
+    console.log('extractMessages llmResponse:', llmResponse);
     const messages: IMemoryMessage[] = [];
     const choices = llmResponse.choices;
 
@@ -46,6 +47,7 @@ export class BaseOpenAISDKHandler extends BaseLLMProvider {
    * @returns An array of messages formatted for LLM compatibility.
    */
   static convertMessages(xpanderMessages: IMemoryMessage[]): any[] {
+    console.log('convertMessages xpanderMessages:', xpanderMessages);
     return xpanderMessages.map((msg) => ({
       role: msg.role,
       content: msg.content,
@@ -65,6 +67,7 @@ export class BaseOpenAISDKHandler extends BaseLLMProvider {
    * @throws Error if the response format is invalid.
    */
   static extractToolCalls(llmResponse: Record<string, any>): ToolCall[] {
+    console.log('extractToolCalls llmResponse:', llmResponse);
     if (typeof llmResponse !== 'object') {
       throw new Error('LLM response should be an object.');
     }

@@ -24,6 +24,8 @@ export class Memory extends Base {
    * @returns A new instance of the Memory class.
    */
   public static create(agent: Agent, userDetails?: IUserDetails): Memory {
+    console.log('Entering Memory.create');
+    console.log(`[Memory] Creating new memory for Agent ID: ${agent.id}`);
     const response = request('POST', `${agent.configuration.url}/memory`, {
       json: {
         organization_id: agent.organizationId,
@@ -35,12 +37,18 @@ export class Memory extends Base {
     });
 
     if (!response.statusCode.toString().startsWith('2')) {
+      console.error(
+        `[Memory] Failed to create memory:`,
+        response.body.toString(),
+      );
       throw new Error(response.body.toString());
     }
 
     const createdThread = convertKeysToCamelCase(
       JSON.parse(response.getBody('utf8')),
     );
+
+    console.log(`[Memory] Created memory thread with ID: ${createdThread.id}`);
 
     return new Memory(
       agent,
@@ -59,6 +67,8 @@ export class Memory extends Base {
    * @returns An instance of the Memory class representing the fetched thread.
    */
   public static fetch(agent: Agent, threadId: string): Memory {
+    console.log('Entering Memory.fetch');
+    console.log(`[Memory] Fetching existing memory thread: ${threadId}`);
     const response = request(
       'GET',
       `${agent.configuration.url}/memory/${threadId}`,
@@ -68,6 +78,10 @@ export class Memory extends Base {
     );
 
     if (!response.statusCode.toString().startsWith('2')) {
+      console.error(
+        `[Memory] Failed to fetch memory thread:`,
+        response.body.toString(),
+      );
       throw new Error(response.body.toString());
     }
 
@@ -75,6 +89,9 @@ export class Memory extends Base {
       JSON.parse(response.getBody('utf8')),
     );
 
+    console.log(
+      `[Memory] Retrieved memory thread with ID: ${fetchedThread.id}`,
+    );
     return new Memory(
       agent,
       fetchedThread.id,
@@ -99,6 +116,7 @@ export class Memory extends Base {
 
   /** Executes the memory strategy and updates the messages accordingly. */
   private runStrategy(): void {
+    console.log('Entering Memory.runStrategy');
     const response = request(
       'GET',
       `${this.agent.configuration.url}/memory/${this.id}/${this.agent.memoryStrategy}`,
@@ -124,6 +142,7 @@ export class Memory extends Base {
    * @returns An array of messages formatted for the selected LLM provider.
    */
   public retrieveMessages(): any[] {
+    console.log('Entering Memory.retrieveMessages');
     this.runStrategy();
     let messages: IMemoryMessage[] = this.messages;
     switch (this.llmProvider) {
@@ -141,6 +160,7 @@ export class Memory extends Base {
    * @param toolCallResults - An array of tool call results to be added as messages.
    */
   public addToolCallResults(toolCallResults: ToolCallResult[]): void {
+    console.log('Entering Memory.addToolCallResults');
     this.addMessages(
       toolCallResults.map((tc) => ({
         role: 'tool',
@@ -157,6 +177,7 @@ export class Memory extends Base {
    * @param _messages - An array of messages to be added to the memory thread.
    */
   public addMessages(_messages: any): void {
+    console.log('Entering Memory.addMessages');
     let messages = JSON.parse(JSON.stringify(_messages)); // deep copy
     const isXpanderMessageStruct =
       Array.isArray(messages) &&
@@ -193,6 +214,7 @@ export class Memory extends Base {
    * @param instructions - Instructions to initialize the memory thread.
    */
   public initInstructions(instructions: IAgentInstructions): void {
+    console.log('Entering Memory.initInstructions');
     // temporary workaround for input_task issue (not passing all required data)
     if (instructions.general) {
       instructions.general += `
@@ -232,6 +254,7 @@ export class Memory extends Base {
     instructions: IAgentInstructions,
     llmProvider: LLMProvider = LLMProvider.OPEN_AI,
   ): void {
+    console.log('Entering Memory.initMessages');
     this.llmProvider = llmProvider;
     if (this.messages.length === 0) {
       this.initInstructions(instructions);
@@ -251,6 +274,7 @@ export class Memory extends Base {
   }
 
   public addKnowledgeBase() {
+    console.log('Entering Memory.addKnowledgeBase');
     if (
       this.agent?.vanillaKnowledgeBases &&
       this.agent.vanillaKnowledgeBases.length !== 0
@@ -280,6 +304,7 @@ export class Memory extends Base {
    * @returns An array of memory messages formatted for the memory thread.
    */
   private convertLLMResponseToMessages(response: any): IMemoryMessage[] {
+    console.log('Entering Memory.convertLLMResponseToMessages');
     switch (this.llmProvider) {
       case LLMProvider.OPEN_AI:
       case LLMProvider.NVIDIA_NIM:
