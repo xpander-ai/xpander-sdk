@@ -1076,4 +1076,14 @@ export class Agent extends Base {
   public get endToolEnabled(): boolean {
     return this.withAgentEndTool;
   }
+
+  public async *events(): any | AsyncGenerator<string> {
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    for (let i = 1; i <= 5; i++) {
+      yield `Message ${i}`;
+      await sleep(1000); // Simulate async operation
+    }
+  }
 }
