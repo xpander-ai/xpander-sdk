@@ -58,9 +58,9 @@
     tslib "^2.6.2"
 
 "@aws-sdk/client-bedrock-runtime@^3.624.0":
-  version "3.750.0"
-  resolved "https://registry.yarnpkg.com/@aws-sdk/client-bedrock-runtime/-/client-bedrock-runtime-3.750.0.tgz#ee998c1b92b80bfc0e169a70711e1ef26736c1ef"
-  integrity sha512-vmfklnpYrW4NU7MsiomND5I3lDVMe2pumsLJQ3KbMMobAlmF5R2skJO1vygG7Tjbkfn8OdxtxKGDhXivhYc9AQ==
+  version "3.755.0"
+  resolved "https://registry.yarnpkg.com/@aws-sdk/client-bedrock-runtime/-/client-bedrock-runtime-3.755.0.tgz#9373e421d1c92a17fe37d474ac40d7c9d587c877"
+  integrity sha512-g5Adp2haJn3d1M7he4KSBUO/QAJuDNhnCNSZ4Ud30F0WvX07C7nZUDzKOi8cYa8xeXK6gpSlk6DdgcJflXdfXA==
   dependencies:
     "@aws-crypto/sha256-browser" "5.2.0"
     "@aws-crypto/sha256-js" "5.2.0"
