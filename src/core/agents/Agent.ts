@@ -18,6 +18,7 @@ import {
   AgentAccessScope,
   AgentGraphItemSubType,
   AgentDelegationType,
+  AgentGraphItemType,
 } from '../../types/agents';
 import {
   IMemoryMessage,
@@ -342,13 +343,34 @@ export class Agent extends Base {
    * @param tools - The list of local tools to add.
    */
   public addLocalTools(tools: any[] | ILocalTool[]): void {
-    this.localTools = tools.map((tool) => ({
-      ...tool,
-      function: {
-        ...tool.function,
-        name: `${LOCAL_TOOL_PREFIX}${tool.function.name}`,
-      },
-    }));
+    this.localTools = [];
+    for (const tool of tools) {
+      const localTool = {
+        ...tool,
+        function: {
+          ...tool.function,
+          name: `${LOCAL_TOOL_PREFIX}${tool.function.name}`,
+        },
+      };
+      this.localTools.push(localTool);
+
+      // graph attach
+      const isAlreadyOnGraph = this.graph.findNodeByItemId(
+        localTool.function.name,
+      );
+      if (!isAlreadyOnGraph) {
+        this.graph.addNode(
+          new GraphItem(
+            this,
+            '',
+            localTool.function.name,
+            tool.function.name,
+            AgentGraphItemType.TOOL,
+            true,
+          ),
+        );
+      }
+    }
   }
 
   /** Checks if the agent has local tools loaded. */
