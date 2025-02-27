@@ -86,6 +86,7 @@ export class Agent extends Base {
   public userDetails?: IUserDetails;
   public executionMemory?: Memory;
   private shouldStop: boolean = false;
+  private hitlIsRunning: boolean = false;
   private isLocalRun: boolean = false;
   private withAgentEndTool: boolean = true;
   public graph: Graph;
@@ -492,6 +493,15 @@ export class Agent extends Base {
         this.shouldStop = true;
       }
 
+      // is human-in-the-loop running
+      if (
+        executionResult?.headers?.['xpander-agent-hitl'] === 'true' &&
+        this.withAgentEndTool
+      ) {
+        this.hitlIsRunning = true;
+        this.shouldStop = true;
+      }
+
       if (!executionResult.isSuccess) {
         throw new Error(toolCallResult.result);
       }
@@ -628,9 +638,40 @@ export class Agent extends Base {
     }
   }
 
+  private get isAwaitingHITL() {
+    return this?.messages?.[this?.messages?.length - 1]?.content?.includes(
+      'AWAITING_HITL',
+    );
+  }
+
   public isFinished(): boolean {
+    let shouldStopByHITL = false;
     let shouldStop = false;
     let shouldStopBySequence = false;
+
+    if (this.isAwaitingHITL && !!this.execution?.id && !this.hitlIsRunning) {
+      Execution.update(this, this.execution.id, {
+        result: "The agent's execution is still pending approval.",
+        status: ExecutionStatus.COMPLETED,
+      });
+      return true;
+    }
+
+    if (this.hitlIsRunning) {
+      console.debug(
+        `Agent ${this.id} with execution ${this.execution?.id} stopped due to HITL`,
+      );
+      shouldStopByHITL = true;
+    }
+    // get pending execution in hitl to continue local execution
+    if (shouldStopByHITL && this.execution?.workerId) {
+      const pendingExecution = this.retrievePendingExecutionWithLimit();
+      if (pendingExecution) {
+        this.switchExecution(pendingExecution, true);
+        return false;
+      }
+    }
+
     if (this.shouldStop) {
       shouldStop = true;
     } else {
@@ -727,38 +768,7 @@ export class Agent extends Base {
         this.execution.workerId,
       );
       if (pendingExecution) {
-        console.debug(
-          `switching from execution ${this.execution.id} to ${pendingExecution.id}`,
-        );
-        // re-load agent if needed (switch agent)
-        if (this.id !== pendingExecution.agentId) {
-          this.id = pendingExecution.agentId;
-
-          const withAgentEndTool = this.withAgentEndTool;
-          const localTools = this.localTools;
-
-          this.load(pendingExecution.agentId);
-
-          // preserve agent end tool state
-          if (!withAgentEndTool) {
-            this.disableAgentEndTool();
-          }
-          // preserve local tools
-          if (localTools && localTools.length !== 0) {
-            this.localTools = localTools;
-          }
-
-          this.isLocalRun = true;
-        }
-        this.initTask(pendingExecution);
-
-        // reload memory
-        this.executionMemory = this.initializeMemory();
-        this.memory.initMessages(
-          this.execution?.inputMessage as IMemoryMessage,
-          this.instructions,
-        );
-        shouldStop = false;
+        this.switchExecution(pendingExecution);
       } else if (this.execution.parentExecution) {
         // fetch execution result
         console.debug(
@@ -780,6 +790,37 @@ export class Agent extends Base {
     }
 
     return shouldStop;
+  }
+
+  private switchExecution(
+    pendingExecution: Execution,
+    allowSameAgentSwitch: boolean = false,
+  ) {
+    if (!!this?.execution?.id) {
+      console.debug(
+        `switching from execution ${this.execution.id} to ${pendingExecution.id}`,
+      );
+      // re-load agent if needed (switch agent)
+      if (this.id !== pendingExecution.agentId || allowSameAgentSwitch) {
+        this.id = pendingExecution.agentId;
+
+        const withAgentEndTool = this.withAgentEndTool;
+        const localTools = this.localTools;
+
+        this.load(pendingExecution.agentId);
+
+        // preserve agent end tool state
+        if (!withAgentEndTool) {
+          this.disableAgentEndTool();
+        }
+        // preserve local tools
+        if (localTools && localTools.length !== 0) {
+          this.localTools = localTools;
+        }
+
+        this.isLocalRun = true;
+      }
+    }
   }
 
   public addTask(
@@ -807,6 +848,41 @@ export class Agent extends Base {
 
   public disableAgentEndTool(): void {
     this.withAgentEndTool = false;
+  }
+
+  private retrievePendingExecutionWithLimit(): Execution | null {
+    if (!this?.execution?.workerId) {
+      throw new Error('Execution workerId is missing!');
+    }
+
+    const pollInterval = 5000; // 5 seconds
+    const timeout = 60000; // 1 minute
+    const startTime = Date.now();
+
+    let pendingExecution: Execution | null = null;
+
+    while (Date.now() - startTime < timeout) {
+      console.log(
+        `Checking for pending execution on worker ${this.execution.workerId}`,
+      );
+      pendingExecution = Execution.retrievePendingExecution(
+        this,
+        this.execution.workerId,
+      ); // Synchronous call
+
+      if (pendingExecution) {
+        return pendingExecution; // Return immediately if a pending execution is found
+      }
+
+      // Synchronous sleep
+      const now = Date.now();
+      while (Date.now() - now < pollInterval) {
+        // Busy wait to simulate synchronous sleep
+      }
+    }
+
+    // Return null if no pending execution is found within the time limit
+    return null;
   }
 
   public retrieveExecutionResult(): Execution {
