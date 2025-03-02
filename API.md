@@ -2205,6 +2205,7 @@ new Graph(agent: Agent, items: GraphItem[])
 | <code><a href="#xpander-sdk.Graph.toJson">toJson</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.addNode">addNode</a></code> | Adds a new node to the graph. |
 | <code><a href="#xpander-sdk.Graph.findNodeByItemId">findNodeByItemId</a></code> | Finds a node in the graph by its item ID. |
+| <code><a href="#xpander-sdk.Graph.findNodeByName">findNodeByName</a></code> | Finds a node in the graph by its name. |
 | <code><a href="#xpander-sdk.Graph.findNodeByNodeId">findNodeByNodeId</a></code> | Finds a node in the graph by its node ID. |
 | <code><a href="#xpander-sdk.Graph.reset">reset</a></code> | Resets the graph for the associated agent. |
 
@@ -2259,6 +2260,22 @@ public findNodeByItemId(itemId: string): GraphItem
 Finds a node in the graph by its item ID.
 
 ###### `itemId`<sup>Required</sup> <a name="itemId" id="xpander-sdk.Graph.findNodeByItemId.parameter.itemId"></a>
+
+- *Type:* string
+
+The item ID to search for.
+
+---
+
+##### `findNodeByName` <a name="findNodeByName" id="xpander-sdk.Graph.findNodeByName"></a>
+
+```typescript
+public findNodeByName(name: string): GraphItem
+```
+
+Finds a node in the graph by its name.
+
+###### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.Graph.findNodeByName.parameter.name"></a>
 
 - *Type:* string
 
