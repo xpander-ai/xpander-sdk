@@ -356,9 +356,10 @@ export class Agent extends Base {
       this.localTools.push(localTool);
 
       // graph attach
-      const isAlreadyOnGraph = this.graph.findNodeByItemId(
-        localTool.function.name,
-      );
+      const isAlreadyOnGraph =
+        this.graph.findNodeByItemId(localTool.function.name) ||
+        this.graph.findNodeByName(localTool.function.name);
+
       if (!isAlreadyOnGraph) {
         this.graph.addNode(
           new GraphItem(

@@ -35,6 +35,16 @@ export class Graph extends Base {
   }
 
   /**
+   * Finds a node in the graph by its name.
+   *
+   * @param {string} name - The item ID to search for.
+   * @returns {GraphItem | undefined} The found graph item or undefined if not found.
+   */
+  public findNodeByName(name: string): GraphItem | undefined {
+    return this.items.find((gi) => gi.name === name);
+  }
+
+  /**
    * Finds a node in the graph by its node ID.
    *
    * @param {string} nodeId - The node ID to search for.
