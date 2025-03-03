@@ -770,6 +770,7 @@ export class Agent extends Base {
       );
       if (pendingExecution) {
         this.switchExecution(pendingExecution);
+        shouldStop = false;
       } else if (this.execution.parentExecution) {
         // fetch execution result
         console.debug(
@@ -801,8 +802,9 @@ export class Agent extends Base {
       console.debug(
         `switching from execution ${this.execution.id} to ${pendingExecution.id}`,
       );
+      const isDifferentAgent = this.id !== pendingExecution.agentId;
       // re-load agent if needed (switch agent)
-      if (this.id !== pendingExecution.agentId || allowSameAgentSwitch) {
+      if (isDifferentAgent || allowSameAgentSwitch) {
         this.id = pendingExecution.agentId;
 
         const withAgentEndTool = this.withAgentEndTool;
@@ -820,6 +822,18 @@ export class Agent extends Base {
         }
 
         this.isLocalRun = true;
+
+        // different agent? new task
+        if (isDifferentAgent) {
+          this.initTask(pendingExecution);
+
+          // reload memory
+          this.executionMemory = this.initializeMemory();
+          this.memory.initMessages(
+            this.execution?.inputMessage as IMemoryMessage,
+            this.instructions,
+          );
+        }
       }
     }
   }

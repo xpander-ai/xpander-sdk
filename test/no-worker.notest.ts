@@ -4,7 +4,7 @@ import { XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const xpanderAgentId = '74df98ef-59f9-4fe9-9cb3-10343d856693';
+const xpanderAgentId = '62f3f605-eeb1-4497-afd1-2beeff8e5b60';
 const openAIKey = process.env.OPENAI_API_KEY || '';
 const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
 const organizationId = process.env.ORGANIZATION_ID || '';
@@ -37,7 +37,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
     startTime = getStartTime();
     // manually set execution - should come from worker when running in cloud/on-prem
-    agent.addTask('get longest readable tag');
+    agent.addTask('get longest tag and send to moriel@xpander.ai');
     announceTiming(startTime, 'Invoke Agent');
 
     let shouldSkip = false;
@@ -78,6 +78,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
     startTime = getStartTime();
     const executionResult = agent.retrieveExecutionResult();
+    console.log(executionResult);
     announceTiming(startTime, 'Retrieve execution result');
 
     expect(executionResult?.result.length).toBeGreaterThanOrEqual(1);
