@@ -11,14 +11,6 @@ export enum MemoryStrategy {
   CONTEXT = 'context',
 }
 
-export interface IUserDetails {
-  id?: string;
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  additionalAttributes?: Record<string, any>;
-}
-
 export interface IToolCall {
   name: string;
   payload?: string;

@@ -37,7 +37,16 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
     startTime = getStartTime();
     // manually set execution - should come from worker when running in cloud/on-prem
-    agent.addTask('get longest tag and send to moriel@xpander.ai');
+    // agent.updateUserDetails(
+    //   new UserDetails(
+    //     'moriel-user-id',
+    //     'moriel',
+    //     'pahima',
+    //     'moriel@xpander.ai',
+    //   ),
+    // );
+
+    agent.addTask('get longest tag and email me moriel@xpander.ai');
     announceTiming(startTime, 'Invoke Agent');
 
     let shouldSkip = false;

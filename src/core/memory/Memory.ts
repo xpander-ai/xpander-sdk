@@ -7,9 +7,11 @@ import {
   ToolCallResult,
 } from '../..';
 import { BaseOpenAISDKHandler } from '../../llmProviders/shared/baseOpenAI';
-import { IMemoryMessage, IUserDetails, MemoryType } from '../../types/memory';
+import { IMemoryMessage, MemoryType } from '../../types/memory';
 import { Base } from '../base';
+import { UserDetails } from '../UserDetails';
 import { convertKeysToCamelCase, convertKeysToSnakeCase } from '../utils';
+import { MemoryThread } from './MemoryThread';
 
 /**
  * Represents a memory thread in xpanderAI, handling storage, retrieval,
@@ -23,12 +25,12 @@ export class Memory extends Base {
    * @param userDetails - Optional user details associated with the memory thread.
    * @returns A new instance of the Memory class.
    */
-  public static create(agent: Agent, userDetails?: IUserDetails): Memory {
+  public static create(agent: Agent, userDetails?: UserDetails): Memory {
     const response = request('POST', `${agent.configuration.url}/memory`, {
       json: {
         organization_id: agent.organizationId,
         user_details: userDetails
-          ? convertKeysToSnakeCase(userDetails)
+          ? convertKeysToSnakeCase(userDetails.toDict())
           : undefined,
       },
       headers: { 'x-api-key': agent.configuration.apiKey },
@@ -81,6 +83,36 @@ export class Memory extends Base {
       fetchedThread.messages,
       fetchedThread.userDetails,
       agent.memoryType,
+    );
+  }
+
+  /**
+   * Fetches the memory threads associated with a given agent.
+   *
+   * @param {Agent} agent - The agent whose memory threads are to be retrieved.
+   * @returns {MemoryThread[]} - An array of memory threads belonging to the agent.
+   * @throws {Error} - Throws an error if the request fails.
+   */
+  public static fetchUserThreads(agent: Agent): MemoryThread[] {
+    const response = request(
+      'GET',
+      `${agent.configuration.url}/memory/threads/${agent?.userDetails?.id!}`,
+      {
+        headers: { 'x-api-key': agent.configuration.apiKey },
+      },
+    );
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      throw new Error(response.body.toString());
+    }
+
+    const fetchedThreads = convertKeysToCamelCase(
+      JSON.parse(response.getBody('utf8')),
+    );
+
+    return fetchedThreads.map(
+      (thread: any) =>
+        new MemoryThread(thread.threadId, thread.createdAt, thread.name),
     );
   }
 
