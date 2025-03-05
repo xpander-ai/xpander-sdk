@@ -185,6 +185,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.retrieveAgenticOperations">retrieveAgenticOperations</a></code> | Retrieves a list of operations for a given agentic interface. |
 | <code><a href="#xpander-sdk.Agent.retrieveExecutionResult">retrieveExecutionResult</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | Retrieves a node from the graph by its ID. |
+| <code><a href="#xpander-sdk.Agent.retrieveThreadsList">retrieveThreadsList</a></code> | Retrieves the list of memory threads for the current user. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
 | <code><a href="#xpander-sdk.Agent.stop">stop</a></code> | *No description.* |
@@ -446,6 +447,14 @@ The ID of the graph node to retrieve.
 
 ---
 
+##### `retrieveThreadsList` <a name="retrieveThreadsList" id="xpander-sdk.Agent.retrieveThreadsList"></a>
+
+```typescript
+public retrieveThreadsList(): MemoryThread[]
+```
+
+Retrieves the list of memory threads for the current user.
+
 ##### `runTool` <a name="runTool" id="xpander-sdk.Agent.runTool"></a>
 
 ```typescript
@@ -521,14 +530,14 @@ public update(): Agent
 ##### `updateUserDetails` <a name="updateUserDetails" id="xpander-sdk.Agent.updateUserDetails"></a>
 
 ```typescript
-public updateUserDetails(userDetails: any): void
+public updateUserDetails(userDetails: UserDetails): void
 ```
 
 Updates the user details for the agent.
 
 ###### `userDetails`<sup>Required</sup> <a name="userDetails" id="xpander-sdk.Agent.updateUserDetails.parameter.userDetails"></a>
 
-- *Type:* any
+- *Type:* <a href="#xpander-sdk.UserDetails">UserDetails</a>
 
 The user details to update.
 
@@ -609,7 +618,7 @@ Agent.getById(configuration: Configuration, agentId: string)
 | <code><a href="#xpander-sdk.Agent.property.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | - Tools available to the agent. |
 | <code><a href="#xpander-sdk.Agent.property.execution">execution</a></code> | <code><a href="#xpander-sdk.Execution">Execution</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.executionMemory">executionMemory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.userDetails">userDetails</a></code> | <code><a href="#xpander-sdk.IUserDetails">IUserDetails</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.property.userDetails">userDetails</a></code> | <code><a href="#xpander-sdk.UserDetails">UserDetails</a></code> | *No description.* |
 
 ---
 
@@ -942,10 +951,10 @@ public readonly executionMemory: Memory;
 ##### `userDetails`<sup>Optional</sup> <a name="userDetails" id="xpander-sdk.Agent.property.userDetails"></a>
 
 ```typescript
-public readonly userDetails: IUserDetails;
+public readonly userDetails: UserDetails;
 ```
 
-- *Type:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
+- *Type:* <a href="#xpander-sdk.UserDetails">UserDetails</a>
 
 ---
 
@@ -2955,6 +2964,7 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 | <code><a href="#xpander-sdk.Memory.initInstructions">initInstructions</a></code> | Initializes the memory thread with system instructions if no messages exist. |
 | <code><a href="#xpander-sdk.Memory.initMessages">initMessages</a></code> | Initializes the thread with input and instructions. |
 | <code><a href="#xpander-sdk.Memory.retrieveMessages">retrieveMessages</a></code> | Retrieves the messages stored in the memory thread. |
+| <code><a href="#xpander-sdk.Memory.updateMessages">updateMessages</a></code> | Updates the message history for the agent by sending the provided messages to the server. |
 
 ---
 
@@ -3078,6 +3088,27 @@ Retrieves the messages stored in the memory thread.
 
 Applies the agent's memory strategy to refresh the messages if needed.
 
+##### `updateMessages` <a name="updateMessages" id="xpander-sdk.Memory.updateMessages"></a>
+
+```typescript
+public updateMessages(_messages: any): void
+```
+
+Updates the message history for the agent by sending the provided messages to the server.
+
+If the messages are not in the expected "xpander.ai" message format, they are converted.
+
+###### `_messages`<sup>Required</sup> <a name="_messages" id="xpander-sdk.Memory.updateMessages.parameter._messages"></a>
+
+- *Type:* any
+
+The messages to be updated.
+
+Can be in various formats.
+ If not in the "xpander.ai" format, they will be converted.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
@@ -3085,6 +3116,7 @@ Applies the agent's memory strategy to refresh the messages if needed.
 | <code><a href="#xpander-sdk.Memory.fromObject">fromObject</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.create">create</a></code> | Creates a new memory thread for the specified agent. |
 | <code><a href="#xpander-sdk.Memory.fetch">fetch</a></code> | Fetches an existing memory thread by its ID. |
+| <code><a href="#xpander-sdk.Memory.fetchUserThreads">fetchUserThreads</a></code> | Fetches the memory threads associated with a given agent. |
 
 ---
 
@@ -3107,7 +3139,7 @@ Memory.fromObject(data: any)
 ```typescript
 import { Memory } from 'xpander-sdk'
 
-Memory.create(agent: Agent, userDetails?: IUserDetails)
+Memory.create(agent: Agent, userDetails?: UserDetails)
 ```
 
 Creates a new memory thread for the specified agent.
@@ -3122,7 +3154,7 @@ The agent for which the memory thread is created.
 
 ###### `userDetails`<sup>Optional</sup> <a name="userDetails" id="xpander-sdk.Memory.create.parameter.userDetails"></a>
 
-- *Type:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
+- *Type:* <a href="#xpander-sdk.UserDetails">UserDetails</a>
 
 Optional user details associated with the memory thread.
 
@@ -3151,6 +3183,24 @@ The agent associated with the memory thread.
 - *Type:* string
 
 The ID of the memory thread to fetch.
+
+---
+
+##### `fetchUserThreads` <a name="fetchUserThreads" id="xpander-sdk.Memory.fetchUserThreads"></a>
+
+```typescript
+import { Memory } from 'xpander-sdk'
+
+Memory.fetchUserThreads(agent: Agent)
+```
+
+Fetches the memory threads associated with a given agent.
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.fetchUserThreads.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+The agent whose memory threads are to be retrieved.
 
 ---
 
@@ -3212,6 +3262,139 @@ public readonly messages: IMemoryMessage[];
 
 ```typescript
 public readonly userDetails: string;
+```
+
+- *Type:* string
+
+---
+
+
+### MemoryThread <a name="MemoryThread" id="xpander-sdk.MemoryThread"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.MemoryThread.Initializer"></a>
+
+```typescript
+import { MemoryThread } from 'xpander-sdk'
+
+new MemoryThread(id: string, createdAt?: string, name?: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.MemoryThread.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryThread.Initializer.parameter.createdAt">createdAt</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryThread.Initializer.parameter.name">name</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.MemoryThread.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `createdAt`<sup>Optional</sup> <a name="createdAt" id="xpander-sdk.MemoryThread.Initializer.parameter.createdAt"></a>
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="xpander-sdk.MemoryThread.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.MemoryThread.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryThread.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryThread.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.MemoryThread.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.MemoryThread.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.MemoryThread.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.MemoryThread.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.MemoryThread.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.MemoryThread.fromObject"></a>
+
+```typescript
+import { MemoryThread } from 'xpander-sdk'
+
+MemoryThread.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.MemoryThread.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.MemoryThread.property.createdAt">createdAt</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryThread.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryThread.property.name">name</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `createdAt`<sup>Required</sup> <a name="createdAt" id="xpander-sdk.MemoryThread.property.createdAt"></a>
+
+```typescript
+public readonly createdAt: string;
+```
+
+- *Type:* string
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.MemoryThread.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.MemoryThread.property.name"></a>
+
+```typescript
+public readonly name: string;
 ```
 
 - *Type:* string
@@ -3669,6 +3852,175 @@ public readonly statusCode: number;
 
 ```typescript
 public readonly toolCallId: string;
+```
+
+- *Type:* string
+
+---
+
+
+### UserDetails <a name="UserDetails" id="xpander-sdk.UserDetails"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.UserDetails.Initializer"></a>
+
+```typescript
+import { UserDetails } from 'xpander-sdk'
+
+new UserDetails(id: string, firstName?: string, lastName?: string, email?: string, additionalAttributes?: {[ key: string ]: any})
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.UserDetails.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.Initializer.parameter.firstName">firstName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.Initializer.parameter.lastName">lastName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.Initializer.parameter.email">email</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.Initializer.parameter.additionalAttributes">additionalAttributes</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.UserDetails.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `firstName`<sup>Optional</sup> <a name="firstName" id="xpander-sdk.UserDetails.Initializer.parameter.firstName"></a>
+
+- *Type:* string
+
+---
+
+##### `lastName`<sup>Optional</sup> <a name="lastName" id="xpander-sdk.UserDetails.Initializer.parameter.lastName"></a>
+
+- *Type:* string
+
+---
+
+##### `email`<sup>Optional</sup> <a name="email" id="xpander-sdk.UserDetails.Initializer.parameter.email"></a>
+
+- *Type:* string
+
+---
+
+##### `additionalAttributes`<sup>Optional</sup> <a name="additionalAttributes" id="xpander-sdk.UserDetails.Initializer.parameter.additionalAttributes"></a>
+
+- *Type:* {[ key: string ]: any}
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.UserDetails.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.UserDetails.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.UserDetails.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.UserDetails.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.UserDetails.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.UserDetails.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.UserDetails.fromObject"></a>
+
+```typescript
+import { UserDetails } from 'xpander-sdk'
+
+UserDetails.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.UserDetails.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.UserDetails.property.additionalAttributes">additionalAttributes</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.property.email">email</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.property.firstName">firstName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.UserDetails.property.lastName">lastName</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `additionalAttributes`<sup>Required</sup> <a name="additionalAttributes" id="xpander-sdk.UserDetails.property.additionalAttributes"></a>
+
+```typescript
+public readonly additionalAttributes: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+---
+
+##### `email`<sup>Required</sup> <a name="email" id="xpander-sdk.UserDetails.property.email"></a>
+
+```typescript
+public readonly email: string;
+```
+
+- *Type:* string
+
+---
+
+##### `firstName`<sup>Required</sup> <a name="firstName" id="xpander-sdk.UserDetails.property.firstName"></a>
+
+```typescript
+public readonly firstName: string;
+```
+
+- *Type:* string
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.UserDetails.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+---
+
+##### `lastName`<sup>Required</sup> <a name="lastName" id="xpander-sdk.UserDetails.property.lastName"></a>
+
+```typescript
+public readonly lastName: string;
 ```
 
 - *Type:* string
@@ -4346,7 +4698,7 @@ Optional flag to enable metrics reporting.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.IExecutionInput.property.user">user</a></code> | <code><a href="#xpander-sdk.IUserDetails">IUserDetails</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.IExecutionInput.property.user">user</a></code> | <code><a href="#xpander-sdk.UserDetails">UserDetails</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.IExecutionInput.property.files">files</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.IExecutionInput.property.text">text</a></code> | <code>string</code> | *No description.* |
 
@@ -4355,10 +4707,10 @@ Optional flag to enable metrics reporting.
 ##### `user`<sup>Required</sup> <a name="user" id="xpander-sdk.IExecutionInput.property.user"></a>
 
 ```typescript
-public readonly user: IUserDetails;
+public readonly user: UserDetails;
 ```
 
-- *Type:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
+- *Type:* <a href="#xpander-sdk.UserDetails">UserDetails</a>
 
 ---
 
@@ -5317,73 +5669,6 @@ public readonly required: string[];
 - *Type:* string[]
 
 List of required properties within this parameter, if any.
-
----
-
-### IUserDetails <a name="IUserDetails" id="xpander-sdk.IUserDetails"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IUserDetails">IUserDetails</a>
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IUserDetails.property.additionalAttributes">additionalAttributes</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
-| <code><a href="#xpander-sdk.IUserDetails.property.email">email</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IUserDetails.property.firstName">firstName</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IUserDetails.property.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IUserDetails.property.lastName">lastName</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `additionalAttributes`<sup>Optional</sup> <a name="additionalAttributes" id="xpander-sdk.IUserDetails.property.additionalAttributes"></a>
-
-```typescript
-public readonly additionalAttributes: {[ key: string ]: any};
-```
-
-- *Type:* {[ key: string ]: any}
-
----
-
-##### `email`<sup>Optional</sup> <a name="email" id="xpander-sdk.IUserDetails.property.email"></a>
-
-```typescript
-public readonly email: string;
-```
-
-- *Type:* string
-
----
-
-##### `firstName`<sup>Optional</sup> <a name="firstName" id="xpander-sdk.IUserDetails.property.firstName"></a>
-
-```typescript
-public readonly firstName: string;
-```
-
-- *Type:* string
-
----
-
-##### `id`<sup>Optional</sup> <a name="id" id="xpander-sdk.IUserDetails.property.id"></a>
-
-```typescript
-public readonly id: string;
-```
-
-- *Type:* string
-
----
-
-##### `lastName`<sup>Optional</sup> <a name="lastName" id="xpander-sdk.IUserDetails.property.lastName"></a>
-
-```typescript
-public readonly lastName: string;
-```
-
-- *Type:* string
 
 ---
 

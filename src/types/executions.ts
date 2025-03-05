@@ -1,4 +1,4 @@
-import { IUserDetails } from './memory';
+import { UserDetails } from '../core/UserDetails';
 
 export enum ExecutionStatus {
   PENDING = 'pending',
@@ -11,5 +11,5 @@ export enum ExecutionStatus {
 export interface IExecutionInput {
   text?: string;
   files?: string[];
-  user: IUserDetails;
+  user: UserDetails;
 }

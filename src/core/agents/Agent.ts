@@ -20,19 +20,14 @@ import {
   AgentDelegationType,
   AgentGraphItemType,
 } from '../../types/agents';
-import {
-  IMemoryMessage,
-  IUserDetails,
-  MemoryStrategy,
-  MemoryType,
-} from '../../types/memory';
+import { IMemoryMessage, MemoryStrategy, MemoryType } from '../../types/memory';
 import { Base } from '../base';
 import CacheService from '../CacheService';
 import { Configuration } from '../Configuration';
 import { Execution } from '../executions/Execution';
 import { Graph, GraphItem } from '../graphs';
 import { KnowledgeBase } from '../knowledgeBases';
-import { Memory } from '../memory';
+import { Memory, MemoryThread } from '../memory';
 import { AgenticInterface, AgenticOperation } from '../tools';
 import { ToolCall, ToolCallResult } from '../tools/ToolCall';
 import {
@@ -46,6 +41,7 @@ import {
   mergeDeep,
   testToolGraphPosition,
 } from '../tools/utils';
+import { UserDetails } from '../UserDetails';
 import { convertKeysToCamelCase, generateUUIDv4 } from '../utils';
 
 /**
@@ -83,7 +79,7 @@ export class Agent extends Base {
   localTools: ILocalTool[] = [];
 
   public execution?: Execution;
-  public userDetails?: IUserDetails;
+  public userDetails?: UserDetails;
   public executionMemory?: Memory;
   private shouldStop: boolean = false;
   private hitlIsRunning: boolean = false;
@@ -593,9 +589,23 @@ export class Agent extends Base {
    *
    * @param userDetails - The user details to update.
    */
-  public updateUserDetails(userDetails: any): void {
-    const camelCasedUserDetails = convertKeysToCamelCase(userDetails);
-    this.userDetails = camelCasedUserDetails;
+  public updateUserDetails(userDetails: UserDetails): void {
+    this.userDetails = userDetails;
+  }
+
+  /**
+   * Retrieves the list of memory threads for the current user.
+   *
+   * @returns {MemoryThread[]} An array of memory threads associated with the user.
+   * @throws {Error} If user details are missing, instructing to update user details first.
+   */
+  public retrieveThreadsList(): MemoryThread[] {
+    if (!this.userDetails) {
+      throw new Error(
+        'User details required for listing threads. Use agent.update_user_details first (user must have an ID).',
+      );
+    }
+    return Memory.fetchUserThreads(this);
   }
 
   /** Retrieves the vanilla knowledge bases of the agent. */
