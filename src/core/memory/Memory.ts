@@ -346,7 +346,7 @@ export class Memory extends Base {
     }
 
     const response = request(
-      'POST',
+      'PATCH',
       `${this.agent.configuration.url}/memory/${this.id}`,
       {
         json: { messages: convertKeysToSnakeCase(messages) },
