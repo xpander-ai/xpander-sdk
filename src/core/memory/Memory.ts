@@ -349,7 +349,7 @@ export class Memory extends Base {
       'POST',
       `${this.agent.configuration.url}/memory/${this.id}`,
       {
-        json: convertKeysToSnakeCase(messages),
+        json: { messages: convertKeysToSnakeCase(messages) },
         headers: { 'x-api-key': this.agent.configuration.apiKey },
       },
     );
