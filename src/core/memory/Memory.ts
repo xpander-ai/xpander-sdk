@@ -324,8 +324,17 @@ export class Memory extends Base {
     return [];
   }
 
+  /**
+   * Updates the message history for the agent by sending the provided messages to the server.
+   * If the messages are not in the expected "xpander.ai" message format, they are converted.
+   *
+   * @param {any} _messages - The messages to be updated. Can be in various formats.
+   *                         If not in the "xpander.ai" format, they will be converted.
+   * @throws {Error} - Throws an error if the request to update messages fails.
+   */
   public updateMessages(_messages: any): void {
-    let messages = JSON.parse(JSON.stringify(_messages)); // deep copy
+    let messages = JSON.parse(JSON.stringify(_messages)); // Deep copy to avoid mutation
+
     const isXpanderMessageStruct =
       Array.isArray(messages) &&
       messages.length !== 0 &&
@@ -352,6 +361,7 @@ export class Memory extends Base {
     const updatedThread = convertKeysToCamelCase(
       JSON.parse(response.getBody('utf8')),
     );
+
     this.from({ messages: updatedThread.messages });
   }
 }

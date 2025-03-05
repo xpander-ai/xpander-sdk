@@ -2964,7 +2964,7 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 | <code><a href="#xpander-sdk.Memory.initInstructions">initInstructions</a></code> | Initializes the memory thread with system instructions if no messages exist. |
 | <code><a href="#xpander-sdk.Memory.initMessages">initMessages</a></code> | Initializes the thread with input and instructions. |
 | <code><a href="#xpander-sdk.Memory.retrieveMessages">retrieveMessages</a></code> | Retrieves the messages stored in the memory thread. |
-| <code><a href="#xpander-sdk.Memory.updateMessages">updateMessages</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.updateMessages">updateMessages</a></code> | Updates the message history for the agent by sending the provided messages to the server. |
 
 ---
 
@@ -3094,9 +3094,18 @@ Applies the agent's memory strategy to refresh the messages if needed.
 public updateMessages(_messages: any): void
 ```
 
+Updates the message history for the agent by sending the provided messages to the server.
+
+If the messages are not in the expected "xpander.ai" message format, they are converted.
+
 ###### `_messages`<sup>Required</sup> <a name="_messages" id="xpander-sdk.Memory.updateMessages.parameter._messages"></a>
 
 - *Type:* any
+
+The messages to be updated.
+
+Can be in various formats.
+ If not in the "xpander.ai" format, they will be converted.
 
 ---
 
