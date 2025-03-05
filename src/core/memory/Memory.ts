@@ -323,4 +323,35 @@ export class Memory extends Base {
     }
     return [];
   }
+
+  public updateMessages(_messages: any): void {
+    let messages = JSON.parse(JSON.stringify(_messages)); // deep copy
+    const isXpanderMessageStruct =
+      Array.isArray(messages) &&
+      messages.length !== 0 &&
+      'role' in messages[0] &&
+      ('content' in messages[0] || 'files' in messages[0]);
+
+    if (!isXpanderMessageStruct) {
+      messages = this.convertLLMResponseToMessages(messages);
+    }
+
+    const response = request(
+      'POST',
+      `${this.agent.configuration.url}/memory/${this.id}`,
+      {
+        json: convertKeysToSnakeCase(messages),
+        headers: { 'x-api-key': this.agent.configuration.apiKey },
+      },
+    );
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      throw new Error(response.body.toString());
+    }
+
+    const updatedThread = convertKeysToCamelCase(
+      JSON.parse(response.getBody('utf8')),
+    );
+    this.from({ messages: updatedThread.messages });
+  }
 }

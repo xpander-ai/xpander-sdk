@@ -2964,6 +2964,7 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 | <code><a href="#xpander-sdk.Memory.initInstructions">initInstructions</a></code> | Initializes the memory thread with system instructions if no messages exist. |
 | <code><a href="#xpander-sdk.Memory.initMessages">initMessages</a></code> | Initializes the thread with input and instructions. |
 | <code><a href="#xpander-sdk.Memory.retrieveMessages">retrieveMessages</a></code> | Retrieves the messages stored in the memory thread. |
+| <code><a href="#xpander-sdk.Memory.updateMessages">updateMessages</a></code> | *No description.* |
 
 ---
 
@@ -3086,6 +3087,18 @@ public retrieveMessages(): any[]
 Retrieves the messages stored in the memory thread.
 
 Applies the agent's memory strategy to refresh the messages if needed.
+
+##### `updateMessages` <a name="updateMessages" id="xpander-sdk.Memory.updateMessages"></a>
+
+```typescript
+public updateMessages(_messages: any): void
+```
+
+###### `_messages`<sup>Required</sup> <a name="_messages" id="xpander-sdk.Memory.updateMessages.parameter._messages"></a>
+
+- *Type:* any
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
