@@ -3191,14 +3191,14 @@ The ID of the memory thread to fetch.
 ```typescript
 import { Memory } from 'xpander-sdk'
 
-Memory.fetchUserThreads(agent: Agent)
+Memory.fetchUserThreads(agent: any)
 ```
 
 Fetches the memory threads associated with a given agent.
 
 ###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.fetchUserThreads.parameter.agent"></a>
 
-- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+- *Type:* any
 
 The agent whose memory threads are to be retrieved.
 

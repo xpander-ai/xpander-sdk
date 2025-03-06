@@ -89,11 +89,11 @@ export class Memory extends Base {
   /**
    * Fetches the memory threads associated with a given agent.
    *
-   * @param {Agent} agent - The agent whose memory threads are to be retrieved.
+   * @param {any|Agent} agent - The agent whose memory threads are to be retrieved.
    * @returns {MemoryThread[]} - An array of memory threads belonging to the agent.
    * @throws {Error} - Throws an error if the request fails.
    */
-  public static fetchUserThreads(agent: Agent): MemoryThread[] {
+  public static fetchUserThreads(agent: any | Agent): MemoryThread[] {
     const response = request(
       'GET',
       `${agent.configuration.url}/memory/threads/${agent?.userDetails?.id!}`,
