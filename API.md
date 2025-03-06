@@ -3165,14 +3165,14 @@ Optional user details associated with the memory thread.
 ```typescript
 import { Memory } from 'xpander-sdk'
 
-Memory.fetch(agent: Agent, threadId: string)
+Memory.fetch(agent: any, threadId: string)
 ```
 
 Fetches an existing memory thread by its ID.
 
 ###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.fetch.parameter.agent"></a>
 
-- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+- *Type:* any
 
 The agent associated with the memory thread.
 
