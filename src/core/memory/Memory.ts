@@ -60,7 +60,7 @@ export class Memory extends Base {
    * @param threadId - The ID of the memory thread to fetch.
    * @returns An instance of the Memory class representing the fetched thread.
    */
-  public static fetch(agent: Agent, threadId: string): Memory {
+  public static fetch(agent: any | Agent, threadId: string): Memory {
     const response = request(
       'GET',
       `${agent.configuration.url}/memory/${threadId}`,
