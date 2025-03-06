@@ -911,11 +911,6 @@ export class Agent extends Base {
   }
 
   public retrieveExecutionResult(): Execution {
-    if (!this.withAgentEndTool) {
-      throw new Error(
-        'When an agent runs without an end tool, execution cannot be marked as completed or failed, resulting in no execution output. Handle this accordingly.',
-      );
-    }
     if (!this?.execution?.id) {
       throw new Error('Execution is missing!');
     }
