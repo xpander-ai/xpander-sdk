@@ -3115,8 +3115,10 @@ Can be in various formats.
 | --- | --- |
 | <code><a href="#xpander-sdk.Memory.fromObject">fromObject</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.create">create</a></code> | Creates a new memory thread for the specified agent. |
+| <code><a href="#xpander-sdk.Memory.deleteThreadById">deleteThreadById</a></code> | Deletes a memory thread by its ID. |
 | <code><a href="#xpander-sdk.Memory.fetch">fetch</a></code> | Fetches an existing memory thread by its ID. |
 | <code><a href="#xpander-sdk.Memory.fetchUserThreads">fetchUserThreads</a></code> | Fetches the memory threads associated with a given agent. |
+| <code><a href="#xpander-sdk.Memory.renameThreadById">renameThreadById</a></code> | Renames a memory thread by its ID. |
 
 ---
 
@@ -3157,6 +3159,32 @@ The agent for which the memory thread is created.
 - *Type:* <a href="#xpander-sdk.UserDetails">UserDetails</a>
 
 Optional user details associated with the memory thread.
+
+---
+
+##### `deleteThreadById` <a name="deleteThreadById" id="xpander-sdk.Memory.deleteThreadById"></a>
+
+```typescript
+import { Memory } from 'xpander-sdk'
+
+Memory.deleteThreadById(agent: any, threadId: string)
+```
+
+Deletes a memory thread by its ID.
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.deleteThreadById.parameter.agent"></a>
+
+- *Type:* any
+
+The agent instance containing configuration details.
+
+---
+
+###### `threadId`<sup>Required</sup> <a name="threadId" id="xpander-sdk.Memory.deleteThreadById.parameter.threadId"></a>
+
+- *Type:* string
+
+The ID of the thread to delete.
 
 ---
 
@@ -3201,6 +3229,40 @@ Fetches the memory threads associated with a given agent.
 - *Type:* any
 
 The agent whose memory threads are to be retrieved.
+
+---
+
+##### `renameThreadById` <a name="renameThreadById" id="xpander-sdk.Memory.renameThreadById"></a>
+
+```typescript
+import { Memory } from 'xpander-sdk'
+
+Memory.renameThreadById(agent: any, threadId: string, name: string)
+```
+
+Renames a memory thread by its ID.
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.renameThreadById.parameter.agent"></a>
+
+- *Type:* any
+
+The agent instance containing configuration details.
+
+---
+
+###### `threadId`<sup>Required</sup> <a name="threadId" id="xpander-sdk.Memory.renameThreadById.parameter.threadId"></a>
+
+- *Type:* string
+
+The ID of the thread to rename.
+
+---
+
+###### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.Memory.renameThreadById.parameter.name"></a>
+
+- *Type:* string
+
+The new name for the thread.
 
 ---
 

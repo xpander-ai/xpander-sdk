@@ -116,6 +116,57 @@ export class Memory extends Base {
     );
   }
 
+  /**
+   * Renames a memory thread by its ID.
+   *
+   * @param {any | Agent} agent - The agent instance containing configuration details.
+   * @param {string} threadId - The ID of the thread to rename.
+   * @param {string} name - The new name for the thread.
+   * @throws {Error} If the request fails.
+   *
+   * @xpander.ai
+   */
+  public static renameThreadById(
+    agent: any | Agent,
+    threadId: string,
+    name: string,
+  ) {
+    const response = request(
+      'PATCH',
+      `${agent.configuration.url}/memory/rename/${threadId}/${name}`,
+      {
+        headers: { 'x-api-key': agent.configuration.apiKey },
+      },
+    );
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      throw new Error(response.body.toString());
+    }
+  }
+
+  /**
+   * Deletes a memory thread by its ID.
+   *
+   * @param {any | Agent} agent - The agent instance containing configuration details.
+   * @param {string} threadId - The ID of the thread to delete.
+   * @throws {Error} If the request fails.
+   *
+   * @xpander.ai
+   */
+  public static deleteThreadById(agent: any | Agent, threadId: string) {
+    const response = request(
+      'DELETE',
+      `${agent.configuration.url}/memory/${threadId}`,
+      {
+        headers: { 'x-api-key': agent.configuration.apiKey },
+      },
+    );
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      throw new Error(response.body.toString());
+    }
+  }
+
   /** The LLM provider to be used for message processing. */
   public llmProvider: LLMProvider = LLMProvider.OPEN_AI;
 
