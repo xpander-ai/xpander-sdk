@@ -4123,7 +4123,7 @@ XpanderClient provides methods for configuring and interacting with xpanderAI to
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, organizationId?: string)
+new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, organizationId?: string, should_reset_cache?: boolean)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -4132,6 +4132,7 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, or
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.baseUrl">baseUrl</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.should_reset_cache">should_reset_cache</a></code> | <code>boolean</code> | *No description.* |
 
 ---
 
@@ -4156,6 +4157,12 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, or
 ##### `organizationId`<sup>Optional</sup> <a name="organizationId" id="xpander-sdk.XpanderClient.Initializer.parameter.organizationId"></a>
 
 - *Type:* string
+
+---
+
+##### `should_reset_cache`<sup>Optional</sup> <a name="should_reset_cache" id="xpander-sdk.XpanderClient.Initializer.parameter.should_reset_cache"></a>
+
+- *Type:* boolean
 
 ---
 

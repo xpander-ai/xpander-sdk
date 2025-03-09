@@ -76,7 +76,8 @@ export class XpanderClient {
    * @param params.apiKey - The API key for the agent.
    * @param params.baseUrl - The base URL for the agent, defaults to DEFAULT_BASE_URL.
    * @param params.withMetricsReport - Optional flag for enabling metrics reporting.
-   * @param params.customParams - Additional custom parameters for the client.
+   * @param params.organizationId - Organization id (if needed).
+   * @param params.should_reset_cache - Use this when you want to refresh the in-memory cache for each client initialization.
    * @throws Will throw an error if an invalid API key is specified.
    */
   constructor(
@@ -84,7 +85,12 @@ export class XpanderClient {
     baseUrl: any = DEFAULT_BASE_URL,
     withMetricsReport: boolean = false,
     organizationId: string = '',
+    should_reset_cache: boolean = false,
   ) {
+    if (should_reset_cache) {
+      CacheService.getInstance().clear();
+    }
+
     this.configuration = new Configuration({
       organizationId,
       apiKey,
