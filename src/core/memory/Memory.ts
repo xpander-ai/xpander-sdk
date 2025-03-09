@@ -25,13 +25,18 @@ export class Memory extends Base {
    * @param userDetails - Optional user details associated with the memory thread.
    * @returns A new instance of the Memory class.
    */
-  public static create(agent: Agent, userDetails?: UserDetails): Memory {
+  public static create(
+    agent: Agent,
+    userDetails?: UserDetails,
+    threadMetadata?: Record<string, any>,
+  ): Memory {
     const response = request('POST', `${agent.configuration.url}/memory`, {
       json: {
         organization_id: agent.organizationId,
         user_details: userDetails
           ? convertKeysToSnakeCase(userDetails.toDict())
           : undefined,
+        metadata: threadMetadata || null,
       },
       headers: { 'x-api-key': agent.configuration.apiKey },
     });

@@ -3141,7 +3141,7 @@ Memory.fromObject(data: any)
 ```typescript
 import { Memory } from 'xpander-sdk'
 
-Memory.create(agent: Agent, userDetails?: UserDetails)
+Memory.create(agent: Agent, userDetails?: UserDetails, threadMetadata?: {[ key: string ]: any})
 ```
 
 Creates a new memory thread for the specified agent.
@@ -3159,6 +3159,12 @@ The agent for which the memory thread is created.
 - *Type:* <a href="#xpander-sdk.UserDetails">UserDetails</a>
 
 Optional user details associated with the memory thread.
+
+---
+
+###### `threadMetadata`<sup>Optional</sup> <a name="threadMetadata" id="xpander-sdk.Memory.create.parameter.threadMetadata"></a>
+
+- *Type:* {[ key: string ]: any}
 
 ---
 

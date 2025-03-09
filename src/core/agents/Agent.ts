@@ -637,7 +637,9 @@ export class Agent extends Base {
     }
 
     if (!this.execution.memoryThreadId) {
-      const memory = Memory.create(this, this.userDetails);
+      const memory = Memory.create(this, this.userDetails, {
+        agent_id: this.id,
+      });
       this.execution.from(
         Execution.update(this, this.execution.id, {
           memory_thread_id: memory.id,
