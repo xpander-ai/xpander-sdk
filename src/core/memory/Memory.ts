@@ -117,7 +117,12 @@ export class Memory extends Base {
 
     return fetchedThreads.map(
       (thread: any) =>
-        new MemoryThread(thread.threadId, thread.createdAt, thread.name),
+        new MemoryThread(
+          thread.threadId,
+          thread.createdAt,
+          thread.name,
+          thread?.metadata || {},
+        ),
     );
   }
 

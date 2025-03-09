@@ -3344,7 +3344,7 @@ public readonly userDetails: string;
 ```typescript
 import { MemoryThread } from 'xpander-sdk'
 
-new MemoryThread(id: string, createdAt?: string, name?: string)
+new MemoryThread(id: string, createdAt?: string, name?: string, metadata?: {[ key: string ]: any})
 ```
 
 | **Name** | **Type** | **Description** |
@@ -3352,6 +3352,7 @@ new MemoryThread(id: string, createdAt?: string, name?: string)
 | <code><a href="#xpander-sdk.MemoryThread.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.MemoryThread.Initializer.parameter.createdAt">createdAt</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.MemoryThread.Initializer.parameter.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryThread.Initializer.parameter.metadata">metadata</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
 
 ---
 
@@ -3370,6 +3371,12 @@ new MemoryThread(id: string, createdAt?: string, name?: string)
 ##### `name`<sup>Optional</sup> <a name="name" id="xpander-sdk.MemoryThread.Initializer.parameter.name"></a>
 
 - *Type:* string
+
+---
+
+##### `metadata`<sup>Optional</sup> <a name="metadata" id="xpander-sdk.MemoryThread.Initializer.parameter.metadata"></a>
+
+- *Type:* {[ key: string ]: any}
 
 ---
 
@@ -3435,6 +3442,7 @@ MemoryThread.fromObject(data: any)
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.MemoryThread.property.createdAt">createdAt</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.MemoryThread.property.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryThread.property.metadata">metadata</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
 | <code><a href="#xpander-sdk.MemoryThread.property.name">name</a></code> | <code>string</code> | *No description.* |
 
 ---
@@ -3456,6 +3464,16 @@ public readonly id: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `metadata`<sup>Required</sup> <a name="metadata" id="xpander-sdk.MemoryThread.property.metadata"></a>
+
+```typescript
+public readonly metadata: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
 
 ---
 

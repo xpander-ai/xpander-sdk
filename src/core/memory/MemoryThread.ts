@@ -5,6 +5,7 @@ export class MemoryThread extends Base {
     public id: string,
     public createdAt: string = '',
     public name: string = '',
+    public metadata: Record<string, any> = {},
   ) {
     super();
   }
