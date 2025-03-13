@@ -5020,6 +5020,7 @@ Parameters used by the local tool function.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.IMemoryMessage.property.role">role</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IMemoryMessage.property.completionResponse">completionResponse</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.IMemoryMessage.property.content">content</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.IMemoryMessage.property.nodeName">nodeName</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.IMemoryMessage.property.toolCallId">toolCallId</a></code> | <code>string</code> | *No description.* |
@@ -5034,6 +5035,16 @@ public readonly role: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `completionResponse`<sup>Optional</sup> <a name="completionResponse" id="xpander-sdk.IMemoryMessage.property.completionResponse"></a>
+
+```typescript
+public readonly completionResponse: any;
+```
+
+- *Type:* any
 
 ---
 

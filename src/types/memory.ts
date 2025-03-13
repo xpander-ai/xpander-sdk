@@ -25,4 +25,5 @@ export interface IMemoryMessage {
   toolCallId?: string;
   toolCalls?: IToolCall[];
   nodeName?: string;
+  completionResponse?: any;
 }

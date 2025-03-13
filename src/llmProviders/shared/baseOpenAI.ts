@@ -33,6 +33,7 @@ export class BaseOpenAISDKHandler extends BaseLLMProvider {
           payload: tc.function.arguments,
           toolCallId: tc.id,
         })),
+        completionResponse: llmResponse,
       });
     }
 
