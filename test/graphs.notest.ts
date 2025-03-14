@@ -16,7 +16,6 @@ describe('Test xpander.ai SDK (GRAPHS)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 
@@ -48,7 +47,6 @@ describe('Test xpander.ai SDK (GRAPHS)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 
@@ -83,7 +81,6 @@ describe('Test xpander.ai SDK (GRAPHS)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 
@@ -146,7 +143,6 @@ describe('Test xpander.ai SDK (GRAPHS)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 

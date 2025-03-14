@@ -22,7 +22,6 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 

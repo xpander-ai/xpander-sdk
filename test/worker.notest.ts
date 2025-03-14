@@ -104,7 +104,6 @@ describe('Test xpander.ai SDK (Worker Mode)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       TASK.organization_id,
     );
     const agent = xpanderClient.agents.get(TASK.agent_id);

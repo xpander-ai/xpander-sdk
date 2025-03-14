@@ -15,7 +15,6 @@ describe('Test xpander.ai SDK (CRUD)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 
@@ -30,7 +29,6 @@ describe('Test xpander.ai SDK (CRUD)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 
@@ -62,7 +60,6 @@ describe('Test xpander.ai SDK (CRUD)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 
