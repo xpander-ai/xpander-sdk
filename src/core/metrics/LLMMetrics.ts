@@ -6,12 +6,12 @@ export class LLMMetrics extends MetricsBase {
   constructor(
     public sourceNodeType: SourceNodeType,
     public finishReason: string = 'finish',
-    public provider: LLMProvider,
-    public model: string,
-    public duration: number,
-    public promptTokens: number,
-    public completionTokens: number,
-    public totalTokens: number,
+    public provider: LLMProvider = LLMProvider.OPEN_AI,
+    public model: string = '',
+    public duration: number = 0,
+    public promptTokens: number = 0,
+    public completionTokens: number = 0,
+    public totalTokens: number = 0,
     public functionName: string[] = [],
   ) {
     super();
