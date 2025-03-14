@@ -8,9 +8,6 @@ export interface IConfiguration {
   /** Optional base URL for the xpanderAI API. */
   baseUrl?: string;
 
-  /** Optional flag to enable metrics reporting. */
-  withMetricsReport?: boolean;
-
   /** Custom parameters for client-specific settings. */
   organizationId?: string;
 }

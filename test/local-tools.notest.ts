@@ -86,7 +86,6 @@ describe('Test xpander.ai SDK (**NO** Worker Mode - Local Tools)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
     );
 
     let startTime = getStartTime();

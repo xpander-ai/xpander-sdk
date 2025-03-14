@@ -15,9 +15,6 @@ export class Configuration extends Base {
   /** Base URL for the xpanderAI API requests. */
   public baseUrl: string;
 
-  /** Flag to enable or disable metrics reporting. */
-  public withMetricsReport: boolean;
-
   /** Optional organization ID for scoped API requests. */
   public organizationId?: string;
 
@@ -26,19 +23,16 @@ export class Configuration extends Base {
    *
    * @param apiKey - The API key for xpanderAI.
    * @param baseUrl - The base URL for API requests (defaults to `DEFAULT_BASE_URL`).
-   * @param withMetricsReport - Whether to enable metrics reporting (defaults to `false`).
    * @param organizationId - Optional organization ID for additional scoping.
    */
   constructor({
     apiKey,
     baseUrl = DEFAULT_BASE_URL,
-    withMetricsReport = false,
     organizationId,
   }: IConfiguration) {
     super();
     this.apiKey = apiKey;
     this.baseUrl = baseUrl;
-    this.withMetricsReport = withMetricsReport;
     this.organizationId = organizationId;
   }
 

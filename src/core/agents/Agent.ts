@@ -24,10 +24,12 @@ import { IMemoryMessage, MemoryStrategy, MemoryType } from '../../types/memory';
 import { Base } from '../base';
 import CacheService from '../CacheService';
 import { Configuration } from '../Configuration';
+import { Tokens } from '../executions';
 import { Execution } from '../executions/Execution';
 import { Graph, GraphItem } from '../graphs';
 import { KnowledgeBase } from '../knowledgeBases';
 import { Memory, MemoryThread } from '../memory';
+import { ExecutionMetrics, LLMMetrics } from '../metrics';
 import { AgenticInterface, AgenticOperation } from '../tools';
 import { ToolCall, ToolCallResult } from '../tools/ToolCall';
 import {
@@ -376,6 +378,10 @@ export class Agent extends Base {
     return this.localTools.length !== 0;
   }
 
+  private toolCallActionCounterKey() {
+    return `executions_api_call_counter_${this.execution?.parentExecution || this?.execution?.id}`;
+  }
+
   /**
    * Executes a single tool call and returns the result.
    *
@@ -395,6 +401,12 @@ export class Agent extends Base {
     console.debug(
       `running tool ${tool.name} on agent ${this.id} with execution ${this.execution.id}`,
     );
+
+    // increase execution tool actions audit
+    const cache = CacheService.getInstance();
+    const actions = (cache.get(this.toolCallActionCounterKey()) as any[]) || [];
+    actions.push(tool.toDict());
+    cache.set(this.toolCallActionCounterKey(), actions);
 
     // append execution id
     if (!payloadExtension?.headers) {
@@ -1197,13 +1209,82 @@ export class Agent extends Base {
     return this.withAgentEndTool;
   }
 
-  public async *events(): any | AsyncGenerator<string> {
-    const sleep = (ms: number) =>
-      new Promise((resolve) => setTimeout(resolve, ms));
+  public reportLlmUsage(
+    llmResponse: any,
+    llmInferenceDuration: number = 0,
+    llmProvider: LLMProvider = LLMProvider.OPEN_AI,
+  ) {
+    const structIsValid =
+      !!llmResponse?.usage?.completion_tokens &&
+      !!llmResponse?.usage?.prompt_tokens &&
+      !!llmResponse?.usage?.total_tokens;
 
-    for (let i = 1; i <= 5; i++) {
-      yield `Message ${i}`;
-      await sleep(1000); // Simulate async operation
+    if (!structIsValid) {
+      throw new Error(
+        'llm response must include usage(dict with completion_tokens, prompt_tokens and total_tokens) e.g: {"usage":{"completion_tokens":10,"prompt_tokens":20,"total_tokens":30}}',
+      );
+    }
+    try {
+      const metrics = new LLMMetrics(
+        this.sourceNodeType,
+        llmResponse?.choices?.[0]?.finish_reason || 'finish',
+        llmProvider,
+        llmResponse?.model || 'Unknown',
+        llmInferenceDuration,
+        llmResponse.usage.prompt_tokens,
+        llmResponse.usage.completion_tokens,
+        llmResponse.usage.total_tokens,
+      );
+      metrics.report(this, 'llm');
+    } catch (err) {
+      console.error(`failed to report llm `);
+    }
+  }
+
+  public reportExecutionMetrics(
+    llmTokens: Tokens,
+    aiModel: string = 'Unknown',
+  ) {
+    try {
+      const duration = 0;
+      if (!!this.execution) {
+        let triggeredBy = [];
+        if (!!this?.userDetails) {
+          if (
+            !this.userDetails?.firstName &&
+            !this.userDetails?.lastName &&
+            !!this.userDetails?.email
+          ) {
+            triggeredBy.push(this.userDetails.email);
+          } else if (!!this.userDetails?.firstName) {
+            triggeredBy.push(this.userDetails.firstName);
+            if (!!this.userDetails?.lastName) {
+              triggeredBy.push(this.userDetails.lastName);
+            }
+          }
+        }
+        const cache = CacheService.getInstance();
+        const metrics = new ExecutionMetrics(
+          this.sourceNodeType,
+          this.execution.id,
+          [],
+          this.execution.memoryThreadId,
+          this?.execution?.input?.text || '',
+          triggeredBy.join(' ') || 'Unknown',
+          [],
+          this.execution.status,
+          duration,
+          aiModel,
+          this.execution.workerId || '',
+          '',
+          (cache.get(this.toolCallActionCounterKey()) as any[]) || [],
+          this.execution.result,
+          llmTokens,
+        );
+        metrics.report(this, 'execution');
+      }
+    } catch (err) {
+      console.error(`failed to report execution metrics `);
     }
   }
 }
