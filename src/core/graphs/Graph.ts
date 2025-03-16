@@ -169,4 +169,44 @@ export class Graph extends Base {
       (gi) => this.items.every((item) => !item.targets.includes(gi.id)), // Not targeted by others
     );
   }
+
+  public get textual(): string | null {
+    if (!this.items.length) return null;
+
+    const nodeMap = new Map<string, GraphItem>();
+    let hasConnections = false;
+
+    this.items.forEach((node) => {
+      nodeMap.set(node.id, node);
+      if (node.targets.length > 0) {
+        // check single pointer
+        if (node.targets.length === 1 && node.targets[0] === node.id) {
+          //skip;
+        } else {
+          hasConnections = true;
+        }
+      }
+    });
+
+    if (!hasConnections) return null;
+
+    let markdown = '# AI Agent Graph\n\n';
+
+    this.items.forEach((node) => {
+      if (node.targets.length > 0) {
+        markdown += `## ${node.name}\n`;
+        markdown += `- **Tool ID**: ${node.itemId}\n`;
+        markdown += `- **Targets**:\n`;
+        node.targets.forEach((targetId) => {
+          const targetNode = nodeMap.get(targetId);
+          if (targetNode) {
+            markdown += `  - [${targetNode.name}](#${targetNode.name.replace(/\s+/g, '-')})\n`;
+          }
+        });
+        markdown += `\n`;
+      }
+    });
+
+    return markdown.trim() ? markdown : null;
+  }
 }
