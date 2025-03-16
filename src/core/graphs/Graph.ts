@@ -170,27 +170,53 @@ export class Graph extends Base {
     );
   }
 
-  public get textual(): string | null {
-    if (!this.items.length) return null;
+  public get textual(): string {
+    if (!this.items.length) return '';
 
     const nodeMap = new Map<string, GraphItem>();
     let hasConnections = false;
+    let rootNodes: GraphItem[] = [];
+    const targetSet = new Set<string>();
 
     this.items.forEach((node) => {
       nodeMap.set(node.id, node);
+      node.targets.forEach((target) => {
+        if (target !== node.id) {
+          // Ignore self-targeting nodes
+          targetSet.add(target);
+        }
+      });
+    });
+
+    // Identify root nodes (nodes that are not targeted by any other nodes, excluding self-targets)
+    this.items.forEach((node) => {
+      if (!targetSet.has(node.id)) {
+        rootNodes.push(node);
+      }
+    });
+
+    this.items.forEach((node) => {
       if (node.targets.length > 0) {
-        // check single pointer
+        // Check single self-pointer
         if (node.targets.length === 1 && node.targets[0] === node.id) {
-          //skip;
+          // Skip
         } else {
           hasConnections = true;
         }
       }
     });
 
-    if (!hasConnections) return null;
+    if (!hasConnections) return '';
 
     let markdown = '# AI Agent Graph\n\n';
+
+    if (rootNodes.length > 0) {
+      markdown += '## Root Node(s) - Execution Must Start Here\n';
+      rootNodes.forEach((rootNode) => {
+        markdown += `- **${rootNode.name}** (Tool ID: ${rootNode.itemId})\n`;
+      });
+      markdown += '\n';
+    }
 
     this.items.forEach((node) => {
       if (node.targets.length > 0) {
@@ -199,7 +225,8 @@ export class Graph extends Base {
         markdown += `- **Targets**:\n`;
         node.targets.forEach((targetId) => {
           const targetNode = nodeMap.get(targetId);
-          if (targetNode) {
+          if (targetNode && targetId !== node.id) {
+            // Exclude self-targeting
             markdown += `  - [${targetNode.name}](#${targetNode.name.replace(/\s+/g, '-')})\n`;
           }
         });
@@ -207,6 +234,6 @@ export class Graph extends Base {
       }
     });
 
-    return markdown.trim() ? markdown : null;
+    return markdown.trim() ? markdown : '';
   }
 }

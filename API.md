@@ -2736,6 +2736,7 @@ Graph.fromObject(data: any)
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Graph.property.isEmpty">isEmpty</a></code> | <code>boolean</code> | Checks whether the graph is empty. |
 | <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | Gets the list of nodes in the graph. |
+| <code><a href="#xpander-sdk.Graph.property.textual">textual</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | Gets the last node in the graph. |
 | <code><a href="#xpander-sdk.Graph.property.rootNode">rootNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | *No description.* |
 
@@ -2762,6 +2763,16 @@ public readonly nodes: GraphItem[];
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
 
 Gets the list of nodes in the graph.
+
+---
+
+##### `textual`<sup>Required</sup> <a name="textual" id="xpander-sdk.Graph.property.textual"></a>
+
+```typescript
+public readonly textual: string;
+```
+
+- *Type:* string
 
 ---
 
