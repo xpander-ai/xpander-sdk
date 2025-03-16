@@ -169,4 +169,71 @@ export class Graph extends Base {
       (gi) => this.items.every((item) => !item.targets.includes(gi.id)), // Not targeted by others
     );
   }
+
+  public get textual(): string {
+    if (!this.items.length) return '';
+
+    const nodeMap = new Map<string, GraphItem>();
+    let hasConnections = false;
+    let rootNodes: GraphItem[] = [];
+    const targetSet = new Set<string>();
+
+    this.items.forEach((node) => {
+      nodeMap.set(node.id, node);
+      node.targets.forEach((target) => {
+        if (target !== node.id) {
+          // Ignore self-targeting nodes
+          targetSet.add(target);
+        }
+      });
+    });
+
+    // Identify root nodes (nodes that are not targeted by any other nodes, excluding self-targets)
+    this.items.forEach((node) => {
+      if (!targetSet.has(node.id)) {
+        rootNodes.push(node);
+      }
+    });
+
+    this.items.forEach((node) => {
+      if (node.targets.length > 0) {
+        // Check single self-pointer
+        if (node.targets.length === 1 && node.targets[0] === node.id) {
+          // Skip
+        } else {
+          hasConnections = true;
+        }
+      }
+    });
+
+    if (!hasConnections) return '';
+
+    let markdown = '# AI Agent Graph\n\n';
+
+    if (rootNodes.length > 0) {
+      markdown += '## Root Node(s) - Execution Must Start Here\n';
+      rootNodes.forEach((rootNode) => {
+        markdown += `- **${rootNode.name}** (Tool ID: ${rootNode.itemId})\n`;
+      });
+      markdown += '\n';
+    }
+
+    this.items.forEach((node) => {
+      if (node.targets.length > 0) {
+        markdown += `## ${node.name}\n`;
+        markdown += `- **Tool ID**: ${node.itemId}\n`;
+        markdown += `- **Targets**:\n`;
+        node.targets.forEach((targetId) => {
+          const targetNode = nodeMap.get(targetId);
+          if (targetNode && targetId !== node.id) {
+            // Exclude self-targeting
+            markdown += `  - [${targetNode.name}](#${targetNode.name.replace(/\s+/g, '-')})\n`;
+          }
+        });
+        markdown += `\n`;
+      }
+    });
+
+    return markdown.trim() ? markdown : '';
+  }
 }

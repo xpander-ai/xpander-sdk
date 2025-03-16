@@ -302,7 +302,7 @@ export class Memory extends Base {
         - If a tool fails **3 times**, execution stalls, or no tool is called for an extended period, stop immediately and report the issue along with any relevant results or errors.
         `;
     }
-    this.addMessages([
+    const instructionsMessages = [
       {
         role: 'system',
         content: [
@@ -314,7 +314,36 @@ export class Memory extends Base {
             : '',
         ].join('\n'),
       },
-    ]);
+    ];
+
+    const textualGraph = this.agent.graph.textual;
+    if (textualGraph && textualGraph.length !== 0) {
+      instructionsMessages.push({
+        role: 'system',
+        content: `
+You have access to a structured **AI Agent Graph** that maps available tools and their connections. Use this graph to **pre-plan execution**, ensuring optimal decision-making.
+
+#### **Execution Plan:**
+1. **Analyze the Request**: Break down the request into actionable steps.
+2. **Identify the Starting Tool**: Find the most relevant tool from the graph.
+3. **Map the Execution Flow**: Before running any tool, outline the required sequence of steps using available targets.
+4. **Follow Graph Connections**: Execute tools in order, ensuring logical progression.
+5. **Adjust Dynamically**: If a tool is unavailable, infer from similar tools or alter execution based on the flow.
+
+#### **Key Guidelines:**
+- **Pre-plan all steps** before invoking tools.
+- **Use only the available graph paths**—do not invent tools.
+- **Optimize efficiency** by choosing the shortest logical path.
+- **Ensure contextual accuracy** in every step.
+
+Use the Markdown representation of the graph as your **execution guide**. Do not proceed with execution until a clear plan is defined.
+
+Agent's graph: ${textualGraph}
+        `,
+      });
+    }
+
+    this.addMessages(instructionsMessages);
   }
 
   /**

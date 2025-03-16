@@ -176,11 +176,12 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.addToolCallResults">addToolCallResults</a></code> | Adds tool call results as messages to the memory thread. |
 | <code><a href="#xpander-sdk.Agent.attachOperations">attachOperations</a></code> | Attaches a list of agentic operations to the agent. |
 | <code><a href="#xpander-sdk.Agent.disableAgentEndTool">disableAgentEndTool</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.events">events</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
 | <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.load">load</a></code> | Loads the agent data from its source node type. |
+| <code><a href="#xpander-sdk.Agent.reportExecutionMetrics">reportExecutionMetrics</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.reportLlmUsage">reportLlmUsage</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.retrieveAgenticInterfaces">retrieveAgenticInterfaces</a></code> | Retrieves a list of available agentic interfaces. |
 | <code><a href="#xpander-sdk.Agent.retrieveAgenticOperations">retrieveAgenticOperations</a></code> | Retrieves a list of operations for a given agentic interface. |
 | <code><a href="#xpander-sdk.Agent.retrieveExecutionResult">retrieveExecutionResult</a></code> | *No description.* |
@@ -321,12 +322,6 @@ The list of agentic operations to attach.
 public disableAgentEndTool(): void
 ```
 
-##### `events` <a name="events" id="xpander-sdk.Agent.events"></a>
-
-```typescript
-public events(): any
-```
-
 ##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
 
 ```typescript
@@ -382,6 +377,48 @@ Loads the agent data from its source node type.
 ###### `ignoreCache`<sup>Optional</sup> <a name="ignoreCache" id="xpander-sdk.Agent.load.parameter.ignoreCache"></a>
 
 - *Type:* boolean
+
+---
+
+##### `reportExecutionMetrics` <a name="reportExecutionMetrics" id="xpander-sdk.Agent.reportExecutionMetrics"></a>
+
+```typescript
+public reportExecutionMetrics(llmTokens: Tokens, aiModel?: string): void
+```
+
+###### `llmTokens`<sup>Required</sup> <a name="llmTokens" id="xpander-sdk.Agent.reportExecutionMetrics.parameter.llmTokens"></a>
+
+- *Type:* <a href="#xpander-sdk.Tokens">Tokens</a>
+
+---
+
+###### `aiModel`<sup>Optional</sup> <a name="aiModel" id="xpander-sdk.Agent.reportExecutionMetrics.parameter.aiModel"></a>
+
+- *Type:* string
+
+---
+
+##### `reportLlmUsage` <a name="reportLlmUsage" id="xpander-sdk.Agent.reportLlmUsage"></a>
+
+```typescript
+public reportLlmUsage(llmResponse: any, llmInferenceDuration?: number, llmProvider?: LLMProvider): void
+```
+
+###### `llmResponse`<sup>Required</sup> <a name="llmResponse" id="xpander-sdk.Agent.reportLlmUsage.parameter.llmResponse"></a>
+
+- *Type:* any
+
+---
+
+###### `llmInferenceDuration`<sup>Optional</sup> <a name="llmInferenceDuration" id="xpander-sdk.Agent.reportLlmUsage.parameter.llmInferenceDuration"></a>
+
+- *Type:* number
+
+---
+
+###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Agent.reportLlmUsage.parameter.llmProvider"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
 
@@ -1637,7 +1674,6 @@ Configuration.fromObject(data: any)
 | <code><a href="#xpander-sdk.Configuration.property.url">url</a></code> | <code>string</code> | Constructs the full API endpoint URL. |
 | <code><a href="#xpander-sdk.Configuration.property.apiKey">apiKey</a></code> | <code>string</code> | API key for authenticating requests to xpanderAI. |
 | <code><a href="#xpander-sdk.Configuration.property.baseUrl">baseUrl</a></code> | <code>string</code> | Base URL for the xpanderAI API requests. |
-| <code><a href="#xpander-sdk.Configuration.property.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | Flag to enable or disable metrics reporting. |
 | <code><a href="#xpander-sdk.Configuration.property.organizationId">organizationId</a></code> | <code>string</code> | Optional organization ID for scoped API requests. |
 
 ---
@@ -1677,18 +1713,6 @@ public readonly baseUrl: string;
 - *Type:* string
 
 Base URL for the xpanderAI API requests.
-
----
-
-##### `withMetricsReport`<sup>Required</sup> <a name="withMetricsReport" id="xpander-sdk.Configuration.property.withMetricsReport"></a>
-
-```typescript
-public readonly withMetricsReport: boolean;
-```
-
-- *Type:* boolean
-
-Flag to enable or disable metrics reporting.
 
 ---
 
@@ -2174,6 +2198,374 @@ Identifier of the worker associated with the execution.
 ---
 
 
+### ExecutionMetrics <a name="ExecutionMetrics" id="xpander-sdk.ExecutionMetrics"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.ExecutionMetrics.Initializer"></a>
+
+```typescript
+import { ExecutionMetrics } from 'xpander-sdk'
+
+new ExecutionMetrics(source: SourceNodeType, executionId: string, subExecutions?: string[], memoryThreadId?: string, task?: string, triggeredBy?: string, skills?: string[], status?: string, duration?: number, aiModel?: string, worker?: string, aiEmployeeId?: string, apiCallsMade?: any[], result?: string, llmTokens?: Tokens)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.source">source</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.executionId">executionId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.subExecutions">subExecutions</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.task">task</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.triggeredBy">triggeredBy</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.skills">skills</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.status">status</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.duration">duration</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.aiModel">aiModel</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.worker">worker</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.aiEmployeeId">aiEmployeeId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.apiCallsMade">apiCallsMade</a></code> | <code>any[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.result">result</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.llmTokens">llmTokens</a></code> | <code><a href="#xpander-sdk.Tokens">Tokens</a></code> | *No description.* |
+
+---
+
+##### `source`<sup>Required</sup> <a name="source" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.source"></a>
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+---
+
+##### `executionId`<sup>Required</sup> <a name="executionId" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.executionId"></a>
+
+- *Type:* string
+
+---
+
+##### `subExecutions`<sup>Optional</sup> <a name="subExecutions" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.subExecutions"></a>
+
+- *Type:* string[]
+
+---
+
+##### `memoryThreadId`<sup>Optional</sup> <a name="memoryThreadId" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.memoryThreadId"></a>
+
+- *Type:* string
+
+---
+
+##### `task`<sup>Optional</sup> <a name="task" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.task"></a>
+
+- *Type:* string
+
+---
+
+##### `triggeredBy`<sup>Optional</sup> <a name="triggeredBy" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.triggeredBy"></a>
+
+- *Type:* string
+
+---
+
+##### `skills`<sup>Optional</sup> <a name="skills" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.skills"></a>
+
+- *Type:* string[]
+
+---
+
+##### `status`<sup>Optional</sup> <a name="status" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.status"></a>
+
+- *Type:* string
+
+---
+
+##### `duration`<sup>Optional</sup> <a name="duration" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.duration"></a>
+
+- *Type:* number
+
+---
+
+##### `aiModel`<sup>Optional</sup> <a name="aiModel" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.aiModel"></a>
+
+- *Type:* string
+
+---
+
+##### `worker`<sup>Optional</sup> <a name="worker" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.worker"></a>
+
+- *Type:* string
+
+---
+
+##### `aiEmployeeId`<sup>Optional</sup> <a name="aiEmployeeId" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.aiEmployeeId"></a>
+
+- *Type:* string
+
+---
+
+##### `apiCallsMade`<sup>Optional</sup> <a name="apiCallsMade" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.apiCallsMade"></a>
+
+- *Type:* any[]
+
+---
+
+##### `result`<sup>Optional</sup> <a name="result" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.result"></a>
+
+- *Type:* string
+
+---
+
+##### `llmTokens`<sup>Optional</sup> <a name="llmTokens" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.llmTokens"></a>
+
+- *Type:* <a href="#xpander-sdk.Tokens">Tokens</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ExecutionMetrics.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.report">report</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.ExecutionMetrics.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.ExecutionMetrics.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.ExecutionMetrics.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.ExecutionMetrics.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `report` <a name="report" id="xpander-sdk.ExecutionMetrics.report"></a>
+
+```typescript
+public report(agent: Agent, reportType: string): void
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.ExecutionMetrics.report.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `reportType`<sup>Required</sup> <a name="reportType" id="xpander-sdk.ExecutionMetrics.report.parameter.reportType"></a>
+
+- *Type:* string
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.ExecutionMetrics.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.ExecutionMetrics.fromObject"></a>
+
+```typescript
+import { ExecutionMetrics } from 'xpander-sdk'
+
+ExecutionMetrics.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.ExecutionMetrics.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.aiEmployeeId">aiEmployeeId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.aiModel">aiModel</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.apiCallsMade">apiCallsMade</a></code> | <code>any[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.duration">duration</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.executionId">executionId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.llmTokens">llmTokens</a></code> | <code><a href="#xpander-sdk.Tokens">Tokens</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.result">result</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.skills">skills</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.source">source</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.status">status</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.subExecutions">subExecutions</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.task">task</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.triggeredBy">triggeredBy</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.worker">worker</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `aiEmployeeId`<sup>Required</sup> <a name="aiEmployeeId" id="xpander-sdk.ExecutionMetrics.property.aiEmployeeId"></a>
+
+```typescript
+public readonly aiEmployeeId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `aiModel`<sup>Required</sup> <a name="aiModel" id="xpander-sdk.ExecutionMetrics.property.aiModel"></a>
+
+```typescript
+public readonly aiModel: string;
+```
+
+- *Type:* string
+
+---
+
+##### `apiCallsMade`<sup>Required</sup> <a name="apiCallsMade" id="xpander-sdk.ExecutionMetrics.property.apiCallsMade"></a>
+
+```typescript
+public readonly apiCallsMade: any[];
+```
+
+- *Type:* any[]
+
+---
+
+##### `duration`<sup>Required</sup> <a name="duration" id="xpander-sdk.ExecutionMetrics.property.duration"></a>
+
+```typescript
+public readonly duration: number;
+```
+
+- *Type:* number
+
+---
+
+##### `executionId`<sup>Required</sup> <a name="executionId" id="xpander-sdk.ExecutionMetrics.property.executionId"></a>
+
+```typescript
+public readonly executionId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `llmTokens`<sup>Required</sup> <a name="llmTokens" id="xpander-sdk.ExecutionMetrics.property.llmTokens"></a>
+
+```typescript
+public readonly llmTokens: Tokens;
+```
+
+- *Type:* <a href="#xpander-sdk.Tokens">Tokens</a>
+
+---
+
+##### `memoryThreadId`<sup>Required</sup> <a name="memoryThreadId" id="xpander-sdk.ExecutionMetrics.property.memoryThreadId"></a>
+
+```typescript
+public readonly memoryThreadId: string;
+```
+
+- *Type:* string
+
+---
+
+##### `result`<sup>Required</sup> <a name="result" id="xpander-sdk.ExecutionMetrics.property.result"></a>
+
+```typescript
+public readonly result: string;
+```
+
+- *Type:* string
+
+---
+
+##### `skills`<sup>Required</sup> <a name="skills" id="xpander-sdk.ExecutionMetrics.property.skills"></a>
+
+```typescript
+public readonly skills: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `source`<sup>Required</sup> <a name="source" id="xpander-sdk.ExecutionMetrics.property.source"></a>
+
+```typescript
+public readonly source: SourceNodeType;
+```
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.ExecutionMetrics.property.status"></a>
+
+```typescript
+public readonly status: string;
+```
+
+- *Type:* string
+
+---
+
+##### `subExecutions`<sup>Required</sup> <a name="subExecutions" id="xpander-sdk.ExecutionMetrics.property.subExecutions"></a>
+
+```typescript
+public readonly subExecutions: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `task`<sup>Required</sup> <a name="task" id="xpander-sdk.ExecutionMetrics.property.task"></a>
+
+```typescript
+public readonly task: string;
+```
+
+- *Type:* string
+
+---
+
+##### `triggeredBy`<sup>Required</sup> <a name="triggeredBy" id="xpander-sdk.ExecutionMetrics.property.triggeredBy"></a>
+
+```typescript
+public readonly triggeredBy: string;
+```
+
+- *Type:* string
+
+---
+
+##### `worker`<sup>Required</sup> <a name="worker" id="xpander-sdk.ExecutionMetrics.property.worker"></a>
+
+```typescript
+public readonly worker: string;
+```
+
+- *Type:* string
+
+---
+
+
 ### Graph <a name="Graph" id="xpander-sdk.Graph"></a>
 
 Represents a graph structure containing nodes related to an agent.
@@ -2344,6 +2736,7 @@ Graph.fromObject(data: any)
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Graph.property.isEmpty">isEmpty</a></code> | <code>boolean</code> | Checks whether the graph is empty. |
 | <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | Gets the list of nodes in the graph. |
+| <code><a href="#xpander-sdk.Graph.property.textual">textual</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | Gets the last node in the graph. |
 | <code><a href="#xpander-sdk.Graph.property.rootNode">rootNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | *No description.* |
 
@@ -2370,6 +2763,16 @@ public readonly nodes: GraphItem[];
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
 
 Gets the list of nodes in the graph.
+
+---
+
+##### `textual`<sup>Required</sup> <a name="textual" id="xpander-sdk.Graph.property.textual"></a>
+
+```typescript
+public readonly textual: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -2816,6 +3219,266 @@ public readonly strategy: KnowledgeBaseStrategy;
 ```
 
 - *Type:* <a href="#xpander-sdk.KnowledgeBaseStrategy">KnowledgeBaseStrategy</a>
+
+---
+
+
+### LLMMetrics <a name="LLMMetrics" id="xpander-sdk.LLMMetrics"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.LLMMetrics.Initializer"></a>
+
+```typescript
+import { LLMMetrics } from 'xpander-sdk'
+
+new LLMMetrics(sourceNodeType: SourceNodeType, finishReason?: string, provider?: LLMProvider, model?: string, duration?: number, promptTokens?: number, completionTokens?: number, totalTokens?: number, functionName?: string[])
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.finishReason">finishReason</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.provider">provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.model">model</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.duration">duration</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.promptTokens">promptTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.completionTokens">completionTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.totalTokens">totalTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.functionName">functionName</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `sourceNodeType`<sup>Required</sup> <a name="sourceNodeType" id="xpander-sdk.LLMMetrics.Initializer.parameter.sourceNodeType"></a>
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+---
+
+##### `finishReason`<sup>Optional</sup> <a name="finishReason" id="xpander-sdk.LLMMetrics.Initializer.parameter.finishReason"></a>
+
+- *Type:* string
+
+---
+
+##### `provider`<sup>Optional</sup> <a name="provider" id="xpander-sdk.LLMMetrics.Initializer.parameter.provider"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+---
+
+##### `model`<sup>Optional</sup> <a name="model" id="xpander-sdk.LLMMetrics.Initializer.parameter.model"></a>
+
+- *Type:* string
+
+---
+
+##### `duration`<sup>Optional</sup> <a name="duration" id="xpander-sdk.LLMMetrics.Initializer.parameter.duration"></a>
+
+- *Type:* number
+
+---
+
+##### `promptTokens`<sup>Optional</sup> <a name="promptTokens" id="xpander-sdk.LLMMetrics.Initializer.parameter.promptTokens"></a>
+
+- *Type:* number
+
+---
+
+##### `completionTokens`<sup>Optional</sup> <a name="completionTokens" id="xpander-sdk.LLMMetrics.Initializer.parameter.completionTokens"></a>
+
+- *Type:* number
+
+---
+
+##### `totalTokens`<sup>Optional</sup> <a name="totalTokens" id="xpander-sdk.LLMMetrics.Initializer.parameter.totalTokens"></a>
+
+- *Type:* number
+
+---
+
+##### `functionName`<sup>Optional</sup> <a name="functionName" id="xpander-sdk.LLMMetrics.Initializer.parameter.functionName"></a>
+
+- *Type:* string[]
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.LLMMetrics.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.report">report</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.LLMMetrics.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.LLMMetrics.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.LLMMetrics.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.LLMMetrics.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `report` <a name="report" id="xpander-sdk.LLMMetrics.report"></a>
+
+```typescript
+public report(agent: Agent, reportType: string): void
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.LLMMetrics.report.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `reportType`<sup>Required</sup> <a name="reportType" id="xpander-sdk.LLMMetrics.report.parameter.reportType"></a>
+
+- *Type:* string
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.LLMMetrics.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.LLMMetrics.fromObject"></a>
+
+```typescript
+import { LLMMetrics } from 'xpander-sdk'
+
+LLMMetrics.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.LLMMetrics.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.LLMMetrics.property.completionTokens">completionTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.duration">duration</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.finishReason">finishReason</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.functionName">functionName</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.model">model</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.promptTokens">promptTokens</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.provider">provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.totalTokens">totalTokens</a></code> | <code>number</code> | *No description.* |
+
+---
+
+##### `completionTokens`<sup>Required</sup> <a name="completionTokens" id="xpander-sdk.LLMMetrics.property.completionTokens"></a>
+
+```typescript
+public readonly completionTokens: number;
+```
+
+- *Type:* number
+
+---
+
+##### `duration`<sup>Required</sup> <a name="duration" id="xpander-sdk.LLMMetrics.property.duration"></a>
+
+```typescript
+public readonly duration: number;
+```
+
+- *Type:* number
+
+---
+
+##### `finishReason`<sup>Required</sup> <a name="finishReason" id="xpander-sdk.LLMMetrics.property.finishReason"></a>
+
+```typescript
+public readonly finishReason: string;
+```
+
+- *Type:* string
+
+---
+
+##### `functionName`<sup>Required</sup> <a name="functionName" id="xpander-sdk.LLMMetrics.property.functionName"></a>
+
+```typescript
+public readonly functionName: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `model`<sup>Required</sup> <a name="model" id="xpander-sdk.LLMMetrics.property.model"></a>
+
+```typescript
+public readonly model: string;
+```
+
+- *Type:* string
+
+---
+
+##### `promptTokens`<sup>Required</sup> <a name="promptTokens" id="xpander-sdk.LLMMetrics.property.promptTokens"></a>
+
+```typescript
+public readonly promptTokens: number;
+```
+
+- *Type:* number
+
+---
+
+##### `provider`<sup>Required</sup> <a name="provider" id="xpander-sdk.LLMMetrics.property.provider"></a>
+
+```typescript
+public readonly provider: LLMProvider;
+```
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+---
+
+##### `sourceNodeType`<sup>Required</sup> <a name="sourceNodeType" id="xpander-sdk.LLMMetrics.property.sourceNodeType"></a>
+
+```typescript
+public readonly sourceNodeType: SourceNodeType;
+```
+
+- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+
+---
+
+##### `totalTokens`<sup>Required</sup> <a name="totalTokens" id="xpander-sdk.LLMMetrics.property.totalTokens"></a>
+
+```typescript
+public readonly totalTokens: number;
+```
+
+- *Type:* number
 
 ---
 
@@ -3488,6 +4151,98 @@ public readonly name: string;
 ---
 
 
+### MetricsBase <a name="MetricsBase" id="xpander-sdk.MetricsBase"></a>
+
+#### Initializers <a name="Initializers" id="xpander-sdk.MetricsBase.Initializer"></a>
+
+```typescript
+import { MetricsBase } from 'xpander-sdk'
+
+new MetricsBase()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.MetricsBase.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MetricsBase.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MetricsBase.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MetricsBase.report">report</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.MetricsBase.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.MetricsBase.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.MetricsBase.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.MetricsBase.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `report` <a name="report" id="xpander-sdk.MetricsBase.report"></a>
+
+```typescript
+public report(agent: Agent, reportType: string): void
+```
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.MetricsBase.report.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+---
+
+###### `reportType`<sup>Required</sup> <a name="reportType" id="xpander-sdk.MetricsBase.report.parameter.reportType"></a>
+
+- *Type:* string
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.MetricsBase.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.MetricsBase.fromObject"></a>
+
+```typescript
+import { MetricsBase } from 'xpander-sdk'
+
+MetricsBase.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.MetricsBase.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+
+
 ### Tokens <a name="Tokens" id="xpander-sdk.Tokens"></a>
 
 #### Initializers <a name="Initializers" id="xpander-sdk.Tokens.Initializer"></a>
@@ -4123,14 +4878,13 @@ XpanderClient provides methods for configuring and interacting with xpanderAI to
 ```typescript
 import { XpanderClient } from 'xpander-sdk'
 
-new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, organizationId?: string, should_reset_cache?: boolean)
+new XpanderClient(apiKey: string, baseUrl?: any, organizationId?: string, should_reset_cache?: boolean)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.apiKey">apiKey</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.baseUrl">baseUrl</a></code> | <code>any</code> | *No description.* |
-| <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.XpanderClient.Initializer.parameter.should_reset_cache">should_reset_cache</a></code> | <code>boolean</code> | *No description.* |
 
@@ -4145,12 +4899,6 @@ new XpanderClient(apiKey: string, baseUrl?: any, withMetricsReport?: boolean, or
 ##### `baseUrl`<sup>Optional</sup> <a name="baseUrl" id="xpander-sdk.XpanderClient.Initializer.parameter.baseUrl"></a>
 
 - *Type:* any
-
----
-
-##### `withMetricsReport`<sup>Optional</sup> <a name="withMetricsReport" id="xpander-sdk.XpanderClient.Initializer.parameter.withMetricsReport"></a>
-
-- *Type:* boolean
 
 ---
 
@@ -4730,7 +5478,6 @@ Interface representing configuration settings for the xpanderAI client.
 | <code><a href="#xpander-sdk.IConfiguration.property.apiKey">apiKey</a></code> | <code>string</code> | API key for authenticating with xpanderAI. |
 | <code><a href="#xpander-sdk.IConfiguration.property.baseUrl">baseUrl</a></code> | <code>string</code> | Optional base URL for the xpanderAI API. |
 | <code><a href="#xpander-sdk.IConfiguration.property.organizationId">organizationId</a></code> | <code>string</code> | Custom parameters for client-specific settings. |
-| <code><a href="#xpander-sdk.IConfiguration.property.withMetricsReport">withMetricsReport</a></code> | <code>boolean</code> | Optional flag to enable metrics reporting. |
 
 ---
 
@@ -4767,18 +5514,6 @@ public readonly organizationId: string;
 - *Type:* string
 
 Custom parameters for client-specific settings.
-
----
-
-##### `withMetricsReport`<sup>Optional</sup> <a name="withMetricsReport" id="xpander-sdk.IConfiguration.property.withMetricsReport"></a>
-
-```typescript
-public readonly withMetricsReport: boolean;
-```
-
-- *Type:* boolean
-
-Optional flag to enable metrics reporting.
 
 ---
 

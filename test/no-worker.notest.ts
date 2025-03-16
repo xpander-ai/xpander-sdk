@@ -4,7 +4,7 @@ import { XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
 
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
-const xpanderAgentId = '62f3f605-eeb1-4497-afd1-2beeff8e5b60';
+const xpanderAgentId = '6c666a44-9c36-4b9f-bc80-5dac3bcbff70';
 const openAIKey = process.env.OPENAI_API_KEY || '';
 const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
 const organizationId = process.env.ORGANIZATION_ID || '';
@@ -22,7 +22,6 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
     const xpanderClient = new XpanderClient(
       xpanderAPIKey,
       localAgentControllerURL,
-      false,
       organizationId,
     );
 
@@ -46,7 +45,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
     //   ),
     // );
 
-    agent.addTask('get longest tag and email me moriel@xpander.ai');
+    agent.addTask('summarize dudu twizer profile');
     announceTiming(startTime, 'Invoke Agent');
 
     let shouldSkip = false;
