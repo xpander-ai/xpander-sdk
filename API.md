@@ -383,7 +383,7 @@ Loads the agent data from its source node type.
 ##### `reportExecutionMetrics` <a name="reportExecutionMetrics" id="xpander-sdk.Agent.reportExecutionMetrics"></a>
 
 ```typescript
-public reportExecutionMetrics(llmTokens: Tokens, aiModel?: string): void
+public reportExecutionMetrics(llmTokens: Tokens, aiModel?: string, sourceNodeType?: string): void
 ```
 
 ###### `llmTokens`<sup>Required</sup> <a name="llmTokens" id="xpander-sdk.Agent.reportExecutionMetrics.parameter.llmTokens"></a>
@@ -398,10 +398,16 @@ public reportExecutionMetrics(llmTokens: Tokens, aiModel?: string): void
 
 ---
 
+###### `sourceNodeType`<sup>Optional</sup> <a name="sourceNodeType" id="xpander-sdk.Agent.reportExecutionMetrics.parameter.sourceNodeType"></a>
+
+- *Type:* string
+
+---
+
 ##### `reportLlmUsage` <a name="reportLlmUsage" id="xpander-sdk.Agent.reportLlmUsage"></a>
 
 ```typescript
-public reportLlmUsage(llmResponse: any, llmInferenceDuration?: number, llmProvider?: LLMProvider): void
+public reportLlmUsage(llmResponse: any, llmInferenceDuration?: number, llmProvider?: LLMProvider, sourceNodeType?: string): void
 ```
 
 ###### `llmResponse`<sup>Required</sup> <a name="llmResponse" id="xpander-sdk.Agent.reportLlmUsage.parameter.llmResponse"></a>
@@ -419,6 +425,12 @@ public reportLlmUsage(llmResponse: any, llmInferenceDuration?: number, llmProvid
 ###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Agent.reportLlmUsage.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+---
+
+###### `sourceNodeType`<sup>Optional</sup> <a name="sourceNodeType" id="xpander-sdk.Agent.reportLlmUsage.parameter.sourceNodeType"></a>
+
+- *Type:* string
 
 ---
 
@@ -2205,12 +2217,12 @@ Identifier of the worker associated with the execution.
 ```typescript
 import { ExecutionMetrics } from 'xpander-sdk'
 
-new ExecutionMetrics(source: SourceNodeType, executionId: string, subExecutions?: string[], memoryThreadId?: string, task?: string, triggeredBy?: string, skills?: string[], status?: string, duration?: number, aiModel?: string, worker?: string, aiEmployeeId?: string, apiCallsMade?: any[], result?: string, llmTokens?: Tokens)
+new ExecutionMetrics(source: string, executionId: string, subExecutions?: string[], memoryThreadId?: string, task?: string, triggeredBy?: string, skills?: string[], status?: string, duration?: number, aiModel?: string, worker?: string, aiEmployeeId?: string, apiCallsMade?: any[], result?: string, llmTokens?: Tokens)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.source">source</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.source">source</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.executionId">executionId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.subExecutions">subExecutions</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.ExecutionMetrics.Initializer.parameter.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | *No description.* |
@@ -2230,7 +2242,7 @@ new ExecutionMetrics(source: SourceNodeType, executionId: string, subExecutions?
 
 ##### `source`<sup>Required</sup> <a name="source" id="xpander-sdk.ExecutionMetrics.Initializer.parameter.source"></a>
 
-- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+- *Type:* string
 
 ---
 
@@ -2406,7 +2418,7 @@ ExecutionMetrics.fromObject(data: any)
 | <code><a href="#xpander-sdk.ExecutionMetrics.property.memoryThreadId">memoryThreadId</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ExecutionMetrics.property.result">result</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ExecutionMetrics.property.skills">skills</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#xpander-sdk.ExecutionMetrics.property.source">source</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.ExecutionMetrics.property.source">source</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ExecutionMetrics.property.status">status</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ExecutionMetrics.property.subExecutions">subExecutions</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.ExecutionMetrics.property.task">task</a></code> | <code>string</code> | *No description.* |
@@ -2508,10 +2520,10 @@ public readonly skills: string[];
 ##### `source`<sup>Required</sup> <a name="source" id="xpander-sdk.ExecutionMetrics.property.source"></a>
 
 ```typescript
-public readonly source: SourceNodeType;
+public readonly source: string;
 ```
 
-- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+- *Type:* string
 
 ---
 
@@ -3230,12 +3242,12 @@ public readonly strategy: KnowledgeBaseStrategy;
 ```typescript
 import { LLMMetrics } from 'xpander-sdk'
 
-new LLMMetrics(sourceNodeType: SourceNodeType, finishReason?: string, provider?: LLMProvider, model?: string, duration?: number, promptTokens?: number, completionTokens?: number, totalTokens?: number, functionName?: string[])
+new LLMMetrics(sourceNodeType: string, finishReason?: string, provider?: LLMProvider, model?: string, duration?: number, promptTokens?: number, completionTokens?: number, totalTokens?: number, functionName?: string[])
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.sourceNodeType">sourceNodeType</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.finishReason">finishReason</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.provider">provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.LLMMetrics.Initializer.parameter.model">model</a></code> | <code>string</code> | *No description.* |
@@ -3249,7 +3261,7 @@ new LLMMetrics(sourceNodeType: SourceNodeType, finishReason?: string, provider?:
 
 ##### `sourceNodeType`<sup>Required</sup> <a name="sourceNodeType" id="xpander-sdk.LLMMetrics.Initializer.parameter.sourceNodeType"></a>
 
-- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+- *Type:* string
 
 ---
 
@@ -3387,7 +3399,7 @@ LLMMetrics.fromObject(data: any)
 | <code><a href="#xpander-sdk.LLMMetrics.property.model">model</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.LLMMetrics.property.promptTokens">promptTokens</a></code> | <code>number</code> | *No description.* |
 | <code><a href="#xpander-sdk.LLMMetrics.property.provider">provider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.LLMMetrics.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMMetrics.property.sourceNodeType">sourceNodeType</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.LLMMetrics.property.totalTokens">totalTokens</a></code> | <code>number</code> | *No description.* |
 
 ---
@@ -3465,10 +3477,10 @@ public readonly provider: LLMProvider;
 ##### `sourceNodeType`<sup>Required</sup> <a name="sourceNodeType" id="xpander-sdk.LLMMetrics.property.sourceNodeType"></a>
 
 ```typescript
-public readonly sourceNodeType: SourceNodeType;
+public readonly sourceNodeType: string;
 ```
 
-- *Type:* <a href="#xpander-sdk.SourceNodeType">SourceNodeType</a>
+- *Type:* string
 
 ---
 
