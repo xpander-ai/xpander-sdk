@@ -1213,6 +1213,7 @@ export class Agent extends Base {
     llmResponse: any,
     llmInferenceDuration: number = 0,
     llmProvider: LLMProvider = LLMProvider.OPEN_AI,
+    sourceNodeType: string = '',
   ) {
     const structIsValid =
       !!llmResponse?.usage?.completion_tokens &&
@@ -1226,7 +1227,7 @@ export class Agent extends Base {
     }
     try {
       const metrics = new LLMMetrics(
-        this.sourceNodeType,
+        sourceNodeType || this.sourceNodeType.toString().toLowerCase(),
         llmResponse?.choices?.[0]?.finish_reason || 'finish',
         llmProvider,
         llmResponse?.model || 'Unknown',
@@ -1244,6 +1245,7 @@ export class Agent extends Base {
   public reportExecutionMetrics(
     llmTokens: Tokens,
     aiModel: string = 'Unknown',
+    sourceNodeType: string = '',
   ) {
     try {
       const duration = 0;
@@ -1265,7 +1267,7 @@ export class Agent extends Base {
         }
         const cache = CacheService.getInstance();
         const metrics = new ExecutionMetrics(
-          this.sourceNodeType,
+          sourceNodeType || this.sourceNodeType.toString().toLowerCase(),
           this.execution.id,
           [],
           this.execution.memoryThreadId,

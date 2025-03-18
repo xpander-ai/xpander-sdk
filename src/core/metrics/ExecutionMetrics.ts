@@ -1,10 +1,9 @@
-import { SourceNodeType } from '../../types';
 import { Tokens } from '../executions';
 import { MetricsBase } from './MetricsBase';
 
 export class ExecutionMetrics extends MetricsBase {
   constructor(
-    public source: SourceNodeType,
+    public source: string,
     public executionId: string,
     public subExecutions: string[] = [],
     public memoryThreadId: string = '',

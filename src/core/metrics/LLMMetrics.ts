@@ -1,10 +1,9 @@
 import { MetricsBase } from './MetricsBase';
 import { LLMProvider } from '../../constants/llmProvider';
-import { SourceNodeType } from '../../types';
 
 export class LLMMetrics extends MetricsBase {
   constructor(
-    public sourceNodeType: SourceNodeType,
+    public sourceNodeType: string,
     public finishReason: string = 'finish',
     public provider: LLMProvider = LLMProvider.OPEN_AI,
     public model: string = '',
