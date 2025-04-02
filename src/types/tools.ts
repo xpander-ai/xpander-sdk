@@ -189,6 +189,6 @@ export interface IToolExecutionResult {
 export type SimplifiedSchemaMatchResult = {
   path: string; // The dot-separated path of the property in the schema
   isBlocked?: boolean; // Indicates if the property is blocked
-  permanentValue?: string | number; // A fixed value assigned to the property
+  permanentValue?: string | number | any; // A fixed value assigned to the property
   description?: string; // A description override
 };

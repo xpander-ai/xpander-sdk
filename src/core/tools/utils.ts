@@ -239,7 +239,7 @@ export function extractSimplifiedSchemaProps(
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       const currentPath = [...path, key];
-      const value = obj[key];
+      const value = obj[key] as any;
 
       // Recurse into nested objects
       if (typeof value === 'object' && value !== null) {
@@ -267,12 +267,17 @@ export function extractSimplifiedSchemaProps(
 
         if (
           key === 'permanentValue' &&
-          (typeof value === 'string' || typeof value === 'number')
+          (typeof value === 'string' ||
+            typeof value === 'number' ||
+            Array.isArray(value))
         ) {
           if (existingMatch) {
             existingMatch.permanentValue = value;
           } else {
-            results.push({ path: formattedPath, permanentValue: value });
+            results.push({
+              path: formattedPath,
+              permanentValue: value,
+            });
           }
         }
 
@@ -292,6 +297,14 @@ export function extractSimplifiedSchemaProps(
 
   return results;
 }
+
+const getByPath = (obj: any, path: string): any => {
+  const parts = path.split('.');
+  return parts.reduce((acc, key) => {
+    if (acc === undefined || acc === null) return undefined;
+    return acc[key];
+  }, obj);
+};
 
 /**
  * Deletes a property from an object or array by following a specified path.
@@ -333,20 +346,25 @@ export function deletePropertyByPath(obj: any, path: string): void {
   }
 
   let current = obj;
-
+  let isDeletingLastKey = false;
   // Traverse to the parent of the target property
-  for (let i = 0; i < keys.length - 1; i++) {
+  for (let i = 0; i <= keys.length - 1; i++) {
     const key = keys[i];
     if (!(key in current)) {
       // If the path doesn't exist, exit early
       return;
     }
 
+    const isLast = i === keys.length - 1;
+    if (isLast) {
+      isDeletingLastKey = true;
+    }
+
     if (Array.isArray(current[key])) {
       // If the key points to an array, handle array logic
       deleteInArray(current[key], keys.slice(i + 1));
       return;
-    } else {
+    } else if (!isLast) {
       current = current[key];
     }
   }
@@ -354,15 +372,24 @@ export function deletePropertyByPath(obj: any, path: string): void {
   // The last key to be deleted
   const lastKey = keys[keys.length - 1];
 
-  // Delete the property if it exists
-  if (lastKey in current) {
-    delete current[lastKey];
-  }
-
-  // Handle "required" logic
+  // prepare required field deletion
   const parentPathKeys = keys.slice(0, -2); // Up to parent of parent
   let parentOfParent = obj;
 
+  // Delete the property if it exists
+  if (lastKey in current) {
+    delete current[lastKey];
+    if (isDeletingLastKey) {
+      const parent = getByPath(obj, keys.slice(0, -2).join('.'));
+      if ('required' in parent && Array.isArray(parent?.required)) {
+        parent.required = parent.required.filter(
+          (item: string) => item !== lastKey,
+        );
+      }
+    }
+  }
+
+  // Handle "required" logic
   for (const key of parentPathKeys) {
     if (!(key in parentOfParent)) {
       return;
@@ -587,11 +614,14 @@ export function appendDescriptionOverride(
       for (const prop of simplifiedSchema) {
         // if is has description override
         if (!!prop.description) {
-          setValueByPath(
-            newTool.function.parameters,
-            `${prop.path}.description`,
-            prop.description,
-          );
+          const propExists = getByPath(newTool.function.parameters, prop.path);
+          if (!!propExists) {
+            setValueByPath(
+              newTool.function.parameters,
+              `${prop.path}.description`,
+              prop.description,
+            );
+          }
         }
       }
     }
