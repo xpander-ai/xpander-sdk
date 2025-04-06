@@ -891,6 +891,10 @@ export class Agent extends Base {
     this.withAgentEndTool = false;
   }
 
+  public enableAgentEndTool(): void {
+    this.withAgentEndTool = true;
+  }
+
   private retrievePendingExecutionWithLimit(): Execution | null {
     if (!this?.execution?.workerId) {
       throw new Error('Execution workerId is missing!');

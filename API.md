@@ -176,6 +176,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.addToolCallResults">addToolCallResults</a></code> | Adds tool call results as messages to the memory thread. |
 | <code><a href="#xpander-sdk.Agent.attachOperations">attachOperations</a></code> | Attaches a list of agentic operations to the agent. |
 | <code><a href="#xpander-sdk.Agent.disableAgentEndTool">disableAgentEndTool</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.enableAgentEndTool">enableAgentEndTool</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
 | <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
@@ -320,6 +321,12 @@ The list of agentic operations to attach.
 
 ```typescript
 public disableAgentEndTool(): void
+```
+
+##### `enableAgentEndTool` <a name="enableAgentEndTool" id="xpander-sdk.Agent.enableAgentEndTool"></a>
+
+```typescript
+public enableAgentEndTool(): void
 ```
 
 ##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
