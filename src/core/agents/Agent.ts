@@ -476,9 +476,9 @@ export class Agent extends Base {
           ) {
             clonedTool.payload.queryParams[`${k}[]`] =
               clonedTool.payload.queryParams[k];
+            clonedTool.payload.queryParams[k] = undefined;
+            delete clonedTool.payload.queryParams[k];
           }
-          clonedTool.payload.queryParams[k] = undefined;
-          delete clonedTool.payload.queryParams[k];
         }
       }
 
