@@ -82,7 +82,7 @@ export function executeTool(
         'x-api-key': configuration.apiKey,
         'x-xpander-tool-call-id': tool.toolCallId,
         'x-xpander-parallel': isMultiple ? 'true' : 'false',
-        'x-xpander-with-output-schema': hasOutputSchema ? 'true' : 'false',
+        'x-xpander-with-auto-report-result': hasOutputSchema ? 'false' : 'true',
       },
     });
     result.statusCode = response.statusCode || 0;
