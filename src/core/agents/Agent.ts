@@ -444,6 +444,7 @@ export class Agent extends Base {
         this.originalToolNamesReMapping?.[clonedTool.name] || clonedTool.name;
 
       const graphItem = this.retrieveNodeFromGraph(originalToolName);
+      const hasOutputSchema = !!graphItem?.settings?.schemas?.output; // in case we have output schema, let the sdk to report tool call result
       if (graphItem?.settings?.schemas) {
         clonedTool = appendPermanentValues(
           ToolCall.fromObject({
@@ -491,6 +492,7 @@ export class Agent extends Base {
         this.configuration,
         this.execution.id,
         isMultiple,
+        hasOutputSchema,
       );
 
       toolCallResult.statusCode = executionResult.statusCode;
@@ -522,6 +524,9 @@ export class Agent extends Base {
           toolCallResult,
           graphItem.settings?.schemas,
         );
+      }
+      if (hasOutputSchema) {
+        this.memory.addToolCallResults([toolCallResult]);
       }
 
       toolCallResult.isSuccess = true;

@@ -59,6 +59,7 @@ export function executeTool(
   configuration: Configuration,
   executionId: string,
   isMultiple: boolean = false,
+  hasOutputSchema: boolean = false,
 ): IToolExecutionResult {
   const result: IToolExecutionResult = {
     statusCode: 200,
@@ -81,6 +82,7 @@ export function executeTool(
         'x-api-key': configuration.apiKey,
         'x-xpander-tool-call-id': tool.toolCallId,
         'x-xpander-parallel': isMultiple ? 'true' : 'false',
+        'x-xpander-with-auto-report-result': hasOutputSchema ? 'false' : 'true',
       },
     });
     result.statusCode = response.statusCode || 0;
@@ -381,7 +383,7 @@ export function deletePropertyByPath(obj: any, path: string): void {
     delete current[lastKey];
     if (isDeletingLastKey) {
       const parent = getByPath(obj, keys.slice(0, -2).join('.'));
-      if ('required' in parent && Array.isArray(parent?.required)) {
+      if (parent && 'required' in parent && Array.isArray(parent?.required)) {
         parent.required = parent.required.filter(
           (item: string) => item !== lastKey,
         );
