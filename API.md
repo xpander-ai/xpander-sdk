@@ -3733,7 +3733,7 @@ Instructions to initialize the memory thread.
 ##### `initMessages` <a name="initMessages" id="xpander-sdk.Memory.initMessages"></a>
 
 ```typescript
-public initMessages(input: IMemoryMessage, instructions: IAgentInstructions, llmProvider?: LLMProvider): void
+public initMessages(input: IMemoryMessage, instructions: IAgentInstructions, llmProvider?: LLMProvider, files?: string[]): void
 ```
 
 Initializes the thread with input and instructions.
@@ -3757,6 +3757,12 @@ Instructions to initialize the memory thread.
 ###### `llmProvider`<sup>Optional</sup> <a name="llmProvider" id="xpander-sdk.Memory.initMessages.parameter.llmProvider"></a>
 
 - *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+---
+
+###### `files`<sup>Optional</sup> <a name="files" id="xpander-sdk.Memory.initMessages.parameter.files"></a>
+
+- *Type:* string[]
 
 ---
 

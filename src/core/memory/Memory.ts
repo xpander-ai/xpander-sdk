@@ -356,6 +356,7 @@ Agent's graph: ${textualGraph}
     input: IMemoryMessage,
     instructions: IAgentInstructions,
     llmProvider: LLMProvider = LLMProvider.OPEN_AI,
+    files: string[] = [],
   ): void {
     this.llmProvider = llmProvider;
     if (this.messages.length === 0) {
@@ -367,6 +368,13 @@ Agent's graph: ${textualGraph}
         initialMessages.push({
           role: 'system',
           content: `User Details: ${JSON.stringify(this.agent.userDetails)}`,
+        });
+      }
+
+      if (Array.isArray(files) && files.length !== 0) {
+        initialMessages.push({
+          role: 'system',
+          content: `Attached Files: ${files.map((file) => `"${file}"`).join(', ')}`,
         });
       }
 

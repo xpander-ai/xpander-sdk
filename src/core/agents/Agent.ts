@@ -644,6 +644,8 @@ export class Agent extends Base {
       this.executionMemory.initMessages(
         this.execution?.inputMessage as IMemoryMessage,
         this.instructions,
+        undefined,
+        this.execution?.input?.files || [],
       );
     }
     return this.executionMemory as Memory;
@@ -863,6 +865,8 @@ export class Agent extends Base {
           this.memory.initMessages(
             this.execution?.inputMessage as IMemoryMessage,
             this.instructions,
+            undefined,
+            this.execution?.input?.files || [],
           );
         }
       }
