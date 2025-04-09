@@ -187,12 +187,6 @@ export class Execution extends Base {
       content.push(this.input.text);
     }
 
-    if (Array.isArray(this.input.files) && this.input.files.length !== 0) {
-      content.push(
-        `Files: ${this.input.files.map((file) => `"${file}"`).join(', ')}`,
-      );
-    }
-
     return { role: 'user', content: content.join('\n') };
   }
 }
