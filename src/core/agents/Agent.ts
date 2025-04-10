@@ -674,7 +674,7 @@ export class Agent extends Base {
 
   private get isAwaitingHITL() {
     return this?.messages?.[this?.messages?.length - 1]?.content?.includes(
-      'AWAITING_HITL',
+      'waiting for a human approval',
     );
   }
 
@@ -698,12 +698,8 @@ export class Agent extends Base {
       shouldStopByHITL = true;
     }
     // get pending execution in hitl to continue local execution
-    if (shouldStopByHITL && this.execution?.workerId) {
-      const pendingExecution = this.retrievePendingExecutionWithLimit();
-      if (pendingExecution) {
-        this.switchExecution(pendingExecution, true);
-        return false;
-      }
+    if (shouldStopByHITL) {
+      return true;
     }
 
     if (this.shouldStop) {
@@ -902,41 +898,6 @@ export class Agent extends Base {
 
   public enableAgentEndTool(): void {
     this.withAgentEndTool = true;
-  }
-
-  private retrievePendingExecutionWithLimit(): Execution | null {
-    if (!this?.execution?.workerId) {
-      throw new Error('Execution workerId is missing!');
-    }
-
-    const pollInterval = 5000; // 5 seconds
-    const timeout = 60000; // 1 minute
-    const startTime = Date.now();
-
-    let pendingExecution: Execution | null = null;
-
-    while (Date.now() - startTime < timeout) {
-      console.log(
-        `Checking for pending execution on worker ${this.execution.workerId}`,
-      );
-      pendingExecution = Execution.retrievePendingExecution(
-        this,
-        this.execution.workerId,
-      ); // Synchronous call
-
-      if (pendingExecution) {
-        return pendingExecution; // Return immediately if a pending execution is found
-      }
-
-      // Synchronous sleep
-      const now = Date.now();
-      while (Date.now() - now < pollInterval) {
-        // Busy wait to simulate synchronous sleep
-      }
-    }
-
-    // Return null if no pending execution is found within the time limit
-    return null;
   }
 
   public retrieveExecutionResult(): Execution {
