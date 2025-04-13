@@ -27,16 +27,23 @@ export class Agents {
   public list(): Agent[] {
     try {
       const url = `${this.configuration.url}/agents/list`;
+      
       const response = request('GET' as HttpVerb, url, {
-        headers: { 'x-api-key': this.configuration.apiKey },
+        headers: { 
+          'x-api-key': this.configuration.apiKey,
+          ...(this.configuration.organizationId ? { 'x-organization-id': this.configuration.organizationId } : {})
+        },
       });
-
+      
       if (!response.statusCode.toString().startsWith('2')) {
         throw new Error(response.body.toString());
       }
 
+      const responseBody = response.getBody('utf8');
+      const parsedData = JSON.parse(responseBody);
+      
       this.agentsList =
-        JSON.parse(response.getBody('utf8')).map((agent: any) => {
+        parsedData.map((agent: any) => {
           const camelCasedAgent = convertKeysToCamelCase(agent);
           return new Agent(
             this.configuration,
@@ -57,6 +64,7 @@ export class Agents {
             agent.oas,
           );
         }) || [];
+      
       return this.agentsList;
     } catch (err) {
       throw new Error('Failed to retrieve agents list');
@@ -76,6 +84,7 @@ export class Agents {
       throw new Error('Failed to retrieve agent');
     }
   }
+
   /**
    * @function create
    * @description Creates a new agent with the given name and type.
@@ -87,10 +96,17 @@ export class Agents {
    */
   public create(name: string, type: AgentType = AgentType.REGULAR): Agent {
     try {
-      const url = `${this.configuration.url}/agents-crud/tools/crud/create`;
+      // Extract the base URL without the organization ID
+      const urlParts = this.configuration.url.split('/');
+      const baseUrl = urlParts.slice(0, 3).join('/'); // Get the protocol and domain
+      const url = `${baseUrl}/agents-crud/tools/crud/create`;
+      
       const response = request('POST' as HttpVerb, url, {
         json: { name, type },
-        headers: { 'x-api-key': this.configuration.apiKey },
+        headers: { 
+          'x-api-key': this.configuration.apiKey,
+          ...(this.configuration.organizationId ? { 'x-organization-id': this.configuration.organizationId } : {})
+        },
       });
 
       if (!response.statusCode.toString().startsWith('2')) {
