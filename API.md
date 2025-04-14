@@ -1488,7 +1488,7 @@ The unique identifier of the agent to retrieve.
 ##### `list` <a name="list" id="xpander-sdk.Agents.list"></a>
 
 ```typescript
-public list(): Agent[]
+public list(): UnloadedAgent[]
 ```
 
 Retrieves the list of agents from the API and populates the local agents list.
@@ -1498,7 +1498,7 @@ Retrieves the list of agents from the API and populates the local agents list.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#xpander-sdk.Agents.property.agentsList">agentsList</a></code> | <code><a href="#xpander-sdk.Agent">Agent</a>[]</code> | Collection of Agent instances managed by this class. |
+| <code><a href="#xpander-sdk.Agents.property.agentsList">agentsList</a></code> | <code><a href="#xpander-sdk.UnloadedAgent">UnloadedAgent</a>[]</code> | Collection of Agent instances managed by this class. |
 | <code><a href="#xpander-sdk.Agents.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for managing agents. |
 
 ---
@@ -1506,10 +1506,10 @@ Retrieves the list of agents from the API and populates the local agents list.
 ##### `agentsList`<sup>Required</sup> <a name="agentsList" id="xpander-sdk.Agents.property.agentsList"></a>
 
 ```typescript
-public readonly agentsList: Agent[];
+public readonly agentsList: UnloadedAgent[];
 ```
 
-- *Type:* <a href="#xpander-sdk.Agent">Agent</a>[]
+- *Type:* <a href="#xpander-sdk.UnloadedAgent">UnloadedAgent</a>[]
 
 Collection of Agent instances managed by this class.
 
@@ -2658,14 +2658,14 @@ public toJson(): string
 ##### `addNode` <a name="addNode" id="xpander-sdk.Graph.addNode"></a>
 
 ```typescript
-public addNode(node: GraphItem | Agent): GraphItem
+public addNode(node: Agent | GraphItem): GraphItem
 ```
 
 Adds a new node to the graph.
 
 ###### `node`<sup>Required</sup> <a name="node" id="xpander-sdk.Graph.addNode.parameter.node"></a>
 
-- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a> | <a href="#xpander-sdk.Agent">Agent</a>
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a> | <a href="#xpander-sdk.GraphItem">GraphItem</a>
 
 The node to add, which can be an agent or a graph item.
 
@@ -4721,6 +4721,193 @@ public readonly toolCallId: string;
 ```
 
 - *Type:* string
+
+---
+
+
+### UnloadedAgent <a name="UnloadedAgent" id="xpander-sdk.UnloadedAgent"></a>
+
+Represents an unloaded agent in the xpander.ai system. Used to reference agents that are not yet fully loaded.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.UnloadedAgent.Initializer"></a>
+
+```typescript
+import { UnloadedAgent } from 'xpander-sdk'
+
+new UnloadedAgent(configuration: Configuration, id: string, name: string, status: AgentStatus, organizationId: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.UnloadedAgent.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - The configuration instance used for loading the agent. |
+| <code><a href="#xpander-sdk.UnloadedAgent.Initializer.parameter.id">id</a></code> | <code>string</code> | - The unique identifier of the agent. |
+| <code><a href="#xpander-sdk.UnloadedAgent.Initializer.parameter.name">name</a></code> | <code>string</code> | - The name of the agent. |
+| <code><a href="#xpander-sdk.UnloadedAgent.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | - The current status of the agent. |
+| <code><a href="#xpander-sdk.UnloadedAgent.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | - The ID of the organization to which the agent belongs. |
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.UnloadedAgent.Initializer.parameter.configuration"></a>
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+The configuration instance used for loading the agent.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.UnloadedAgent.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The unique identifier of the agent.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.UnloadedAgent.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+The name of the agent.
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.UnloadedAgent.Initializer.parameter.status"></a>
+
+- *Type:* <a href="#xpander-sdk.AgentStatus">AgentStatus</a>
+
+The current status of the agent.
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.UnloadedAgent.Initializer.parameter.organizationId"></a>
+
+- *Type:* string
+
+The ID of the organization to which the agent belongs.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.UnloadedAgent.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.UnloadedAgent.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.UnloadedAgent.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.UnloadedAgent.load">load</a></code> | Loads the full Agent instance from the xpander.ai system using its ID. |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.UnloadedAgent.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.UnloadedAgent.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.UnloadedAgent.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.UnloadedAgent.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `load` <a name="load" id="xpander-sdk.UnloadedAgent.load"></a>
+
+```typescript
+public load(): Agent
+```
+
+Loads the full Agent instance from the xpander.ai system using its ID.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.UnloadedAgent.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.UnloadedAgent.fromObject"></a>
+
+```typescript
+import { UnloadedAgent } from 'xpander-sdk'
+
+UnloadedAgent.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.UnloadedAgent.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.UnloadedAgent.property.id">id</a></code> | <code>string</code> | - The unique identifier of the agent. |
+| <code><a href="#xpander-sdk.UnloadedAgent.property.name">name</a></code> | <code>string</code> | - The name of the agent. |
+| <code><a href="#xpander-sdk.UnloadedAgent.property.organizationId">organizationId</a></code> | <code>string</code> | - The ID of the organization to which the agent belongs. |
+| <code><a href="#xpander-sdk.UnloadedAgent.property.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | - The current status of the agent. |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.UnloadedAgent.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+The unique identifier of the agent.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.UnloadedAgent.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+The name of the agent.
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.UnloadedAgent.property.organizationId"></a>
+
+```typescript
+public readonly organizationId: string;
+```
+
+- *Type:* string
+
+The ID of the organization to which the agent belongs.
+
+---
+
+##### `status`<sup>Required</sup> <a name="status" id="xpander-sdk.UnloadedAgent.property.status"></a>
+
+```typescript
+public readonly status: AgentStatus;
+```
+
+- *Type:* <a href="#xpander-sdk.AgentStatus">AgentStatus</a>
+
+The current status of the agent.
 
 ---
 

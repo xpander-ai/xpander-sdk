@@ -3,6 +3,7 @@ import { Agent } from './Agent';
 import { AgentType } from '../../types/agents';
 import { Configuration } from '../Configuration';
 import { convertKeysToCamelCase } from '../utils';
+import { UnloadedAgent } from './UnloadedAgent';
 
 /**
  * Manages a collection of Agent instances in xpanderAI, providing methods to list,
@@ -10,7 +11,7 @@ import { convertKeysToCamelCase } from '../utils';
  */
 export class Agents {
   /** Collection of Agent instances managed by this class. */
-  public agentsList: Agent[] = [];
+  public agentsList: UnloadedAgent[] = [];
 
   /**
    * Constructs an instance of the Agents manager.
@@ -24,7 +25,7 @@ export class Agents {
    *
    * @returns An array of Agent instances.
    */
-  public list(): Agent[] {
+  public list(): UnloadedAgent[] {
     try {
       // Extract the base URL without the organization ID
       const urlParts = this.configuration.url.split('/');
@@ -50,23 +51,12 @@ export class Agents {
       this.agentsList =
         parsedData.map((agent: any) => {
           const camelCasedAgent = convertKeysToCamelCase(agent);
-          return new Agent(
+          return new UnloadedAgent(
             this.configuration,
             camelCasedAgent.id,
             camelCasedAgent.name,
-            camelCasedAgent.organizationId,
             camelCasedAgent.status,
-            camelCasedAgent.delegationType,
-            camelCasedAgent.memoryType,
-            camelCasedAgent.memoryStrategy,
-            camelCasedAgent.enrichedInstructions,
-            camelCasedAgent.accessScope,
-            camelCasedAgent.sourceNodes,
-            camelCasedAgent.enrichedPrompts,
-            [],
-            [],
-            [],
-            agent.oas,
+            camelCasedAgent.organizationId,
           );
         }) || [];
 
