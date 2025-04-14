@@ -28,21 +28,23 @@ export class Agents {
   public list(): UnloadedAgent[] {
     try {
       const url = `${this.configuration.url}/agents/list`;
-      
+
       const response = request('GET' as HttpVerb, url, {
-        headers: { 
+        headers: {
           'x-api-key': this.configuration.apiKey,
-          ...(this.configuration.organizationId ? { 'x-organization-id': this.configuration.organizationId } : {})
+          ...(this.configuration.organizationId
+            ? { 'x-organization-id': this.configuration.organizationId }
+            : {}),
         },
       });
-      
+
       if (!response.statusCode.toString().startsWith('2')) {
         throw new Error(response.body.toString());
       }
 
       const responseBody = response.getBody('utf8');
       const parsedData = JSON.parse(responseBody);
-      
+
       this.agentsList =
         parsedData.map((agent: any) => {
           const camelCasedAgent = convertKeysToCamelCase(agent);
@@ -54,7 +56,7 @@ export class Agents {
             camelCasedAgent.organizationId,
           );
         }) || [];
-      
+
       return this.agentsList;
     } catch (err) {
       throw new Error('Failed to retrieve agents list');
@@ -86,16 +88,15 @@ export class Agents {
    */
   public create(name: string, type: AgentType = AgentType.REGULAR): Agent {
     try {
-      // Extract the base URL without the organization ID
-      const urlParts = this.configuration.url.split('/');
-      const baseUrl = urlParts.slice(0, 3).join('/'); // Get the protocol and domain
-      const url = `${baseUrl}/agents-crud/tools/crud/create`;
-      
+      const url = `${this.configuration.url}/agents-crud/tools/crud/create`;
+
       const response = request('POST' as HttpVerb, url, {
         json: { name, type },
-        headers: { 
+        headers: {
           'x-api-key': this.configuration.apiKey,
-          ...(this.configuration.organizationId ? { 'x-organization-id': this.configuration.organizationId } : {})
+          ...(this.configuration.organizationId
+            ? { 'x-organization-id': this.configuration.organizationId }
+            : {}),
         },
       });
 

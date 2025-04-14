@@ -140,7 +140,11 @@ export class Agent extends Base {
   }
 
   /** Loads the agent data from its source node type. */
-  load(agentId: string = '', ignoreCache: boolean = false): void {
+  load(
+    agentId: string = '',
+    ignoreCache: boolean = false,
+    rawAgentData?: any,
+  ): void {
     if (this.ready && !agentId) return;
 
     console.debug(`loading agent ${this.id}`);
@@ -158,16 +162,20 @@ export class Agent extends Base {
         console.debug('Agent loaded from cache');
         rawAgent = cachedAgent;
       } else {
-        const response = request('GET', this.url, {
-          headers: { 'x-api-key': this.configuration.apiKey },
-        });
+        if (rawAgentData) {
+          rawAgent = rawAgentData;
+        } else {
+          const response = request('GET', this.url, {
+            headers: { 'x-api-key': this.configuration.apiKey },
+          });
 
-        if (!response.statusCode.toString().startsWith('2')) {
-          throw new Error(response.body.toString());
+          if (!response.statusCode.toString().startsWith('2')) {
+            throw new Error(response.body.toString());
+          }
+
+          rawAgent = JSON.parse(response.getBody('utf8'));
+          cache.set(this.id, rawAgent);
         }
-
-        rawAgent = JSON.parse(response.getBody('utf8'));
-        cache.set(this.id, rawAgent);
       }
 
       const agent = convertKeysToCamelCase(rawAgent);
@@ -984,8 +992,12 @@ export class Agent extends Base {
         throw new Error(response.body.toString());
       }
 
+      const rawResponse = convertKeysToCamelCase(
+        JSON.parse(response.getBody('utf8')),
+      );
+
       CacheService.getInstance().delete(this.id);
-      this.load(this.id, true);
+      this.load(this.id, true, rawResponse);
       return this;
     } catch (err) {
       throw new Error('Failed to sync agent');
