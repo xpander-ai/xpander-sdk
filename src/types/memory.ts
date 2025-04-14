@@ -9,6 +9,7 @@ export enum MemoryStrategy {
   BUFFERING = 'buffering',
   MOVING_WINDOW = 'MovingWindow',
   CONTEXT = 'context',
+  CLEAN_TOOL_CALLS = 'cleanToolCallResponses',
 }
 
 export interface IToolCall {

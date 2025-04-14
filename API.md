@@ -7056,6 +7056,7 @@ Represents the 'FriendliAI' provider.
 | <code><a href="#xpander-sdk.MemoryStrategy.BUFFERING">BUFFERING</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.MemoryStrategy.MOVING_WINDOW">MOVING_WINDOW</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.MemoryStrategy.CONTEXT">CONTEXT</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.MemoryStrategy.CLEAN_TOOL_CALLS">CLEAN_TOOL_CALLS</a></code> | *No description.* |
 
 ---
 
@@ -7080,6 +7081,11 @@ Represents the 'FriendliAI' provider.
 
 
 ##### `CONTEXT` <a name="CONTEXT" id="xpander-sdk.MemoryStrategy.CONTEXT"></a>
+
+---
+
+
+##### `CLEAN_TOOL_CALLS` <a name="CLEAN_TOOL_CALLS" id="xpander-sdk.MemoryStrategy.CLEAN_TOOL_CALLS"></a>
 
 ---
 
