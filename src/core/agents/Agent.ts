@@ -212,10 +212,10 @@ export class Agent extends Base {
         agent.delegationType,
         agent.memoryType,
         agent.memoryStrategy,
-        agent.enrichedInstructions,
+        agent.instructions,
         agent.accessScope,
         agent.sourceNodes,
-        agent.enrichedPrompts,
+        agent.prompts,
         agent.tools,
         agent.graph
           .map((gi: any, idx: number) => ({
