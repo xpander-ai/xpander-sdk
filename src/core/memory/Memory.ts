@@ -12,6 +12,7 @@ import { Base } from '../base';
 import { UserDetails } from '../UserDetails';
 import { convertKeysToCamelCase, convertKeysToSnakeCase } from '../utils';
 import { MemoryThread } from './MemoryThread';
+import { AmazonBedrock } from '../../llmProviders';
 
 /**
  * Represents a memory thread in xpanderAI, handling storage, retrieval,
@@ -225,8 +226,16 @@ export class Memory extends Base {
       case LLMProvider.NVIDIA_NIM:
       case LLMProvider.FRIENDLI_AI:
         return BaseOpenAISDKHandler.convertMessages(messages);
+      case LLMProvider.AMAZON_BEDROCK:
+        return AmazonBedrock.convertMessages(messages);
     }
     return [];
+  }
+
+  public get systemMessage(): any[] {
+    return this.messages
+      .filter((msg) => msg.role === 'system')
+      .map(({ content: text }) => ({ text }));
   }
 
   /**

@@ -307,6 +307,36 @@ export class Agent extends Base {
         );
       }
     }
+    // amazon bedrock converse messaging api
+    if (!!messages?.output?.message) {
+      const bedrockResponseMessage: any = messages.output.message;
+      const xpanderMessages: IMemoryMessage[] = [];
+      const msg: IMemoryMessage = {
+        role: bedrockResponseMessage.role,
+        content: '',
+      };
+
+      for (const content of bedrockResponseMessage.content) {
+        if (!!content?.toolUse) {
+          const { toolUse } = content;
+          msg.toolCalls = [
+            {
+              toolCallId: toolUse.toolUseId,
+              name: toolUse.name,
+              payload: JSON.stringify(toolUse.input),
+            },
+          ];
+        }
+        if (!!content?.text) {
+          msg.content = content.text;
+        }
+      }
+      if (msg?.content || msg.toolCalls) {
+        xpanderMessages.push(msg);
+      }
+
+      return this.memory.addMessages(xpanderMessages);
+    }
     return this.memory.addMessages(messages);
   }
 
