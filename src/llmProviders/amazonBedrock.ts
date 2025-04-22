@@ -2,7 +2,7 @@ import { BaseLLMProvider } from './shared/baseProvider';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
 import { ToolCall, getToolBaseSignature } from '../core/tools';
-import { IBedrockTool } from '../types';
+import { IBedrockTool, IMemoryMessage } from '../types';
 
 /**
  * Represents the Amazon Bedrock LLM provider, handling tool calls and model-specific processing.
@@ -18,13 +18,54 @@ export class AmazonBedrock extends BaseLLMProvider {
   }
 
   /**
+   * Converts xpanderAI memory messages into LLM-compatible message formats.
+   *
+   * @param xpanderMessages - An array of xpanderAI memory messages.
+   * @returns An array of messages formatted for LLM compatibility.
+   */
+  static convertMessages(xpanderMessages: IMemoryMessage[]): any[] {
+    const getMsgContent = (msg: IMemoryMessage) => {
+      const contentBlocks: any[] = [];
+
+      if (msg.toolCalls) {
+        contentBlocks.push(
+          ...msg.toolCalls.map((tc) => ({
+            toolUse: {
+              toolUseId: tc.toolCallId,
+              name: tc.name,
+              input: tc?.payload ? JSON.parse(tc.payload) : {},
+            },
+          })),
+        );
+      } else if (msg.toolCallId) {
+        contentBlocks.push({
+          toolResult: {
+            toolUseId: msg.toolCallId,
+            content: [{ text: msg.content }],
+          },
+        });
+      } else {
+        contentBlocks.push({ text: msg.content });
+      }
+
+      return contentBlocks;
+    };
+    return xpanderMessages
+      .filter((msg) => msg.role !== 'system')
+      .map((msg) => ({
+        role: msg.role !== 'assistant' ? 'user' : 'assistant',
+        content: getMsgContent(msg),
+      }));
+  }
+
+  /**
    * Transforms a string to a valid AWS identifier by replacing non-alphanumeric characters
    * with underscores and ensuring it starts with a letter.
    * @param inputString - The string to transform.
    * @returns The transformed AWS-compatible string.
    */
   static transformToValidAWSIdentifier(inputString: string): string {
-    let modifiedString = inputString.replace(/[^a-zA-Z0-9_]/g, '_');
+    let modifiedString = inputString.replace(/[^a-zA-Z0-9_]/g, '-');
     if (!/^[a-zA-Z]/.test(modifiedString)) {
       modifiedString = 'a' + modifiedString;
     }
@@ -88,10 +129,12 @@ export class AmazonBedrock extends BaseLLMProvider {
           name,
           description: tool.function.description,
           inputSchema: {
-            json:
-              Object.keys(tool?.function?.parameters || {}).length !== 0
+            json: {
+              ...(Object.keys(tool?.function?.parameters || {}).length !== 0
                 ? tool?.function?.parameters
-                : DEFAULT_TOOL_PARAMETERS,
+                : DEFAULT_TOOL_PARAMETERS),
+              additionalProperties: false,
+            },
           },
         },
         execute: tool?.function?.execute,

@@ -3970,11 +3970,22 @@ The new name for the thread.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#xpander-sdk.Memory.property.systemMessage">systemMessage</a></code> | <code>any[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.property.id">id</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.property.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | The LLM provider to be used for message processing. |
 | <code><a href="#xpander-sdk.Memory.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.property.messages">messages</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.property.userDetails">userDetails</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `systemMessage`<sup>Required</sup> <a name="systemMessage" id="xpander-sdk.Memory.property.systemMessage"></a>
+
+```typescript
+public readonly systemMessage: any[];
+```
+
+- *Type:* any[]
 
 ---
 
