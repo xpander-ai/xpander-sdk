@@ -685,6 +685,11 @@ export class Agent extends Base {
         undefined,
         this.execution?.input?.files || [],
       );
+    } else if (
+      !!this?.executionMemory &&
+      this.executionMemory.messages.length === 0
+    ) {
+      this.executionMemory.initInstructions(this.instructions);
     }
     return this.executionMemory as Memory;
   }
