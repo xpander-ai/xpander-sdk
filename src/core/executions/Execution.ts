@@ -86,7 +86,7 @@ export class Execution extends Base {
       `${agent.configuration.url}/agent-execution/${agent.id}`,
       {
         json: payload,
-        headers: { 'x-api-key': agent.configuration.apiKey },
+        headers: { 'x-api-key': agent.configuration.apiKey, 'x-source': 'sdk' },
       },
     );
 
