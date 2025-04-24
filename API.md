@@ -177,6 +177,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.attachOperations">attachOperations</a></code> | Attaches a list of agentic operations to the agent. |
 | <code><a href="#xpander-sdk.Agent.disableAgentEndTool">disableAgentEndTool</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.enableAgentEndTool">enableAgentEndTool</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.extractToolCalls">extractToolCalls</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
 | <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
@@ -190,6 +191,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.retrieveThreadsList">retrieveThreadsList</a></code> | Retrieves the list of memory threads for the current user. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
+| <code><a href="#xpander-sdk.Agent.selectLLMProvider">selectLLMProvider</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.stop">stop</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.sync">sync</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.update">update</a></code> | *No description.* |
@@ -328,6 +330,18 @@ public disableAgentEndTool(): void
 ```typescript
 public enableAgentEndTool(): void
 ```
+
+##### `extractToolCalls` <a name="extractToolCalls" id="xpander-sdk.Agent.extractToolCalls"></a>
+
+```typescript
+public extractToolCalls(llmResponse: any): ToolCall[]
+```
+
+###### `llmResponse`<sup>Required</sup> <a name="llmResponse" id="xpander-sdk.Agent.extractToolCalls.parameter.llmResponse"></a>
+
+- *Type:* any
+
+---
 
 ##### `getTools` <a name="getTools" id="xpander-sdk.Agent.getTools"></a>
 
@@ -571,6 +585,18 @@ Additional payload data to merge.
 
 ---
 
+##### `selectLLMProvider` <a name="selectLLMProvider" id="xpander-sdk.Agent.selectLLMProvider"></a>
+
+```typescript
+public selectLLMProvider(llmProvider: LLMProvider): void
+```
+
+###### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.Agent.selectLLMProvider.parameter.llmProvider"></a>
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
+
+---
+
 ##### `stop` <a name="stop" id="xpander-sdk.Agent.stop"></a>
 
 ```typescript
@@ -667,6 +693,7 @@ Agent.getById(configuration: Configuration, agentId: string)
 | <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | - Unique identifier for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
 | <code><a href="#xpander-sdk.Agent.property.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | - Knowledge bases associated with the agent. |
+| <code><a href="#xpander-sdk.Agent.property.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | Collection of local tools specific to this agent. |
 | <code><a href="#xpander-sdk.Agent.property.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | - Strategy for memory management. |
 | <code><a href="#xpander-sdk.Agent.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | - Type of memory the agent utilizes. |
@@ -857,6 +884,16 @@ public readonly knowledgeBases: KnowledgeBase[];
 - *Type:* <a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]
 
 Knowledge bases associated with the agent.
+
+---
+
+##### `llmProvider`<sup>Required</sup> <a name="llmProvider" id="xpander-sdk.Agent.property.llmProvider"></a>
+
+```typescript
+public readonly llmProvider: LLMProvider;
+```
+
+- *Type:* <a href="#xpander-sdk.LLMProvider">LLMProvider</a>
 
 ---
 

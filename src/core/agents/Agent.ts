@@ -45,6 +45,7 @@ import {
 } from '../tools/utils';
 import { UserDetails } from '../UserDetails';
 import { convertKeysToCamelCase, generateUUIDv4 } from '../utils';
+import { XpanderClient } from '../XpanderClient';
 
 /**
  * Represents an agent in xpanderAI, managing tools, sessions, and operational workflows.
@@ -88,6 +89,7 @@ export class Agent extends Base {
   private isLocalRun: boolean = false;
   private withAgentEndTool: boolean = true;
   public graph: Graph;
+  public llmProvider: LLMProvider = LLMProvider.OPEN_AI;
 
   /** Maps original tool names to renamed versions for consistency. */
   protected originalToolNamesReMapping: Record<string, string> = {};
@@ -137,6 +139,14 @@ export class Agent extends Base {
       this.load();
     }
     this.graph = new Graph(this, this._graph);
+  }
+
+  public selectLLMProvider(llmProvider: LLMProvider) {
+    this.llmProvider = llmProvider;
+  }
+
+  public extractToolCalls(llmResponse: any) {
+    return XpanderClient.extractToolCalls(llmResponse, this.llmProvider);
   }
 
   /** Loads the agent data from its source node type. */
@@ -256,7 +266,7 @@ export class Agent extends Base {
    * @param llmProvider - The LLM provider to filter tools by (default: `OPEN_AI`).
    * @returns A list of tools matching the specified provider.
    */
-  getTools(llmProvider: LLMProvider = LLMProvider.OPEN_AI): any[] {
+  getTools(llmProvider: LLMProvider = this.llmProvider): any[] {
     const provider = allProviders.find((p) => p.shouldHandle(llmProvider));
     if (!provider) {
       throw new Error(`Provider (${llmProvider}) not found`);
@@ -626,6 +636,8 @@ export class Agent extends Base {
    */
   public initTask(execution: any): void {
     const camelCasedExecution = convertKeysToCamelCase(execution);
+    this.shouldStop = false;
+    this.hitlIsRunning = false;
     this.execution = new Execution(
       camelCasedExecution.id,
       camelCasedExecution.agentId,
@@ -691,6 +703,9 @@ export class Agent extends Base {
     ) {
       this.executionMemory.initInstructions(this.instructions);
     }
+
+    this.executionMemory.llmProvider = this.llmProvider;
+
     return this.executionMemory as Memory;
   }
 
