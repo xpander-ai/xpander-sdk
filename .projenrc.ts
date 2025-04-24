@@ -6,6 +6,7 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: 'main',
   jsiiVersion: '~5.7.0',
   gitignore: ['test/.env'],
+  minNodeVersion: '22.15.0',
   tsconfig: {
     exclude: ['.env', '.env.template'],
     compilerOptions: {
@@ -72,3 +73,5 @@ if (project?.github?.actions) {
 }
 
 project.synth();
+
+project.addDevDeps('jsii-rosetta@~5.0.7');
