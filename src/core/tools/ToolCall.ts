@@ -45,6 +45,7 @@ export class ToolCall extends Base {
  * @param {any} result - The result of the tool call execution.
  * @param {boolean} isSuccess - Indicates if the tool call execution was successful.
  * @param {boolean} isError - Indicates if the tool call execution resulted in an error.
+ * @param {boolean} isLocal - Indicates if the tool is local.
  * @param {boolean} graphApproved - Indicates if the tool call result is approved within the graph.
  *
  * @memberof xpander.ai
@@ -63,6 +64,7 @@ export class ToolCallResult extends Base {
     public result: any = null,
     public isSuccess: boolean = false,
     public isError: boolean = false,
+    public isLocal: boolean = false,
     public graphApproved: boolean = false,
   ) {
     super();
