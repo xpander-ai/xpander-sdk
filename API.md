@@ -4563,7 +4563,7 @@ Represents the result of a tool call execution.
 ```typescript
 import { ToolCallResult } from 'xpander-sdk'
 
-new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, statusCode?: number, result?: any, isSuccess?: boolean, isError?: boolean, graphApproved?: boolean)
+new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, statusCode?: number, result?: any, isSuccess?: boolean, isError?: boolean, isLocal?: boolean, graphApproved?: boolean)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -4575,6 +4575,7 @@ new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, st
 | <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.result">result</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.isError">isError</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.isLocal">isLocal</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.Initializer.parameter.graphApproved">graphApproved</a></code> | <code>boolean</code> | *No description.* |
 
 ---
@@ -4616,6 +4617,12 @@ new ToolCallResult(functionName?: string, toolCallId?: string, payload?: any, st
 ---
 
 ##### `isError`<sup>Optional</sup> <a name="isError" id="xpander-sdk.ToolCallResult.Initializer.parameter.isError"></a>
+
+- *Type:* boolean
+
+---
+
+##### `isLocal`<sup>Optional</sup> <a name="isLocal" id="xpander-sdk.ToolCallResult.Initializer.parameter.isLocal"></a>
 
 - *Type:* boolean
 
@@ -4690,6 +4697,7 @@ ToolCallResult.fromObject(data: any)
 | <code><a href="#xpander-sdk.ToolCallResult.property.functionName">functionName</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.property.graphApproved">graphApproved</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.property.isError">isError</a></code> | <code>boolean</code> | *No description.* |
+| <code><a href="#xpander-sdk.ToolCallResult.property.isLocal">isLocal</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.property.isSuccess">isSuccess</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.property.payload">payload</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.ToolCallResult.property.result">result</a></code> | <code>any</code> | *No description.* |
@@ -4722,6 +4730,16 @@ public readonly graphApproved: boolean;
 
 ```typescript
 public readonly isError: boolean;
+```
+
+- *Type:* boolean
+
+---
+
+##### `isLocal`<sup>Required</sup> <a name="isLocal" id="xpander-sdk.ToolCallResult.property.isLocal"></a>
+
+```typescript
+public readonly isLocal: boolean;
 ```
 
 - *Type:* boolean

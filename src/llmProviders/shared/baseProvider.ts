@@ -135,6 +135,13 @@ export class BaseLLMProvider {
       }
     }
 
+    // disable additional properties
+    for (const tool of toolset) {
+      if (!!tool?.function?.parameters) {
+        tool.function.parameters.additionalProperties = false;
+      }
+    }
+
     return this.postProcessTools(toolset);
   }
 

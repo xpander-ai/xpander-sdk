@@ -391,6 +391,7 @@ export class Agent extends Base {
    */
   public addLocalTools(tools: any[] | ILocalTool[]): void {
     this.localTools = [];
+    let hasChanges = false;
     for (const tool of tools) {
       const localTool = {
         ...tool,
@@ -407,6 +408,7 @@ export class Agent extends Base {
         this.graph.findNodeByName(localTool.function.name);
 
       if (!isAlreadyOnGraph) {
+        hasChanges = true;
         this.graph.addNode(
           new GraphItem(
             this,
@@ -418,6 +420,9 @@ export class Agent extends Base {
           ),
         );
       }
+    }
+    if (hasChanges) {
+      this.sync(); // deploy
     }
   }
 
@@ -483,6 +488,7 @@ export class Agent extends Base {
         this.execution.id,
       );
       toolCallResult.graphApproved = tool.graphApproved = canProceed;
+      toolCallResult.isLocal = true;
 
       return toolCallResult;
     }
@@ -599,6 +605,8 @@ export class Agent extends Base {
   ): ToolCallResult[] {
     // kb before other tools
     const kbToolCalls = toolCalls.filter((tc) => tc.name.startsWith('xpkb'));
+
+    // no kb
     const nonKbToolCalls = toolCalls.filter(
       (tc) => !tc.name.startsWith('xpkb'),
     );
@@ -611,7 +619,8 @@ export class Agent extends Base {
       ),
     );
 
-    return result;
+    // do not return local tools, we need to call the run tools to enforce graph (HEAD request)
+    return result.filter((res) => !res.isLocal);
   }
 
   /** Retrieves the type of source node for the agent. */
