@@ -1,3 +1,4 @@
+import 'openai/shims/node';
 import dotenv from 'dotenv';
 import { GraphItem, XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });
