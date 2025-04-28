@@ -1,3 +1,4 @@
+import 'openai/shims/node';
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
 import { Tokens, XpanderClient } from '../src';

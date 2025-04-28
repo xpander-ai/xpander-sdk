@@ -44,7 +44,11 @@ import {
   testToolGraphPosition,
 } from '../tools/utils';
 import { UserDetails } from '../UserDetails';
-import { convertKeysToCamelCase, generateUUIDv4 } from '../utils';
+import {
+  convertKeysToCamelCase,
+  generateUUIDv4,
+  getInstructionsFromLocalFile,
+} from '../utils';
 import { XpanderClient } from '../XpanderClient';
 
 /**
@@ -254,6 +258,12 @@ export class Agent extends Base {
       Object.assign(this, loadedAgent);
       if (shouldKeepLocalTools) {
         this.localTools = localTools;
+      }
+
+      // assign local instructions
+      const localInstruction = getInstructionsFromLocalFile();
+      if (localInstruction) {
+        this.instructions = localInstruction;
       }
     } catch (err) {
       throw new Error('Failed to load agent');

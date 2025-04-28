@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import { IAgentInstructions } from '../types';
+
 /**
  * Converts a snake_case string to camelCase.
  *
@@ -82,4 +85,41 @@ export const generateUUIDv4 = (): string => {
     const value = char === 'x' ? random : Math.floor(random % 4) + 8;
     return value.toString(16);
   });
+};
+
+export const fileExists = (path: string): boolean => {
+  try {
+    fs.accessSync(path);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+export const readFile = (path: string): string | null => {
+  try {
+    return fs.readFileSync(path).toString();
+  } catch {
+    return null;
+  }
+};
+
+export const getCurrentWorkDir = (): string => process.cwd();
+
+export const getInstructionsFromLocalFile = (): IAgentInstructions | null => {
+  const instructionsFilePath = `${getCurrentWorkDir()}/agent_instructions.json`;
+  console.log(instructionsFilePath);
+  if (fileExists(instructionsFilePath)) {
+    try {
+      const rawFile = readFile(instructionsFilePath);
+      if (!rawFile) {
+        return null;
+      }
+      return JSON.parse(rawFile);
+    } catch (err: any) {
+      console.warn(`Failed to load agent instructions - ${err.toString()}`);
+    }
+  }
+
+  return null;
 };
