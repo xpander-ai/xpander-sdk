@@ -108,7 +108,6 @@ export const getCurrentWorkDir = (): string => process.cwd();
 
 export const getInstructionsFromLocalFile = (): IAgentInstructions | null => {
   const instructionsFilePath = `${getCurrentWorkDir()}/agent_instructions.json`;
-  console.log(instructionsFilePath);
   if (fileExists(instructionsFilePath)) {
     try {
       const rawFile = readFile(instructionsFilePath);
