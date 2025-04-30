@@ -68,7 +68,7 @@ response = openai_client.chat.completions.create(
 agent.process_llm_response(response.model_dump(), llm_provider=LLMProvider.OPEN_AI)
 ```
 
-> **Tip:** `agent.process_llm_response(...)` is the easiest way to both *store* the assistant message **and** immediately run any tool calls it contains – perfect for serverless single‑turn workflows. citeturn2view0
+> **Tip:** `agent.process_llm_response(...)` is the easiest way to both *store* the assistant message **and** immediately run any tool calls it contains – perfect for serverless single‑turn workflows.
 
 ---
 
@@ -155,7 +155,7 @@ print(execution_result.status)  # e.g. "SUCCEEDED"
 print(execution_result.result)  # your task output
 ```
 
-This loop lets the LLM break the objective into sub‑steps, call tools, update memory and eventually mark the task as **finished**. citeturn2view0
+This loop lets the LLM break the objective into sub‑steps, call tools, update memory and eventually mark the task as **finished**.
 
 ---
 
@@ -199,7 +199,7 @@ while not agent.is_finished():
 print(agent.retrieve_execution_result().result)
 ```
 
-This demo showcases full multi‑step orchestration **without** writing any provider‑specific glue code. citeturn2view0
+This demo showcases full multi‑step orchestration **without** writing any provider‑specific glue code.
 
 ---
 
@@ -210,7 +210,7 @@ This demo showcases full multi‑step orchestration **without** writing any prov
 3. **Store the raw LLM response** with `agent.add_messages(...)` (or implicitly via `agent.process_llm_response`). The SDK will convert fields as required.
 4. **Extract tool calls with the same provider flag** you used for `get_tools`: `XpanderClient.extract_tool_calls(llm_response, llm_provider=...)`.
 
-Following these rules ensures your code works consistently across OpenAI, Claude, Gemini, Bedrock, and more. citeturn2view0
+Following these rules ensures your code works consistently across OpenAI, Claude, Gemini, Bedrock, and more.
 
 ---
 
