@@ -68,7 +68,7 @@ response = openai_client.chat.completions.create(
 agent.process_llm_response(response.model_dump(), llm_provider=LLMProvider.OPEN_AI)
 ```
 
-> **Tip:** `agent.process_llm_response(...)` is the easiest way to both *store* the assistant message **and** immediately run any tool calls it contains – perfect for serverless single‑turn workflows.
+> **Tip:** `agent.process_llm_response(...)` is the easiest way to both *store* the assistant message **and** immediately run any tool calls it contains – perfect for serverless single‑turn workflows. citeturn2view0
 
 ---
 
@@ -78,8 +78,9 @@ agent.process_llm_response(response.model_dump(), llm_provider=LLMProvider.OPEN_
 from xpander_utils.events import (
     XpanderEventListener,
     AgentExecutionResult,
-    AgentExecution,
     ExecutionStatus,
+    AgentExecution,
+    
 )
 from xpander_sdk import XpanderClient, LLMProvider
 from openai import OpenAI
@@ -115,8 +116,8 @@ def on_execution_request(execution_task: AgentExecution) -> AgentExecutionResult
 
     # (3) Return the final result back to the platform
     return AgentExecutionResult(
-        result=agent.retrieve_execution_result().result,
-        status=ExecutionStatus.SUCCEEDED,
+        result=execution_status.result,
+        is_success=True if execution_status.status == ExecutionStatus.COMPLETED else False,
     )
 
 # Block forever, listening for events via SSE
@@ -155,7 +156,7 @@ print(execution_result.status)  # e.g. "SUCCEEDED"
 print(execution_result.result)  # your task output
 ```
 
-This loop lets the LLM break the objective into sub‑steps, call tools, update memory and eventually mark the task as **finished**.
+This loop lets the LLM break the objective into sub‑steps, call tools, update memory and eventually mark the task as **finished**. citeturn2view0
 
 ---
 
@@ -199,18 +200,114 @@ while not agent.is_finished():
 print(agent.retrieve_execution_result().result)
 ```
 
-This demo showcases full multi‑step orchestration **without** writing any provider‑specific glue code.
+This demo showcases full multi‑step orchestration **without** writing any provider‑specific glue code. citeturn2view0
 
 ---
 
-## 🏆 Best Practices (Provider‑agnostic)
+### 5. Local Tools (developer‑executed)
+
+Local tools let you register **your own** functions (Python, TS, C#, …) so the LLM can *request* them. **Important:** the SDK does **not** execute local tools for you. Your code must:
+
+1. Register the tool schema with `agent.add_local_tools()`.
+2. Inspect each LLM response with `XpanderClient.extract_tool_calls(...)`.
+3. Pick out the pending local calls via `retrieve_pending_local_tool_calls(...)`.
+4. Invoke the matching Python/TS function(s).
+5. Feed a `ToolCallResult` back with `agent.memory.add_tool_call_results([...])`.
+
+---
+
+#### 5‑a. Python quick path
+
+```python
+from xpander_sdk import XpanderClient, LLMProvider, ToolCallResult
+from openai import OpenAI
+from local_tools import local_tools_declarations, local_tools_by_name
+
+client = XpanderClient(api_key=XPANDER_API_KEY)
+agent  = client.agents.get(agent_id=XPANDER_AGENT_ID)
+openai = OpenAI(api_key=OPENAI_API_KEY)
+
+# 1️⃣  Tell the agent about your local tools
+agent.add_local_tools(local_tools_declarations)
+
+# 2️⃣  Normal chat ‑ the LLM may now reference those tools
+response = openai.chat.completions.create(
+    model="gpt-4o",
+    messages=agent.messages,
+    tools=agent.get_tools(llm_provider=LLMProvider.OPEN_AI),
+    tool_choice="auto",
+    temperature=0.0,
+)
+
+# 3️⃣  Extract *all* tool calls & isolate locals
+all_calls     = XpanderClient.extract_tool_calls(response.model_dump(), llm_provider=LLMProvider.OPEN_AI)
+pending_local = XpanderClient.retrieve_pending_local_tool_calls(all_calls)
+
+# 4️⃣  Run each local call
+results = []
+for call in pending_local:
+    fn   = local_tools_by_name[call.name]
+    output_payload = fn(**call.payload)  # your function runs here
+    results.append(
+        ToolCallResult(
+            function_name=call.name,
+            tool_call_id=call.tool_call_id,
+            payload=call.payload,
+            status_code=200,
+            result=output_payload,
+            is_success=True,
+            is_retryable=False,
+        )
+    )
+
+# 5️⃣  Write the results back so the LLM can continue
+agent.memory.add_tool_call_results(results)
+```
+
+#### 5‑b. TypeScript pattern (excerpt from SDK tests)
+
+```ts
+// localTools array holds { decleration, fn }
+agent.addLocalTools(localToolsDecleration);
+
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: agent.messages,
+  tools: agent.getTools(),
+  tool_choice: agent.toolChoice,
+});
+
+const toolCalls          = XpanderClient.extractToolCalls(response);
+const pendingLocalCalls  = XpanderClient.retrievePendingLocalToolCalls(toolCalls);
+
+for (const call of pendingLocalCalls) {
+  const resultPayload = localToolsByName[call.name](...Object.values(call.payload));
+  agent.memory.addToolCallResults([
+    new ToolCallResult(
+      call.name,
+      call.toolCallId,
+      call.payload,
+      200,
+      resultPayload,
+      true,
+      false,
+    ),
+  ]);
+}
+```
+
+The LLM will then see the tool responses in its context and proceed to the next reasoning step. This mirrors the official test‑suite workflow.
+
+---
+
+## 🏆 Best Practices (Provider‑agnostic) (Provider-agnostic) (Provider‑agnostic)
 
 1. **Create a task first** – `agent.add_task()` automatically initialises the agent’s memory and system messages.
 2. **Always pass `llm_provider`** when calling `agent.get_tools()` so the SDK can return the correct schema for the target provider.
 3. **Store the raw LLM response** with `agent.add_messages(...)` (or implicitly via `agent.process_llm_response`). The SDK will convert fields as required.
 4. **Extract tool calls with the same provider flag** you used for `get_tools`: `XpanderClient.extract_tool_calls(llm_response, llm_provider=...)`.
 
-Following these rules ensures your code works consistently across OpenAI, Claude, Gemini, Bedrock, and more.
+Following these rules ensures your code works consistently across OpenAI, Claude, Gemini, Bedrock, and more. citeturn2view0
 
 ---
 
