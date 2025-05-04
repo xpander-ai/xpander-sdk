@@ -1,29 +1,49 @@
 import { ToolCallType } from '../../types';
 import { Base } from '../base';
 
-const extractParam = (bodyParams: string, paramName: string): string | null => {
-  const regex = new RegExp(`<parameter name="${paramName}">(.*?)\\b`, 'i');
-  const match = bodyParams.match(regex);
-  return match ? match[1] : null;
+/**
+ * Extract the raw string that follows a <parameter name="…"> tag.
+ * • Works with \escaped quotes around the name
+ * • Captures single words **or** full sentences (incl. new‑lines)
+ * • Stops at the next <parameter name=…> tag or end‑of‑string
+ * • Strips surrounding " or ' if present
+ */
+export const extractParam = (
+  bodyParams: string,
+  paramName: string,
+): string | null => {
+  if (!bodyParams) return null;
+
+  // Escape potential regex metacharacters in the param name
+  const safeName = paramName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  const pattern = `<parameter\\s+name=["\\\\]*${safeName}["\\\\]*>\\s*([\\s\\S]*?)\\s*(?=<parameter\\s+name=|$)`;
+
+  const match = new RegExp(pattern, 'i').exec(bodyParams);
+  if (!match) return null;
+
+  // Remove optional wrapping quotes
+  return match[1].trim().replace(/^["'](.*)["']$/, '$1');
 };
 
 export const ensureFinishStruct = (data: any) => {
-  let isSuccess = false;
-  let result = '';
+  let isSuccess = data?.payload?.bodyParams?.is_success === true;
+  let result = data?.payload?.bodyParams?.result || '';
   try {
+    if (!!data?.payload) {
+      try {
+        data.payload = JSON.parse(data.payload);
+      } catch (err) {
+        // ignore
+      }
+    }
     const isNotInStruct =
       !data?.payload ||
       !('bodyParams' in data?.payload) ||
+      typeof data.payload.bodyParams !== 'object' ||
       !('is_success' in data?.payload?.bodyParams) ||
       !('result' in data?.payload?.bodyParams);
     if (isNotInStruct) {
-      if (!!data?.payload) {
-        try {
-          data.payload = JSON.parse(data.payload);
-        } catch (err) {
-          // ignore
-        }
-      }
       result = data?.payload?.result || '';
       const hasParameters = JSON.stringify(data?.payload || {}).includes(
         '<parameter name=',
