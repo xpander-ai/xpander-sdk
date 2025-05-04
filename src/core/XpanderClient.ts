@@ -1,7 +1,7 @@
 import { Agents } from './agents/AgentsController';
 import CacheService from './CacheService';
 import { Configuration } from './Configuration';
-import { ToolCall } from './tools/ToolCall';
+import { ensureFinishStruct, ToolCall } from './tools/ToolCall';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
 import { allProviders } from '../llmProviders';
@@ -10,6 +10,7 @@ import {
   ensureToolCallPayloadStructure,
   generateToolCallId,
 } from './tools/utils';
+import { AGENT_FINISH_TOOL_ID } from '../constants/tools';
 
 /**
  * XpanderClient provides methods for configuring and interacting with xpanderAI tools,
@@ -39,16 +40,19 @@ export class XpanderClient {
       llmResponse = cachedResponse;
     }
 
-    return provider.extractToolCalls(llmResponse).map((toolCall) =>
-      ToolCall.fromObject({
+    return provider.extractToolCalls(llmResponse).map((toolCall) => {
+      if (toolCall?.payload && toolCall.name === AGENT_FINISH_TOOL_ID) {
+        ensureFinishStruct(toolCall);
+      }
+      return ToolCall.fromObject({
         ...toolCall,
         payload: ensureToolCallPayloadStructure(
           toolCall.type === ToolCallType.LOCAL,
           toolCall?.payload || {},
         ),
         toolCallId: toolCall.toolCallId || generateToolCallId(),
-      }),
-    );
+      });
+    });
   }
 
   /**

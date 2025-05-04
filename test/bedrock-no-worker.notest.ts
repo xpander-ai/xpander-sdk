@@ -10,10 +10,11 @@ dotenv.config({ path: __dirname + '/.env' });
 const xpanderAPIKey = process.env.XPANDER_AGENT_API_KEY || '';
 const xpanderAgentId = 'd86f4f03-0bb3-4fd4-ab07-dd9254fea783';
 
-const bedrockAWSRegionName = process.env.BEDROCK_AWS_REGION_NAME || '';
+const bedrockAWSRegionName = process.env.BEDROCK_AWS_REGION || '';
 const bedrockAWSAccessKeyId = process.env.BEDROCK_AWS_ACCESS_KEY_ID || '';
 const bedrockAWSSecretAccessKey =
   process.env.BEDROCK_AWS_SECRET_ACCESS_KEY || '';
+const bedrockAWSSessionToken = process.env.BEDROCK_AWS_SESSION_TOKEN || '';
 
 const localAgentControllerURL = process.env.LOCAL_AGENT_CONTROLLER || '';
 const organizationId = '729931d4-9320-46bf-a6a9-cf1a252e7cc6';
@@ -23,6 +24,7 @@ const bedrockClient = new BedrockRuntimeClient({
   credentials: {
     accessKeyId: bedrockAWSAccessKeyId,
     secretAccessKey: bedrockAWSSecretAccessKey,
+    sessionToken: bedrockAWSSessionToken,
   },
 });
 
@@ -49,7 +51,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
 
     startTime = getStartTime();
 
-    agent.addTask('send hello world email to moriel@xpander.ai');
+    agent.addTask('what can you do?');
     announceTiming(startTime, 'Invoke Agent');
 
     let shouldSkip = false;
@@ -62,7 +64,7 @@ describe('Test xpander.ai SDK (**NO** Worker Mode)', () => {
       agent.memory.llmProvider = LLMProvider.AMAZON_BEDROCK;
 
       const command = new ConverseCommand({
-        modelId: 'anthropic.claude-3-5-sonnet-20240620-v1:0',
+        modelId: 'us.anthropic.claude-3-7-sonnet-20250219-v1:0',
         messages: agent.messages,
         inferenceConfig: { temperature: 0.0 },
         system: agent.memory.systemMessage,

@@ -1,6 +1,54 @@
 import { ToolCallType } from '../../types';
 import { Base } from '../base';
 
+const extractParam = (bodyParams: string, paramName: string): string | null => {
+  const regex = new RegExp(`<parameter name="${paramName}">(.*?)\\b`, 'i');
+  const match = bodyParams.match(regex);
+  return match ? match[1] : null;
+};
+
+export const ensureFinishStruct = (data: any) => {
+  let isSuccess = false;
+  let result = '';
+  try {
+    const isNotInStruct =
+      !data?.payload ||
+      !('bodyParams' in data?.payload) ||
+      !('is_success' in data?.payload?.bodyParams) ||
+      !('result' in data?.payload?.bodyParams);
+    if (isNotInStruct) {
+      if (!!data?.payload) {
+        try {
+          data.payload = JSON.parse(data.payload);
+        } catch (err) {
+          // ignore
+        }
+      }
+      result = data?.payload?.result || '';
+      const hasParameters = JSON.stringify(data?.payload || {}).includes(
+        '<parameter name=',
+      );
+      if (hasParameters) {
+        isSuccess =
+          extractParam(data.payload.bodyParams, 'is_success') === 'true' ||
+          false;
+        if (!result) {
+          result = extractParam(data.payload.bodyParams, 'result') || '';
+        }
+      }
+    }
+  } catch (err: any) {
+    isSuccess = false;
+    result = `Failed to parse xpfinish result - ${err.toString()}`;
+  } finally {
+    data.payload = {
+      bodyParams: { is_success: isSuccess, result },
+      queryParams: {},
+      pathParams: {},
+    };
+  }
+};
+
 /**
  * Represents a tool call with its metadata and payload.
  *
