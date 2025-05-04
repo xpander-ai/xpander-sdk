@@ -1384,13 +1384,14 @@ export class Agent extends Base {
       pathParams: {},
     };
 
-    const message: any = {
+    const message: IMemoryMessage = {
       role: 'assistant',
-      tool_calls: [
+      content: '',
+      toolCalls: [
         {
           name: AGENT_FINISH_TOOL_ID,
           payload: JSON.stringify(payload),
-          tool_call_id: toolCallId,
+          toolCallId: toolCallId,
         },
       ],
     };
