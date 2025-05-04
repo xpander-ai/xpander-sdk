@@ -1376,6 +1376,7 @@ export class Agent extends Base {
    * It uses `ToolCallType.XPANDER` to mark the tool call type for xpander.ai execution tracking.
    */
   public stopExecution(isSuccess: boolean, result: string = '') {
+    this.shouldStop = true;
     const toolCallId = generateToolCallId();
     const payload = {
       bodyParams: { result, is_success: isSuccess },

@@ -194,6 +194,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
 | <code><a href="#xpander-sdk.Agent.selectLLMProvider">selectLLMProvider</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.stop">stop</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.stopExecution">stopExecution</a></code> | Stops execution and reports the final result to the controller via a tool call. |
 | <code><a href="#xpander-sdk.Agent.sync">sync</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.update">update</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.updateUserDetails">updateUserDetails</a></code> | Updates the user details for the agent. |
@@ -623,6 +624,30 @@ public selectLLMProvider(llmProvider: LLMProvider): void
 ```typescript
 public stop(): void
 ```
+
+##### `stopExecution` <a name="stopExecution" id="xpander-sdk.Agent.stopExecution"></a>
+
+```typescript
+public stopExecution(isSuccess: boolean, result?: string): void
+```
+
+Stops execution and reports the final result to the controller via a tool call.
+
+###### `isSuccess`<sup>Required</sup> <a name="isSuccess" id="xpander-sdk.Agent.stopExecution.parameter.isSuccess"></a>
+
+- *Type:* boolean
+
+Indicates whether the execution was successful.
+
+---
+
+###### `result`<sup>Optional</sup> <a name="result" id="xpander-sdk.Agent.stopExecution.parameter.result"></a>
+
+- *Type:* string
+
+Optional result string to return upon stopping.
+
+---
 
 ##### `sync` <a name="sync" id="xpander-sdk.Agent.sync"></a>
 
