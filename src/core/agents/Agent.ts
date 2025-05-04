@@ -1361,4 +1361,48 @@ export class Agent extends Base {
       console.error(`failed to report execution metrics `);
     }
   }
+
+  /**
+   * Stops execution and reports the final result to the controller via a tool call.
+   *
+   * @param {boolean} isSuccess - Indicates whether the execution was successful.
+   * @param {string} [result=''] - Optional result string to return upon stopping.
+   *
+   * @returns {void}
+   *
+   * @remarks
+   * This method generates a tool call payload with execution result and uses `AGENT_FINISH_TOOL_ID`
+   * to notify the controller via both `addMessages` and `runTool`.
+   * It uses `ToolCallType.XPANDER` to mark the tool call type for xpander.ai execution tracking.
+   */
+  public stopExecution(isSuccess: boolean, result: string = '') {
+    const toolCallId = generateToolCallId();
+    const payload = {
+      bodyParams: { result, is_success: isSuccess },
+      queryParams: {},
+      pathParams: {},
+    };
+
+    const message: any = {
+      role: 'assistant',
+      tool_calls: [
+        {
+          name: AGENT_FINISH_TOOL_ID,
+          payload: JSON.stringify(payload),
+          tool_call_id: toolCallId,
+        },
+      ],
+    };
+
+    this.addMessages([message]);
+
+    this.runTool(
+      ToolCall.fromObject({
+        name: AGENT_FINISH_TOOL_ID,
+        type: ToolCallType.XPANDER,
+        toolCallId,
+        payload,
+      }),
+    );
+  }
 }
