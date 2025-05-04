@@ -1,7 +1,6 @@
 import request from 'sync-request';
 import { Agent } from '../agents';
 import { Base } from '../base';
-import { Execution } from '../executions';
 import { convertKeysToSnakeCase } from '../utils';
 
 export class MetricsBase extends Base {
@@ -11,16 +10,7 @@ export class MetricsBase extends Base {
 
   public report(agent: Agent, reportType: 'llm' | 'execution') {
     if (!!agent?.execution) {
-      let executionId = agent.execution.id;
       let agentId = agent.id;
-      const hasParentExecution = !!agent?.execution?.parentExecution;
-
-      // get parent execution and extract agent id
-      if (hasParentExecution) {
-        executionId = agent.execution.parentExecution;
-        const parentExecution = Execution.fetch(agent, executionId);
-        agentId = parentExecution.agentId;
-      }
 
       const response = request(
         'POST',
