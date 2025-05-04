@@ -149,8 +149,23 @@ export class Agent extends Base {
     this.llmProvider = llmProvider;
   }
 
+  /**
+   * Extracts tool calls from an LLM response based on the specified LLM provider.
+   * @param llmResponse - The LLM response to analyze for tool calls.
+   * @returns An array of tool calls extracted from the LLM response.
+   * @throws Error if the specified LLM provider is not supported.
+   */
   public extractToolCalls(llmResponse: any) {
     return XpanderClient.extractToolCalls(llmResponse, this.llmProvider);
+  }
+
+  /**
+   * Filters and retrieves local tool calls from a given list of tool calls.
+   * @param toolCalls - The list of tool calls to filter.
+   * @returns An array of tool calls that are of type LOCAL.
+   */
+  public retrievePendingLocalToolCalls(toolCalls: ToolCall[]): ToolCall[] {
+    return XpanderClient.retrievePendingLocalToolCalls(toolCalls);
   }
 
   /** Loads the agent data from its source node type. */

@@ -177,7 +177,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.attachOperations">attachOperations</a></code> | Attaches a list of agentic operations to the agent. |
 | <code><a href="#xpander-sdk.Agent.disableAgentEndTool">disableAgentEndTool</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.enableAgentEndTool">enableAgentEndTool</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.extractToolCalls">extractToolCalls</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.extractToolCalls">extractToolCalls</a></code> | Extracts tool calls from an LLM response based on the specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.getTools">getTools</a></code> | Retrieves tools compatible with a specified LLM provider. |
 | <code><a href="#xpander-sdk.Agent.initTask">initTask</a></code> | Initializes the task execution for the agent. |
 | <code><a href="#xpander-sdk.Agent.isFinished">isFinished</a></code> | *No description.* |
@@ -188,6 +188,7 @@ Knowledge bases associated with the agent.
 | <code><a href="#xpander-sdk.Agent.retrieveAgenticOperations">retrieveAgenticOperations</a></code> | Retrieves a list of operations for a given agentic interface. |
 | <code><a href="#xpander-sdk.Agent.retrieveExecutionResult">retrieveExecutionResult</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.retrieveNodeFromGraph">retrieveNodeFromGraph</a></code> | Retrieves a node from the graph by its ID. |
+| <code><a href="#xpander-sdk.Agent.retrievePendingLocalToolCalls">retrievePendingLocalToolCalls</a></code> | Filters and retrieves local tool calls from a given list of tool calls. |
 | <code><a href="#xpander-sdk.Agent.retrieveThreadsList">retrieveThreadsList</a></code> | Retrieves the list of memory threads for the current user. |
 | <code><a href="#xpander-sdk.Agent.runTool">runTool</a></code> | Executes a single tool call and returns the result. |
 | <code><a href="#xpander-sdk.Agent.runTools">runTools</a></code> | Executes multiple tool calls sequentially and returns their results. |
@@ -337,9 +338,13 @@ public enableAgentEndTool(): void
 public extractToolCalls(llmResponse: any): ToolCall[]
 ```
 
+Extracts tool calls from an LLM response based on the specified LLM provider.
+
 ###### `llmResponse`<sup>Required</sup> <a name="llmResponse" id="xpander-sdk.Agent.extractToolCalls.parameter.llmResponse"></a>
 
 - *Type:* any
+
+The LLM response to analyze for tool calls.
 
 ---
 
@@ -520,6 +525,22 @@ Retrieves a node from the graph by its ID.
 - *Type:* string
 
 The ID of the graph node to retrieve.
+
+---
+
+##### `retrievePendingLocalToolCalls` <a name="retrievePendingLocalToolCalls" id="xpander-sdk.Agent.retrievePendingLocalToolCalls"></a>
+
+```typescript
+public retrievePendingLocalToolCalls(toolCalls: ToolCall[]): ToolCall[]
+```
+
+Filters and retrieves local tool calls from a given list of tool calls.
+
+###### `toolCalls`<sup>Required</sup> <a name="toolCalls" id="xpander-sdk.Agent.retrievePendingLocalToolCalls.parameter.toolCalls"></a>
+
+- *Type:* <a href="#xpander-sdk.ToolCall">ToolCall</a>[]
+
+The list of tool calls to filter.
 
 ---
 
