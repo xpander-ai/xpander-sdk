@@ -4,7 +4,7 @@
 
 With first‑class support for leading LLM providers such as **OpenAI**, **Amazon Bedrock**, **Google Gemini**, **Anthropic Claude**, and **NVIDIA NIM**, the **Xpander SDK** seamlessly integrates into your existing systems.
 
-![ai-agents-with-xpander](static/images/screenshots/2024-11-19-21-45-27.png)
+![ai-agents-with-xpander](https://assets.xpanderai.io/xpander-sdk-readme.png)
 
 ---
 
