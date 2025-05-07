@@ -765,8 +765,10 @@ export class Agent extends Base {
   }
 
   private get isAwaitingHITL() {
-    return this?.messages?.[this?.messages?.length - 1]?.content?.includes(
-      'waiting for a human approval',
+    return (
+      this?.messages?.[this?.messages?.length - 1]?.content?.includes(
+        'waiting for a human approval',
+      ) && this?.messages?.[this?.messages?.length - 1]?.length < 1000
     );
   }
 
