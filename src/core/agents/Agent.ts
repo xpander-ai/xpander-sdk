@@ -733,7 +733,8 @@ export class Agent extends Base {
       );
     } else if (
       !!this?.executionMemory &&
-      this.executionMemory.messages.length === 0
+      (this.executionMemory.messages.length === 0 ||
+        !this.executionMemory.messages.some((msg) => msg.role === 'system'))
     ) {
       this.executionMemory.initInstructions(this.instructions);
     }
