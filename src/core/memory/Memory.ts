@@ -368,8 +368,12 @@ Agent's graph: ${textualGraph}
     files: string[] = [],
   ): void {
     this.llmProvider = llmProvider;
-    if (this.messages.length === 0) {
-      this.initInstructions(instructions);
+    const hasSystemMessage = this.messages.some((msg) => msg.role === 'system');
+    const hasUserMessage = this.messages.some((msg) => msg.role === 'user');
+    if (this.messages.length === 0 || !hasSystemMessage || !hasUserMessage) {
+      if (!hasSystemMessage) {
+        this.initInstructions(instructions);
+      }
 
       const initialMessages = [input];
 
@@ -387,7 +391,9 @@ Agent's graph: ${textualGraph}
         });
       }
 
-      this.addMessages(initialMessages);
+      if (!hasUserMessage) {
+        this.addMessages(initialMessages);
+      }
       this.addKnowledgeBase();
     }
   }
