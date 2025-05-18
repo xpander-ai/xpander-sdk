@@ -22,6 +22,11 @@ export enum AgentDelegationType {
   SEQUENCE = 'sequence',
 }
 
+export enum AgentDelegationEndStrategy {
+  RETURN_TO_START = 'return-to-start',
+  FINISH_WITH_LAST = 'finish-with-last',
+}
+
 export interface IAgentGraphItemAdvancedFilteringOption {
   returnables?: string[];
   searchables?: string[];

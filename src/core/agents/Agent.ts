@@ -19,6 +19,7 @@ import {
   AgentGraphItemSubType,
   AgentDelegationType,
   AgentGraphItemType,
+  AgentDelegationEndStrategy,
 } from '../../types/agents';
 import { IMemoryMessage, MemoryStrategy, MemoryType } from '../../types/memory';
 import { Base } from '../base';
@@ -64,6 +65,7 @@ export class Agent extends Base {
       '',
       AgentStatus.ACTIVE,
       AgentDelegationType.ROUTER,
+      AgentDelegationEndStrategy.RETURN_TO_START,
       MemoryType.SHORT_TERM,
       MemoryStrategy.FULL,
       { role: '', general: '', goal: '' },
@@ -124,6 +126,7 @@ export class Agent extends Base {
     public organizationId: string,
     public status: AgentStatus,
     public delegationType: AgentDelegationType,
+    public delegationEndStrategy: AgentDelegationEndStrategy,
     public memoryType: MemoryType,
     public memoryStrategy: MemoryStrategy,
     public instructions: IAgentInstructions,
@@ -239,6 +242,7 @@ export class Agent extends Base {
         agent.organizationId,
         agent.status,
         agent.delegationType,
+        agent.delegationEndStrategy,
         agent.memoryType,
         agent.memoryStrategy,
         agent.instructions,
@@ -900,8 +904,28 @@ export class Agent extends Base {
         console.debug(
           `switching from execution ${this.execution.id} to parent execution ${this.execution.parentExecution}`,
         );
+        const agentId = this.execution.agentId;
         this.execution = Execution.fetch(this, this.execution.parentExecution);
         shouldStop = false;
+
+        if (!!this.execution?.agentId) {
+          // handle finish with last (sequence)
+          const parentAgent = Agent.getById(
+            this.configuration,
+            this.execution?.agentId,
+          );
+          if (
+            !!parentAgent &&
+            parentAgent?.delegationType === AgentDelegationType.SEQUENCE &&
+            parentAgent?.delegationEndStrategy ===
+              AgentDelegationEndStrategy.FINISH_WITH_LAST
+          ) {
+            // this is last? stop
+            if (parentAgent.graph.lastNodeInSequence?.itemId === agentId) {
+              return true;
+            }
+          }
+        }
       }
     }
 

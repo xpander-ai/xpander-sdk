@@ -85,6 +85,22 @@ export class Graph extends Base {
   }
 
   /**
+   * Gets the last node in sequence.
+   *
+   * @returns {GraphItem | undefined} The last graph item or undefined if the graph is empty.
+   */
+  public get lastNodeInSequence(): GraphItem | undefined {
+    if (!this.items || this.items.length === 0) {
+      return;
+    }
+    return this.items.find(
+      (gi) =>
+        (!gi.targets || gi.targets.length === 0) &&
+        this.items.some((item) => item.targets.includes(gi.id)),
+    );
+  }
+
+  /**
    * Adds a new node to the graph.
    *
    * @param {Agent | GraphItem} node - The node to add, which can be an agent or a graph item.
