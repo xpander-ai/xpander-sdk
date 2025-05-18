@@ -15,7 +15,7 @@ This class facilitates loading agents, handling tool executions, and managing pr
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, delegationType: AgentDelegationType, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[], oas?: any)
+new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, delegationType: AgentDelegationType, delegationEndStrategy: AgentDelegationEndStrategy, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[], oas?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -26,6 +26,7 @@ new Agent(configuration: Configuration, id: string, name: string, organizationId
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | - Organization ID to which the agent belongs. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | - Current status of the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.delegationType">delegationType</a></code> | <code><a href="#xpander-sdk.AgentDelegationType">AgentDelegationType</a></code> | - The agent's delegation type (Router/Sequence). |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.delegationEndStrategy">delegationEndStrategy</a></code> | <code><a href="#xpander-sdk.AgentDelegationEndStrategy">AgentDelegationEndStrategy</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | - Type of memory the agent utilizes. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | - Strategy for memory management. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
@@ -84,6 +85,12 @@ Current status of the agent.
 - *Type:* <a href="#xpander-sdk.AgentDelegationType">AgentDelegationType</a>
 
 The agent's delegation type (Router/Sequence).
+
+---
+
+##### `delegationEndStrategy`<sup>Required</sup> <a name="delegationEndStrategy" id="xpander-sdk.Agent.Initializer.parameter.delegationEndStrategy"></a>
+
+- *Type:* <a href="#xpander-sdk.AgentDelegationEndStrategy">AgentDelegationEndStrategy</a>
 
 ---
 
@@ -734,6 +741,7 @@ Agent.getById(configuration: Configuration, agentId: string)
 | <code><a href="#xpander-sdk.Agent.property.vanillaKnowledgeBases">vanillaKnowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | Retrieves the vanilla knowledge bases of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | - Scope of the agent's access permissions. |
 | <code><a href="#xpander-sdk.Agent.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for the agent. |
+| <code><a href="#xpander-sdk.Agent.property.delegationEndStrategy">delegationEndStrategy</a></code> | <code><a href="#xpander-sdk.AgentDelegationEndStrategy">AgentDelegationEndStrategy</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.delegationType">delegationType</a></code> | <code><a href="#xpander-sdk.AgentDelegationType">AgentDelegationType</a></code> | - The agent's delegation type (Router/Sequence). |
 | <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.Graph">Graph</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | - Unique identifier for the agent. |
@@ -872,6 +880,16 @@ public readonly configuration: Configuration;
 - *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
 
 Configuration settings for the agent.
+
+---
+
+##### `delegationEndStrategy`<sup>Required</sup> <a name="delegationEndStrategy" id="xpander-sdk.Agent.property.delegationEndStrategy"></a>
+
+```typescript
+public readonly delegationEndStrategy: AgentDelegationEndStrategy;
+```
+
+- *Type:* <a href="#xpander-sdk.AgentDelegationEndStrategy">AgentDelegationEndStrategy</a>
 
 ---
 
@@ -2846,6 +2864,7 @@ Graph.fromObject(data: any)
 | <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | Gets the list of nodes in the graph. |
 | <code><a href="#xpander-sdk.Graph.property.textual">textual</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | Gets the last node in the graph. |
+| <code><a href="#xpander-sdk.Graph.property.lastNodeInSequence">lastNodeInSequence</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | Gets the last node in sequence. |
 | <code><a href="#xpander-sdk.Graph.property.rootNode">rootNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | *No description.* |
 
 ---
@@ -2893,6 +2912,18 @@ public readonly lastNode: GraphItem;
 - *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>
 
 Gets the last node in the graph.
+
+---
+
+##### `lastNodeInSequence`<sup>Optional</sup> <a name="lastNodeInSequence" id="xpander-sdk.Graph.property.lastNodeInSequence"></a>
+
+```typescript
+public readonly lastNodeInSequence: GraphItem;
+```
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>
+
+Gets the last node in sequence.
 
 ---
 
@@ -6725,6 +6756,27 @@ List of required properties within this parameter, if any.
 
 
 ##### `ORGANIZATIONAL` <a name="ORGANIZATIONAL" id="xpander-sdk.AgentAccessScope.ORGANIZATIONAL"></a>
+
+---
+
+
+### AgentDelegationEndStrategy <a name="AgentDelegationEndStrategy" id="xpander-sdk.AgentDelegationEndStrategy"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentDelegationEndStrategy.RETURN_TO_START">RETURN_TO_START</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentDelegationEndStrategy.FINISH_WITH_LAST">FINISH_WITH_LAST</a></code> | *No description.* |
+
+---
+
+##### `RETURN_TO_START` <a name="RETURN_TO_START" id="xpander-sdk.AgentDelegationEndStrategy.RETURN_TO_START"></a>
+
+---
+
+
+##### `FINISH_WITH_LAST` <a name="FINISH_WITH_LAST" id="xpander-sdk.AgentDelegationEndStrategy.FINISH_WITH_LAST"></a>
 
 ---
 
