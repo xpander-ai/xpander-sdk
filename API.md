@@ -6863,6 +6863,8 @@ List of required properties within this parameter, if any.
 | <code><a href="#xpander-sdk.AgentGraphItemType.AGENT">AGENT</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.AgentGraphItemType.TOOL">TOOL</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.AgentGraphItemType.HUMAN_IN_THE_LOOP">HUMAN_IN_THE_LOOP</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemType.STORAGE">STORAGE</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemType.CODING_AGENT">CODING_AGENT</a></code> | *No description.* |
 
 ---
 
@@ -6882,6 +6884,16 @@ List of required properties within this parameter, if any.
 
 
 ##### `HUMAN_IN_THE_LOOP` <a name="HUMAN_IN_THE_LOOP" id="xpander-sdk.AgentGraphItemType.HUMAN_IN_THE_LOOP"></a>
+
+---
+
+
+##### `STORAGE` <a name="STORAGE" id="xpander-sdk.AgentGraphItemType.STORAGE"></a>
+
+---
+
+
+##### `CODING_AGENT` <a name="CODING_AGENT" id="xpander-sdk.AgentGraphItemType.CODING_AGENT"></a>
 
 ---
 

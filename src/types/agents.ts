@@ -37,6 +37,8 @@ export enum AgentGraphItemType {
   AGENT = 'agent',
   TOOL = 'tool',
   HUMAN_IN_THE_LOOP = 'human_in_the_loop',
+  STORAGE = 'storage',
+  CODING_AGENT = 'coding_agent',
 }
 
 export enum AgentGraphItemSubType {
