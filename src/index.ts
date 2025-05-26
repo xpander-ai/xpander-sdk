@@ -1,5 +1,4 @@
 // src/index.ts
-process.env.JSII_SILENCE_WARNING_DEPRECATED_NODE_VERSION = '1';
 export { XpanderClient } from './core/XpanderClient';
 export { LLMProvider } from './constants/llmProvider';
 export * from './types';
