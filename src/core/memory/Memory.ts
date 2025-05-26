@@ -56,6 +56,7 @@ export class Memory extends Base {
       createdThread.messages,
       createdThread.userDetails,
       agent.memoryType,
+      createdThread.metadata,
     );
   }
 
@@ -106,6 +107,7 @@ export class Memory extends Base {
       updatedThread.messages,
       updatedThread.userDetails,
       agent.memoryType,
+      updatedThread.metadata,
     );
   }
 
@@ -139,6 +141,7 @@ export class Memory extends Base {
       fetchedThread.messages,
       fetchedThread.userDetails,
       agent.memoryType,
+      fetchedThread.metadata,
     );
   }
 
@@ -237,6 +240,7 @@ export class Memory extends Base {
     public messages: IMemoryMessage[],
     public userDetails: string,
     public memoryType: MemoryType,
+    public metadata: Record<string, any> = {},
   ) {
     super();
   }

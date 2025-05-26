@@ -3710,7 +3710,7 @@ Represents a memory thread in xpanderAI, handling storage, retrieval, and proces
 ```typescript
 import { Memory } from 'xpander-sdk'
 
-new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: string, memoryType: MemoryType)
+new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: string, memoryType: MemoryType, metadata?: {[ key: string ]: any})
 ```
 
 | **Name** | **Type** | **Description** |
@@ -3720,6 +3720,7 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 | <code><a href="#xpander-sdk.Memory.Initializer.parameter.messages">messages</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.Initializer.parameter.userDetails">userDetails</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.Initializer.parameter.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.Initializer.parameter.metadata">metadata</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
 
 ---
 
@@ -3750,6 +3751,12 @@ new Memory(agent: Agent, id: string, messages: IMemoryMessage[], userDetails: st
 ##### `memoryType`<sup>Required</sup> <a name="memoryType" id="xpander-sdk.Memory.Initializer.parameter.memoryType"></a>
 
 - *Type:* <a href="#xpander-sdk.MemoryType">MemoryType</a>
+
+---
+
+##### `metadata`<sup>Optional</sup> <a name="metadata" id="xpander-sdk.Memory.Initializer.parameter.metadata"></a>
+
+- *Type:* {[ key: string ]: any}
 
 ---
 
@@ -4138,6 +4145,7 @@ Optional object containing the fields and values to update in the memory thread.
 | <code><a href="#xpander-sdk.Memory.property.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | The LLM provider to be used for message processing. |
 | <code><a href="#xpander-sdk.Memory.property.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.property.messages">messages</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.Memory.property.metadata">metadata</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
 | <code><a href="#xpander-sdk.Memory.property.userDetails">userDetails</a></code> | <code>string</code> | *No description.* |
 
 ---
@@ -4191,6 +4199,16 @@ public readonly messages: IMemoryMessage[];
 ```
 
 - *Type:* <a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a>[]
+
+---
+
+##### `metadata`<sup>Required</sup> <a name="metadata" id="xpander-sdk.Memory.property.metadata"></a>
+
+```typescript
+public readonly metadata: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
 
 ---
 
