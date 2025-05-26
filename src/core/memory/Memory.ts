@@ -60,6 +60,56 @@ export class Memory extends Base {
   }
 
   /**
+   * Updates an existing memory thread for a specified agent.
+   *
+   * Sends a PATCH request to the agent's memory endpoint to update an existing thread
+   * with the provided `delta` object. The updated thread is returned as a new
+   * instance of the `Memory` class.
+   *
+   * @param agent - The agent for which the memory thread should be updated. Must contain
+   *                valid configuration including `url` and `apiKey`.
+   * @param threadId - The unique identifier of the memory thread to update.
+   * @param delta - Optional object containing the fields and values to update in the memory thread.
+   *
+   * @returns A new instance of the `Memory` class representing the updated thread.
+   *
+   * @throws Error - Throws if the server response status code is not successful (non-2xx).
+   *
+   * @example
+   * const memory = Memory.update(agent, 'thread-id-123', { status: 'active' });
+   */
+  public static update(
+    agent: Agent,
+    threadId: string,
+    delta?: Record<string, any>,
+  ): Memory {
+    const response = request(
+      'PATCH',
+      `${agent.configuration.url}/memory/${threadId}`,
+      {
+        json: delta,
+        headers: { 'x-api-key': agent.configuration.apiKey },
+      },
+    );
+
+    if (!response.statusCode.toString().startsWith('2')) {
+      throw new Error(response.body.toString());
+    }
+
+    const updatedThread = convertKeysToCamelCase(
+      JSON.parse(response.getBody('utf8')),
+    );
+
+    return new Memory(
+      agent,
+      updatedThread.id,
+      updatedThread.messages,
+      updatedThread.userDetails,
+      agent.memoryType,
+    );
+  }
+
+  /**
    * Fetches an existing memory thread by its ID.
    *
    * @param agent - The agent associated with the memory thread.

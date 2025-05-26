@@ -3927,6 +3927,7 @@ Can be in various formats.
 | <code><a href="#xpander-sdk.Memory.fetch">fetch</a></code> | Fetches an existing memory thread by its ID. |
 | <code><a href="#xpander-sdk.Memory.fetchUserThreads">fetchUserThreads</a></code> | Fetches the memory threads associated with a given agent. |
 | <code><a href="#xpander-sdk.Memory.renameThreadById">renameThreadById</a></code> | Renames a memory thread by its ID. |
+| <code><a href="#xpander-sdk.Memory.update">update</a></code> | Updates an existing memory thread for a specified agent. |
 
 ---
 
@@ -4077,6 +4078,54 @@ The ID of the thread to rename.
 - *Type:* string
 
 The new name for the thread.
+
+---
+
+##### `update` <a name="update" id="xpander-sdk.Memory.update"></a>
+
+```typescript
+import { Memory } from 'xpander-sdk'
+
+Memory.update(agent: Agent, threadId: string, delta?: {[ key: string ]: any})
+```
+
+Updates an existing memory thread for a specified agent.
+
+Sends a PATCH request to the agent's memory endpoint to update an existing thread
+with the provided `delta` object. The updated thread is returned as a new
+instance of the `Memory` class.
+
+*Example*
+
+```typescript
+const memory = Memory.update(agent, 'thread-id-123', { status: 'active' });
+```
+
+
+###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Memory.update.parameter.agent"></a>
+
+- *Type:* <a href="#xpander-sdk.Agent">Agent</a>
+
+The agent for which the memory thread should be updated.
+
+Must contain
+  valid configuration including `url` and `apiKey`.
+
+---
+
+###### `threadId`<sup>Required</sup> <a name="threadId" id="xpander-sdk.Memory.update.parameter.threadId"></a>
+
+- *Type:* string
+
+The unique identifier of the memory thread to update.
+
+---
+
+###### `delta`<sup>Optional</sup> <a name="delta" id="xpander-sdk.Memory.update.parameter.delta"></a>
+
+- *Type:* {[ key: string ]: any}
+
+Optional object containing the fields and values to update in the memory thread.
 
 ---
 
