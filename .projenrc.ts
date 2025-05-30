@@ -32,7 +32,7 @@ const project = new cdk.JsiiProject({
   dependabot: true,
   deps: [] /* Runtime dependencies of this module. */,
   devDeps: [
-    'openai',
+    'openai@latest',
     '@langchain/openai',
     'dotenv',
     '@aws-sdk/client-bedrock-runtime',
@@ -40,6 +40,7 @@ const project = new cdk.JsiiProject({
   bundledDeps: ['sync-request'],
   jestOptions: {
     jestConfig: {
+      injectGlobals: true,
       detectOpenHandles: true,
     },
   },

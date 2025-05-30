@@ -1,4 +1,3 @@
-import 'openai/shims/node';
 import dotenv from 'dotenv';
 import { AgentGraphItemType, XpanderClient } from '../src';
 import { GraphItem } from '../src/core/graphs';

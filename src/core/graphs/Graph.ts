@@ -100,6 +100,10 @@ export class Graph extends Base {
     );
   }
 
+  public get mcpNodes(): GraphItem[] {
+    return this.items.filter((gi) => gi.type === AgentGraphItemType.MCP);
+  }
+
   /**
    * Adds a new node to the graph.
    *

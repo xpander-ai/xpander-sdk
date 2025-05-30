@@ -32,6 +32,13 @@ export interface IAgentGraphItemAdvancedFilteringOption {
   searchables?: string[];
 }
 
+export interface IAgentGraphItemMCPSettings {
+  name: string;
+  url: string;
+  apiKey?: string;
+  allowedTools?: string[];
+}
+
 export enum AgentGraphItemType {
   SOURCE_NODE = 'source_node',
   AGENT = 'agent',
@@ -39,6 +46,7 @@ export enum AgentGraphItemType {
   HUMAN_IN_THE_LOOP = 'human_in_the_loop',
   STORAGE = 'storage',
   CODING_AGENT = 'coding_agent',
+  MCP = 'mcp',
 }
 
 export enum AgentGraphItemSubType {
@@ -63,6 +71,7 @@ export interface IAgentGraphItemSettings {
   description?: string;
   schemas?: IAgentGraphItemSchema;
   advancedFilteringOptions?: IAgentGraphItemAdvancedFilteringOption[];
+  mcpSettings?: IAgentGraphItemMCPSettings;
 }
 
 /**

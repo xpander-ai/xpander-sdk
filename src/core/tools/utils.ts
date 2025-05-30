@@ -8,11 +8,14 @@ import {
   SimplifiedSchemaMatchResult,
   ToolCallType,
 } from '../../types';
-import { IAgentGraphItemSchema } from '../../types/agents';
+import {
+  IAgentGraphItemMCPSettings,
+  IAgentGraphItemSchema,
+} from '../../types/agents';
 import { Configuration } from '../Configuration';
 import { GraphItem } from '../graphs';
 import { ToolCall, ToolCallResult } from './ToolCall';
-import { toCamelCase } from '../utils';
+import { convertKeysToCamelCase, toCamelCase } from '../utils';
 
 /**
  * Creates a tool representation for xpanderAI based on tool instructions,
@@ -655,4 +658,39 @@ export const generateToolCallId = (): string => {
   }
 
   return prefix + randomString;
+};
+
+export const getMCPServersTools = (graphItems: GraphItem[]): any[] => {
+  const tools: any[] = [];
+  // add attached mcp servers as tools
+  for (const gi of graphItems) {
+    if (!gi?.settings?.mcp_settings) continue;
+    const mcpSettings: IAgentGraphItemMCPSettings = convertKeysToCamelCase(
+      gi.settings.mcp_settings,
+    );
+
+    // build tool definition
+    const tool: any = {
+      type: 'mcp',
+      server_label: mcpSettings.name,
+      server_url: mcpSettings.url,
+      require_approval: 'never',
+    };
+
+    // in case of tools whitelisting
+    if (mcpSettings.allowedTools) {
+      tool.allowed_tools = mcpSettings.allowedTools;
+    }
+
+    // authorization
+    if (mcpSettings.apiKey) {
+      tool.headers = {
+        Authorization: `Bearer ${mcpSettings.apiKey}`,
+      };
+    }
+
+    tools.push(tool);
+  }
+
+  return tools;
 };

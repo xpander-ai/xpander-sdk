@@ -90,6 +90,7 @@
     },
     {
       "name": "openai",
+      "version": "latest",
       "type": "build"
     },
     {

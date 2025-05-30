@@ -460,6 +460,11 @@ export class Agent extends Base {
     return this.localTools.length !== 0;
   }
 
+  /** Checks if the agent has mcp servers attached. */
+  public get hasMCPServers(): boolean {
+    return this.graph.mcpNodes.length !== 0;
+  }
+
   private toolCallActionCounterKey() {
     return `executions_api_call_counter_${this.execution?.parentExecution || this?.execution?.id}`;
   }
