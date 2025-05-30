@@ -13,6 +13,4 @@ export class OpenAI extends BaseOpenAISDKHandler {
   static shouldHandle(llmProvider: LLMProvider): boolean {
     return llmProvider === LLMProvider.OPEN_AI;
   }
-
-  mcpSupported = true;
 }
