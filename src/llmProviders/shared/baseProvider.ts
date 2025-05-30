@@ -6,6 +6,7 @@ import {
   createTool,
   getSubAgentNameFromOAS,
   modifyPropertiesByRemoteSettings,
+  getMCPServersTools,
 } from '../../core/tools';
 import { AgentDelegationType, IToolInstructions } from '../../types';
 
@@ -38,6 +39,7 @@ export class BaseLLMProvider {
 
   /** Maps original tool names to modified versions, if needed. */
   public originalToolNamesReMapping: Record<string, string> = {};
+  public mcpSupported: boolean = false;
 
   constructor(public agent: Agent) {}
   /**
@@ -53,14 +55,12 @@ export class BaseLLMProvider {
 
     // Add local tools
     if (this.agent.hasLocalTools) {
-      for (const localTool of this.agent.localTools) {
-        toolset.push(localTool);
-      }
+      toolset.push(...this.agent.localTools);
     }
 
     toolset.push(...agentTools.map(createTool));
 
-    if (toolset.length === 0) {
+    if (toolset.length === 0 && !this.agent.hasMCPServers) {
       throw new Error(`No tools found for agent ${this.agent.id}`);
     }
 
@@ -142,7 +142,13 @@ export class BaseLLMProvider {
       }
     }
 
-    return this.postProcessTools(toolset);
+    // add mcp servers
+    const mcpServers = [];
+    if (this.agent.hasMCPServers && this.mcpSupported) {
+      mcpServers.push(...getMCPServersTools(this.agent.graph.mcpNodes));
+    }
+
+    return [...this.postProcessTools(toolset), ...mcpServers];
   }
 
   /**

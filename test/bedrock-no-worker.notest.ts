@@ -1,4 +1,3 @@
-import 'openai/shims/node';
 import {
   BedrockRuntimeClient,
   ConverseCommand,

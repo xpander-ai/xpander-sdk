@@ -56,7 +56,7 @@
     "jsii-docgen": "^10.4.17",
     "jsii-pacmak": "^1.101.0",
     "jsii-rosetta": "~5.7.0",
-    "openai": "^4.55.4",
+    "openai": "latest",
     "prettier": "^3.3.2",
     "projen": "^0.82.8",
     "standard-version": "^9",
@@ -81,6 +81,7 @@
   "version": "0.0.0",
   "jest": {
     "coverageProvider": "v8",
+    "injectGlobals": true,
     "detectOpenHandles": true,
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",

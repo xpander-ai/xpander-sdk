@@ -1,4 +1,3 @@
-import 'openai/shims/node';
 import dotenv from 'dotenv';
 import { OpenAI } from 'openai'; // Assuming OpenAI is an external library installed via npm
 import { IMemoryMessage, XpanderClient } from '../src';

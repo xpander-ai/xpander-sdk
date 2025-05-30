@@ -1,4 +1,3 @@
-import 'openai/shims/node';
 import dotenv from 'dotenv';
 import { XpanderClient } from '../src';
 dotenv.config({ path: __dirname + '/.env' });

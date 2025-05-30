@@ -733,6 +733,7 @@ Agent.getById(configuration: Configuration, agentId: string)
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Agent.property.endToolEnabled">endToolEnabled</a></code> | <code>boolean</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.hasLocalTools">hasLocalTools</a></code> | <code>boolean</code> | Checks if the agent has local tools loaded. |
+| <code><a href="#xpander-sdk.Agent.property.hasMCPServers">hasMCPServers</a></code> | <code>boolean</code> | Checks if the agent has mcp servers attached. |
 | <code><a href="#xpander-sdk.Agent.property.memory">memory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | Retrieves the memory instance for the agent. |
 | <code><a href="#xpander-sdk.Agent.property.messages">messages</a></code> | <code>any[]</code> | Retrieves list of messages. |
 | <code><a href="#xpander-sdk.Agent.property.sourceNodeType">sourceNodeType</a></code> | <code><a href="#xpander-sdk.SourceNodeType">SourceNodeType</a></code> | Retrieves the type of source node for the agent. |
@@ -784,6 +785,18 @@ public readonly hasLocalTools: boolean;
 - *Type:* boolean
 
 Checks if the agent has local tools loaded.
+
+---
+
+##### `hasMCPServers`<sup>Required</sup> <a name="hasMCPServers" id="xpander-sdk.Agent.property.hasMCPServers"></a>
+
+```typescript
+public readonly hasMCPServers: boolean;
+```
+
+- *Type:* boolean
+
+Checks if the agent has mcp servers attached.
 
 ---
 
@@ -2861,6 +2874,7 @@ Graph.fromObject(data: any)
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Graph.property.isEmpty">isEmpty</a></code> | <code>boolean</code> | Checks whether the graph is empty. |
+| <code><a href="#xpander-sdk.Graph.property.mcpNodes">mcpNodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.property.nodes">nodes</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a>[]</code> | Gets the list of nodes in the graph. |
 | <code><a href="#xpander-sdk.Graph.property.textual">textual</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Graph.property.lastNode">lastNode</a></code> | <code><a href="#xpander-sdk.GraphItem">GraphItem</a></code> | Gets the last node in the graph. |
@@ -2878,6 +2892,16 @@ public readonly isEmpty: boolean;
 - *Type:* boolean
 
 Checks whether the graph is empty.
+
+---
+
+##### `mcpNodes`<sup>Required</sup> <a name="mcpNodes" id="xpander-sdk.Graph.property.mcpNodes"></a>
+
+```typescript
+public readonly mcpNodes: GraphItem[];
+```
+
+- *Type:* <a href="#xpander-sdk.GraphItem">GraphItem</a>[]
 
 ---
 
@@ -5466,6 +5490,62 @@ public readonly searchables: string[];
 
 ---
 
+### IAgentGraphItemMCPSettings <a name="IAgentGraphItemMCPSettings" id="xpander-sdk.IAgentGraphItemMCPSettings"></a>
+
+- *Implemented By:* <a href="#xpander-sdk.IAgentGraphItemMCPSettings">IAgentGraphItemMCPSettings</a>
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.IAgentGraphItemMCPSettings.property.name">name</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemMCPSettings.property.url">url</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemMCPSettings.property.allowedTools">allowedTools</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemMCPSettings.property.apiKey">apiKey</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.IAgentGraphItemMCPSettings.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+---
+
+##### `url`<sup>Required</sup> <a name="url" id="xpander-sdk.IAgentGraphItemMCPSettings.property.url"></a>
+
+```typescript
+public readonly url: string;
+```
+
+- *Type:* string
+
+---
+
+##### `allowedTools`<sup>Optional</sup> <a name="allowedTools" id="xpander-sdk.IAgentGraphItemMCPSettings.property.allowedTools"></a>
+
+```typescript
+public readonly allowedTools: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `apiKey`<sup>Optional</sup> <a name="apiKey" id="xpander-sdk.IAgentGraphItemMCPSettings.property.apiKey"></a>
+
+```typescript
+public readonly apiKey: string;
+```
+
+- *Type:* string
+
+---
+
 ### IAgentGraphItemSchema <a name="IAgentGraphItemSchema" id="xpander-sdk.IAgentGraphItemSchema"></a>
 
 - *Implemented By:* <a href="#xpander-sdk.IAgentGraphItemSchema">IAgentGraphItemSchema</a>
@@ -5512,6 +5592,7 @@ public readonly output: {[ key: string ]: any};
 | <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.advancedFilteringOptions">advancedFilteringOptions</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemAdvancedFilteringOption">IAgentGraphItemAdvancedFilteringOption</a>[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.description">description</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.instructions">instructions</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.mcpSettings">mcpSettings</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemMCPSettings">IAgentGraphItemMCPSettings</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.IAgentGraphItemSettings.property.schemas">schemas</a></code> | <code><a href="#xpander-sdk.IAgentGraphItemSchema">IAgentGraphItemSchema</a></code> | *No description.* |
 
 ---
@@ -5543,6 +5624,16 @@ public readonly instructions: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `mcpSettings`<sup>Optional</sup> <a name="mcpSettings" id="xpander-sdk.IAgentGraphItemSettings.property.mcpSettings"></a>
+
+```typescript
+public readonly mcpSettings: IAgentGraphItemMCPSettings;
+```
+
+- *Type:* <a href="#xpander-sdk.IAgentGraphItemMCPSettings">IAgentGraphItemMCPSettings</a>
 
 ---
 
@@ -6932,6 +7023,7 @@ List of required properties within this parameter, if any.
 | <code><a href="#xpander-sdk.AgentGraphItemType.HUMAN_IN_THE_LOOP">HUMAN_IN_THE_LOOP</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.AgentGraphItemType.STORAGE">STORAGE</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.AgentGraphItemType.CODING_AGENT">CODING_AGENT</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentGraphItemType.MCP">MCP</a></code> | *No description.* |
 
 ---
 
@@ -6961,6 +7053,11 @@ List of required properties within this parameter, if any.
 
 
 ##### `CODING_AGENT` <a name="CODING_AGENT" id="xpander-sdk.AgentGraphItemType.CODING_AGENT"></a>
+
+---
+
+
+##### `MCP` <a name="MCP" id="xpander-sdk.AgentGraphItemType.MCP"></a>
 
 ---
 
