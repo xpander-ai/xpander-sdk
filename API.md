@@ -269,10 +269,16 @@ An array of messages to be added to the memory thread.
 ##### `addTask` <a name="addTask" id="xpander-sdk.Agent.addTask"></a>
 
 ```typescript
-public addTask(input?: string, files?: string[], useWorker?: boolean, threadId?: string): Execution
+public addTask(input?: string, threadId?: string, files?: string[], useWorker?: boolean): Execution
 ```
 
 ###### `input`<sup>Optional</sup> <a name="input" id="xpander-sdk.Agent.addTask.parameter.input"></a>
+
+- *Type:* string
+
+---
+
+###### `threadId`<sup>Optional</sup> <a name="threadId" id="xpander-sdk.Agent.addTask.parameter.threadId"></a>
 
 - *Type:* string
 
@@ -287,12 +293,6 @@ public addTask(input?: string, files?: string[], useWorker?: boolean, threadId?:
 ###### `useWorker`<sup>Optional</sup> <a name="useWorker" id="xpander-sdk.Agent.addTask.parameter.useWorker"></a>
 
 - *Type:* boolean
-
----
-
-###### `threadId`<sup>Optional</sup> <a name="threadId" id="xpander-sdk.Agent.addTask.parameter.threadId"></a>
-
-- *Type:* string
 
 ---
 

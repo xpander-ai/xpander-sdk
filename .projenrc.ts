@@ -46,18 +46,29 @@ const project = new cdk.JsiiProject({
   },
 });
 
-// Adding custom tasks to generate documentation for each language
-project.addTask('generate-docs', {
-  exec: 'jsii-docgen -o API.md',
+// Add beautiful per-class documentation generation (replaces monolithic docs)
+project.addTask('generate-class-docs', {
+  exec: 'node scripts/generate-class-docs.js',
+  description:
+    'Generate beautiful, individual markdown files per class for LLM-friendly consumption',
 });
 
-project.addTask('generate-docs-python', {
-  exec: 'jsii-docgen -o API_python.md --language python',
+// Add LIVE documentation generation with real API calls! 🔥
+project.addTask('docs:live', {
+  exec: 'node scripts/live-docs-runner.js',
+  description:
+    '🔥 Generate LIVE documentation with real API calls and actual outputs! Requires API keys in .env',
 });
 
-project.addTask('generate-docs-node', {
-  exec: 'jsii-docgen -o API_node.md --language typescript',
+// Add combined task for full documentation generation
+project.addTask('docs:complete', {
+  exec: 'npm run docs:live && node scripts/generate-class-docs.js',
+  description:
+    '🚀 Generate complete documentation: first capture live API data, then generate enhanced docs',
 });
+
+// Add per-class documentation to the post-compile step
+project.postCompileTask.spawn(project.tasks.tryFind('generate-class-docs')!);
 
 // project.addTask('generate-docs-dotnet', {
 //   exec: 'jsii-docgen -o API_dotnet.md --language csharp',
