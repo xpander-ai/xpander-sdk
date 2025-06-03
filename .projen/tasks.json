@@ -109,6 +109,24 @@
         }
       ]
     },
+    "docs:complete": {
+      "name": "docs:complete",
+      "description": "🚀 Generate complete documentation: first capture live API data, then generate enhanced docs",
+      "steps": [
+        {
+          "exec": "npm run docs:live && node scripts/generate-class-docs.js"
+        }
+      ]
+    },
+    "docs:live": {
+      "name": "docs:live",
+      "description": "🔥 Generate LIVE documentation with real API calls and actual outputs! Requires API keys in .env",
+      "steps": [
+        {
+          "exec": "node scripts/live-docs-runner.js"
+        }
+      ]
+    },
     "eject": {
       "name": "eject",
       "description": "Remove projen from the project",
@@ -131,27 +149,12 @@
         }
       ]
     },
-    "generate-docs": {
-      "name": "generate-docs",
+    "generate-class-docs": {
+      "name": "generate-class-docs",
+      "description": "Generate beautiful, individual markdown files per class for LLM-friendly consumption",
       "steps": [
         {
-          "exec": "jsii-docgen -o API.md"
-        }
-      ]
-    },
-    "generate-docs-node": {
-      "name": "generate-docs-node",
-      "steps": [
-        {
-          "exec": "jsii-docgen -o API_node.md --language typescript"
-        }
-      ]
-    },
-    "generate-docs-python": {
-      "name": "generate-docs-python",
-      "steps": [
-        {
-          "exec": "jsii-docgen -o API_python.md --language python"
+          "exec": "node scripts/generate-class-docs.js"
         }
       ]
     },
@@ -218,6 +221,9 @@
       "steps": [
         {
           "spawn": "docgen"
+        },
+        {
+          "spawn": "generate-class-docs"
         }
       ]
     },

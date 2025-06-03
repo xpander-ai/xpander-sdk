@@ -997,9 +997,9 @@ export class Agent extends Base {
 
   public addTask(
     input: string = '',
+    threadId: string | undefined,
     files: string[] = [],
     useWorker: boolean = false,
-    threadId?: string,
   ): Execution {
     const localWorkerId = !useWorker ? generateUUIDv4() : undefined;
     const execution = Execution.create(
