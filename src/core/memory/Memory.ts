@@ -153,13 +153,13 @@ export class Memory extends Base {
    * @throws {Error} - Throws an error if the request fails.
    */
   public static fetchUserThreads(agent: any | Agent): MemoryThread[] {
-    const response = request(
-      'GET',
-      `${agent.configuration.url}/memory/threads/${agent?.userDetails?.id!}`,
-      {
-        headers: { 'x-api-key': agent.configuration.apiKey },
-      },
-    );
+    let url = `${agent.configuration.url}/memory/threads/${agent?.userDetails?.id!}`;
+    if (!!agent?.id) {
+      url += `?agent_id=${agent.id}`;
+    }
+    const response = request('GET', url, {
+      headers: { 'x-api-key': agent.configuration.apiKey },
+    });
 
     if (!response.statusCode.toString().startsWith('2')) {
       throw new Error(response.body.toString());
