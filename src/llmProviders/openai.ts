@@ -49,6 +49,11 @@ export class OpenAI extends BaseOpenAISDKHandler {
       toolDef.function.strict = true; // ensure strict mode enabled and leveraging openai structured output (new)
       if (!!toolDef?.function?.parameters) {
         applyAdditionalPropertiesFalse(toolDef.function.parameters);
+        if (
+          !!toolDef?.function?.parameters?.bodyParams?.properties?.input_task
+        ) {
+          toolDef.function.parameters.bodyParams.required = ['input_task'];
+        }
       }
       return toolDef;
     });
