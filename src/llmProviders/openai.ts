@@ -50,9 +50,12 @@ export class OpenAI extends BaseOpenAISDKHandler {
       if (!!toolDef?.function?.parameters) {
         applyAdditionalPropertiesFalse(toolDef.function.parameters);
         if (
-          !!toolDef?.function?.parameters?.bodyParams?.properties?.input_task
+          !!toolDef?.function?.parameters?.properties?.bodyParams?.properties
+            ?.input_task
         ) {
-          toolDef.function.parameters.bodyParams.required = ['input_task'];
+          toolDef.function.parameters.properties.bodyParams.required = [
+            'input_task',
+          ];
         }
       }
       return toolDef;
