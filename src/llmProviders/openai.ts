@@ -46,6 +46,7 @@ export class OpenAI extends BaseOpenAISDKHandler {
   postProcessTools(tools: any[]): any[] {
     return tools.map((tool) => {
       const toolDef = { ...tool };
+
       if (!!toolDef?.function?.parameters) {
         applyAdditionalPropertiesFalse(toolDef.function.parameters);
         if (
