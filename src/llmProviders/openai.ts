@@ -42,23 +42,4 @@ export class OpenAI extends BaseOpenAISDKHandler {
   static shouldHandle(llmProvider: LLMProvider): boolean {
     return llmProvider === LLMProvider.OPEN_AI;
   }
-
-  postProcessTools(tools: any[]): any[] {
-    return tools.map((tool) => {
-      const toolDef = { ...tool };
-      toolDef.function.strict = true; // ensure strict mode enabled and leveraging openai structured output (new)
-      if (!!toolDef?.function?.parameters) {
-        applyAdditionalPropertiesFalse(toolDef.function.parameters);
-        if (
-          !!toolDef?.function?.parameters?.properties?.bodyParams?.properties
-            ?.input_task
-        ) {
-          toolDef.function.parameters.properties.bodyParams.required = [
-            'input_task',
-          ];
-        }
-      }
-      return toolDef;
-    });
-  }
 }
