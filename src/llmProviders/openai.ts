@@ -1,5 +1,7 @@
 import { BaseOpenAISDKHandler } from './shared/baseOpenAI';
 import { LLMProvider } from '../constants/llmProvider';
+import { DEFAULT_TOOL_PARAMETERS } from '../constants/tools';
+import { convertKeysToCamelCase } from '../core/utils';
 
 const applyAdditionalPropertiesFalse = (schema: any): void => {
   if (schema && typeof schema === 'object') {
@@ -57,6 +59,10 @@ export class OpenAI extends BaseOpenAISDKHandler {
             'input_task',
           ];
         }
+      } else {
+        toolDef.function.parameters = convertKeysToCamelCase({
+          ...DEFAULT_TOOL_PARAMETERS,
+        });
       }
       return toolDef;
     });
