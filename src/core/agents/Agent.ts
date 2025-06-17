@@ -57,7 +57,11 @@ import { XpanderClient } from '../XpanderClient';
  * This class facilitates loading agents, handling tool executions, and managing prompt groups.
  */
 export class Agent extends Base {
-  public static getById(configuration: Configuration, agentId: string): Agent {
+  public static getById(
+    configuration: Configuration,
+    agentId: string,
+    version?: number,
+  ): Agent {
     const agent = new Agent(
       configuration,
       agentId,
@@ -76,8 +80,10 @@ export class Agent extends Base {
       [],
       [],
       null,
+      version,
     );
     agent.load();
+    agent.usedVersion = version;
     return agent;
   }
 
@@ -90,6 +96,7 @@ export class Agent extends Base {
   public execution?: Execution;
   public userDetails?: UserDetails;
   public executionMemory?: Memory;
+  public usedVersion?: number;
   private shouldStop: boolean = false;
   private hitlIsRunning: boolean = false;
   private isLocalRun: boolean = false;
@@ -137,6 +144,7 @@ export class Agent extends Base {
     private _graph: any[] = [],
     public knowledgeBases: KnowledgeBase[] = [],
     public oas: any = null,
+    public version: any = null,
   ) {
     super();
     if (this.tools.length !== 0) {
@@ -187,7 +195,11 @@ export class Agent extends Base {
 
     try {
       const cache = CacheService.getInstance();
-      const cachedAgent = cache.get(this.id);
+      let cacheKey = this.id;
+      if (this.usedVersion) {
+        cacheKey += `_v${this.usedVersion}`;
+      }
+      const cachedAgent = cache.get(cacheKey);
 
       let rawAgent: any;
       if (cachedAgent && !ignoreCache) {
@@ -197,8 +209,12 @@ export class Agent extends Base {
         if (rawAgentData) {
           rawAgent = rawAgentData;
         } else {
+          const headers: any = { 'x-api-key': this.configuration.apiKey };
+          if (this.usedVersion) {
+            headers['x-agent-version'] = this.usedVersion;
+          }
           const response = request('GET', this.url, {
-            headers: { 'x-api-key': this.configuration.apiKey },
+            headers,
           });
 
           if (!response.statusCode.toString().startsWith('2')) {
@@ -206,7 +222,7 @@ export class Agent extends Base {
           }
 
           rawAgent = JSON.parse(response.getBody('utf8'));
-          cache.set(this.id, rawAgent);
+          cache.set(cacheKey, rawAgent);
         }
       }
 
@@ -270,6 +286,7 @@ export class Agent extends Base {
           ),
         agent.knowledgeBases,
         rawAgent.oas,
+        agent.version,
       );
       if (agent?.knowledgeBases && agent.knowledgeBases.length !== 0) {
         loadedAgent.knowledgeBases = KnowledgeBase.loadByAgent(loadedAgent);
@@ -582,6 +599,7 @@ export class Agent extends Base {
         this.execution.id,
         isMultiple,
         hasOutputSchema,
+        this.usedVersion,
       );
 
       toolCallResult.statusCode = executionResult.statusCode;
@@ -920,6 +938,7 @@ export class Agent extends Base {
           const parentAgent = Agent.getById(
             this.configuration,
             this.execution?.agentId,
+            this.execution?.agentVersion,
           );
           if (
             !!parentAgent &&
@@ -997,7 +1016,7 @@ export class Agent extends Base {
 
   public addTask(
     input: string = '',
-    threadId: string | undefined,
+    threadId: string | undefined = undefined,
     files: string[] = [],
     useWorker: boolean = false,
   ): Execution {
@@ -1008,6 +1027,9 @@ export class Agent extends Base {
       files,
       localWorkerId,
       threadId,
+      undefined,
+      undefined,
+      this.usedVersion,
     );
     this.initTask(execution);
     this.isLocalRun = true;

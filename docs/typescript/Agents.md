@@ -132,6 +132,7 @@ const result = agent.create(name, type);
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `agentId` | `string` | ✅ | - The unique identifier of the agent to retrieve. |
+| `version` | `number` | ❌ | No description |
 
 **Returns:** `Agent`
 
@@ -140,7 +141,7 @@ const result = agent.create(name, type);
 **Usage:**
 
 ```typescript
-const result = agent.get(agentId);
+const result = agent.get(agentId, version);
 ```
 
 ---

@@ -27,6 +27,7 @@ export class Execution extends Base {
       createdExecution.workerId,
       createdExecution.result || '',
       createdExecution.llmTokens,
+      createdExecution.agentVersion || '',
     );
   }
   /**
@@ -70,6 +71,7 @@ export class Execution extends Base {
     threadId?: string,
     parentExecutionId?: string,
     toolCallName?: string,
+    agentVersion?: any,
   ): any {
     const payload = {
       input: {
@@ -81,12 +83,22 @@ export class Execution extends Base {
       parent_execution_id: parentExecutionId || undefined,
       tool_call_name: toolCallName || undefined,
     };
+
+    const headers: any = {
+      'x-api-key': agent.configuration.apiKey,
+      'x-source': 'sdk',
+    };
+
+    if (agentVersion) {
+      headers['x-agent-version'] = agentVersion;
+    }
+
     const response = request(
       'POST',
       `${agent.configuration.url}/agent-execution/${agent.id}`,
       {
         json: payload,
-        headers: { 'x-api-key': agent.configuration.apiKey, 'x-source': 'sdk' },
+        headers,
       },
     );
 
@@ -169,6 +181,7 @@ export class Execution extends Base {
     public workerId: string = '',
     public result: string = '',
     public llmTokens: Tokens = new Tokens(),
+    public agentVersion: any = null,
   ) {
     super();
   }

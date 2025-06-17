@@ -69,9 +69,9 @@ export class Agents {
    * @param agentId - The unique identifier of the agent to retrieve.
    * @returns The requested Agent instance.
    */
-  public get(agentId: string): Agent {
+  public get(agentId: string, version?: number): Agent {
     try {
-      return Agent.getById(this.configuration, agentId);
+      return Agent.getById(this.configuration, agentId, version);
     } catch (err) {
       throw new Error('Failed to retrieve agent');
     }

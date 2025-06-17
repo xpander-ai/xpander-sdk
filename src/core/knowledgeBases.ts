@@ -20,22 +20,30 @@ export class KnowledgeBase extends Base {
 
       const cache = CacheService.getInstance();
       const kbsURL = `${agent.url}/knowledge_base`;
-      const cachedKBs = cache.get(kbsURL);
+      let cacheKey = kbsURL;
+      if (agent.usedVersion) {
+        cacheKey += `_v${agent.usedVersion}`;
+      }
+      const cachedKBs = cache.get(cacheKey);
       let rawResponse: any;
 
       if (cachedKBs) {
         console.debug('Loaded knowledge bases from cache');
         rawResponse = cachedKBs;
       } else {
+        const headers: any = { 'x-api-key': agent.configuration.apiKey };
+        if (agent.usedVersion) {
+          headers['x-agent-version'] = agent.usedVersion;
+        }
         const response = request('GET', kbsURL, {
-          headers: { 'x-api-key': agent.configuration.apiKey },
+          headers,
         });
         if (!response.statusCode.toString().startsWith('2')) {
           throw new Error(response.body.toString());
         }
 
         rawResponse = JSON.parse(response.getBody('utf8'));
-        cache.set(kbsURL, rawResponse);
+        cache.set(cacheKey, rawResponse);
       }
 
       const kbs = convertKeysToCamelCase(rawResponse);

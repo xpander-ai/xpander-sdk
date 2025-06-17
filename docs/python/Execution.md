@@ -65,6 +65,7 @@ Represents an execution of an agent in xpanderAI, including its input, status, m
 | `workerId` | `string` | ❌ | - Identifier of the worker associated with the execution. |
 | `result` | `string` | ❌ | No description |
 | `llmTokens` | `Tokens` | ❌ | No description |
+| `agentVersion` | `any` | ❌ | No description |
 
 </details>
 
@@ -99,6 +100,16 @@ Retrieves the input message formatted as a memory message.
 | Property | Value |
 |----------|-------|
 | **Type** | `string` |
+| **Required** | ✅ Required |
+| **Access** | ✏️ Read/Write |
+
+---
+
+#### 📝 `agentVersion`
+
+| Property | Value |
+|----------|-------|
+| **Type** | `any` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 
@@ -236,6 +247,7 @@ Retrieves the input message formatted as a memory message.
 | `threadId` | `string` | ❌ | No description |
 | `parentExecutionId` | `string` | ❌ | No description |
 | `toolCallName` | `string` | ❌ | No description |
+| `agentVersion` | `any` | ❌ | No description |
 
 **Returns:** `any`
 
