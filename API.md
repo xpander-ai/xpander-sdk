@@ -15,7 +15,7 @@ This class facilitates loading agents, handling tool executions, and managing pr
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, delegationType: AgentDelegationType, delegationEndStrategy: AgentDelegationEndStrategy, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[], oas?: any)
+new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, delegationType: AgentDelegationType, delegationEndStrategy: AgentDelegationEndStrategy, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[], oas?: any, version?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -37,6 +37,7 @@ new Agent(configuration: Configuration, id: string, name: string, organizationId
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter._graph">_graph</a></code> | <code>any[]</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | - Knowledge bases associated with the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.oas">oas</a></code> | <code>any</code> | *No description.* |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.version">version</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -165,6 +166,12 @@ Knowledge bases associated with the agent.
 ---
 
 ##### `oas`<sup>Optional</sup> <a name="oas" id="xpander-sdk.Agent.Initializer.parameter.oas"></a>
+
+- *Type:* any
+
+---
+
+##### `version`<sup>Optional</sup> <a name="version" id="xpander-sdk.Agent.Initializer.parameter.version"></a>
 
 - *Type:* any
 
@@ -712,7 +719,7 @@ Agent.fromObject(data: any)
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-Agent.getById(configuration: Configuration, agentId: string)
+Agent.getById(configuration: Configuration, agentId: string, version?: number)
 ```
 
 ###### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.Agent.getById.parameter.configuration"></a>
@@ -724,6 +731,12 @@ Agent.getById(configuration: Configuration, agentId: string)
 ###### `agentId`<sup>Required</sup> <a name="agentId" id="xpander-sdk.Agent.getById.parameter.agentId"></a>
 
 - *Type:* string
+
+---
+
+###### `version`<sup>Optional</sup> <a name="version" id="xpander-sdk.Agent.getById.parameter.version"></a>
+
+- *Type:* number
 
 ---
 
@@ -760,6 +773,7 @@ Agent.getById(configuration: Configuration, agentId: string)
 | <code><a href="#xpander-sdk.Agent.property.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | - Source nodes associated with the agent. |
 | <code><a href="#xpander-sdk.Agent.property.status">status</a></code> | <code><a href="#xpander-sdk.AgentStatus">AgentStatus</a></code> | - Current status of the agent. |
 | <code><a href="#xpander-sdk.Agent.property.tools">tools</a></code> | <code><a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]</code> | - Tools available to the agent. |
+| <code><a href="#xpander-sdk.Agent.property.version">version</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.execution">execution</a></code> | <code><a href="#xpander-sdk.Execution">Execution</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.executionMemory">executionMemory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.userDetails">userDetails</a></code> | <code><a href="#xpander-sdk.UserDetails">UserDetails</a></code> | *No description.* |
@@ -1101,6 +1115,16 @@ public readonly tools: IAgentTool[];
 - *Type:* <a href="#xpander-sdk.IAgentTool">IAgentTool</a>[]
 
 Tools available to the agent.
+
+---
+
+##### `version`<sup>Required</sup> <a name="version" id="xpander-sdk.Agent.property.version"></a>
+
+```typescript
+public readonly version: any;
+```
+
+- *Type:* any
 
 ---
 
@@ -1592,7 +1616,7 @@ The type of the agent, defaults to Regular.
 ##### `get` <a name="get" id="xpander-sdk.Agents.get"></a>
 
 ```typescript
-public get(agentId: string): Agent
+public get(agentId: string, version?: number): Agent
 ```
 
 Retrieves a specific agent by its ID and initializes it.
@@ -1602,6 +1626,12 @@ Retrieves a specific agent by its ID and initializes it.
 - *Type:* string
 
 The unique identifier of the agent to retrieve.
+
+---
+
+###### `version`<sup>Optional</sup> <a name="version" id="xpander-sdk.Agents.get.parameter.version"></a>
+
+- *Type:* number
 
 ---
 
@@ -1877,7 +1907,7 @@ Represents an execution of an agent in xpanderAI, including its input, status, m
 ```typescript
 import { Execution } from 'xpander-sdk'
 
-new Execution(id: string, agentId: string, organizationId: string, input: IExecutionInput, status: ExecutionStatus, lastExecutedNodeId?: string, memoryThreadId?: string, parentExecution?: string, workerId?: string, result?: string, llmTokens?: Tokens)
+new Execution(id: string, agentId: string, organizationId: string, input: IExecutionInput, status: ExecutionStatus, lastExecutedNodeId?: string, memoryThreadId?: string, parentExecution?: string, workerId?: string, result?: string, llmTokens?: Tokens, agentVersion?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1893,6 +1923,7 @@ new Execution(id: string, agentId: string, organizationId: string, input: IExecu
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.workerId">workerId</a></code> | <code>string</code> | - Identifier of the worker associated with the execution. |
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.result">result</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#xpander-sdk.Execution.Initializer.parameter.llmTokens">llmTokens</a></code> | <code><a href="#xpander-sdk.Tokens">Tokens</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Execution.Initializer.parameter.agentVersion">agentVersion</a></code> | <code>any</code> | *No description.* |
 
 ---
 
@@ -1978,6 +2009,12 @@ Identifier of the worker associated with the execution.
 
 ---
 
+##### `agentVersion`<sup>Optional</sup> <a name="agentVersion" id="xpander-sdk.Execution.Initializer.parameter.agentVersion"></a>
+
+- *Type:* any
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -2044,7 +2081,7 @@ Execution.fromObject(data: any)
 ```typescript
 import { Execution } from 'xpander-sdk'
 
-Execution.create(agent: Agent, input: string, files: string[], workerId?: string, threadId?: string, parentExecutionId?: string, toolCallName?: string)
+Execution.create(agent: Agent, input: string, files: string[], workerId?: string, threadId?: string, parentExecutionId?: string, toolCallName?: string, agentVersion?: any)
 ```
 
 ###### `agent`<sup>Required</sup> <a name="agent" id="xpander-sdk.Execution.create.parameter.agent"></a>
@@ -2086,6 +2123,12 @@ Execution.create(agent: Agent, input: string, files: string[], workerId?: string
 ###### `toolCallName`<sup>Optional</sup> <a name="toolCallName" id="xpander-sdk.Execution.create.parameter.toolCallName"></a>
 
 - *Type:* string
+
+---
+
+###### `agentVersion`<sup>Optional</sup> <a name="agentVersion" id="xpander-sdk.Execution.create.parameter.agentVersion"></a>
+
+- *Type:* any
 
 ---
 
@@ -2183,6 +2226,7 @@ A record of changes to apply to the execution.
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.Execution.property.inputMessage">inputMessage</a></code> | <code><a href="#xpander-sdk.IMemoryMessage">IMemoryMessage</a></code> | Retrieves the input message formatted as a memory message. |
 | <code><a href="#xpander-sdk.Execution.property.agentId">agentId</a></code> | <code>string</code> | - Identifier of the agent performing the execution. |
+| <code><a href="#xpander-sdk.Execution.property.agentVersion">agentVersion</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.Execution.property.id">id</a></code> | <code>string</code> | - Unique identifier of the execution. |
 | <code><a href="#xpander-sdk.Execution.property.input">input</a></code> | <code><a href="#xpander-sdk.IExecutionInput">IExecutionInput</a></code> | - Input provided for the execution. |
 | <code><a href="#xpander-sdk.Execution.property.lastExecutedNodeId">lastExecutedNodeId</a></code> | <code>string</code> | - Identifier of the last executed node. |
@@ -2219,6 +2263,16 @@ public readonly agentId: string;
 - *Type:* string
 
 Identifier of the agent performing the execution.
+
+---
+
+##### `agentVersion`<sup>Required</sup> <a name="agentVersion" id="xpander-sdk.Execution.property.agentVersion"></a>
+
+```typescript
+public readonly agentVersion: any;
+```
+
+- *Type:* any
 
 ---
 

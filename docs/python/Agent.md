@@ -73,6 +73,7 @@ Represents an agent in xpanderAI, managing tools, sessions, and operational work
 | `_graph` | `List[any]` | ❌ | No description |
 | `knowledgeBases` | `List[KnowledgeBase]` | ❌ | - Knowledge bases associated with the agent. |
 | `oas` | `any` | ❌ | No description |
+| `version` | `any` | ❌ | No description |
 
 </details>
 
@@ -433,6 +434,16 @@ Indicates if the agent is ready and tools are loaded.
 | Property | Value |
 |----------|-------|
 | **Type** | `List[IAgentTool]` |
+| **Required** | ✅ Required |
+| **Access** | ✏️ Read/Write |
+
+---
+
+#### 📝 `version`
+
+| Property | Value |
+|----------|-------|
+| **Type** | `any` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 
@@ -1127,6 +1138,7 @@ result = agent.sync()
 |-----------|------|----------|-------------|
 | `configuration` | `Configuration` | ✅ | No description |
 | `agentId` | `string` | ✅ | No description |
+| `version` | `number` | ❌ | No description |
 
 **Returns:** `Agent`
 

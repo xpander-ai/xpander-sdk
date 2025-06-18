@@ -132,6 +132,7 @@ result = agent.create(name, type=None)
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `agentId` | `string` | ✅ | - The unique identifier of the agent to retrieve. |
+| `version` | `number` | ❌ | No description |
 
 **Returns:** `Agent`
 
@@ -140,7 +141,7 @@ result = agent.create(name, type=None)
 **Usage:**
 
 ```python
-result = agent.get(agentId)
+result = agent.get(agentId, version=None)
 ```
 
 ---

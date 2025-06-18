@@ -63,6 +63,7 @@ export function executeTool(
   executionId: string,
   isMultiple: boolean = false,
   hasOutputSchema: boolean = false,
+  agentVersion?: any,
 ): IToolExecutionResult {
   const result: IToolExecutionResult = {
     statusCode: 200,
@@ -79,14 +80,20 @@ export function executeTool(
       query_params: tool?.payload?.queryParams || {},
       headers: tool?.payload?.headers || {},
     };
+
+    const headers: any = {
+      'x-api-key': configuration.apiKey,
+      'x-xpander-tool-call-id': tool.toolCallId,
+      'x-xpander-parallel': isMultiple ? 'true' : 'false',
+      'x-xpander-with-auto-report-result': hasOutputSchema ? 'false' : 'true',
+    };
+    if (agentVersion && Number(agentVersion) >= 2) {
+      headers['x-agent-version'] = agentVersion;
+    }
+
     const response = request('POST' as HttpVerb, url, {
       json: requestPayload,
-      headers: {
-        'x-api-key': configuration.apiKey,
-        'x-xpander-tool-call-id': tool.toolCallId,
-        'x-xpander-parallel': isMultiple ? 'true' : 'false',
-        'x-xpander-with-auto-report-result': hasOutputSchema ? 'false' : 'true',
-      },
+      headers,
     });
     result.statusCode = response.statusCode || 0;
     result.headers = response.headers;
