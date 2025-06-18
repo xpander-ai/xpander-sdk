@@ -84,6 +84,9 @@ if (project?.github?.actions) {
   );
 }
 
+project.addDevDeps('ts-jest@latest');
+project.addDevDeps('jest@latest');
+
 project.synth();
 
 project.addDevDeps('jsii-rosetta@~5.0.7');

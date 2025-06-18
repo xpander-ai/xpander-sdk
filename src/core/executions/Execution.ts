@@ -89,7 +89,7 @@ export class Execution extends Base {
       'x-source': 'sdk',
     };
 
-    if (agentVersion) {
+    if (agentVersion && Number(agentVersion) >= 2) {
       headers['x-agent-version'] = agentVersion;
     }
 

@@ -49,7 +49,7 @@
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.3",
-    "jest": "^27",
+    "jest": "latest",
     "jest-junit": "^15",
     "jsii": "~5.7.0",
     "jsii-diff": "^1.101.0",
@@ -60,7 +60,7 @@
     "prettier": "^3.3.2",
     "projen": "^0.82.8",
     "standard-version": "^9",
-    "ts-jest": "^27",
+    "ts-jest": "latest",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
@@ -115,11 +115,13 @@
         }
       ]
     ],
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.dev.json"
-      }
+    "transform": {
+      "^.+\\.[t]sx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.dev.json"
+        }
+      ]
     }
   },
   "types": "lib/index.d.ts",

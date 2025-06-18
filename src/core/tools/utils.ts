@@ -87,7 +87,7 @@ export function executeTool(
       'x-xpander-parallel': isMultiple ? 'true' : 'false',
       'x-xpander-with-auto-report-result': hasOutputSchema ? 'false' : 'true',
     };
-    if (agentVersion) {
+    if (agentVersion && Number(agentVersion) >= 2) {
       headers['x-agent-version'] = agentVersion;
     }
 

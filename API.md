@@ -776,7 +776,6 @@ Agent.getById(configuration: Configuration, agentId: string, version?: number)
 | <code><a href="#xpander-sdk.Agent.property.version">version</a></code> | <code>any</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.execution">execution</a></code> | <code><a href="#xpander-sdk.Execution">Execution</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.executionMemory">executionMemory</a></code> | <code><a href="#xpander-sdk.Memory">Memory</a></code> | *No description.* |
-| <code><a href="#xpander-sdk.Agent.property.usedVersion">usedVersion</a></code> | <code>number</code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.userDetails">userDetails</a></code> | <code><a href="#xpander-sdk.UserDetails">UserDetails</a></code> | *No description.* |
 
 ---
@@ -1146,16 +1145,6 @@ public readonly executionMemory: Memory;
 ```
 
 - *Type:* <a href="#xpander-sdk.Memory">Memory</a>
-
----
-
-##### `usedVersion`<sup>Optional</sup> <a name="usedVersion" id="xpander-sdk.Agent.property.usedVersion"></a>
-
-```typescript
-public readonly usedVersion: number;
-```
-
-- *Type:* number
 
 ---
 

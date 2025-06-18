@@ -21,8 +21,8 @@ export class KnowledgeBase extends Base {
       const cache = CacheService.getInstance();
       const kbsURL = `${agent.url}/knowledge_base`;
       let cacheKey = kbsURL;
-      if (agent.usedVersion) {
-        cacheKey += `_v${agent.usedVersion}`;
+      if (agent.version) {
+        cacheKey += `_v${agent.version}`;
       }
       const cachedKBs = cache.get(cacheKey);
       let rawResponse: any;
@@ -32,8 +32,8 @@ export class KnowledgeBase extends Base {
         rawResponse = cachedKBs;
       } else {
         const headers: any = { 'x-api-key': agent.configuration.apiKey };
-        if (agent.usedVersion) {
-          headers['x-agent-version'] = agent.usedVersion;
+        if (agent.version && Number(agent.version) >= 2) {
+          headers['x-agent-version'] = agent.version;
         }
         const response = request('GET', kbsURL, {
           headers,

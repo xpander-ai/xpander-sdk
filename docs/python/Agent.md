@@ -471,16 +471,6 @@ Indicates if the agent is ready and tools are loaded.
 
 ---
 
-#### ⚙️ `usedVersion`
-
-| Property | Value |
-|----------|-------|
-| **Type** | `number` |
-| **Required** | ❌ Optional |
-| **Access** | ✏️ Read/Write |
-
----
-
 #### ⚙️ `userDetails`
 
 | Property | Value |

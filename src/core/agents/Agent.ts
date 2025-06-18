@@ -83,7 +83,6 @@ export class Agent extends Base {
       version,
     );
     agent.load();
-    agent.usedVersion = version;
     return agent;
   }
 
@@ -96,7 +95,6 @@ export class Agent extends Base {
   public execution?: Execution;
   public userDetails?: UserDetails;
   public executionMemory?: Memory;
-  public usedVersion?: number;
   private shouldStop: boolean = false;
   private hitlIsRunning: boolean = false;
   private isLocalRun: boolean = false;
@@ -196,8 +194,8 @@ export class Agent extends Base {
     try {
       const cache = CacheService.getInstance();
       let cacheKey = this.id;
-      if (this.usedVersion) {
-        cacheKey += `_v${this.usedVersion}`;
+      if (this.version) {
+        cacheKey += `_v${this.version}`;
       }
       const cachedAgent = cache.get(cacheKey);
 
@@ -210,8 +208,8 @@ export class Agent extends Base {
           rawAgent = rawAgentData;
         } else {
           const headers: any = { 'x-api-key': this.configuration.apiKey };
-          if (this.usedVersion) {
-            headers['x-agent-version'] = this.usedVersion;
+          if (this.version && Number(this.version) >= 2) {
+            headers['x-agent-version'] = this.version;
           }
           const response = request('GET', this.url, {
             headers,
@@ -599,7 +597,7 @@ export class Agent extends Base {
         this.execution.id,
         isMultiple,
         hasOutputSchema,
-        this.usedVersion,
+        this.version,
       );
 
       toolCallResult.statusCode = executionResult.statusCode;
@@ -1029,7 +1027,7 @@ export class Agent extends Base {
       threadId,
       undefined,
       undefined,
-      this.usedVersion,
+      this.version,
     );
     this.initTask(execution);
     this.isLocalRun = true;
