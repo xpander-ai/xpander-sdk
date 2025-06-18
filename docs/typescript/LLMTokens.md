@@ -35,6 +35,12 @@
 import { LLMTokens } from 'xpander-sdk';
 ```
 
+## 📖 Description
+
+Represents token usage statistics for a language model interaction.
+
+> 🔗 **Extends:** [`Base`](Base.md)
+
 ## 🏗️ Constructor
 
 #### 🏗️ `new LLMTokens()`

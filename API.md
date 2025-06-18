@@ -15,7 +15,7 @@ This class facilitates loading agents, handling tool executions, and managing pr
 ```typescript
 import { Agent } from 'xpander-sdk'
 
-new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, delegationType: AgentDelegationType, delegationEndStrategy: AgentDelegationEndStrategy, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: IAgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[], oas?: any, version?: any)
+new Agent(configuration: Configuration, id: string, name: string, organizationId: string, status: AgentStatus, delegationType: AgentDelegationType, delegationEndStrategy: AgentDelegationEndStrategy, memoryType: MemoryType, memoryStrategy: MemoryStrategy, instructions: AgentInstructions, accessScope: AgentAccessScope, sourceNodes: ISourceNode[], prompts: string[], tools?: IAgentTool[], _graph?: any[], knowledgeBases?: KnowledgeBase[], oas?: any, version?: any)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -29,7 +29,7 @@ new Agent(configuration: Configuration, id: string, name: string, organizationId
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.delegationEndStrategy">delegationEndStrategy</a></code> | <code><a href="#xpander-sdk.AgentDelegationEndStrategy">AgentDelegationEndStrategy</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryType">memoryType</a></code> | <code><a href="#xpander-sdk.MemoryType">MemoryType</a></code> | - Type of memory the agent utilizes. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.memoryStrategy">memoryStrategy</a></code> | <code><a href="#xpander-sdk.MemoryStrategy">MemoryStrategy</a></code> | - Strategy for memory management. |
-| <code><a href="#xpander-sdk.Agent.Initializer.parameter.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
+| <code><a href="#xpander-sdk.Agent.Initializer.parameter.instructions">instructions</a></code> | <code><a href="#xpander-sdk.AgentInstructions">AgentInstructions</a></code> | - Instructions for the agent's operation. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.accessScope">accessScope</a></code> | <code><a href="#xpander-sdk.AgentAccessScope">AgentAccessScope</a></code> | - Scope of the agent's access permissions. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.sourceNodes">sourceNodes</a></code> | <code><a href="#xpander-sdk.ISourceNode">ISourceNode</a>[]</code> | - Source nodes associated with the agent. |
 | <code><a href="#xpander-sdk.Agent.Initializer.parameter.prompts">prompts</a></code> | <code>string[]</code> | - Prompts used by the agent. |
@@ -113,7 +113,7 @@ Strategy for memory management.
 
 ##### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Agent.Initializer.parameter.instructions"></a>
 
-- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+- *Type:* <a href="#xpander-sdk.AgentInstructions">AgentInstructions</a>
 
 Instructions for the agent's operation.
 
@@ -759,7 +759,7 @@ Agent.getById(configuration: Configuration, agentId: string, version?: number)
 | <code><a href="#xpander-sdk.Agent.property.delegationType">delegationType</a></code> | <code><a href="#xpander-sdk.AgentDelegationType">AgentDelegationType</a></code> | - The agent's delegation type (Router/Sequence). |
 | <code><a href="#xpander-sdk.Agent.property.graph">graph</a></code> | <code><a href="#xpander-sdk.Graph">Graph</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.id">id</a></code> | <code>string</code> | - Unique identifier for the agent. |
-| <code><a href="#xpander-sdk.Agent.property.instructions">instructions</a></code> | <code><a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a></code> | - Instructions for the agent's operation. |
+| <code><a href="#xpander-sdk.Agent.property.instructions">instructions</a></code> | <code><a href="#xpander-sdk.AgentInstructions">AgentInstructions</a></code> | - Instructions for the agent's operation. |
 | <code><a href="#xpander-sdk.Agent.property.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBase">KnowledgeBase</a>[]</code> | - Knowledge bases associated with the agent. |
 | <code><a href="#xpander-sdk.Agent.property.llmProvider">llmProvider</a></code> | <code><a href="#xpander-sdk.LLMProvider">LLMProvider</a></code> | *No description.* |
 | <code><a href="#xpander-sdk.Agent.property.localTools">localTools</a></code> | <code><a href="#xpander-sdk.ILocalTool">ILocalTool</a>[]</code> | Collection of local tools specific to this agent. |
@@ -957,10 +957,10 @@ Unique identifier for the agent.
 ##### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Agent.property.instructions"></a>
 
 ```typescript
-public readonly instructions: IAgentInstructions;
+public readonly instructions: AgentInstructions;
 ```
 
-- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+- *Type:* <a href="#xpander-sdk.AgentInstructions">AgentInstructions</a>
 
 Instructions for the agent's operation.
 
@@ -1551,6 +1551,152 @@ public readonly summary: string;
 ```
 
 - *Type:* string
+
+---
+
+
+### AgentInstructions <a name="AgentInstructions" id="xpander-sdk.AgentInstructions"></a>
+
+Represents the instructions provided to an agent within the xpander.ai framework.
+
+*Example*
+
+```typescript
+const instructions = new AgentInstructions(
+  ['data-analyzer'],
+  ['extract insights from customer data'],
+  'Perform general analysis and summary of given inputs.'
+);
+```
+
+
+#### Initializers <a name="Initializers" id="xpander-sdk.AgentInstructions.Initializer"></a>
+
+```typescript
+import { AgentInstructions } from 'xpander-sdk'
+
+new AgentInstructions(role?: string[], goal?: string[], general?: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.AgentInstructions.Initializer.parameter.role">role</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentInstructions.Initializer.parameter.goal">goal</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentInstructions.Initializer.parameter.general">general</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `role`<sup>Optional</sup> <a name="role" id="xpander-sdk.AgentInstructions.Initializer.parameter.role"></a>
+
+- *Type:* string[]
+
+---
+
+##### `goal`<sup>Optional</sup> <a name="goal" id="xpander-sdk.AgentInstructions.Initializer.parameter.goal"></a>
+
+- *Type:* string[]
+
+---
+
+##### `general`<sup>Optional</sup> <a name="general" id="xpander-sdk.AgentInstructions.Initializer.parameter.general"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentInstructions.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentInstructions.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentInstructions.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.AgentInstructions.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.AgentInstructions.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.AgentInstructions.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.AgentInstructions.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.AgentInstructions.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.AgentInstructions.fromObject"></a>
+
+```typescript
+import { AgentInstructions } from 'xpander-sdk'
+
+AgentInstructions.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.AgentInstructions.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.AgentInstructions.property.general">general</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentInstructions.property.goal">goal</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#xpander-sdk.AgentInstructions.property.role">role</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `general`<sup>Required</sup> <a name="general" id="xpander-sdk.AgentInstructions.property.general"></a>
+
+```typescript
+public readonly general: string;
+```
+
+- *Type:* string
+
+---
+
+##### `goal`<sup>Required</sup> <a name="goal" id="xpander-sdk.AgentInstructions.property.goal"></a>
+
+```typescript
+public readonly goal: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.AgentInstructions.property.role"></a>
+
+```typescript
+public readonly role: string[];
+```
+
+- *Type:* string[]
 
 ---
 
@@ -3702,6 +3848,15 @@ public readonly totalTokens: number;
 
 ### LLMTokens <a name="LLMTokens" id="xpander-sdk.LLMTokens"></a>
 
+Represents token usage statistics for a language model interaction.
+
+*Example*
+
+```typescript
+const tokens = new LLMTokens(100, 50, 150);
+```
+
+
 #### Initializers <a name="Initializers" id="xpander-sdk.LLMTokens.Initializer"></a>
 
 ```typescript
@@ -3736,7 +3891,61 @@ new LLMTokens(completionTokens?: number, promptTokens?: number, totalTokens?: nu
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
 
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.LLMTokens.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMTokens.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.LLMTokens.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.LLMTokens.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.LLMTokens.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.LLMTokens.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.LLMTokens.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.LLMTokens.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.LLMTokens.fromObject"></a>
+
+```typescript
+import { LLMTokens } from 'xpander-sdk'
+
+LLMTokens.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.LLMTokens.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -3922,14 +4131,14 @@ An array of tool call results to be added as messages.
 ##### `initInstructions` <a name="initInstructions" id="xpander-sdk.Memory.initInstructions"></a>
 
 ```typescript
-public initInstructions(instructions: IAgentInstructions): void
+public initInstructions(instructions: AgentInstructions): void
 ```
 
 Initializes the memory thread with system instructions if no messages exist.
 
 ###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initInstructions.parameter.instructions"></a>
 
-- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+- *Type:* <a href="#xpander-sdk.AgentInstructions">AgentInstructions</a>
 
 Instructions to initialize the memory thread.
 
@@ -3938,7 +4147,7 @@ Instructions to initialize the memory thread.
 ##### `initMessages` <a name="initMessages" id="xpander-sdk.Memory.initMessages"></a>
 
 ```typescript
-public initMessages(input: IMemoryMessage, instructions: IAgentInstructions, llmProvider?: LLMProvider, files?: string[]): void
+public initMessages(input: IMemoryMessage, instructions: AgentInstructions, llmProvider?: LLMProvider, files?: string[]): void
 ```
 
 Initializes the thread with input and instructions.
@@ -3953,7 +4162,7 @@ Initial user input message.
 
 ###### `instructions`<sup>Required</sup> <a name="instructions" id="xpander-sdk.Memory.initMessages.parameter.instructions"></a>
 
-- *Type:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
+- *Type:* <a href="#xpander-sdk.AgentInstructions">AgentInstructions</a>
 
 Instructions to initialize the memory thread.
 
@@ -4546,6 +4755,18 @@ MetricsBase.fromObject(data: any)
 
 ### Tokens <a name="Tokens" id="xpander-sdk.Tokens"></a>
 
+Encapsulates token usage for different components of a task, typically an internal process and a worker/agent execution.
+
+*Example*
+
+```typescript
+const tokens = new Tokens(
+  new LLMTokens(30, 20, 50),
+  new LLMTokens(80, 40, 120)
+);
+```
+
+
 #### Initializers <a name="Initializers" id="xpander-sdk.Tokens.Initializer"></a>
 
 ```typescript
@@ -4573,7 +4794,61 @@ new Tokens(inner?: LLMTokens, worker?: LLMTokens)
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
 
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Tokens.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Tokens.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.Tokens.toJson">toJson</a></code> | *No description.* |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.Tokens.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Tokens.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.Tokens.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.Tokens.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.Tokens.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.Tokens.fromObject"></a>
+
+```typescript
+import { Tokens } from 'xpander-sdk'
+
+Tokens.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.Tokens.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -5698,51 +5973,6 @@ public readonly schemas: IAgentGraphItemSchema;
 ```
 
 - *Type:* <a href="#xpander-sdk.IAgentGraphItemSchema">IAgentGraphItemSchema</a>
-
----
-
-### IAgentInstructions <a name="IAgentInstructions" id="xpander-sdk.IAgentInstructions"></a>
-
-- *Implemented By:* <a href="#xpander-sdk.IAgentInstructions">IAgentInstructions</a>
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#xpander-sdk.IAgentInstructions.property.general">general</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IAgentInstructions.property.goal">goal</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#xpander-sdk.IAgentInstructions.property.role">role</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `general`<sup>Required</sup> <a name="general" id="xpander-sdk.IAgentInstructions.property.general"></a>
-
-```typescript
-public readonly general: string;
-```
-
-- *Type:* string
-
----
-
-##### `goal`<sup>Required</sup> <a name="goal" id="xpander-sdk.IAgentInstructions.property.goal"></a>
-
-```typescript
-public readonly goal: string;
-```
-
-- *Type:* string
-
----
-
-##### `role`<sup>Required</sup> <a name="role" id="xpander-sdk.IAgentInstructions.property.role"></a>
-
-```typescript
-public readonly role: string;
-```
-
-- *Type:* string
 
 ---
 

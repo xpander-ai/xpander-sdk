@@ -35,6 +35,12 @@
 import { Tokens } from 'xpander-sdk';
 ```
 
+## 📖 Description
+
+Encapsulates token usage for different components of a task, typically an internal process and a worker/agent execution.
+
+> 🔗 **Extends:** [`Base`](Base.md)
+
 ## 🏗️ Constructor
 
 #### 🏗️ `new Tokens()`
