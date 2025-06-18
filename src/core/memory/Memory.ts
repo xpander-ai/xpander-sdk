@@ -1,7 +1,7 @@
 import request from 'sync-request';
 import {
   Agent,
-  IAgentInstructions,
+  AgentInstructions,
   KnowledgeBaseStrategy,
   LLMProvider,
   ToolCallResult,
@@ -349,7 +349,7 @@ export class Memory extends Base {
    *
    * @param instructions - Instructions to initialize the memory thread.
    */
-  public initInstructions(instructions: IAgentInstructions): void {
+  public initInstructions(instructions: AgentInstructions): void {
     // temporary workaround for input_task issue (not passing all required data)
     if (instructions.general) {
       instructions.general += `
@@ -370,8 +370,8 @@ export class Memory extends Base {
         role: 'system',
         content: [
           `Your General instructions: ${instructions.general}`,
-          `Your Role instructions: ${instructions.role}`,
-          `Your Goal instructions: ${instructions.goal}`,
+          `Your Role instructions: ${instructions.role.join('\n')}`,
+          `Your Goal instructions: ${instructions.goal.join('\n')}`,
           this.agent.endToolEnabled
             ? `IMPORTANT: When done or unable to proceed after attempts, use "xpfinish-agent-execution-finished" to mark success or failure.`
             : '',
@@ -417,7 +417,7 @@ Agent's graph: ${textualGraph}
    */
   public initMessages(
     input: IMemoryMessage,
-    instructions: IAgentInstructions,
+    instructions: AgentInstructions,
     llmProvider: LLMProvider = LLMProvider.OPEN_AI,
     files: string[] = [],
   ): void {

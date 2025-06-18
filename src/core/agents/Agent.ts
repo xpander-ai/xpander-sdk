@@ -14,7 +14,6 @@ import {
   IAgentTool,
   ISourceNode,
   SourceNodeType,
-  IAgentInstructions,
   AgentAccessScope,
   AgentGraphItemSubType,
   AgentDelegationType,
@@ -51,6 +50,7 @@ import {
   getInstructionsFromLocalFile,
 } from '../utils';
 import { XpanderClient } from '../XpanderClient';
+import { AgentInstructions } from './AgentInstructions';
 
 /**
  * Represents an agent in xpanderAI, managing tools, sessions, and operational workflows.
@@ -72,7 +72,7 @@ export class Agent extends Base {
       AgentDelegationEndStrategy.RETURN_TO_START,
       MemoryType.SHORT_TERM,
       MemoryStrategy.FULL,
-      { role: '', general: '', goal: '' },
+      new AgentInstructions(),
       AgentAccessScope.ORGANIZATIONAL,
       [],
       [],
@@ -134,7 +134,7 @@ export class Agent extends Base {
     public delegationEndStrategy: AgentDelegationEndStrategy,
     public memoryType: MemoryType,
     public memoryStrategy: MemoryStrategy,
-    public instructions: IAgentInstructions,
+    public instructions: AgentInstructions,
     public accessScope: AgentAccessScope,
     public sourceNodes: ISourceNode[],
     public prompts: string[],
@@ -259,7 +259,7 @@ export class Agent extends Base {
         agent.delegationEndStrategy,
         agent.memoryType,
         agent.memoryStrategy,
-        agent.instructions,
+        AgentInstructions.fromObject(agent.instructions),
         agent.accessScope,
         agent.sourceNodes,
         agent.prompts,
