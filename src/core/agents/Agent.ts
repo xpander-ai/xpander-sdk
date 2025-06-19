@@ -662,14 +662,15 @@ export class Agent extends Base {
     const nonKbToolCalls = toolCalls.filter(
       (tc) => !tc.name.startsWith('xpkb'),
     );
-    const result = kbToolCalls.map((toolCall) =>
-      this.runTool(toolCall, payloadExtension, toolCalls.length > 1),
-    );
-    result.push(
-      ...nonKbToolCalls.map((toolCall) =>
+
+    const result: ToolCallResult[] = [];
+
+    // kb and cloud tool calls
+    for (const toolCall of [...kbToolCalls, ...nonKbToolCalls]) {
+      result.push(
         this.runTool(toolCall, payloadExtension, toolCalls.length > 1),
-      ),
-    );
+      );
+    }
 
     // do not return local tools, we need to call the run tools to enforce graph (HEAD request)
     return result.filter((res) => !res.isLocal);
@@ -982,6 +983,7 @@ export class Agent extends Base {
         const withAgentEndTool = this.withAgentEndTool;
         const localTools = this.localTools;
 
+        this.version = null;
         this.load(pendingExecution.agentId);
 
         // preserve agent end tool state
