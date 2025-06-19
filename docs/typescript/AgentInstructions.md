@@ -25,25 +25,25 @@
 
 ---
 
-## 🏗️ LLMTokens
+## 🏗️ AgentInstructions
 
 **Language:** TypeScript | **Type:** Class
 
 ## 📦 Installation & Import
 
 ```typescript
-import { LLMTokens } from 'xpander-sdk';
+import { AgentInstructions } from 'xpander-sdk';
 ```
 
 ## 📖 Description
 
-Represents token usage statistics for a language model interaction.
+Represents the instructions provided to an agent within the xpander.ai framework.
 
 > 🔗 **Extends:** [`Base`](Base.md)
 
 ## 🏗️ Constructor
 
-#### 🏗️ `new LLMTokens()`
+#### 🏗️ `new AgentInstructions()`
 
 <details>
 <summary>📋 Method Details</summary>
@@ -52,16 +52,16 @@ Represents token usage statistics for a language model interaction.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `completionTokens` | `number` | ❌ | No description |
-| `promptTokens` | `number` | ❌ | No description |
-| `totalTokens` | `number` | ❌ | No description |
+| `role` | `string[]` | ❌ | No description |
+| `goal` | `string[]` | ❌ | No description |
+| `general` | `string` | ❌ | No description |
 
 </details>
 
 **Usage:**
 
 ```typescript
-const instance = new LLMTokens(completionTokens, promptTokens);
+const instance = new AgentInstructions(role, goal);
 ```
 
 ---
@@ -70,31 +70,31 @@ const instance = new LLMTokens(completionTokens, promptTokens);
 
 ### ✅ Required Properties
 
-#### 📝 `completionTokens`
+#### 📝 `general`
 
 | Property | Value |
 |----------|-------|
-| **Type** | `number` |
+| **Type** | `string` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 
 ---
 
-#### 📝 `promptTokens`
+#### 📝 `goal`
 
 | Property | Value |
 |----------|-------|
-| **Type** | `number` |
+| **Type** | `string[]` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 
 ---
 
-#### 📝 `totalTokens`
+#### 📝 `role`
 
 | Property | Value |
 |----------|-------|
-| **Type** | `number` |
+| **Type** | `string[]` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 
@@ -103,23 +103,23 @@ const instance = new LLMTokens(completionTokens, promptTokens);
 ## Usage Example
 
 <details>
-<summary>📝 TypeScript LLMTokens Usage</summary>
+<summary>📝 TypeScript AgentInstructions Usage</summary>
 
 ```typescript
-import { LLMTokens } from 'xpander-sdk';
+import { AgentInstructions } from 'xpander-sdk';
 
-// Create LLMTokens instance
-const llmtokens = new LLMTokens();
-
-
-// Access key property: completionTokens
-const value = llmtokens.completionTokens;
-console.log(`completionTokens: ${value}`);
+// Create AgentInstructions instance
+const agentinstructions = new AgentInstructions();
 
 
+// Access key property: general
+const value = agentinstructions.general;
+console.log(`general: ${value}`);
 
 
-console.log("LLMTokens ready!");
+
+
+console.log("AgentInstructions ready!");
 ```
 
 </details>

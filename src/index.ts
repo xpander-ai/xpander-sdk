@@ -3,7 +3,7 @@ export { XpanderClient } from './core/XpanderClient';
 export { LLMProvider } from './constants/llmProvider';
 export * from './types';
 export { Configuration } from './core/Configuration';
-export { Agents, Agent, UnloadedAgent } from './core/agents';
+export { Agents, Agent, UnloadedAgent, AgentInstructions } from './core/agents';
 export { KnowledgeBase } from './core/knowledgeBases';
 export { Base } from './core/base';
 export * from './core/tools';

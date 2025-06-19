@@ -265,7 +265,7 @@ const result = agent.updateMessages(_messages);
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `instructions` | `IAgentInstructions` | ✅ | - Instructions to initialize the memory thread. |
+| `instructions` | `AgentInstructions` | ✅ | - Instructions to initialize the memory thread. |
 
 </details>
 
@@ -289,7 +289,7 @@ const result = agent.initInstructions(instructions);
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `input` | `IMemoryMessage` | ✅ | - Initial user input message. |
-| `instructions` | `IAgentInstructions` | ✅ | - Instructions to initialize the memory thread. |
+| `instructions` | `AgentInstructions` | ✅ | - Instructions to initialize the memory thread. |
 | `llmProvider` | `LLMProvider` | ❌ | No description |
 | `files` | `string[]` | ❌ | No description |
 

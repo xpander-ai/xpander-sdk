@@ -5,6 +5,7 @@ This directory contains individual documentation files for each class in the xpa
 ## Classes
 
 - [Agent](Agent.md) - Represents an agent in xpanderAI, managing tools, sessions, and operational workflows.
+- [AgentInstructions](AgentInstructions.md) - Represents the instructions provided to an agent within the xpander.ai framework.
 - [AgenticInterface](AgenticInterface.md) - Represents an agentic interface with identifying and descriptive properties.
 - [AgenticOperation](AgenticOperation.md) - Represents an agentic operation with metadata and execution details.
 - [Agents](Agents.md) - Manages a collection of Agent instances in xpanderAI, providing methods to list, retrieve, and initialize agents, including custom agents.
@@ -16,11 +17,11 @@ This directory contains individual documentation files for each class in the xpa
 - [GraphItem](GraphItem.md) - Represents a single item (node) in an agent's graph structure.
 - [KnowledgeBase](KnowledgeBase.md)
 - [LLMMetrics](LLMMetrics.md)
-- [LLMTokens](LLMTokens.md)
+- [LLMTokens](LLMTokens.md) - Represents token usage statistics for a language model interaction.
 - [Memory](Memory.md) - Represents a memory thread in xpanderAI, handling storage, retrieval, and processing of memory messages and related operations.
 - [MemoryThread](MemoryThread.md)
 - [MetricsBase](MetricsBase.md)
-- [Tokens](Tokens.md)
+- [Tokens](Tokens.md) - Encapsulates token usage for different components of a task, typically an internal process and a worker/agent execution.
 - [ToolCall](ToolCall.md) - Represents a tool call with its metadata and payload.
 - [ToolCallResult](ToolCallResult.md) - Represents the result of a tool call execution.
 - [UnloadedAgent](UnloadedAgent.md) - Represents an unloaded agent in the xpander.ai system. Used to reference agents that are not yet fully loaded.
@@ -33,7 +34,6 @@ This directory contains individual documentation files for each class in the xpa
 - [IAgentGraphItemMCPSettings](IAgentGraphItemMCPSettings.md)
 - [IAgentGraphItemSchema](IAgentGraphItemSchema.md)
 - [IAgentGraphItemSettings](IAgentGraphItemSettings.md)
-- [IAgentInstructions](IAgentInstructions.md)
 - [IAgentTool](IAgentTool.md) - Interface representing a tool available to an agent.
 - [IBedrockTool](IBedrockTool.md) - Interface representing a Bedrock tool.
 - [IBedrockToolOutput](IBedrockToolOutput.md) - Output interface for a Bedrock tool.

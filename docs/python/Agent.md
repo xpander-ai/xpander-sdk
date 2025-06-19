@@ -65,7 +65,7 @@ Represents an agent in xpanderAI, managing tools, sessions, and operational work
 | `delegationEndStrategy` | `AgentDelegationEndStrategy` | ✅ | No description |
 | `memoryType` | `MemoryType` | ✅ | - Type of memory the agent utilizes. |
 | `memoryStrategy` | `MemoryStrategy` | ✅ | - Strategy for memory management. |
-| `instructions` | `IAgentInstructions` | ✅ | - Instructions for the agent's operation. |
+| `instructions` | `AgentInstructions` | ✅ | - Instructions for the agent's operation. |
 | `accessScope` | `AgentAccessScope` | ✅ | - Scope of the agent's access permissions. |
 | `sourceNodes` | `List[ISourceNode]` | ✅ | - Source nodes associated with the agent. |
 | `prompts` | `List[string]` | ✅ | - Prompts used by the agent. |
@@ -269,7 +269,7 @@ Retrieves the vanilla knowledge bases of the agent.
 
 | Property | Value |
 |----------|-------|
-| **Type** | `IAgentInstructions` |
+| **Type** | `AgentInstructions` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 

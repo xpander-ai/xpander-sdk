@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { IAgentInstructions } from '../types';
+import { AgentInstructions } from './agents';
 
 /**
  * Converts a snake_case string to camelCase.
@@ -106,7 +106,7 @@ export const readFile = (path: string): string | null => {
 
 export const getCurrentWorkDir = (): string => process.cwd();
 
-export const getInstructionsFromLocalFile = (): IAgentInstructions | null => {
+export const getInstructionsFromLocalFile = (): AgentInstructions | null => {
   const instructionsFilePath = `${getCurrentWorkDir()}/agent_instructions.json`;
   if (fileExists(instructionsFilePath)) {
     try {
@@ -114,7 +114,7 @@ export const getInstructionsFromLocalFile = (): IAgentInstructions | null => {
       if (!rawFile) {
         return null;
       }
-      return JSON.parse(rawFile);
+      return AgentInstructions.fromObject(JSON.parse(rawFile));
     } catch (err: any) {
       console.warn(`Failed to load agent instructions - ${err.toString()}`);
     }

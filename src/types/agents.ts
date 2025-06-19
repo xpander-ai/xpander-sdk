@@ -152,12 +152,6 @@ export enum AgentAccessScope {
   ORGANIZATIONAL = 'organizational',
 }
 
-export interface IAgentInstructions {
-  role: string;
-  goal: string;
-  general: string;
-}
-
 export enum AgentType {
   REGULAR = 'regular',
   MANAGER = 'manager',
