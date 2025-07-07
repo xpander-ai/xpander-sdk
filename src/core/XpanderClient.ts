@@ -1,6 +1,7 @@
 import { Agents } from './agents/AgentsController';
 import CacheService from './CacheService';
 import { Configuration } from './Configuration';
+import { KnowledgeBases } from './knowledge';
 import { ensureFinishStruct, ToolCall } from './tools/ToolCall';
 import { LLMProvider } from '../constants/llmProvider';
 import { DEFAULT_BASE_URL } from '../constants/xpanderClient';
@@ -73,6 +74,8 @@ export class XpanderClient {
 
   /** Instance of Agents to manage xpanderAI agents. */
   agents: Agents;
+  /** Instance of Knowledgebases to manage xpanderAI knowledge bases. */
+  knowledgeBases: KnowledgeBases;
 
   /**
    * Constructs a new XpanderClient instance.
@@ -101,5 +104,6 @@ export class XpanderClient {
     });
 
     this.agents = new Agents(this.configuration);
+    this.knowledgeBases = new KnowledgeBases(this.configuration);
   }
 }

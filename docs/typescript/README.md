@@ -16,6 +16,9 @@ This directory contains individual documentation files for each class in the xpa
 - [Graph](Graph.md) - Represents a graph structure containing nodes related to an agent.
 - [GraphItem](GraphItem.md) - Represents a single item (node) in an agent's graph structure.
 - [KnowledgeBase](KnowledgeBase.md)
+- [KnowledgeBaseDocument](KnowledgeBaseDocument.md) - Represents a knowledge base document in the xpander.ai system. This is used to reference a document within a knowledge base.
+- [KnowledgeBaseItem](KnowledgeBaseItem.md) - Represents a knowledge base in the xpander.ai system. Used to manage documents stored within the knowledge base.
+- [KnowledgeBases](KnowledgeBases.md) - Manages a collection of knowledge bases in the xpander.ai system, providing methods to list, retrieve, and create individual knowledge bases.
 - [LLMMetrics](LLMMetrics.md)
 - [LLMTokens](LLMTokens.md) - Represents token usage statistics for a language model interaction.
 - [Memory](Memory.md) - Represents a memory thread in xpanderAI, handling storage, retrieval, and processing of memory messages and related operations.
@@ -68,6 +71,7 @@ This directory contains individual documentation files for each class in the xpa
 - [AgentType](AgentType.md)
 - [ExecutionStatus](ExecutionStatus.md)
 - [KnowledgeBaseStrategy](KnowledgeBaseStrategy.md)
+- [KnowledgeBaseType](KnowledgeBaseType.md)
 - [LLMProvider](LLMProvider.md) - Enum representing different Large Language Model (LLM) providers.
 - [MemoryStrategy](MemoryStrategy.md)
 - [MemoryType](MemoryType.md)

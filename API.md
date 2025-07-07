@@ -3586,6 +3586,537 @@ public readonly strategy: KnowledgeBaseStrategy;
 ---
 
 
+### KnowledgeBaseDocument <a name="KnowledgeBaseDocument" id="xpander-sdk.KnowledgeBaseDocument"></a>
+
+Represents a knowledge base document in the xpander.ai system. This is used to reference a document within a knowledge base.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.KnowledgeBaseDocument.Initializer"></a>
+
+```typescript
+import { KnowledgeBaseDocument } from 'xpander-sdk'
+
+new KnowledgeBaseDocument(configuration: Configuration, id: string, kbId: string, documentUrl: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - The configuration instance used for interacting with the xpander.ai API. |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.Initializer.parameter.id">id</a></code> | <code>string</code> | - The unique identifier of the document. |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.Initializer.parameter.kbId">kbId</a></code> | <code>string</code> | - The identifier of the knowledge base this document belongs to. |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.Initializer.parameter.documentUrl">documentUrl</a></code> | <code>string</code> | - The URL of the document stored in the knowledge base. |
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.KnowledgeBaseDocument.Initializer.parameter.configuration"></a>
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+The configuration instance used for interacting with the xpander.ai API.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.KnowledgeBaseDocument.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The unique identifier of the document.
+
+---
+
+##### `kbId`<sup>Required</sup> <a name="kbId" id="xpander-sdk.KnowledgeBaseDocument.Initializer.parameter.kbId"></a>
+
+- *Type:* string
+
+The identifier of the knowledge base this document belongs to.
+
+---
+
+##### `documentUrl`<sup>Required</sup> <a name="documentUrl" id="xpander-sdk.KnowledgeBaseDocument.Initializer.parameter.documentUrl"></a>
+
+- *Type:* string
+
+The URL of the document stored in the knowledge base.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.delete">delete</a></code> | Deletes the document from the knowledge base via the xpander.ai API. |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.KnowledgeBaseDocument.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.KnowledgeBaseDocument.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.KnowledgeBaseDocument.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.KnowledgeBaseDocument.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `delete` <a name="delete" id="xpander-sdk.KnowledgeBaseDocument.delete"></a>
+
+```typescript
+public delete(): void
+```
+
+Deletes the document from the knowledge base via the xpander.ai API.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.KnowledgeBaseDocument.fromObject"></a>
+
+```typescript
+import { KnowledgeBaseDocument } from 'xpander-sdk'
+
+KnowledgeBaseDocument.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.KnowledgeBaseDocument.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.property.documentUrl">documentUrl</a></code> | <code>string</code> | - The URL of the document stored in the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.property.id">id</a></code> | <code>string</code> | - The unique identifier of the document. |
+| <code><a href="#xpander-sdk.KnowledgeBaseDocument.property.kbId">kbId</a></code> | <code>string</code> | - The identifier of the knowledge base this document belongs to. |
+
+---
+
+##### `documentUrl`<sup>Required</sup> <a name="documentUrl" id="xpander-sdk.KnowledgeBaseDocument.property.documentUrl"></a>
+
+```typescript
+public readonly documentUrl: string;
+```
+
+- *Type:* string
+
+The URL of the document stored in the knowledge base.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.KnowledgeBaseDocument.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+The unique identifier of the document.
+
+---
+
+##### `kbId`<sup>Required</sup> <a name="kbId" id="xpander-sdk.KnowledgeBaseDocument.property.kbId"></a>
+
+```typescript
+public readonly kbId: string;
+```
+
+- *Type:* string
+
+The identifier of the knowledge base this document belongs to.
+
+---
+
+
+### KnowledgeBaseItem <a name="KnowledgeBaseItem" id="xpander-sdk.KnowledgeBaseItem"></a>
+
+Represents a knowledge base in the xpander.ai system. Used to manage documents stored within the knowledge base.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.KnowledgeBaseItem.Initializer"></a>
+
+```typescript
+import { KnowledgeBaseItem } from 'xpander-sdk'
+
+new KnowledgeBaseItem(configuration: Configuration, id: string, name: string, description: string, type: KnowledgeBaseType, organizationId: string, totalDocuments: number)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - The configuration instance used for interacting with the xpander.ai API. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.Initializer.parameter.id">id</a></code> | <code>string</code> | - The unique identifier of the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.Initializer.parameter.name">name</a></code> | <code>string</code> | - The name of the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.Initializer.parameter.description">description</a></code> | <code>string</code> | - The description of the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.Initializer.parameter.type">type</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseType">KnowledgeBaseType</a></code> | - The type of the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.Initializer.parameter.organizationId">organizationId</a></code> | <code>string</code> | - The ID of the organization to which the knowledge base belongs. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.Initializer.parameter.totalDocuments">totalDocuments</a></code> | <code>number</code> | - The total number of documents in the knowledge base. |
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.KnowledgeBaseItem.Initializer.parameter.configuration"></a>
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+The configuration instance used for interacting with the xpander.ai API.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.KnowledgeBaseItem.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The unique identifier of the knowledge base.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.KnowledgeBaseItem.Initializer.parameter.name"></a>
+
+- *Type:* string
+
+The name of the knowledge base.
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.KnowledgeBaseItem.Initializer.parameter.description"></a>
+
+- *Type:* string
+
+The description of the knowledge base.
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.KnowledgeBaseItem.Initializer.parameter.type"></a>
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBaseType">KnowledgeBaseType</a>
+
+The type of the knowledge base.
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.KnowledgeBaseItem.Initializer.parameter.organizationId"></a>
+
+- *Type:* string
+
+The ID of the organization to which the knowledge base belongs.
+
+---
+
+##### `totalDocuments`<sup>Required</sup> <a name="totalDocuments" id="xpander-sdk.KnowledgeBaseItem.Initializer.parameter.totalDocuments"></a>
+
+- *Type:* number
+
+The total number of documents in the knowledge base.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.from">from</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.toDict">toDict</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.toJson">toJson</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.addDocuments">addDocuments</a></code> | Adds new documents to the knowledge base using the xpander.ai API. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.listDocuments">listDocuments</a></code> | Retrieves the list of documents in the knowledge base from the xpander.ai API. |
+
+---
+
+##### `from` <a name="from" id="xpander-sdk.KnowledgeBaseItem.from"></a>
+
+```typescript
+public from(data: object): Base
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.KnowledgeBaseItem.from.parameter.data"></a>
+
+- *Type:* object
+
+---
+
+##### `toDict` <a name="toDict" id="xpander-sdk.KnowledgeBaseItem.toDict"></a>
+
+```typescript
+public toDict(): {[ key: string ]: any}
+```
+
+##### `toJson` <a name="toJson" id="xpander-sdk.KnowledgeBaseItem.toJson"></a>
+
+```typescript
+public toJson(): string
+```
+
+##### `addDocuments` <a name="addDocuments" id="xpander-sdk.KnowledgeBaseItem.addDocuments"></a>
+
+```typescript
+public addDocuments(urls: string[], sync?: boolean): KnowledgeBaseDocument[]
+```
+
+Adds new documents to the knowledge base using the xpander.ai API.
+
+###### `urls`<sup>Required</sup> <a name="urls" id="xpander-sdk.KnowledgeBaseItem.addDocuments.parameter.urls"></a>
+
+- *Type:* string[]
+
+An array of document URLs to be added to the knowledge base.
+
+---
+
+###### `sync`<sup>Optional</sup> <a name="sync" id="xpander-sdk.KnowledgeBaseItem.addDocuments.parameter.sync"></a>
+
+- *Type:* boolean
+
+Optional.
+
+If true, documents are added synchronously; otherwise, they are added asynchronously. Default is false.
+
+---
+
+##### `listDocuments` <a name="listDocuments" id="xpander-sdk.KnowledgeBaseItem.listDocuments"></a>
+
+```typescript
+public listDocuments(): KnowledgeBaseDocument[]
+```
+
+Retrieves the list of documents in the knowledge base from the xpander.ai API.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.fromObject">fromObject</a></code> | *No description.* |
+
+---
+
+##### `fromObject` <a name="fromObject" id="xpander-sdk.KnowledgeBaseItem.fromObject"></a>
+
+```typescript
+import { KnowledgeBaseItem } from 'xpander-sdk'
+
+KnowledgeBaseItem.fromObject(data: any)
+```
+
+###### `data`<sup>Required</sup> <a name="data" id="xpander-sdk.KnowledgeBaseItem.fromObject.parameter.data"></a>
+
+- *Type:* any
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.property.description">description</a></code> | <code>string</code> | - The description of the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.property.id">id</a></code> | <code>string</code> | - The unique identifier of the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.property.name">name</a></code> | <code>string</code> | - The name of the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.property.organizationId">organizationId</a></code> | <code>string</code> | - The ID of the organization to which the knowledge base belongs. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.property.totalDocuments">totalDocuments</a></code> | <code>number</code> | - The total number of documents in the knowledge base. |
+| <code><a href="#xpander-sdk.KnowledgeBaseItem.property.type">type</a></code> | <code><a href="#xpander-sdk.KnowledgeBaseType">KnowledgeBaseType</a></code> | - The type of the knowledge base. |
+
+---
+
+##### `description`<sup>Required</sup> <a name="description" id="xpander-sdk.KnowledgeBaseItem.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+
+The description of the knowledge base.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="xpander-sdk.KnowledgeBaseItem.property.id"></a>
+
+```typescript
+public readonly id: string;
+```
+
+- *Type:* string
+
+The unique identifier of the knowledge base.
+
+---
+
+##### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.KnowledgeBaseItem.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+
+The name of the knowledge base.
+
+---
+
+##### `organizationId`<sup>Required</sup> <a name="organizationId" id="xpander-sdk.KnowledgeBaseItem.property.organizationId"></a>
+
+```typescript
+public readonly organizationId: string;
+```
+
+- *Type:* string
+
+The ID of the organization to which the knowledge base belongs.
+
+---
+
+##### `totalDocuments`<sup>Required</sup> <a name="totalDocuments" id="xpander-sdk.KnowledgeBaseItem.property.totalDocuments"></a>
+
+```typescript
+public readonly totalDocuments: number;
+```
+
+- *Type:* number
+
+The total number of documents in the knowledge base.
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="xpander-sdk.KnowledgeBaseItem.property.type"></a>
+
+```typescript
+public readonly type: KnowledgeBaseType;
+```
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBaseType">KnowledgeBaseType</a>
+
+The type of the knowledge base.
+
+---
+
+
+### KnowledgeBases <a name="KnowledgeBases" id="xpander-sdk.KnowledgeBases"></a>
+
+Manages a collection of knowledge bases in the xpander.ai system, providing methods to list, retrieve, and create individual knowledge bases.
+
+#### Initializers <a name="Initializers" id="xpander-sdk.KnowledgeBases.Initializer"></a>
+
+```typescript
+import { KnowledgeBases } from 'xpander-sdk'
+
+new KnowledgeBases(configuration: Configuration)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBases.Initializer.parameter.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for managing knowledge bases. |
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.KnowledgeBases.Initializer.parameter.configuration"></a>
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+Configuration settings for managing knowledge bases.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBases.create">create</a></code> | Creates a new knowledge base using the xpander.ai API. |
+| <code><a href="#xpander-sdk.KnowledgeBases.get">get</a></code> | Retrieves a specific knowledge base by its ID from the xpander.ai API. |
+| <code><a href="#xpander-sdk.KnowledgeBases.list">list</a></code> | Retrieves the list of knowledge bases from the xpander.ai API. |
+
+---
+
+##### `create` <a name="create" id="xpander-sdk.KnowledgeBases.create"></a>
+
+```typescript
+public create(name: string, description?: string): KnowledgeBaseItem
+```
+
+Creates a new knowledge base using the xpander.ai API.
+
+###### `name`<sup>Required</sup> <a name="name" id="xpander-sdk.KnowledgeBases.create.parameter.name"></a>
+
+- *Type:* string
+
+The name of the new knowledge base.
+
+---
+
+###### `description`<sup>Optional</sup> <a name="description" id="xpander-sdk.KnowledgeBases.create.parameter.description"></a>
+
+- *Type:* string
+
+Optional.
+
+The description of the knowledge base. Defaults to an empty string.
+
+---
+
+##### `get` <a name="get" id="xpander-sdk.KnowledgeBases.get"></a>
+
+```typescript
+public get(knowledgeBaseId: string): KnowledgeBaseItem
+```
+
+Retrieves a specific knowledge base by its ID from the xpander.ai API.
+
+###### `knowledgeBaseId`<sup>Required</sup> <a name="knowledgeBaseId" id="xpander-sdk.KnowledgeBases.get.parameter.knowledgeBaseId"></a>
+
+- *Type:* string
+
+The unique identifier of the knowledge base to retrieve.
+
+---
+
+##### `list` <a name="list" id="xpander-sdk.KnowledgeBases.list"></a>
+
+```typescript
+public list(): KnowledgeBaseItem[]
+```
+
+Retrieves the list of knowledge bases from the xpander.ai API.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBases.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | - Configuration settings for managing knowledge bases. |
+
+---
+
+##### `configuration`<sup>Required</sup> <a name="configuration" id="xpander-sdk.KnowledgeBases.property.configuration"></a>
+
+```typescript
+public readonly configuration: Configuration;
+```
+
+- *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
+
+Configuration settings for managing knowledge bases.
+
+---
+
+
 ### LLMMetrics <a name="LLMMetrics" id="xpander-sdk.LLMMetrics"></a>
 
 #### Initializers <a name="Initializers" id="xpander-sdk.LLMMetrics.Initializer"></a>
@@ -5755,6 +6286,7 @@ The list of tool calls to filter.
 | --- | --- | --- |
 | <code><a href="#xpander-sdk.XpanderClient.property.agents">agents</a></code> | <code><a href="#xpander-sdk.Agents">Agents</a></code> | Instance of Agents to manage xpanderAI agents. |
 | <code><a href="#xpander-sdk.XpanderClient.property.configuration">configuration</a></code> | <code><a href="#xpander-sdk.Configuration">Configuration</a></code> | Configuration settings for the xpanderAI client. |
+| <code><a href="#xpander-sdk.XpanderClient.property.knowledgeBases">knowledgeBases</a></code> | <code><a href="#xpander-sdk.KnowledgeBases">KnowledgeBases</a></code> | Instance of Knowledgebases to manage xpanderAI knowledge bases. |
 
 ---
 
@@ -5779,6 +6311,18 @@ public readonly configuration: Configuration;
 - *Type:* <a href="#xpander-sdk.Configuration">Configuration</a>
 
 Configuration settings for the xpanderAI client.
+
+---
+
+##### `knowledgeBases`<sup>Required</sup> <a name="knowledgeBases" id="xpander-sdk.XpanderClient.property.knowledgeBases"></a>
+
+```typescript
+public readonly knowledgeBases: KnowledgeBases;
+```
+
+- *Type:* <a href="#xpander-sdk.KnowledgeBases">KnowledgeBases</a>
+
+Instance of Knowledgebases to manage xpanderAI knowledge bases.
 
 ---
 
@@ -7452,6 +7996,27 @@ Enum representing the possible statuses of an agent.
 
 
 ##### `AGENTIC_RAG` <a name="AGENTIC_RAG" id="xpander-sdk.KnowledgeBaseStrategy.AGENTIC_RAG"></a>
+
+---
+
+
+### KnowledgeBaseType <a name="KnowledgeBaseType" id="xpander-sdk.KnowledgeBaseType"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#xpander-sdk.KnowledgeBaseType.MANAGED">MANAGED</a></code> | *No description.* |
+| <code><a href="#xpander-sdk.KnowledgeBaseType.EXTERNAL">EXTERNAL</a></code> | *No description.* |
+
+---
+
+##### `MANAGED` <a name="MANAGED" id="xpander-sdk.KnowledgeBaseType.MANAGED"></a>
+
+---
+
+
+##### `EXTERNAL` <a name="EXTERNAL" id="xpander-sdk.KnowledgeBaseType.EXTERNAL"></a>
 
 ---
 

@@ -25,25 +25,25 @@
 
 ---
 
-## 🏗️ XpanderClient
+## 🏗️ KnowledgeBases
 
-**Language:** Python | **Type:** Class
+**Language:** TypeScript | **Type:** Class
 
 ## 📦 Installation & Import
 
-```python
-from xpander_sdk import XpanderClient
+```typescript
+import { KnowledgeBases } from 'xpander-sdk';
 ```
 
 ## 📖 Description
 
-XpanderClient provides methods for configuring and interacting with xpanderAI tools, managing agents, and extracting tool calls from LLM responses.
+Manages a collection of knowledge bases in the xpander.ai system, providing methods to list, retrieve, and create individual knowledge bases.
 
 ## 🏗️ Constructor
 
-#### 🏗️ `new XpanderClient()`
+#### 🏗️ `new KnowledgeBases()`
 
-> Constructs a new XpanderClient instance.
+> Constructs an instance of the KnowledgeBases manager.
 
 <details>
 <summary>📋 Method Details</summary>
@@ -52,17 +52,14 @@ XpanderClient provides methods for configuring and interacting with xpanderAI to
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `apiKey` | `string` | ✅ | No description |
-| `baseUrl` | `any` | ❌ | No description |
-| `organizationId` | `string` | ❌ | No description |
-| `should_reset_cache` | `boolean` | ❌ | No description |
+| `configuration` | `Configuration` | ✅ | - Configuration settings for managing knowledge bases. |
 
 </details>
 
 **Usage:**
 
-```python
-instance = XpanderClient(apiKey, baseUrl=None)
+```typescript
+const instance = new KnowledgeBases(configuration);
 ```
 
 ---
@@ -71,21 +68,9 @@ instance = XpanderClient(apiKey, baseUrl=None)
 
 ### ✅ Required Properties
 
-#### 📝 `agents`
-
-Instance of Agents to manage xpanderAI agents.
-
-| Property | Value |
-|----------|-------|
-| **Type** | `Agents` |
-| **Required** | ✅ Required |
-| **Access** | ✏️ Read/Write |
-
----
-
 #### 📝 `configuration`
 
-Configuration settings for the xpanderAI client.
+- Configuration settings for managing knowledge bases.
 
 | Property | Value |
 |----------|-------|
@@ -95,23 +80,13 @@ Configuration settings for the xpanderAI client.
 
 ---
 
-#### 📝 `knowledgeBases`
+## 🔧 Methods
 
-Instance of Knowledgebases to manage xpanderAI knowledge bases.
+### 💾 Data Operations
 
-| Property | Value |
-|----------|-------|
-| **Type** | `KnowledgeBases` |
-| **Required** | ✅ Required |
-| **Access** | ✏️ Read/Write |
+#### ➕ `create()`
 
----
-
-## ⚡ Static Methods
-
-#### 🔍 `extractToolCalls()`
-
-> Extracts tool calls from an LLM response based on the specified LLM provider.
+> Creates a new knowledge base using the xpander.ai API.
 
 <details>
 <summary>📋 Method Details</summary>
@@ -120,24 +95,24 @@ Instance of Knowledgebases to manage xpanderAI knowledge bases.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `llmResponse` | `any` | ✅ | - The LLM response to analyze for tool calls. |
-| `llmProvider` | `LLMProvider` | ❌ | - The LLM provider, defaults to OPEN_AI. |
+| `name` | `string` | ✅ | - The name of the new knowledge base. |
+| `description` | `string` | ❌ | - Optional. |
 
-**Returns:** `List[ToolCall]`
+**Returns:** `KnowledgeBaseItem`
 
 </details>
 
 **Usage:**
 
-```python
-result = agent.extractToolCalls(llmResponse, llmProvider=None)
+```typescript
+const result = agent.create(name, description);
 ```
 
 ---
 
-#### 📥 `retrievePendingLocalToolCalls()`
+#### 📥 `get()`
 
-> Filters and retrieves local tool calls from a given list of tool calls.
+> Retrieves a specific knowledge base by its ID from the xpander.ai API.
 
 <details>
 <summary>📋 Method Details</summary>
@@ -146,16 +121,37 @@ result = agent.extractToolCalls(llmResponse, llmProvider=None)
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `toolCalls` | `List[ToolCall]` | ✅ | - The list of tool calls to filter. |
+| `knowledgeBaseId` | `string` | ✅ | - The unique identifier of the knowledge base to retrieve. |
 
-**Returns:** `List[ToolCall]`
+**Returns:** `KnowledgeBaseItem`
 
 </details>
 
 **Usage:**
 
-```python
-result = agent.retrievePendingLocalToolCalls(toolCalls)
+```typescript
+const result = agent.get(knowledgeBaseId);
+```
+
+---
+
+### 🛠️ Utility Methods
+
+#### 🔧 `list()`
+
+> Retrieves the list of knowledge bases from the xpander.ai API.
+
+<details>
+<summary>📋 Method Details</summary>
+
+**Returns:** `KnowledgeBaseItem[]`
+
+</details>
+
+**Usage:**
+
+```typescript
+const result = agent.list();
 ```
 
 ---
@@ -163,23 +159,28 @@ result = agent.retrievePendingLocalToolCalls(toolCalls)
 ## Usage Example
 
 <details>
-<summary>🐍 Python XpanderClient Usage</summary>
+<summary>📝 TypeScript KnowledgeBases Usage</summary>
 
-```python
-from xpander_sdk import XpanderClient
+```typescript
+import { KnowledgeBases } from 'xpander-sdk';
 
-# Create client instance
-client = XpanderClient(
-    api_key="your-api-key",
-    organization_id="your-org-id"
-)
+// Create KnowledgeBases instance
+const knowledgebases = new KnowledgeBases();
 
 
-print("XpanderClient ready!")
+// Access key property: configuration
+const value = knowledgebases.configuration;
+console.log(`configuration: ${value}`);
 
+
+
+// Call key method: create
+const result = knowledgebases.create();
+console.log(`Result: ${result}`);
+
+
+console.log("KnowledgeBases ready!");
 ```
-
-
 
 </details>
 

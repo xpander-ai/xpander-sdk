@@ -25,25 +25,27 @@
 
 ---
 
-## 🏗️ XpanderClient
+## 🏗️ KnowledgeBaseDocument
 
-**Language:** Python | **Type:** Class
+**Language:** TypeScript | **Type:** Class
 
 ## 📦 Installation & Import
 
-```python
-from xpander_sdk import XpanderClient
+```typescript
+import { KnowledgeBaseDocument } from 'xpander-sdk';
 ```
 
 ## 📖 Description
 
-XpanderClient provides methods for configuring and interacting with xpanderAI tools, managing agents, and extracting tool calls from LLM responses.
+Represents a knowledge base document in the xpander.ai system. This is used to reference a document within a knowledge base.
+
+> 🔗 **Extends:** [`Base`](Base.md)
 
 ## 🏗️ Constructor
 
-#### 🏗️ `new XpanderClient()`
+#### 🏗️ `new KnowledgeBaseDocument()`
 
-> Constructs a new XpanderClient instance.
+> Creates a new KnowledgeBaseDocument instance.
 
 <details>
 <summary>📋 Method Details</summary>
@@ -52,17 +54,17 @@ XpanderClient provides methods for configuring and interacting with xpanderAI to
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `apiKey` | `string` | ✅ | No description |
-| `baseUrl` | `any` | ❌ | No description |
-| `organizationId` | `string` | ❌ | No description |
-| `should_reset_cache` | `boolean` | ❌ | No description |
+| `configuration` | `Configuration` | ✅ | - The configuration instance used for interacting with the xpander.ai API. |
+| `id` | `string` | ✅ | - The unique identifier of the document. |
+| `kbId` | `string` | ✅ | - The identifier of the knowledge base this document belongs to. |
+| `documentUrl` | `string` | ✅ | - The URL of the document stored in the knowledge base. |
 
 </details>
 
 **Usage:**
 
-```python
-instance = XpanderClient(apiKey, baseUrl=None)
+```typescript
+const instance = new KnowledgeBaseDocument(configuration, id);
 ```
 
 ---
@@ -71,91 +73,59 @@ instance = XpanderClient(apiKey, baseUrl=None)
 
 ### ✅ Required Properties
 
-#### 📝 `agents`
+#### 📝 `documentUrl`
 
-Instance of Agents to manage xpanderAI agents.
+- The URL of the document stored in the knowledge base.
 
 | Property | Value |
 |----------|-------|
-| **Type** | `Agents` |
+| **Type** | `string` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 
 ---
 
-#### 📝 `configuration`
+#### 📝 `id`
 
-Configuration settings for the xpanderAI client.
+- The unique identifier of the document.
 
 | Property | Value |
 |----------|-------|
-| **Type** | `Configuration` |
+| **Type** | `string` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 
 ---
 
-#### 📝 `knowledgeBases`
+#### 📝 `kbId`
 
-Instance of Knowledgebases to manage xpanderAI knowledge bases.
+- The identifier of the knowledge base this document belongs to.
 
 | Property | Value |
 |----------|-------|
-| **Type** | `KnowledgeBases` |
+| **Type** | `string` |
 | **Required** | ✅ Required |
 | **Access** | ✏️ Read/Write |
 
 ---
 
-## ⚡ Static Methods
+## 🔧 Methods
 
-#### 🔍 `extractToolCalls()`
+### 💾 Data Operations
 
-> Extracts tool calls from an LLM response based on the specified LLM provider.
+#### 🗑️ `delete()`
+
+> Deletes the document from the knowledge base via the xpander.ai API.
 
 <details>
 <summary>📋 Method Details</summary>
-
-**Parameters:**
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `llmResponse` | `any` | ✅ | - The LLM response to analyze for tool calls. |
-| `llmProvider` | `LLMProvider` | ❌ | - The LLM provider, defaults to OPEN_AI. |
-
-**Returns:** `List[ToolCall]`
 
 </details>
 
 **Usage:**
 
-```python
-result = agent.extractToolCalls(llmResponse, llmProvider=None)
-```
-
----
-
-#### 📥 `retrievePendingLocalToolCalls()`
-
-> Filters and retrieves local tool calls from a given list of tool calls.
-
-<details>
-<summary>📋 Method Details</summary>
-
-**Parameters:**
-
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `toolCalls` | `List[ToolCall]` | ✅ | - The list of tool calls to filter. |
-
-**Returns:** `List[ToolCall]`
-
-</details>
-
-**Usage:**
-
-```python
-result = agent.retrievePendingLocalToolCalls(toolCalls)
+```typescript
+const result = agent.delete();
 ```
 
 ---
@@ -163,23 +133,28 @@ result = agent.retrievePendingLocalToolCalls(toolCalls)
 ## Usage Example
 
 <details>
-<summary>🐍 Python XpanderClient Usage</summary>
+<summary>📝 TypeScript KnowledgeBaseDocument Usage</summary>
 
-```python
-from xpander_sdk import XpanderClient
+```typescript
+import { KnowledgeBaseDocument } from 'xpander-sdk';
 
-# Create client instance
-client = XpanderClient(
-    api_key="your-api-key",
-    organization_id="your-org-id"
-)
+// Create KnowledgeBaseDocument instance
+const knowledgebasedocument = new KnowledgeBaseDocument();
 
 
-print("XpanderClient ready!")
+// Access key property: documentUrl
+const value = knowledgebasedocument.documentUrl;
+console.log(`documentUrl: ${value}`);
 
+
+
+// Call key method: delete
+const result = knowledgebasedocument.delete();
+console.log(`Result: ${result}`);
+
+
+console.log("KnowledgeBaseDocument ready!");
 ```
-
-
 
 </details>
 
