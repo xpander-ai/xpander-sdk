@@ -12,3 +12,4 @@ export { Memory, MemoryThread } from './core/memory';
 export * from './core/graphs';
 export { UserDetails } from './core/UserDetails';
 export * from './core/metrics';
+export * from './core/knowledge';

@@ -95,6 +95,18 @@ Configuration settings for the xpanderAI client.
 
 ---
 
+#### 📝 `knowledgeBases`
+
+Instance of Knowledgebases to manage xpanderAI knowledge bases.
+
+| Property | Value |
+|----------|-------|
+| **Type** | `KnowledgeBases` |
+| **Required** | ✅ Required |
+| **Access** | ✏️ Read/Write |
+
+---
+
 ## ⚡ Static Methods
 
 #### 🔍 `extractToolCalls()`
