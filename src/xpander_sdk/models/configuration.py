@@ -62,9 +62,9 @@ class Configuration(BaseModel):
             str: The complete URL for API requests, with organization ID included if required.
             
         Example:
-            >>> config = Configuration(base_url="https://api.xpander.ai", organization_id="org123")
+            >>> config = Configuration(base_url="https://inbound.xpander.ai", organization_id="org123")
             >>> config.get_full_url()
-            'https://api.xpander.ai'
+            'https://inbound.xpander.ai'
             
             >>> config = Configuration(base_url="https://agent-controller.xpander.ai", organization_id="org123")
             >>> config.get_full_url()

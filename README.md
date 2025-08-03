@@ -47,7 +47,7 @@ config = Configuration()
 config = Configuration(
     api_key="your-api-key",
     organization_id="your-org-id",
-    base_url="https://api.xpander.ai"
+    base_url="https://inbound.xpander.ai"
 )
 ```
 
@@ -201,7 +201,7 @@ The SDK supports multiple authentication methods:
 ```bash
 export XPANDER_API_KEY="your-api-key"
 export XPANDER_ORGANIZATION_ID="your-org-id"
-export XPANDER_BASE_URL="https://api.xpander.ai"  # Optional
+export XPANDER_BASE_URL="https://inbound.xpander.ai"  # Optional
 ```
 
 ### Configuration Object
