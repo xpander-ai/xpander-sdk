@@ -155,11 +155,11 @@ async def handle_task_failure(task):
 
 | Module              | Description                               | Documentation                          |
 | ------------------- | ----------------------------------------- | -------------------------------------- |
-| **Agents**          | Agent creation, management, and execution | [Agents Guide](docs/AGENTS.md)         |
-| **Tasks**           | Task lifecycle and execution management   | [docs/TASKS.md](docs/TASKS.md)         |
-| **ToolsRepository** | External tools and integrations           | [docs/TOOLS.md](docs/TOOLS.md)         |
-| **KnowledgeBases**  | Knowledge management and search           | [docs/KNOWLEDGE.md](docs/KNOWLEDGE.md) |
-| **Events**          | Event-driven programming                  | [docs/EVENTS.md](docs/EVENTS.md)       |
+| **Agents**          | Agent creation, management, and execution | [Agents Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/AGENTS.md)         |
+| **Tasks**           | Task lifecycle and execution management   | [Tasks Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/TASKS.md)         |
+| **ToolsRepository** | External tools and integrations           | [Tools Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/TOOLS.md)         |
+| **KnowledgeBases**  | Knowledge management and search           | [Knowledge Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/KNOWLEDGE.md) |
+| **Events**          | Event-driven programming                  | [Events Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/EVENTS.md)       |
 
 ## 🔄 Async/Sync Support
 
@@ -311,16 +311,15 @@ pytest tests/test_agents.py::test_agent_creation
 
 ## 📝 Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
+See [CHANGELOG.md](https://github.com/xpander-ai/xpander-sdk/blob/main/CHANGELOG.md) for version history and updates.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/xpander-ai/xpander-sdk/blob/main/LICENSE) file for details.
 
 ## 🆘 Support
 
 - **Documentation**: [https://docs.xpander.ai](https://docs.xpander.ai)
-- **Community**: [https://community.xpander.ai](https://community.xpander.ai)
 - **Issues**: [GitHub Issues](https://github.com/xpander-ai/xpander-sdk/issues)
 - **Email**: dev@xpander.ai
 

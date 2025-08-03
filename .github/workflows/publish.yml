@@ -27,16 +27,31 @@ jobs:
         run: |
           PACKAGE_NAME="xpander-sdk"
           PYPI_URL="https://pypi.org/pypi/${PACKAGE_NAME}/json"
-          VERSION=$(curl -s $PYPI_URL | jq -r '.info.version' 2>/dev/null || echo "1.99.99")
+          VERSION=$(curl -s $PYPI_URL | jq -r '.info.version' 2>/dev/null || echo "0.0.0")
 
-          if [ "$VERSION" = "null" ] || [ -z "$VERSION" ] || [ "$VERSION" = "1.99.99" ]; then
+          if [ "$VERSION" = "null" ] || [ -z "$VERSION" ] || [ "$VERSION" = "0.0.0" ]; then
             # First release - start with 2.0.0
             NEW_VERSION="2.0.0"
           else
-            # Increment patch version
+            # Parse current version
             IFS='.' read -r -a VERSION_PARTS <<< "$VERSION"
-            PATCH=$((VERSION_PARTS[2] + 1))
-            NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"
+            MAJOR=${VERSION_PARTS[0]}
+            MINOR=${VERSION_PARTS[1]}
+            PATCH=${VERSION_PARTS[2]}
+            
+            # Check if current version is less than 2.0.0
+            if [ "$MAJOR" -lt 2 ]; then
+              # Upgrade to 2.0.0 for new SDK version
+              NEW_VERSION="2.0.0"
+            elif [ "$MAJOR" -eq 2 ] && [ "$MINOR" -eq 0 ]; then
+              # Already in 2.0.x series, increment patch
+              PATCH=$((PATCH + 1))
+              NEW_VERSION="2.0.$PATCH"
+            else
+              # For versions 2.1.0 and above, increment patch
+              PATCH=$((PATCH + 1))
+              NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+            fi
           fi
 
           echo "Current PyPI version: $VERSION"
