@@ -1,0 +1,76 @@
+name: Publish xpander-sdk to PyPi
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine requests packaging jq
+
+      - name: Get Latest Version from PyPI and Increment
+        run: |
+          PACKAGE_NAME="xpander-sdk"
+          PYPI_URL="https://pypi.org/pypi/${PACKAGE_NAME}/json"
+          VERSION=$(curl -s $PYPI_URL | jq -r '.info.version' 2>/dev/null || echo "1.99.99")
+
+          if [ "$VERSION" = "null" ] || [ -z "$VERSION" ] || [ "$VERSION" = "1.99.99" ]; then
+            # First release - start with 2.0.0
+            NEW_VERSION="2.0.0"
+          else
+            # Increment patch version
+            IFS='.' read -r -a VERSION_PARTS <<< "$VERSION"
+            PATCH=$((VERSION_PARTS[2] + 1))
+            NEW_VERSION="${VERSION_PARTS[0]}.${VERSION_PARTS[1]}.$PATCH"
+          fi
+
+          echo "Current PyPI version: $VERSION"
+          echo "New version: $NEW_VERSION"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Update Version in setup.py
+        run: |
+          sed -i "s/version=\"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version=\"$NEW_VERSION\"/" setup.py
+
+      - name: Build Package
+        run: python -m build
+
+      - name: Publish Package to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
+        run: twine upload dist/*
+
+      # Uncomment the below if you want to add Git tags and GitHub Releases
+      # - name: Create Git Tag
+      #   run: |
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      #     git tag "v$NEW_VERSION"
+      #     git push origin "v$NEW_VERSION"
+
+      # - name: Create GitHub Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: "v${{ env.NEW_VERSION }}"
+      #     name: "xpander-sdk v${{ env.NEW_VERSION }}"
+      #     body: "🚀 New release of xpander-sdk: v${{ env.NEW_VERSION }}"
+      #     draft: false
+      #     prerelease: false
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
