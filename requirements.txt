@@ -1,0 +1,15 @@
+setuptools
+xpander-sdk
+pydantic
+loguru
+httpx
+httpx_sse
+python-dotenv
+pytest
+black
+pre-commit
+pytest-asyncio
+sqlalchemy
+agno
+psycopg2-binary
+nest-asyncio
