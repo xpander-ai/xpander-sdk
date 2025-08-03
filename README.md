@@ -20,17 +20,17 @@ xpander.ai SDK provides comprehensive tools for:
 ## 📦 Installation
 
 ```bash
-pip install xpander_sdk
+pip install xpander-sdk
 ```
 
 ### With Optional Dependencies
 
 ```bash
 # For Agno framework support
-pip install xpander_sdk[agno]
+pip install xpander-sdk[agno]
 
 # For development
-pip install xpander_sdk[dev]
+pip install xpander-sdk[dev]
 ```
 
 ## 🔧 Quick Start
@@ -153,9 +153,9 @@ async def handle_task_failure(task):
 
 ## 📚 Core Modules
 
-| Module              | Description                               | Documentation                          |
-| ------------------- | ----------------------------------------- | -------------------------------------- |
-| **Agents**          | Agent creation, management, and execution | [Agents Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/AGENTS.md)         |
+| Module              | Description                               | Documentation                                                                            |
+| ------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+| **Agents**          | Agent creation, management, and execution | [Agents Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/AGENTS.md)       |
 | **Tasks**           | Task lifecycle and execution management   | [Tasks Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/TASKS.md)         |
 | **ToolsRepository** | External tools and integrations           | [Tools Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/TOOLS.md)         |
 | **KnowledgeBases**  | Knowledge management and search           | [Knowledge Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/KNOWLEDGE.md) |
@@ -248,7 +248,7 @@ data_agent = Agent.load("data-agent-id")
 writer_agent = Agent.load("writer-agent-id")
 
 # Chain agent executions
-# Note: acreate_task is an asynchronous function 
+# Note: acreate_task is an asynchronous function
 analysis_task = await data_agent.acreate_task(prompt="Analyze sales data")
 report_task = await writer_agent.acreate_task(
     prompt=f"Write a report based on: {analysis_task.result}"

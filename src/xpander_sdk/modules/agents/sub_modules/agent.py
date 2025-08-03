@@ -558,7 +558,7 @@ class Agent(XPanderSharedModel):
         except ImportError as e:
             raise ImportError(
                 "The 'agno' extras must be installed to use this storage backend. "
-                "Run `pip install xpander_sdk[agno]`."
+                "Run `pip install xpander-sdk[agno]`."
             ) from e
 
         connection_string = await self.aget_connection_string()
@@ -617,7 +617,7 @@ class Agent(XPanderSharedModel):
         except ImportError as e:
             raise ImportError(
                 "The 'agno' extras must be installed to use this users memory backend. "
-                "Run `pip install xpander_sdk[agno]`."
+                "Run `pip install xpander-sdk[agno]`."
             ) from e
 
         connection_string = await self.aget_connection_string()
