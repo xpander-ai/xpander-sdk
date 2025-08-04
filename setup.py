@@ -25,7 +25,7 @@ setup(
     extras_require={
         # TODO: add more frameworks
         "agno": ["agno", "sqlalchemy", "psycopg2-binary"],
-        "dev": ["black", "pre-commit", "pytest"],
+        "dev": ["black", "pre-commit", "pytest", "anthropic", "mcp", "openai"],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
