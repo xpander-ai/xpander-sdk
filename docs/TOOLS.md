@@ -49,19 +49,13 @@ Represents an individual tool with execution capabilities and configuration.
 from xpander_sdk import register_tool
 
 # Register a simple tool
-@register_tool(
-    name="weather_check",
-    description="Check weather for a given location"
-)
+@register_tool
 def check_weather(location: str) -> str:
     """Get weather information for a location."""
     return f"Weather in {location}: Sunny, 25°C"
 
 # Register a tool with complex parameters
-@register_tool(
-    name="data_analyzer",
-    description="Analyze data from multiple sources"
-)
+@register_tool
 def analyze_data(data_sources: list, analysis_type: str, include_charts: bool = False) -> dict:
     """Analyze data from specified sources."""
     return {
@@ -70,6 +64,13 @@ def analyze_data(data_sources: list, analysis_type: str, include_charts: bool = 
         "charts_included": include_charts,
         "status": "completed"
     }
+
+# Register a tool with graph synchronization
+@register_tool(add_to_graph=True)
+async def fetch_external_data(api_endpoint: str, headers: dict = None) -> dict:
+    """Fetch data from external API."""
+    # Implementation here
+    return {"data": "fetched from API", "endpoint": api_endpoint}
 ```
 
 ### Use Tools Repository
@@ -191,16 +192,33 @@ mcp_server = MCPServerDetails(
 
 ### `@register_tool` Decorator
 
+Decorator to register a Python function as a tool for xpander.ai agents.
+
+**Syntax:**
+
 ```python
-@register_tool(
-    name: str,                    # Tool name
-    description: str,             # Tool description
-    should_add_to_graph: bool = True  # Add to agent graph
-)
+# Simple registration
+@register_tool
 def tool_function(param1: type, param2: type = default) -> return_type:
-    """Tool implementation"""
+    """Tool description (automatically extracted from docstring)."""
+    pass
+
+# With graph synchronization
+@register_tool(add_to_graph=True)
+def tool_function(param1: type, param2: type = default) -> return_type:
+    """Tool description (automatically extracted from docstring)."""
     pass
 ```
+
+**Parameters:**
+- `add_to_graph` (Optional[bool]): Whether to automatically add this tool to agent execution graphs. Defaults to False.
+
+**Behavior:**
+- Tool name is automatically derived from the function name
+- Tool description is extracted from the function's docstring
+- Function parameters and type hints are used to generate the tool schema
+- Both synchronous and asynchronous functions are supported
+- The decorated function remains callable as a normal Python function
 
 ## Types and Models
 
@@ -316,10 +334,7 @@ from xpander_sdk import register_tool
 
 app = FastAPI()
 
-@register_tool(
-    name="api_endpoint",
-    description="Call internal API endpoint"
-)
+@register_tool
 def call_api_endpoint(endpoint: str, method: str = "GET") -> dict:
     """Call an internal API endpoint."""
     # Implementation here
@@ -332,10 +347,7 @@ def call_api_endpoint(endpoint: str, method: str = "GET") -> dict:
 import asyncpg
 from xpander_sdk import register_tool
 
-@register_tool(
-    name="query_database",
-    description="Query PostgreSQL database"
-)
+@register_tool
 async def query_database(query: str, params: list = None) -> list:
     """Execute a database query."""
     conn = await asyncpg.connect("postgresql://...")

@@ -49,19 +49,23 @@ tools_repository/
 # Correct pattern for registering local tools
 from xpander_sdk import register_tool
 
-@register_tool(
-    name="data_analyzer",
-    description="Analyze data from multiple sources",
-    should_add_to_graph=True
-)
+# Simple tool registration
+@register_tool
 def analyze_data(data_sources: list, analysis_type: str, include_charts: bool = False) -> dict:
-    """Analyze data from specified sources."""
+    """Analyze data from multiple sources."""
     return {
         "sources_analyzed": len(data_sources),
         "analysis_type": analysis_type,
         "charts_included": include_charts,
         "status": "completed"
     }
+
+# Tool registration with graph synchronization
+@register_tool(add_to_graph=True)
+async def fetch_remote_data(api_url: str, headers: dict = None) -> dict:
+    """Fetch data from remote API endpoint."""
+    # Implementation here
+    return {"data": "fetched", "source": api_url}
 ```
 
 ### Tool Management Operations

@@ -212,16 +212,20 @@ class Tasks(ModuleBase):
             >>> print(f"Created task: {new_task.id}")
         """
         try:
+            headers = {}
+            if agent_version:
+                headers['x-agent-version'] = str(agent_version)
+            
             client = APIClient(configuration=self.configuration)
             created_task = await client.make_request(
                 path=APIRoute.TaskCrud.format(agent_or_task_id=agent_id),
                 method="POST",
+                headers=headers,
                 payload={
                     "id": existing_task_id,
                     "input": AgentExecutionInput(
                         text=prompt, files=file_urls, user=user_details
                     ).model_dump(),
-                    "agent_version": agent_version,
                     "payload_extension": tool_call_payload_extension,
                     "source": source,
                     "worker_id": worker_id,

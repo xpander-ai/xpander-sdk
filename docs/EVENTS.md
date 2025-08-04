@@ -46,8 +46,16 @@ Provides a simple way to register functions as event-driven task handlers.
 
 #### Usage
 
-- Attach to any function to make it a task handler.
-- Support for both asynchronous and synchronous functions.
+- Attach to any function to make it a task handler
+- Support for both asynchronous and synchronous functions
+- Accepts optional `configuration` and `test_task` parameters
+- Automatically validates that the decorated function has a `task` parameter
+- Integrates with the Events system for automatic registration
+
+#### Parameters
+
+- **`configuration`** (Optional[Configuration]): SDK configuration to use for the handler
+- **`test_task`** (Optional[LocalTaskTest]): Local test task for testing and development
 
 ## Event Types
 

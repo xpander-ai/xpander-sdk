@@ -43,6 +43,13 @@ Provides a simple decorator interface for registering task handlers.
 - Support for both synchronous and asynchronous functions
 - Automatic task parameter validation
 - Integration with the event system
+- Optional configuration parameter for custom SDK settings
+- Optional test_task parameter for local testing and development
+- Automatic validation that decorated function has a 'task' parameter
+
+**Parameters:**
+- `configuration` (Optional[Configuration]): SDK configuration to use
+- `test_task` (Optional[LocalTaskTest]): Local test task for testing
 
 ## Usage Examples
 
@@ -85,6 +92,53 @@ await events.stop()
 async with Events() as events:
     await events.start(on_execution_request=handle_task)
     # Events will automatically cleanup on exit
+```
+
+### Local Task Testing
+```python
+from xpander_sdk.modules.tasks.models.task import LocalTaskTest, AgentExecutionInput
+from xpander_sdk.models.shared import OutputFormat
+from xpander_sdk import on_task
+
+# Define a local test task
+local_task = LocalTaskTest(
+    input=AgentExecutionInput(text="What can you do?"),
+    output_format=OutputFormat.Json,
+    output_schema={"capabilities": "list of capabilities"}
+)
+
+# Test with local task
+@on_task(test_task=local_task)
+async def handle_test_task(task):
+    task.result = {
+        "capabilities": [
+            "Data analysis",
+            "Text processing", 
+            "API integration"
+        ]
+    }
+    return task
+```
+
+### Advanced Decorator Usage
+```python
+# Task handler with custom configuration
+@on_task(configuration=custom_config)
+def sync_task_handler(task):
+    print(f"Handling task synchronously: {task.id}")
+    task.result = "Processing complete"
+    return task
+
+# Multiple task handlers
+@on_task
+async def data_processing_handler(task):
+    # Specialized data processing
+    return task
+
+@on_task
+async def notification_handler(task):
+    # Send notifications
+    return task
 ```
 
 ## Configuration

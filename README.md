@@ -91,16 +91,24 @@ await task.asave()
 from xpander_sdk import register_tool, ToolsRepository
 
 # Register a local tool
-@register_tool(
-    name="weather_check",
-    description="Check weather for a location"
-)
+@register_tool
 def check_weather(location: str) -> str:
+    """Check weather for a given location."""
     return f"Weather in {location}: Sunny, 25°C"
+
+# Register a tool with graph synchronization
+@register_tool(add_to_graph=True)
+async def analyze_data(data: list, analysis_type: str) -> dict:
+    """Analyze data from multiple sources."""
+    return {
+        "analysis_type": analysis_type,
+        "data_points": len(data),
+        "status": "completed"
+    }
 
 # Use tools repository
 tools = ToolsRepository(configuration=config)
-weather_tool = tools.get_tool_by_id("weather_check")
+weather_tool = tools.get_tool_by_id("check_weather")
 result = await weather_tool.ainvoke(
     agent_id="agent-id",
     payload={"location": "New York"}
@@ -137,15 +145,26 @@ results = await kb.asearch(
 ### 6. Event-Driven Programming
 
 ```python
-from xpander_sdk import on_task
+from xpander_sdk import on_task, Events
 
-@on_task(status="completed")
-async def handle_task_completion(task):
-    print(f"Task {task.id} completed with result: {task.result}")
+# Basic task handler
+@on_task
+async def handle_task(task):
+    print(f"Processing task: {task.id}")
+    # Task processing logic here
+    task.result = "Task processed successfully"
+    return task
 
-@on_task(status="failed")
-async def handle_task_failure(task):
-    print(f"Task {task.id} failed: {task.error}")
+# Task handler with configuration
+@on_task(configuration=config)
+def sync_task_handler(task):
+    print(f"Handling task synchronously: {task.id}")
+    task.result = "Sync processing complete"
+    return task
+
+# Start event listener
+events = Events(configuration=config)
+await events.start(on_execution_request=handle_task)
 ```
 
 ## 📚 Core Modules
@@ -220,6 +239,33 @@ task = await agent.acreate_task(
 async for event in task.aevents():
     print(f"Event Type: {event.type}")
     print(f"Event Data: {event.data}")
+```
+
+### Local Task Testing
+
+```python
+from xpander_sdk.modules.tasks.models.task import LocalTaskTest, AgentExecutionInput
+from xpander_sdk.models.shared import OutputFormat
+from xpander_sdk import on_task
+
+# Define a local test task
+local_task = LocalTaskTest(
+    input=AgentExecutionInput(text="What can you do?"),
+    output_format=OutputFormat.Json,
+    output_schema={"capabilities": "list of capabilities"}
+)
+
+# Test with local task
+@on_task(test_task=local_task)
+async def handle_test_task(task):
+    task.result = {
+        "capabilities": [
+            "Data analysis",
+            "Text processing", 
+            "API integration"
+        ]
+    }
+    return task
 ```
 
 ## 🧪 Testing

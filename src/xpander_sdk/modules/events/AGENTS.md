@@ -192,11 +192,33 @@ async def stop_event_listener():
 ### Custom Decorator Usage
 ```python
 from xpander_sdk import on_task
+from xpander_sdk.modules.tasks.models.task import LocalTaskTest, AgentExecutionInput
+from xpander_sdk.models.shared import OutputFormat
 
-# Define custom task handler decorator
-@on_task(status="completed")
-async def handle_task_completion(task):
-    print(f"Task {task.id} completed with result: {task.result}")
+# Task handler with custom configuration
+@on_task(configuration=custom_config)
+def sync_task_handler(task):
+    print(f"Handling task synchronously: {task.id}")
+    task.result = "Processing complete"
+    return task
+
+# Local task testing
+local_task = LocalTaskTest(
+    input=AgentExecutionInput(text="What can you do?"),
+    output_format=OutputFormat.Json,
+    output_schema={"capabilities": "list of capabilities"}
+)
+
+@on_task(test_task=local_task)
+async def handle_test_task(task):
+    task.result = {
+        "capabilities": [
+            "Data analysis",
+            "Text processing", 
+            "API integration"
+        ]
+    }
+    return task
 ```
 
 ### Context Manager Usage

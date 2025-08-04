@@ -394,16 +394,21 @@ class Agent(XPanderSharedModel):
             Task: Created Task object linked to this agent.
         """
         try:
+            
+            headers = {}
+            if agent_version:
+                headers['x-agent-version'] = str(agent_version)
+            
             client = APIClient(configuration=self.configuration)
             created_task = await client.make_request(
                 path=APIRoute.TaskCrud.format(agent_or_task_id=self.id),
                 method="POST",
+                headers=headers,
                 payload={
                     "id": existing_task_id,
                     "input": AgentExecutionInput(
                         text=prompt, files=file_urls, user=user_details
                     ).model_dump(),
-                    "agent_version": agent_version,
                     "payload_extension": tool_call_payload_extension,
                     "source": source,
                     "worker_id": worker_id,
