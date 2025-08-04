@@ -67,7 +67,7 @@ class KnowledgeBases(ModuleBase):
         try:
             client = APIClient(configuration=self.configuration)
             kbs = await client.make_request(path=APIRoute.ListKnowledgeBases)
-            return [KnowledgeBase(**kb) for kb in kbs]
+            return [KnowledgeBase(**kb, configuration=self.configuration) for kb in kbs]
         except Exception as e:
             if isinstance(e, HTTPStatusError):
                 raise ModuleException(e.response.status_code, e.response.text)
@@ -119,7 +119,7 @@ class KnowledgeBases(ModuleBase):
             kb = await client.make_request(
                 path=APIRoute.GetKnowledgeBaseDetails.format(knowledge_base_id=knowledge_base_id)
             )
-            return KnowledgeBase(**kb)
+            return KnowledgeBase(**kb, configuration=self.configuration)
         except Exception as e:
             if isinstance(e, HTTPStatusError):
                 raise ModuleException(e.response.status_code, e.response.text)

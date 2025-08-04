@@ -39,9 +39,9 @@ Instance of a single task with execution capabilities.
 
 **Key Features:**
 - Status management (`aset_status()` / `set_status()`)
-- Result handling
-- Task persistence
-- Attachment support (documents, files, etc.)
+- Obtain and set task execution result
+- Stream task events for real-time updates
+- Support for documents, files, and other task attachments
 
 ## Usage Examples
 
@@ -49,26 +49,53 @@ Instance of a single task with execution capabilities.
 ```python
 from xpander_sdk import Tasks, Task
 
-# List tasks
+# List tasks (verified through test)
 tasks_manager = Tasks()
 task_list = await tasks_manager.alist(agent_id="agent-id")
+assert isinstance(task_list, list)
 
 # Retrieve specific task
-task = await tasks_manager.aget(task_id="task-id")
+specific_task = await tasks_manager.aget(task_id="task-id")
 
 # Change task status
-await task.aset_status(AgentExecutionStatus.Completed)
-await task.asave()
+await specific_task.aset_status(AgentExecutionStatus.Completed)
+await specific_task.asave()
 ```
 
-### Create a New Task
+### Create a New Task (Test-Based)
 ```python
 # Create task for agent
+prompt = "what can you do"
+new_task = await tasks_manager.acreate(
+    agent_id="agent-id",
+    prompt=prompt
+)
+assert new_task.agent_id == "agent-id"
+assert new_task.input.text == prompt
+
+# Detailed task configuration
 new_task = await tasks_manager.acreate(
     agent_id="agent-id",
     prompt="Analyze sales data",
-    file_urls=["https://example.com/data.csv"]
+    file_urls=["https://example.com/data.csv"],
+    events_streaming=True
 )
+assert new_task.events_streaming is True
+```
+
+### Task Event Streaming
+```python
+# Enable task event streaming
+# Create a task with event streaming enabled (test verified)
+task = await tasks_manager.acreate(
+    agent_id="agent-id",
+    prompt="Monitor performance",
+    events_streaming=True
+)
+
+# Stream task events
+async for event in task.aevents():
+    print(f"Event: {event.type}, Data: {event.data}")
 ```
 
 ## Configuration

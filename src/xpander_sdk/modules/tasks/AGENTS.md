@@ -45,15 +45,24 @@ task = await tasks_manager.aget(task_id="task-id")
 task = Task.get(task_id="task-id")
 ```
 
-### Task Creation Patterns
+### Task Creation Patterns (Test-Verified)
 ```python
-# AI agents should use the standard task creation pattern
-new_task = await tasks_manager.acreate(
-    agent_id="agent-id",
-    prompt="Analyze this data",
-    file_urls=["data1.csv", "data2.pdf"],
-    user_details={"user_email": "user@example.com"}  # Optional
+# AI agents should use the standard task creation pattern from tests
+tasks = Tasks()
+prompt = "what can you do"
+created_task = await tasks.acreate(agent_id=XPANDER_AGENT_ID, prompt=prompt)
+assert isinstance(created_task, Task)
+assert created_task.agent_id == XPANDER_AGENT_ID
+assert created_task.input.text == prompt
+assert created_task.status == AgentExecutionStatus.Pending
+
+# Create task with events streaming (test pattern)
+created_task = await tasks.acreate(
+    agent_id=XPANDER_AGENT_ID, 
+    prompt=prompt, 
+    events_streaming=True
 )
+assert created_task.events_streaming is True
 ```
 
 ## Data Models and Types for AI Agents

@@ -58,21 +58,42 @@ agent = Agent.load("agent-id", configuration=config)
 
 ### Task Execution Patterns
 ```python
-# AI agents should use the standard task execution pattern
-result = await agent.arun(
-    input_data="User prompt or instruction",
-    input_files=["file1.pdf", "file2.txt"],  # Optional
-    user_details={"name": "User", "email": "user@example.com"}  # Optional
+# AI agents should create tasks using the standard pattern from tests
+prompt = "what can you do"
+task = await agent.acreate_task(prompt=prompt)
+
+# Task with additional options (based on test patterns)
+task_with_options = await agent.acreate_task(
+    prompt="Analyze this data",
+    file_urls=["https://example.com/data.csv"],
+    events_streaming=True,  # Enable real-time event streaming
+    output_format=OutputFormat.Json,
+    output_schema={"analysis": "string", "insights": "array"},
+    additional_context="Additional context for processing",
+    expected_output="Structured analysis results"
 )
+
+# Verify task creation results
+assert task.agent_id == agent.id
+assert task.input.text == prompt
 ```
 
 ### Tool Invocation Patterns
 ```python
-# AI agents should invoke tools through the agent instance
-tool_result = await agent.ainvoke_tool(
-    tool_id="tool-name",
-    payload={"param1": "value1", "param2": "value2"}
-)
+# AI agents should invoke tools through the agent instance (test-based pattern)
+tool = agent.tools.get_tool_by_id("XpanderEmailServiceSendEmailWithHtmlOrTextContent")
+if tool:
+    payload = {
+        "body_params": {
+            "subject": "Test email",
+            "body_html": "Hello world",
+            "to": ["user@example.com"],
+        },
+        "path_params": {},
+        "query_params": {},
+    }
+    result = await agent.ainvoke_tool(tool=tool, payload=payload)
+    assert result.is_success == True
 ```
 
 ## Data Models and Types for AI Agents

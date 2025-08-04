@@ -63,10 +63,9 @@ agents = Agents(configuration=config)
 agent_list = await agents.alist()
 
 # Load existing agent
-agent = Agent.load("agent-id", configuration=config)
+agent = await agents.aget("agent-id")
 
 # Create and execute a task
-# Note: acreate_task is an asynchronous function
 task = await agent.acreate_task(
     prompt="Help me analyze this data",
     file_urls=["https://example.com/data.csv"]
@@ -82,7 +81,7 @@ from xpander_sdk import Tasks, Task
 tasks = Tasks(configuration=config)
 
 # Load and manage tasks
-task = Task.load("task-id", configuration=config)
+task = await tasks.aget("task-id")
 await task.aset_status(AgentExecutionStatus.Running)
 await task.asave()
 ```
@@ -103,7 +102,6 @@ def check_weather(location: str) -> str:
 # Use tools repository
 tools = ToolsRepository(configuration=config)
 weather_tool = tools.get_tool_by_id("weather_check")
-# Note: ainvoke is an asynchronous function
 result = await weather_tool.ainvoke(
     agent_id="agent-id",
     payload={"location": "New York"}
@@ -167,74 +165,12 @@ The SDK provides both asynchronous and synchronous interfaces:
 
 ```python
 # Asynchronous (recommended for production)
-# Note: aload is an asynchronous class method
 agent = await Agent.aload("agent-id")
-# Note: acreate_task is an asynchronous function
 task = await agent.acreate_task(prompt="input data")
 
 # Synchronous (convenient for scripts)
 agent = Agent.load("agent-id")
 task = agent.create_task(prompt="input data")
-```
-
-## 🏗️ Architecture
-
-```
-xpander_sdk/
-├── core/                   # Core API client and base classes
-├── models/                 # Pydantic models and configurations
-├── modules/
-│   ├── agents/            # Agent management
-│   ├── tasks/             # Task execution
-│   ├── tools_repository/  # Tools and integrations
-│   ├── knowledge_bases/   # Knowledge management
-│   └── events/            # Event handling
-└── utils/                 # Utility functions
-```
-
-## 🔒 Authentication
-
-The SDK supports multiple authentication methods:
-
-### Environment Variables (Recommended)
-
-```bash
-export XPANDER_API_KEY="your-api-key"
-export XPANDER_ORGANIZATION_ID="your-org-id"
-export XPANDER_BASE_URL="https://inbound.xpander.ai"  # Optional
-```
-
-### Configuration Object
-
-```python
-config = Configuration(
-    api_key="your-api-key",
-    organization_id="your-org-id"
-)
-```
-
-### From File
-
-```python
-# .env file
-XPANDER_API_KEY=your-api-key
-XPANDER_ORGANIZATION_ID=your-org-id
-
-# Python code
-from dotenv import load_dotenv
-load_dotenv()
-config = Configuration()
-```
-
-## 🚨 Error Handling
-
-```python
-from xpander_sdk.exceptions import ModuleException
-
-try:
-    agent = await Agent.aload("invalid-agent-id")
-except ModuleException as e:
-    print(f"Error {e.status_code}: {e.description}")
 ```
 
 ## 📖 Advanced Examples
@@ -244,11 +180,10 @@ except ModuleException as e:
 ```python
 # Load multiple specialized agents
 agents_list = await agents.alist()
-data_agent = Agent.load("data-agent-id")
-writer_agent = Agent.load("writer-agent-id")
+data_agent = await agents.aget("data-agent-id")
+writer_agent = await agents.aget("writer-agent-id")
 
 # Chain agent executions
-# Note: acreate_task is an asynchronous function
 analysis_task = await data_agent.acreate_task(prompt="Analyze sales data")
 report_task = await writer_agent.acreate_task(
     prompt=f"Write a report based on: {analysis_task.result}"
@@ -282,7 +217,7 @@ task = await agent.acreate_task(
     events_streaming=True
 )
 
-# Note: aevents is an asynchronous generator function
+# Stream events from the task
 async for event in task.aevents():
     print(f"Event Type: {event.type}")
     print(f"Event Data: {event.data}")
@@ -301,6 +236,66 @@ pytest tests/ --cov=xpander_sdk
 pytest tests/test_agents.py::test_agent_creation
 ```
 
+## 🏗️ Architecture
+
+```plaintext
+xpander_sdk/
+├── core/                   # Core API client and base classes
+├── models/                 # Pydantic models and configurations
+├── modules/
+│   ├── agents/            # Agent management
+│   ├── tasks/             # Task execution
+│   ├── tools_repository/  # Tools and integrations
+│   ├── knowledge_bases/   # Knowledge management
+│   └── events/            # Event handling
+└── utils/                 # Utility functions
+```
+
+## 🔒 Authentication
+
+The SDK supports multiple authentication methods:
+
+### Environment Variables (Recommended)
+
+```bash
+export XPANDER_API_KEY="your-api-key"
+export XPANDER_ORGANIZATION_ID="your-org-id"
+export XPANDER_BASE_URL="https://inbound.xpander.ai" # Optional
+```
+
+### Configuration Object
+
+```python
+config = Configuration(
+    api_key="your-api-key",
+    organization_id="your-org-id"
+)
+```
+
+### From File
+
+```python
+# .env file
+XPANDER_API_KEY=your-api-key
+XPANDER_ORGANIZATION_ID=your-org-id
+
+# Python code
+from dotenv import load_dotenv
+load_dotenv()
+config = Configuration()
+```
+
+## 🔄 Error Handling
+
+```python
+from xpander_sdk.exceptions import ModuleException
+
+try:
+    agent = await Agent.aload("invalid-agent-id")
+except ModuleException as e:
+    print(f"Error {e.status_code}: {e.description}")
+```
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -309,13 +304,9 @@ pytest tests/test_agents.py::test_agent_creation
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 Changelog
-
-See [CHANGELOG.md](https://github.com/xpander-ai/xpander-sdk/blob/main/CHANGELOG.md) for version history and updates.
-
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/xpander-ai/xpander-sdk/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🆘 Support
 

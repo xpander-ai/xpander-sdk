@@ -262,7 +262,7 @@ class Task(XPanderSharedModel):
                 method="PATCH",
                 payload=self.model_dump_safe(),
             )
-            updated_task = Task(**response)
+            updated_task = Task(**response, configuration=self.configuration)
             for field, value in updated_task.__dict__.items():
                 setattr(self, field, value)
         except HTTPStatusError as e:

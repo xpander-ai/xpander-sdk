@@ -169,7 +169,7 @@ class Agent(XPanderSharedModel):
     webhook_url: Optional[str] = None
     created_at: Optional[datetime] = None
     type: Optional[AgentType] = None
-    output_format: Optional[OutputFormat] = OutputFormat.Text
+    output_format: Optional[OutputFormat] = OutputFormat.Markdown
     output_schema: Optional[Dict] = None
 
     llm_credentials_key: Optional[str] = None
@@ -490,7 +490,7 @@ class Agent(XPanderSharedModel):
         Example:
             >>> knowledge_bases = await agent.aget_knowledge_bases()
         """
-        kb_modules = KnowledgeBases()
+        kb_modules = KnowledgeBases(configuration=self.configuration)
         tasks = [
             kb_modules.aget(knowledge_base_id=kb.id) for kb in self.knowledge_bases
         ]

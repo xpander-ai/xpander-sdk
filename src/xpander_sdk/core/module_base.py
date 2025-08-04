@@ -6,7 +6,7 @@ establishing common patterns for resource management and API operations.
 """
 
 from abc import ABC
-from typing import Optional, Any
+from typing import Optional, Any, Dict, Type
 from xpander_sdk.models.configuration import Configuration
 
 
@@ -14,13 +14,9 @@ class ModuleBase(ABC):
     """
     Abstract base class for all xpander.ai SDK modules.
     
-    This class implements a singleton pattern and provides common CRUD (Create, Read,
-    Update, Delete) operations that can be implemented by specific modules. It ensures
-    consistent configuration management and API patterns across all SDK modules.
-    
-    The class follows the singleton pattern to ensure that each module type has only
-    one instance throughout the application lifecycle, maintaining consistent state
-    and configuration.
+    This class implements a conditional singleton pattern:
+    - If no configuration is passed, it returns a shared singleton per subclass.
+    - If a configuration is passed, a new instance is created and not shared.
     
     Attributes:
         configuration (Configuration): SDK configuration including API credentials
@@ -34,67 +30,63 @@ class ModuleBase(ABC):
         create: Create a new resource.
         update: Update an existing resource.
         delete: Delete a resource.
-        
-    Example:
-        >>> class MyModule(ModuleBase):
-        ...     async def list(self, **kwargs):
-        ...         # Implementation for listing resources
-        ...         pass
-        ...     async def get(self, resource_id: str, **kwargs):
-        ...         # Implementation for getting a resource
-        ...         pass
     """
-    
-    _instance = None
+
+    _shared_instances: Dict[Type['ModuleBase'], 'ModuleBase'] = {}
 
     def __new__(cls, configuration: Optional[Configuration] = None):
         """
-        Create or return existing module singleton instance.
+        Create or return an existing module singleton instance.
         
         Args:
-            configuration (Optional[Configuration]): SDK configuration. If None,
-                will use default configuration from environment variables.
+            configuration (Optional[Configuration]): If provided, a new independent
+                instance is created. Otherwise, returns a singleton per class.
                 
         Returns:
-            ModuleBase: The singleton module instance.
+            ModuleBase: The module instance.
         """
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._initialized = False
-        return cls._instance
+        if configuration is not None:
+            instance = super().__new__(cls)
+            instance._is_custom_instance = True
+            return instance
+
+        if cls not in cls._shared_instances:
+            instance = super().__new__(cls)
+            instance._is_custom_instance = False
+            cls._shared_instances[cls] = instance
+
+        return cls._shared_instances[cls]
 
     def __init__(self, configuration: Optional[Configuration] = None):
         """
         Initialize the module with configuration.
         
-        This method is called only once due to the singleton pattern.
-        Subsequent calls will not reinitialize the module.
+        This method is called only once per instance to prevent reinitialization.
         
         Args:
             configuration (Optional[Configuration]): SDK configuration. If None,
                 will create a default Configuration instance from environment variables.
         """
-        if self._initialized:
+        if hasattr(self, '_initialized') and self._initialized:
             return
+
         self.configuration = configuration or Configuration()
         self._initialized = True
 
     async def list(self, **kwargs) -> Any:
         """
         List all resources of this module type.
-        
+
         This is an abstract method that must be implemented by concrete module classes.
-        It should return a list or paginated collection of resources.
         
         Args:
-            **kwargs: Additional parameters for filtering, pagination, or other
-                list-specific options.
+            **kwargs: Additional parameters for filtering, pagination, etc.
                 
         Returns:
-            Any: List of resources or paginated response object.
+            Any: List of resources or paginated response.
             
         Raises:
-            NotImplementedError: Always, as this method must be implemented by subclasses.
+            NotImplementedError: Always, unless overridden.
         """
         raise NotImplementedError
 
@@ -103,17 +95,16 @@ class ModuleBase(ABC):
         Retrieve a single resource by its unique identifier.
         
         This is an abstract method that must be implemented by concrete module classes.
-        It should return the resource data for the specified ID.
         
         Args:
             resource_id (str): Unique identifier of the resource to retrieve.
-            **kwargs: Additional parameters for resource retrieval options.
+            **kwargs: Additional retrieval options.
             
         Returns:
-            Any: The resource data object.
+            Any: The resource data.
             
         Raises:
-            NotImplementedError: Always, as this method must be implemented by subclasses.
+            NotImplementedError: Always, unless overridden.
         """
         raise NotImplementedError
 
@@ -121,18 +112,17 @@ class ModuleBase(ABC):
         """
         Create a new resource (optional operation).
         
-        This method can be overridden by modules that support resource creation.
-        By default, it raises NotImplementedError to indicate the operation is not supported.
+        Can be overridden by modules that support creation.
         
         Args:
-            data (dict): Resource data for creation.
-            **kwargs: Additional parameters for resource creation.
+            data (dict): Resource data.
+            **kwargs: Additional creation options.
             
         Returns:
-            Any: The created resource data object.
+            Any: Created resource data.
             
         Raises:
-            NotImplementedError: If the module does not support resource creation.
+            NotImplementedError: If creation is not supported.
         """
         raise NotImplementedError("This module does not support 'create'")
 
@@ -140,19 +130,18 @@ class ModuleBase(ABC):
         """
         Update an existing resource by ID (optional operation).
         
-        This method can be overridden by modules that support resource updates.
-        By default, it raises NotImplementedError to indicate the operation is not supported.
+        Can be overridden by modules that support updates.
         
         Args:
-            resource_id (str): Unique identifier of the resource to update.
-            data (dict): Updated resource data.
-            **kwargs: Additional parameters for resource update.
+            resource_id (str): Unique ID of resource to update.
+            data (dict): Updated data.
+            **kwargs: Additional update options.
             
         Returns:
-            Any: The updated resource data object.
+            Any: Updated resource data.
             
         Raises:
-            NotImplementedError: If the module does not support resource updates.
+            NotImplementedError: If update is not supported.
         """
         raise NotImplementedError("This module does not support 'update'")
 
@@ -160,17 +149,16 @@ class ModuleBase(ABC):
         """
         Delete a resource by ID (optional operation).
         
-        This method can be overridden by modules that support resource deletion.
-        By default, it raises NotImplementedError to indicate the operation is not supported.
+        Can be overridden by modules that support deletion.
         
         Args:
-            resource_id (str): Unique identifier of the resource to delete.
-            **kwargs: Additional parameters for resource deletion.
+            resource_id (str): Unique ID of resource to delete.
+            **kwargs: Additional deletion options.
             
         Returns:
-            Any: Deletion confirmation or result data.
+            Any: Deletion result.
             
         Raises:
-            NotImplementedError: If the module does not support resource deletion.
+            NotImplementedError: If delete is not supported.
         """
         raise NotImplementedError("This module does not support 'delete'")

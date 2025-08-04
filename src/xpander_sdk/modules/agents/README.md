@@ -48,45 +48,109 @@ Individual agent instance with full functionality.
 - Memory and storage management
 
 **Methods:**
-- `aload()` / `load()`: Load agent from backend
-- `arun()` / `run()`: Execute tasks
+- `aload()` / `load()`: Load agent from backend  
+- `acreate_task()` / `create_task()`: Create and execute tasks
 - `ainvoke_tool()` / `invoke_tool()`: Call tools
-- `aproxy_knowledge_base()`: Search knowledge bases
-- `aadd_mcp_server()`: Add MCP server configuration
+- `aget_knowledge_bases()` / `get_knowledge_bases()`: Access linked knowledge bases
+- `aget_connection_string()` / `get_connection_string()`: Get database connection
+- `aget_user_sessions()` / `get_user_sessions()`: Manage user sessions
+- `aget_session()` / `get_session()`: Access specific session
+- `adelete_session()` / `delete_session()`: Delete sessions
 
 ## Usage Examples
 
-### Basic Agent Operations
+### Basic Agent Operations (Test-Verified)
 ```python
 from xpander_sdk import Agents, Agent
 
 # List agents
 agents = Agents()
 agent_list = await agents.alist()
+assert isinstance(agent_list, list)
+assert len(agent_list) != 0
 
 # Load specific agent
 agent = await agents.aget("agent-id")
+assert isinstance(agent, Agent)
 
-# Execute task
-result = await agent.arun("Analyze this data")
+# Load agent from list item
+full_agent = await agent_list[0].aload()
+assert full_agent.id == agent_list[0].id
 ```
 
-### Tool Integration
+### Task Creation and Management
 ```python
-# Invoke a tool
-tool_result = await agent.ainvoke_tool(
-    tool_id="data-analyzer",
-    payload={"data": "sample data"}
+# Create a task
+prompt = "what can you do"
+task = await agent.acreate_task(prompt=prompt)
+assert task.agent_id == agent.id
+assert task.input.text == prompt
+
+# Create task with options
+task = await agent.acreate_task(
+    prompt="Analyze this data",
+    file_urls=["https://example.com/data.csv"],
+    events_streaming=True,
+    output_format=OutputFormat.Json,
+    output_schema={"analysis": "string"}
 )
 ```
 
-### Knowledge Base Search
+### Tool Integration (Test-Based)
 ```python
-# Search knowledge base
-kb_results = await agent.aproxy_knowledge_base(
-    knowledge_base_id="kb-123",
-    search_query="pricing information"
-)
+# Get tool from agent's repository
+tool = agent.tools.get_tool_by_id("XpanderEmailServiceSendEmailWithHtmlOrTextContent")
+if tool:
+    payload = {
+        "body_params": {
+            "subject": "Test email",
+            "body_html": "Hello world",
+            "to": ["user@example.com"],
+        },
+        "path_params": {},
+        "query_params": {},
+    }
+    result = await agent.ainvoke_tool(tool=tool, payload=payload)
+    assert result.is_success == True
+```
+
+### Knowledge Base Integration
+```python
+# Access agent's knowledge bases
+kbs = await agent.aget_knowledge_bases()
+for kb in kbs:
+    # Search within knowledge base
+    results = await kb.asearch(search_query="David Hines", top_k=1)
+    assert len(results) != 0
+```
+
+### MCP Server Access
+```python
+# Access MCP servers configured for agent
+if agent.mcp_servers:
+    for mcp_server in agent.mcp_servers:
+        print(f"MCP Server: {mcp_server.name}")
+        print(f"Type: {mcp_server.type}")
+```
+
+### Connection String Management
+```python
+# Get database connection string
+connection_string = await agent.aget_connection_string()
+assert connection_string.connection_uri.uri is not None
+```
+
+### Session Management
+```python
+# Get user sessions
+sessions = await agent.aget_user_sessions(user_id="user@example.com")
+assert len(sessions) != 0
+
+# Access specific session
+session = await agent.aget_session(session_id="session-id")
+
+# Delete session
+await agent.adelete_session(session_id="session-id")
 ```
 
 ## Configuration

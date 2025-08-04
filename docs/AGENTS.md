@@ -1,114 +1,513 @@
 # Agents Module Guide
 
-The Agents Module in xpander.ai SDK provides functionality for creating, configuring, and managing AI agents. This guide covers the available classes, methods, and usage examples.
+The Agents Module in the xpander.ai SDK offers comprehensive tools for creating, configuring, managing, and executing AI agents on the xpander.ai platform. This guide explains available classes, methods, and real-world usage examples based on the test suite.
 
 ## Overview
 
-The Agents Module allows developers to:
+With the Agents Module, developers can:
 
-- Create and configure AI agents
-- Manage agent deployment settings
-- Execute tasks and handle results
-- Integrate with external tools and services
+- List and retrieve AI agents from the platform
+- Load agents with specific versions
+- Create and manage tasks for agents
+- Invoke tools through agents
+- Access knowledge bases linked to agents
+- Manage MCP (Model Context Protocol) servers
+- Handle database connection strings for agents
+- Manage user sessions and agent interactions
+- Access agent storage and memory backends
 
 ## Classes
 
 ### Agents
 
-Manages a collection of agents. Provides methods to create, list, and manage agents.
+Handles the lifecycle management of multiple agents. Offers methods to retrieve and manage agent lists and specific instances.
 
 #### Key Methods
 
-- **`alist`**: Asynchronously retrieve a list of all agents.
-- **`list`**: Synchronously retrieve a list of all agents.
-- **`aget`**: Asynchronously retrieve a specific agent by ID.
-- **`get`**: Synchronously retrieve a specific agent by ID.
+- **`alist()`**: Retrieve a list of all agents asynchronously.
+- **`list()`**: Retrieve a list of all agents synchronously.
+- **`aget(agent_id: str, version: Optional[int] = None)`**: Retrieve a specific agent by ID asynchronously.
+- **`get(agent_id: str, version: Optional[int] = None)`**: Retrieve a specific agent by ID synchronously.
+
+### AgentsListItem
+
+Represents a summary item from the agents list with basic agent information.
+
+#### Key Methods
+
+- **`aload()`**: Asynchronously load the full agent details from this list item.
+- **`load()`**: Synchronously load the full agent details from this list item.
 
 ### Agent
 
-Represents a single agent. Provides access to agent-specific operations such as task creation, tool invocation, and knowledge base management.
+Represents a specific agent with capabilities to manage tasks, invoke tools, access linked knowledge bases, and manage connections.
+
+#### Key Properties
+
+- **`mcp_servers`**: List of MCPServerDetails configured for this agent.
+- **`tools`**: ToolsRepository instance providing access to all agent tools.
+- **`graph`**: Agent execution graph with all configured items.
 
 #### Key Methods
 
-- **`aload`**: Asynchronously load an existing agent from configuration (class method).
-- **`load`**: Synchronously load an existing agent from configuration (class method).
-- **`acreate_task`**: Asynchronously create a new task for this agent.
-- **`create_task`**: Synchronously create a new task for this agent.
-- **`ainvoke_tool`**: Asynchronously invoke a tool on this agent.
-- **`invoke_tool`**: Synchronously invoke a tool on this agent.
-- **`aget_knowledge_bases`**: Asynchronously get knowledge bases associated with this agent.
-- **`get_knowledge_bases`**: Synchronously get knowledge bases associated with this agent.
-- **`aget_session`**: Asynchronously retrieve a session by ID.
-- **`get_session`**: Synchronously retrieve a session by ID.
-- **`adelete_session`**: Asynchronously delete a session by ID.
-- **`delete_session`**: Synchronously delete a session by ID.
+##### Agent Loading
+- **`aload(agent_id: str, configuration: Optional[Configuration] = None, version: Optional[int] = None)`**: Asynchronously load an existing agent (class method).
+- **`load(agent_id: str, configuration: Optional[Configuration] = None, version: Optional[int] = None)`**: Synchronously load an existing agent (class method).
+
+##### Task Management
+- **`acreate_task(**kwargs)`**: Create a new task for this agent asynchronously.
+- **`create_task(**kwargs)`**: Create a new task for this agent synchronously.
+
+##### Tool Integration
+- **`ainvoke_tool(tool: Tool, payload: Any, **kwargs)`**: Asynchronously invoke a specific tool using the agent.
+- **`invoke_tool(tool: Tool, payload: Any, **kwargs)`**: Synchronously invoke a specific tool using the agent.
+
+##### Knowledge Base Access
+- **`aget_knowledge_bases()`**: Asynchronously access knowledge bases linked to this agent.
+- **`get_knowledge_bases()`**: Synchronously access knowledge bases linked to this agent.
+
+##### Connection Management
+- **`aget_connection_string()`**: Asynchronously retrieve the agent's database connection string.
+- **`get_connection_string()`**: Synchronously retrieve the agent's database connection string.
+
+##### Session Management
+- **`aget_user_sessions(user_id: str)`**: Asynchronously obtain user sessions associated with this agent.
+- **`get_user_sessions(user_id: str)`**: Synchronously obtain user sessions associated with this agent.
+- **`aget_session(session_id: str)`**: Asynchronously retrieve a specific session by ID.
+- **`get_session(session_id: str)`**: Synchronously retrieve a specific session by ID.
+- **`adelete_session(session_id: str)`**: Asynchronously delete a session by ID.
+- **`delete_session(session_id: str)`**: Synchronously delete a session by ID.
 
 ## Examples
 
-### Create and Manage Agents
+### Basic Agent Management
 
 ```python
-from xpander_sdk import Agents, Configuration
+from xpander_sdk import Agents, Agent, Configuration
 
 # Initialize the SDK
 config = Configuration(api_key="your-api-key", organization_id="your-org-id")
 agents_manager = Agents(configuration=config)
 
 # List all agents
-# Note: alist is an asynchronous function
 all_agents = await agents_manager.alist()
+for agent_item in all_agents:
+    print(f"Agent: {agent_item.name} (ID: {agent_item.id})")
+
+# Load specific agent by ID
+agent = await agents_manager.aget(agent_id="your-agent-id")
+print(f"Loaded agent: {agent.name}")
 ```
 
-### Create and Execute a Task
+### Loading Agents from List Items
 
 ```python
-from xpander_sdk import Agent
+# Get agent list and load full agent from list item
+agents_list = await agents_manager.alist()
+if agents_list:
+    # Load full agent details from the first list item
+    full_agent = await agents_list[0].aload()
+    print(f"Loaded agent: {full_agent.name}")
+    assert full_agent.id == agents_list[0].id
+```
 
-# Load an existing agent by ID
-agent = Agent.load("agent123", configuration=config)
+### Task Creation and Management
 
-# Create and execute a task
-# Note: acreate_task is an asynchronous function
-task = await agent.acreate_task(
-    prompt="Please summarize this document.",
-    file_urls=[]
+```python
+# Create a task with basic prompt
+prompt = "what can you do"
+task = await agent.acreate_task(prompt=prompt)
+print(f"Created task ID: {task.id}")
+print(f"Task agent ID: {task.agent_id}")
+print(f"Task input: {task.input.text}")
+
+# Create task with additional options
+task_with_options = await agent.acreate_task(
+    prompt="Analyze this data",
+    file_urls=["https://example.com/data.csv"],
+    events_streaming=True,  # Enable real-time event streaming
+    output_format=OutputFormat.Json,
+    output_schema={"analysis": "string", "insights": "array"}
 )
-print(task.result)
 ```
 
-### Configuration Management
+### MCP Server Access
 
 ```python
-# Update agent's configuration
-agent.set_configuration(new_config)
+# Access MCP servers configured for the agent
+if agent.mcp_servers:
+    for mcp_server in agent.mcp_servers:
+        print(f"MCP Server: {mcp_server.name}")
+        print(f"Type: {mcp_server.type}")
+        print(f"Command: {mcp_server.command}")
+```
 
-# Add MCP server configuration
-await agent.aadd_mcp_server("data-server", mcp_config)
+### Tool Integration
+
+```python
+# Access agent's tools repository
+tools_repo = agent.tools
+print(f"Available tools: {len(tools_repo.functions)}")
+
+# Get specific tool and invoke it
+email_tool = tools_repo.get_tool_by_id("XpanderEmailServiceSendEmailWithHtmlOrTextContent")
+if email_tool:
+    payload = {
+        "body_params": {
+            "subject": "Test email",
+            "body_html": "Hello world",
+            "to": ["user@example.com"],
+        },
+        "path_params": {},
+        "query_params": {},
+    }
+    result = await agent.ainvoke_tool(tool=email_tool, payload=payload)
+    print(f"Tool execution success: {result.is_success}")
+```
+
+### Knowledge Base Integration
+
+```python
+# Access agent's knowledge bases
+kbs = await agent.aget_knowledge_bases()
+for kb in kbs:
+    print(f"Knowledge Base: {kb.name}")
+    
+    # Search within the knowledge base
+    search_results = await kb.asearch(search_query="David Hines", top_k=1)
+    for result in search_results:
+        print(f"Content: {result.content[:100]}...")
+        print(f"Score: {result.score}")
+```
+
+### Connection String Management
+
+```python
+# Get agent's database connection string
+connection_string = await agent.aget_connection_string()
+print(f"Database URI: {connection_string.connection_uri.uri}")
+```
+
+### Session Management
+
+```python
+# Get user sessions for a specific user
+user_sessions = await agent.aget_user_sessions(user_id="user@example.com")
+print(f"Found {len(user_sessions)} sessions")
+
+# Access specific session
+if user_sessions:
+    session_id = user_sessions[0].id  # Assuming session has an id attribute
+    session_details = await agent.aget_session(session_id=session_id)
+    print(f"Session details: {session_details}")
+    
+    # Delete session when no longer needed
+    await agent.adelete_session(session_id=session_id)
+```
+
+### Agent Graph Access
+
+```python
+# Access agent's execution graph
+if agent.graph and agent.graph.items:
+    print(f"Graph has {len(agent.graph.items)} items")
+    
+    # Find specific graph item
+    graph_item = agent.graph.get_graph_item(attr="item_id", value="some-tool-id")
+    if graph_item:
+        print(f"Found graph item: {graph_item.type}")
+```
+
+### Advanced Storage Management
+
+```python
+# Access agent's storage backend (requires Agno framework)
+try:
+    storage = await agent.aget_storage()
+    print(f"Storage backend initialized: {storage}")
+    
+    # Example usage would depend on the storage backend API
+    # This is typically used internally by session management
+except NotImplementedError as e:
+    print(f"Storage not supported: {e}")
+except LookupError as e:
+    print(f"Storage not enabled: {e}")
+```
+
+### Memory Handler Usage
+
+```python
+from your_llm_models import OpenAIModel  # Example model
+
+# Get memory handler for user memories (requires Agno framework)
+try:
+    model = OpenAIModel("gpt-4")
+    memory_handler = await agent.aget_memory_handler(model=model)
+    print(f"Memory handler initialized: {memory_handler}")
+    
+    # Example usage would depend on the memory handler API
+    # Typically used for maintaining user conversation context
+except NotImplementedError as e:
+    print(f"Memory handler not supported: {e}")
+except LookupError as e:
+    print(f"User memories not enabled: {e}")
+```
+
+### Knowledge Base Search Integration
+
+```python
+# Use the knowledge bases retriever for search
+if agent.search_knowledge:
+    retriever = agent.knowledge_bases_retriever()
+    
+    # Search across all linked knowledge bases
+    search_results = retriever(
+        query="pricing strategy",
+        num_documents=10
+    )
+    
+    if search_results:
+        for result in search_results:
+            print(f"Document: {result['document_name']}")
+            print(f"Content: {result['content'][:100]}...")
+            print(f"Score: {result['score']}")
+    else:
+        print("No results found")
+else:
+    print("No knowledge bases linked to this agent")
+```
+
+### Agent Status and Properties
+
+```python
+# Check agent status and properties
+print(f"Agent is active: {agent.is_active}")
+print(f"Agent has knowledge bases: {agent.search_knowledge}")
+print(f"Agent output configuration: {agent.output}")
+
+# Access agent configuration details
+print(f"Agent framework: {agent.framework}")
+print(f"Model provider: {agent.model_provider}")
+print(f"Model name: {agent.model_name}")
+print(f"Output format: {agent.output_format}")
 ```
 
 ## API Reference
 
 ### `Agents`
 
-- **`async acreate(name: str, description: str, ...)`**: Create a new agent asynchronously
-  - **Parameters**: `name` (str): The agent's name. `description` (str): A brief description of the agent.
-  - **Returns**: An instance of `Agent`.
+- **`async alist()`**: Asynchronously retrieves all available agents.
+  - **Returns**: `List[AgentsListItem]` containing summary of each agent.
+  - **Raises**: `ModuleException` on API errors.
+
+- **`list()`**: Synchronously retrieves all available agents.
+  - **Returns**: `List[AgentsListItem]` containing summary of each agent.
+
+- **`async aget(agent_id: str, version: Optional[int] = None)`**: Loads a specific agent by ID.
+  - **Parameters**: 
+    - `agent_id` (str): Agent's unique identifier
+    - `version` (Optional[int]): Optional version number
+  - **Returns**: `Agent` instance with complete configuration.
+  - **Raises**: `ModuleException` if agent not found or access denied.
+
+- **`get(agent_id: str, version: Optional[int] = None)`**: Synchronously loads a specific agent.
+  - **Parameters**: Same as `aget`
+  - **Returns**: `Agent` instance.
+
+### `AgentsListItem`
+
+- **`async aload()`**: Load full agent details from this list item.
+  - **Returns**: `Agent` instance with complete configuration.
+
+- **`load()`**: Synchronously load full agent details.
+  - **Returns**: `Agent` instance.
 
 ### `Agent`
 
-- **`async arun(self, input_data: Any, ...)`**: Execute a task asynchronously
+#### Core Methods
 
-  - **Parameters**: `input_data` (Any): The input data for the task.
-  - **Returns**: Task execution result.
+- **`async acreate_task(self, existing_task_id: Optional[str] = None, prompt: Optional[str] = "", file_urls: Optional[List[str]] = [], user_details: Optional[User] = None, agent_version: Optional[str] = None, tool_call_payload_extension: Optional[dict] = None, source: Optional[str] = None, worker_id: Optional[str] = None, run_locally: Optional[bool] = False, output_format: Optional[OutputFormat] = None, output_schema: Optional[Dict] = None, events_streaming: Optional[bool] = False, additional_context: Optional[str] = None, expected_output: Optional[str] = None) -> Task`**: Asynchronously create a new task and link it to this agent.
+  - **Parameters**: 
+    - `existing_task_id` (Optional[str]): Existing task id if exists.
+    - `prompt` (Optional[str]): Task initiation prompt.
+    - `file_urls` (Optional[List[str]]): URLs of files related to the task.
+    - `user_details` (Optional[User]): User linked to this task context.
+    - `agent_version` (Optional[str]): Optional agent version to use.
+    - `tool_call_payload_extension` (Optional[dict]): Extend payload with additional information.
+    - `source` (Optional[str]): Origin or source of the request.
+    - `worker_id` (Optional[str]): Worker identifier if applicable.
+    - `run_locally` (Optional[bool]): Indicates if task should run locally.
+    - `output_format` (Optional[OutputFormat]): Format for output response.
+    - `output_schema` (Optional[Dict]): Schema defining structure of output.
+    - `events_streaming` (Optional[bool]): Flag indicating if events are required for this task.
+    - `additional_context` (Optional[str]): Additional context to be passed to the agent.
+    - `expected_output` (Optional[str]): Expected output of the execution.
+  - **Returns**: `Task` - Created Task object linked to this agent.
+  - **Raises**: `ModuleException` on task creation failure.
 
-- **`async aadd_mcp_server(self, server_name: str, config: dict)`**: Add MCP server configuration
-  - **Parameters**: `server_name` (str): Name of the server.
-  - **Returns**: None
+- **`create_task(self, *args, **kwargs) -> Task`**: Synchronously create a new task for this agent.
+  - **Parameters**: Arguments matching `acreate_task`.
+  - **Returns**: `Task` - Created Task object linked to this agent.
+  - **Example**: `>>> task = agent.create_task(prompt="Analyze data files")`
+
+- **`async ainvoke_tool(self, tool: Tool, payload: Any, payload_extension: Optional[Dict] = {}, task_id: Optional[str] = None, tool_call_id: Optional[str] = None) -> ToolInvocationResult`**: Asynchronously invoke a specific tool linked to the agent.
+  - **Parameters**:
+    - `tool` (Tool): Tool to be invoked during the execution.
+    - `payload` (Any): Data payload to be passed to the tool.
+    - `payload_extension` (Optional[Dict]): Optional payload extensions.
+    - `task_id` (Optional[str]): Related task ID if linked.
+    - `tool_call_id` (Optional[str]): Optional tool call identifier.
+  - **Returns**: `ToolInvocationResult` - Result object with execution details.
+
+- **`invoke_tool(self, *args, **kwargs) -> ToolInvocationResult`**: Synchronously invoke a specific tool linked to the agent.
+  - **Parameters**: Arguments matching `ainvoke_tool`.
+  - **Returns**: `ToolInvocationResult` - Result object with execution details.
+  - **Example**: `>>> result = agent.invoke_tool(my_tool, payload={"data": "value"})`
+
+#### Knowledge Base Methods
+
+- **`async aget_knowledge_bases()`**: Get linked knowledge bases.
+  - **Returns**: `List[KnowledgeBase]`
+
+- **`get_knowledge_bases()`**: Synchronously get linked knowledge bases.
+  - **Returns**: `List[KnowledgeBase]`
+
+#### Connection Methods
+
+- **`async aget_connection_string()`**: Get database connection string.
+  - **Returns**: `DatabaseConnectionString`
+  - **Raises**: `ModuleException` on failure.
+
+- **`get_connection_string()`**: Synchronously get connection string.
+  - **Returns**: `DatabaseConnectionString`
+
+#### Session Methods
+
+- **`async aget_user_sessions(self, user_id: str)`**: Asynchronously retrieve all user sessions associated with this agent.
+  - **Description**: This method loads all saved session records linked to the specified user ID from the agent's storage backend. It is only supported for agents using the Agno framework with session storage enabled.
+  - **Parameters**: 
+    - `user_id` (str): Identifier of the user whose sessions are to be retrieved.
+  - **Returns**: `Any` - A list of session records associated with the user.
+  - **Raises**: 
+    - `NotImplementedError`: If the agent framework does not support session storage.
+    - `LookupError`: If session storage is not enabled for this agent.
+    - `ImportError`: If required dependencies for Agno storage are not installed.
+    - `ValueError`: If the agent connection string is invalid.
+  - **Example**: `>>> sessions = await agent.aget_user_sessions(user_id="user_123")`
+
+- **`get_user_sessions(self, user_id: str)`**: Synchronously retrieve all user sessions associated with this agent.
+  - **Description**: This method wraps the asynchronous `aget_user_sessions` method and returns the result in a synchronous context. It loads session data for a given user ID from the agent's storage backend.
+  - **Parameters**: 
+    - `user_id` (str): Identifier of the user whose sessions are to be retrieved.
+  - **Returns**: `Any` - A list of sessions related to the given user.
+  - **Example**: `>>> sessions = agent.get_user_sessions(user_id="user_123")`
+
+- **`async aget_session(self, session_id: str)`**: Asynchronously retrieve a single session by its session ID.
+  - **Description**: This method accesses the agent's storage backend and loads the session record corresponding to the given session ID. It is only supported for agents using the Agno framework with session storage enabled.
+  - **Parameters**: 
+    - `session_id` (str): Unique identifier of the session to retrieve.
+  - **Returns**: `Any` - A single session record if found, or None if the session does not exist.
+  - **Raises**: 
+    - `NotImplementedError`: If the agent framework does not support session storage.
+    - `LookupError`: If session storage is not enabled for this agent.
+    - `ImportError`: If required dependencies for Agno storage are not installed.
+    - `ValueError`: If the agent connection string is invalid.
+  - **Example**: `>>> session = await agent.aget_session(session_id="sess_456")`
+
+- **`get_session(self, session_id: str)`**: Synchronously retrieve a single session by its session ID.
+  - **Description**: This method wraps the asynchronous `aget_session` and returns the result in a synchronous context. It retrieves the session record from the agent's storage backend using the given session ID.
+  - **Parameters**: 
+    - `session_id` (str): Unique identifier of the session to retrieve.
+  - **Returns**: `Any` - A single session record if found, or None if the session does not exist.
+  - **Example**: `>>> session = agent.get_session(session_id="sess_456")`
+
+- **`async adelete_session(self, session_id: str)`**: Asynchronously delete a session by its session ID.
+  - **Description**: This method removes a specific session record from the agent's storage backend based on the provided session ID. It is only supported for agents using the Agno framework with session storage enabled.
+  - **Parameters**: 
+    - `session_id` (str): Unique identifier of the session to delete.
+  - **Raises**: 
+    - `NotImplementedError`: If the agent framework does not support session storage.
+    - `LookupError`: If session storage is not enabled for this agent.
+    - `ImportError`: If required dependencies for Agno storage are not installed.
+    - `ValueError`: If the agent connection string is invalid.
+  - **Example**: `>>> await agent.adelete_session(session_id="sess_456")`
+
+- **`delete_session(self, session_id: str)`**: Synchronously delete a session by its session ID.
+  - **Description**: This method wraps the asynchronous `adelete_session` and removes the session record from the agent's storage backend in a synchronous context.
+  - **Parameters**: 
+    - `session_id` (str): Unique identifier of the session to delete.
+  - **Example**: `>>> agent.delete_session(session_id="sess_456")`
+
+#### Storage and Memory Methods
+
+- **`async aget_storage()`**: Asynchronously retrieve the storage backend for this agent.
+  - **Description**: This method returns the storage backend for agent sessions. Only supported for agents using the Agno framework with session storage enabled.
+  - **Returns**: `PostgresStorage` - Initialized storage backend for agent sessions.
+  - **Raises**: 
+    - `NotImplementedError`: If the framework does not support storage.
+    - `ImportError`: If required dependencies are missing.
+    - `ValueError`: If the connection string for storage is invalid.
+    - `LookupError`: If session storage is not enabled for this agent.
+
+- **`get_storage()`**: Synchronously retrieve the storage backend for this agent.
+  - **Returns**: `Any` - Initialized storage backend for agent sessions.
+  - **Example**: `>>> storage = agent.get_storage()`
+
+- **`async aget_memory_handler(self, model: LLMModelT)`**: Asynchronously retrieve the memory handler backend for user memories.
+  - **Description**: This method returns a memory handler for managing user memories associated with the provided model. Only supported for agents using the Agno framework with user memories enabled.
+  - **Parameters**: 
+    - `model` (LLMModelT): Language model type to associate with memory handler.
+  - **Returns**: `Memory` - Initialized memory handler for user memories associated with the provided model.
+  - **Raises**: 
+    - `NotImplementedError`: If the framework does not support user memories.
+    - `ImportError`: If required dependencies are missing.
+    - `ValueError`: If the connection string for memory storage is invalid.
+    - `LookupError`: If user memories are not enabled for this agent.
+
+- **`get_memory_handler(self, model: LLMModelT)`**: Synchronously retrieve the memory handler backend for user memories.
+  - **Parameters**: 
+    - `model` (LLMModelT): Language model type to associate with memory handler.
+  - **Returns**: `Any` - Initialized memory handler for user memories.
+  - **Example**: `>>> memory_handler = agent.get_memory_handler(model=my_model)`
+
+#### Utility Methods
+
+- **`knowledge_bases_retriever()`**: Retrieve callable to perform search within linked knowledge bases.
+  - **Returns**: `Callable[[str, Optional[Any], int], asyncio.Future]` - Function to execute a search query across all linked knowledge bases.
+  - **Description**: Returns a search function that can query all knowledge bases associated with the agent.
+
+#### Properties
+
+- **`search_knowledge`**: Check if any knowledge bases are linked to this agent.
+  - **Type**: `bool`
+  - **Returns**: `True` if one or more knowledge bases are linked, otherwise `False`.
+
+- **`is_active`**: Check if the agent is active.
+  - **Type**: `bool` 
+  - **Returns**: `True` if the agent is active, `False` if not.
+
+- **`output`**: Construct the output settings for this agent.
+  - **Type**: `AgentOutput`
+  - **Returns**: Output configuration based on schema and format.
+
+## Error Handling
+
+```python
+from xpander_sdk.exceptions import ModuleException
+
+try:
+    agent = await agents.aget(agent_id="invalid-id")
+except ModuleException as e:
+    print(f"Error {e.status_code}: {e.description}")
+```
 
 ## Additional Information
 
-- For configuration options, refer to the [Configuration Guide](CONFIGURATION.md).
-- Async support allows for efficient execution in production.
-- For more advanced use-cases, refer to the full [SDK Documentation](https://docs.xpander.ai).
+- All asynchronous methods have synchronous counterparts for convenience
+- MCP servers are automatically loaded with agent configuration
+- Session management requires Agno framework with session storage enabled
+- Connection strings are cached after first retrieval
+- For configuration options, refer to the [Configuration Guide](CONFIGURATION.md)
+- For more advanced scenarios, visit the full [SDK Documentation](https://docs.xpander.ai)
 
 Contact Support: dev@xpander.ai

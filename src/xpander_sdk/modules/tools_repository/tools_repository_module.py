@@ -15,30 +15,6 @@ from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 
-
-def _convert_parameter_value(value: Any, param_schema: dict) -> Any:
-    """Convert parameter value based on JSON schema type information."""
-    param_type = param_schema.get("type")
-
-    if param_type == "array" and not isinstance(value, list):
-        # Convert single values to arrays when schema expects array
-        return [value] if value is not None else []
-    elif param_type == "string" and not isinstance(value, str):
-        # Convert to string if needed
-        return str(value) if value is not None else ""
-    elif param_type == "integer" and not isinstance(value, int):
-        # Convert to int if needed
-        return int(value) if value is not None else 0
-    elif param_type == "number" and not isinstance(value, (int, float)):
-        # Convert to number if needed
-        return float(value) if value is not None else 0.0
-    elif param_type == "boolean" and not isinstance(value, bool):
-        # Convert to boolean if needed
-        return bool(value) if value is not None else False
-
-    return value
-
-
 class ToolsRepository(XPanderSharedModel):
     """
     Repository for managing tools in xpander.ai.

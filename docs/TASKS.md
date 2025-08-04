@@ -1,6 +1,6 @@
 # Tasks Module Guide
 
-The Tasks Module in xpander.ai SDK enables management of task execution within the platform. It offers both asynchronous and synchronous methods for ease of integration.
+The Tasks Module in xpander.ai SDK enables comprehensive management of task execution within the platform. It offers both asynchronous and synchronous methods for ease of integration and supports real-time event streaming.
 
 ## Overview
 
@@ -9,12 +9,14 @@ This module allows developers to:
 - Create tasks and associate them with agents
 - List and retrieve existing tasks
 - Update task states and manage execution
+- Stream real-time events during task execution
+- Stop and manage task lifecycle
 
 ## Classes
 
 ### Tasks
 
-Handles task-related operations, providing methods for task creation, listing, and retrieval.
+Handles task-related operations, providing methods for task creation, listing, retrieval, updating, and stopping.
 
 #### Key Methods
 
@@ -24,21 +26,43 @@ Handles task-related operations, providing methods for task creation, listing, a
 - **`list`**: Synchronously list all tasks for a specific agent.
 - **`aget`**: Asynchronously retrieve a task by its unique ID.
 - **`get`**: Synchronously retrieve a task by its unique ID.
-- **`auupdate`**: Asynchronously update task details such as status and results.
+- **`aupdate`**: Asynchronously update task details such as status and results.
 - **`update`**: Synchronously update task details.
 - **`astop`**: Asynchronously stop a task.
 - **`stop`**: Synchronously stop a task.
 
-### Task
+### TasksListItem
 
-Represents a single task, providing methods to interact with task configurations and track execution status.
+Represents a summary item from the tasks list with basic task information.
 
 #### Key Methods
 
+- **`aload()`**: Asynchronously load the full task details from this list item.
+- **`load()`**: Synchronously load the full task details from this list item.
+
+### Task
+
+Represents a single task, providing methods to interact with task configurations, track execution status, and stream events.
+
+#### Key Properties
+
+- **`id`**: Unique identifier for the task.
+- **`agent_id`**: Identifier for the associated agent.
+- **`status`**: Current status of the task (Pending, Executing, Completed, etc.).
+- **`input`**: The input parameters for agent execution.
+- **`result`**: Result of the task execution.
+- **`events_streaming`**: Flag indicating if the task has events streaming enabled.
+
+#### Key Methods
+
+- **`aload`**: Asynchronously load a task by ID (class method).
+- **`load`**: Synchronously load a task by ID (class method).
 - **`aset_status`**: Asynchronously change the task's status.
 - **`set_status`**: Synchronously change the task's status.
 - **`asave`**: Asynchronously save task changes back to the xpander platform.
 - **`save`**: Synchronously save task changes.
+- **`astop`**: Asynchronously stop the task.
+- **`stop`**: Synchronously stop the task.
 - **`aevents`**: Asynchronously stream task events.
 - **`events`**: Synchronously stream task events.
 

@@ -425,7 +425,7 @@ class Events(ModuleBase):
 
                 if self.test_task:
                     logger.info(f"Sending test task {self.test_task.model_dump_json()}")
-                    await Tasks(self.configuration).create(
+                    await Tasks(configuration=self.configuration).create(
                         agent_id=self.agent_id,
                         prompt=self.test_task.input.text,
                         file_urls=self.test_task.input.files,
