@@ -96,6 +96,32 @@ if tool:
     assert result.is_success == True
 ```
 
+### Knowledge Base Attachment Patterns
+```python
+# AI agents should attach knowledge bases using the standard pattern from tests
+from xpander_sdk import KnowledgeBases
+
+# Method 1: Attach using KnowledgeBase instance
+kb_manager = KnowledgeBases()
+kb = await kb_manager.aget(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488eca")
+agent.attach_knowledge_base(knowledge_base=kb)
+
+# Method 2: Attach using knowledge base ID directly
+agent.attach_knowledge_base(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488eca")
+
+# Verify attachment (test-based pattern)
+attached_kbs = await agent.aget_knowledge_bases()
+assert any(k.id == kb.id for k in attached_kbs)
+
+# Search across attached knowledge bases
+if agent.has_knowledge_bases:
+    retriever = agent.knowledge_bases_retriever()
+    search_results = retriever(
+        query="search term",
+        num_documents=5
+    )
+```
+
 ## Data Models and Types for AI Agents
 
 ### Core Agent Models
@@ -160,7 +186,9 @@ except Exception as e:
 ## Integration Guidelines for AI Agents
 
 ### Knowledge Base Integration
-- AI agents should use `aproxy_knowledge_base()` for searching knowledge bases
+- AI agents should use `attach_knowledge_base()` to link knowledge bases to agents
+- Use `aget_knowledge_bases()` to retrieve linked knowledge bases for searching
+- Use `knowledge_bases_retriever()` for searching across all linked knowledge bases
 - Implement proper pagination for large search results
 - Handle knowledge base connection errors gracefully
 
@@ -235,6 +263,8 @@ async def process_multiple_agents(agent_ids: list, task: str):
 2. **Task execution timeout**: Increase timeout or optimize task complexity
 3. **Tool invocation failures**: Check tool registration and parameters
 4. **Configuration errors**: Validate environment variables and settings
+5. **Knowledge base attachment failures**: Verify knowledge base ID exists and agent has proper permissions
+6. **Knowledge base search errors**: Check if knowledge bases are properly attached before searching
 
 ### Debugging Tips
 - Enable debug logging with loguru

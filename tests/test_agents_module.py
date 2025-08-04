@@ -12,7 +12,6 @@ load_dotenv(test_env_path)
 
 XPANDER_AGENT_ID = os.getenv("XPANDER_AGENT_ID")
 
-
 @pytest.mark.asyncio
 async def test_list_agents():
     agents = Agents()

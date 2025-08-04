@@ -13,3 +13,6 @@ sqlalchemy
 agno
 psycopg2-binary
 nest-asyncio
+mcp
+openai
+anthropic

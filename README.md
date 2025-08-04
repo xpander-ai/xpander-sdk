@@ -173,6 +173,7 @@ def sync_task_handler(task):
 | **ToolsRepository** | External tools and integrations           | [Tools Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/TOOLS.md)         |
 | **KnowledgeBases**  | Knowledge management and search           | [Knowledge Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/KNOWLEDGE.md) |
 | **Events**          | Event-driven programming                  | [Events Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/EVENTS.md)       |
+| **Backend**         | Agent runtime arguments for frameworks    | [Backend Guide](https://github.com/xpander-ai/xpander-sdk/blob/main/docs/BACKEND.md)     |
 
 ## 🔄 Async/Sync Support
 
@@ -289,7 +290,8 @@ xpander_sdk/
 │   ├── tasks/             # Task execution
 │   ├── tools_repository/  # Tools and integrations
 │   ├── knowledge_bases/   # Knowledge management
-│   └── events/            # Event handling
+│   ├── events/            # Event handling
+│   └── backend/           # Agent runtime arguments for frameworks
 └── utils/                 # Utility functions
 ```
 

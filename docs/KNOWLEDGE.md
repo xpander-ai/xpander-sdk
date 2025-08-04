@@ -139,6 +139,39 @@ assert isinstance(search_results[0], KnowledgeBaseSearchResult)
 assert "jason53" in search_results[0].content
 ```
 
+### Attaching Knowledge Bases to Agents
+
+```python
+# Create or retrieve a knowledge base
+from xpander_sdk import KnowledgeBases, Agents
+
+kb_manager = KnowledgeBases()
+kb = await kb_manager.aget(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488eca")
+
+# Load an agent
+agents = Agents()
+agent = await agents.aget(agent_id=XPANDER_AGENT_ID)
+
+# Attach knowledge base to agent using the KnowledgeBase instance
+agent.attach_knowledge_base(knowledge_base=kb)
+
+# Alternative: attach using knowledge base ID directly
+agent.attach_knowledge_base(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488eca")
+
+# Verify the knowledge base is now attached to the agent
+attached_kbs = await agent.aget_knowledge_bases()
+assert any(k.id == kb.id for k in attached_kbs)
+print(f"Agent now has {len(attached_kbs)} knowledge bases attached")
+
+# The agent can now search across all attached knowledge bases
+if agent.has_knowledge_bases:
+    retriever = agent.knowledge_bases_retriever()
+    search_results = retriever(
+        query="search term",
+        num_documents=5
+    )
+```
+
 ## API Reference
 
 ### `KnowledgeBases`

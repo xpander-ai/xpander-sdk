@@ -15,6 +15,9 @@ Main Components:
 For more information, visit: https://xpander.ai
 """
 
+# Backend-related imports
+from .modules.backend.backend_module import Backend
+
 # Agent-related imports
 from .modules.agents.agents_module import Agents, Agent, AgentsListItem
 
@@ -45,6 +48,8 @@ from .models.configuration import Configuration
 from .models.shared import OutputFormat
 
 __all__ = [
+    # xpander.ai Backend
+    "Backend",
     # Agent management
     "Agents",
     "Agent",

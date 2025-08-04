@@ -146,8 +146,9 @@ pytest tests/test_knowledge_bases.py::test_search_operations
 
 ### Agent Integration
 - Knowledge bases integrate seamlessly with agent operations
-- AI agents should use `aproxy_knowledge_base()` method from Agent class
+- AI agents should use `attach_knowledge_base()` method from Agent class to link knowledge bases
 - Handle knowledge base connections through agent configuration
+- Use both knowledge base instances and IDs for flexible integration
 
 ### Document Processing Integration
 - Support multiple document formats (PDF, TXT, DOCX, etc.)
