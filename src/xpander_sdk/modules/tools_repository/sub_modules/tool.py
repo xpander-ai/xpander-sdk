@@ -1,14 +1,16 @@
-from typing import Dict, Any, Optional, Callable
+from copy import deepcopy
+from typing import Dict, Any, Literal, Optional, Callable
 from httpx import HTTPStatusError
 from pydantic import BaseModel, computed_field, model_validator, Field
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.shared import XPanderSharedModel
+from xpander_sdk.modules.agents.models.agent import AgentGraphItemSchema
 from xpander_sdk.modules.tools_repository.models.tool_invocation_result import ToolInvocationResult
 from xpander_sdk.modules.tools_repository.utils.generic import deep_merge, pascal_case
 from xpander_sdk.modules.tools_repository.utils.local_tools import invoke_local_fn
-from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
+from xpander_sdk.modules.tools_repository.utils.schemas import apply_permanent_values_to_payload, build_model_from_schema, enforce_schema_on_response, schema_enforcement_block_and_descriptions
 from xpander_sdk.utils.event_loop import run_sync
 
 
@@ -42,6 +44,7 @@ class Tool(XPanderSharedModel):
     should_add_to_graph: Optional[bool] = False
     is_local: Optional[bool] = False
     is_synced: Optional[bool] = False
+    schema_overrides: Optional[AgentGraphItemSchema] = None
     description: str = ""
     parameters: Dict[str, Any] = {}
 
@@ -55,7 +58,29 @@ class Tool(XPanderSharedModel):
             configuration (Configuration): The configuration instance to associate with this tool.
         """
         self.configuration = configuration
+    
+    def set_schema_overrides(self, agent_graph: Any):
+        """
+        Apply schema overrides from the agent graph item if available.
 
+        This method retrieves the graph item associated with this tool's ID
+        from the provided agent graph. If the item exists and contains valid
+        schema configuration, it sets the tool's internal `schema_overrides`
+        attribute accordingly.
+
+        Args:
+            agent_graph (AgentGraph): The agent graph containing graph items. Must provide
+                a `get_graph_item(key: str, value: Any)` method to retrieve a graph item
+                by a key-value match, where the key is 'item_id' and value is `self.id`.
+        """
+        if gi := agent_graph.get_graph_item("item_id", self.id):
+            if gi.settings and gi.settings.schemas and isinstance(gi.settings.schemas, AgentGraphItemSchema):
+                self.schema_overrides = gi.settings.schemas
+
+
+    def has_schema_override(self, type: Literal["input","output"]) -> bool:
+        return self.schema_overrides and hasattr(self.schema_overrides, type) and isinstance(getattr(self.schema_overrides,type), dict)
+    
     @computed_field
     @property
     def schema(self) -> type[BaseModel]:
@@ -66,7 +91,17 @@ class Tool(XPanderSharedModel):
             type[BaseModel]: A dynamically constructed Pydantic model class.
         """
         model_name = f"{pascal_case(self.id)}PayloadSchema"
-        return build_model_from_schema(model_name=model_name, schema=self.parameters)
+        
+        schema = deepcopy(self.parameters)
+        
+        # apply input schema enforcement
+        if self.has_schema_override(type="input"):
+            schema = schema_enforcement_block_and_descriptions(target_schema=schema, reference_schema=self.schema_overrides.input)
+        
+        return build_model_from_schema(
+            model_name=model_name,
+            schema=schema
+        )
 
     @model_validator(mode="before")
     @classmethod
@@ -119,12 +154,22 @@ class Tool(XPanderSharedModel):
         if is_preflight:
             headers["x-preflight-check"] = "true"
 
-        return await client.make_request(
+        # apply input schema
+        if not is_preflight and self.has_schema_override(type="input") and payload and (isinstance(payload, dict) or isinstance(payload, list)):
+            payload = apply_permanent_values_to_payload(schema=self.schema_overrides.input, payload=payload)
+        
+        result = await client.make_request(
             path=APIRoute.InvokeTool.format(agent_id=agent_id, tool_id=self.id),
             method="POST",
             payload=None if is_preflight else payload,
             headers=headers,
         )
+        
+        # apply output schema
+        if not is_preflight and self.has_schema_override(type="output") and result and (isinstance(result, dict) or isinstance(result, list)):
+            result = enforce_schema_on_response(schema=self.schema_overrides.output, response=result)
+        
+        return result
 
     def call_remote_tool(
         self,

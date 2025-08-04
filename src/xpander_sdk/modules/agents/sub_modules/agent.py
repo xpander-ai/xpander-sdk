@@ -272,7 +272,7 @@ class Agent(XPanderSharedModel):
             agent.graph = AgentGraph(response_data.get("graph", []))
             agent.configuration = configuration or Configuration()
             agent.tools = ToolsRepository(
-                configuration=agent.configuration, tools=response_data.get("tools", [])
+                configuration=agent.configuration, tools=response_data.get("tools", []), agent_graph=agent.graph
             )
 
             if agent.tools.should_sync_local_tools():

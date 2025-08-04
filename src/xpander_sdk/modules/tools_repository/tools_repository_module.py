@@ -46,6 +46,8 @@ class ToolsRepository(XPanderSharedModel):
 
     # Mutable list that can be set/overwritten by backend
     tools: List[Tool] = []
+    
+    agent_graph: Optional[Any] = None
 
     # Immutable registry for tools defined via decorator
     _local_tools: ClassVar[List[Tool]] = []
@@ -82,6 +84,7 @@ class ToolsRepository(XPanderSharedModel):
 
         for tool in tools:
             tool.set_configuration(configuration=self.configuration)
+            tool.set_schema_overrides(agent_graph=self.agent_graph)
 
         return tools
 
