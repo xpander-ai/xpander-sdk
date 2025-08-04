@@ -97,6 +97,8 @@ def _configure_user_memory(args: Dict[str, Any], agent: Agent, task: Optional[Ta
     if agent.agno_settings.user_memories and user and user.id:
         args["enable_user_memories"] = True
         args["enable_agentic_memory"] = True
+    
+    if user: # add user details to the agent
         args["additional_context"] = f"User details: {user.model_dump_json()}"
 
 
