@@ -51,26 +51,32 @@ Represents a specific agent with capabilities to manage tasks, invoke tools, acc
 #### Key Methods
 
 ##### Agent Loading
+
 - **`aload(agent_id: str, configuration: Optional[Configuration] = None, version: Optional[int] = None)`**: Asynchronously load an existing agent (class method).
 - **`load(agent_id: str, configuration: Optional[Configuration] = None, version: Optional[int] = None)`**: Synchronously load an existing agent (class method).
 
 ##### Task Management
-- **`acreate_task(**kwargs)`**: Create a new task for this agent asynchronously.
-- **`create_task(**kwargs)`**: Create a new task for this agent synchronously.
+
+- **`acreate_task(**kwargs)`\*\*: Create a new task for this agent asynchronously.
+- **`create_task(**kwargs)`\*\*: Create a new task for this agent synchronously.
 
 ##### Tool Integration
-- **`ainvoke_tool(tool: Tool, payload: Any, **kwargs)`**: Asynchronously invoke a specific tool using the agent.
-- **`invoke_tool(tool: Tool, payload: Any, **kwargs)`**: Synchronously invoke a specific tool using the agent.
+
+- **`ainvoke_tool(tool: Tool, payload: Any, **kwargs)`\*\*: Asynchronously invoke a specific tool using the agent.
+- **`invoke_tool(tool: Tool, payload: Any, **kwargs)`\*\*: Synchronously invoke a specific tool using the agent.
 
 ##### Knowledge Base Access
+
 - **`aget_knowledge_bases()`**: Asynchronously access knowledge bases linked to this agent.
 - **`get_knowledge_bases()`**: Synchronously access knowledge bases linked to this agent.
 
 ##### Connection Management
+
 - **`aget_connection_string()`**: Asynchronously retrieve the agent's database connection string.
 - **`get_connection_string()`**: Synchronously retrieve the agent's database connection string.
 
 ##### Session Management
+
 - **`aget_user_sessions(user_id: str)`**: Asynchronously obtain user sessions associated with this agent.
 - **`get_user_sessions(user_id: str)`**: Synchronously obtain user sessions associated with this agent.
 - **`aget_session(session_id: str)`**: Asynchronously retrieve a specific session by ID.
@@ -172,12 +178,33 @@ if email_tool:
 kbs = await agent.aget_knowledge_bases()
 for kb in kbs:
     print(f"Knowledge Base: {kb.name}")
-    
+
     # Search within the knowledge base
     search_results = await kb.asearch(search_query="David Hines", top_k=1)
     for result in search_results:
         print(f"Content: {result.content[:100]}...")
         print(f"Score: {result.score}")
+```
+
+### Attaching Knowledge Bases to Agents
+
+```python
+from xpander_sdk import KnowledgeBases
+
+# Get a knowledge base to attach
+kb_manager = KnowledgeBases()
+kb = await kb_manager.aget(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488eca")
+
+# Attach knowledge base to agent using the instance
+agent.attach_knowledge_base(knowledge_base=kb)
+
+# Or attach using just the knowledge base ID
+agent.attach_knowledge_base(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488eca")
+
+# Verify the knowledge base is now attached
+attached_kbs = await agent.aget_knowledge_bases()
+print(f"Agent now has {len(attached_kbs)} knowledge bases attached")
+assert any(k.id == kb.id for k in attached_kbs)
 ```
 
 ### Connection String Management
@@ -200,7 +227,7 @@ if user_sessions:
     session_id = user_sessions[0].id  # Assuming session has an id attribute
     session_details = await agent.aget_session(session_id=session_id)
     print(f"Session details: {session_details}")
-    
+
     # Delete session when no longer needed
     await agent.adelete_session(session_id=session_id)
 ```
@@ -211,7 +238,7 @@ if user_sessions:
 # Access agent's execution graph
 if agent.graph and agent.graph.items:
     print(f"Graph has {len(agent.graph.items)} items")
-    
+
     # Find specific graph item
     graph_item = agent.graph.get_graph_item(attr="item_id", value="some-tool-id")
     if graph_item:
@@ -225,7 +252,7 @@ if agent.graph and agent.graph.items:
 try:
     storage = await agent.aget_storage()
     print(f"Storage backend initialized: {storage}")
-    
+
     # Example usage would depend on the storage backend API
     # This is typically used internally by session management
 except NotImplementedError as e:
@@ -244,7 +271,7 @@ try:
     model = OpenAIModel("gpt-4")
     memory_handler = await agent.aget_memory_handler(model=model)
     print(f"Memory handler initialized: {memory_handler}")
-    
+
     # Example usage would depend on the memory handler API
     # Typically used for maintaining user conversation context
 except NotImplementedError as e:
@@ -257,15 +284,15 @@ except LookupError as e:
 
 ```python
 # Use the knowledge bases retriever for search
-if agent.search_knowledge:
+if agent.has_knowledge_bases:
     retriever = agent.knowledge_bases_retriever()
-    
+
     # Search across all linked knowledge bases
     search_results = retriever(
         query="pricing strategy",
         num_documents=10
     )
-    
+
     if search_results:
         for result in search_results:
             print(f"Document: {result['document_name']}")
@@ -282,7 +309,7 @@ else:
 ```python
 # Check agent status and properties
 print(f"Agent is active: {agent.is_active}")
-print(f"Agent has knowledge bases: {agent.search_knowledge}")
+print(f"Agent has knowledge bases: {agent.has_knowledge_bases}")
 print(f"Agent output configuration: {agent.output}")
 
 # Access agent configuration details
@@ -297,14 +324,17 @@ print(f"Output format: {agent.output_format}")
 ### `Agents`
 
 - **`async alist()`**: Asynchronously retrieves all available agents.
+
   - **Returns**: `List[AgentsListItem]` containing summary of each agent.
   - **Raises**: `ModuleException` on API errors.
 
 - **`list()`**: Synchronously retrieves all available agents.
+
   - **Returns**: `List[AgentsListItem]` containing summary of each agent.
 
 - **`async aget(agent_id: str, version: Optional[int] = None)`**: Loads a specific agent by ID.
-  - **Parameters**: 
+
+  - **Parameters**:
     - `agent_id` (str): Agent's unique identifier
     - `version` (Optional[int]): Optional version number
   - **Returns**: `Agent` instance with complete configuration.
@@ -317,6 +347,7 @@ print(f"Output format: {agent.output_format}")
 ### `AgentsListItem`
 
 - **`async aload()`**: Load full agent details from this list item.
+
   - **Returns**: `Agent` instance with complete configuration.
 
 - **`load()`**: Synchronously load full agent details.
@@ -327,7 +358,8 @@ print(f"Output format: {agent.output_format}")
 #### Core Methods
 
 - **`async acreate_task(self, existing_task_id: Optional[str] = None, prompt: Optional[str] = "", file_urls: Optional[List[str]] = [], user_details: Optional[User] = None, agent_version: Optional[str] = None, tool_call_payload_extension: Optional[dict] = None, source: Optional[str] = None, worker_id: Optional[str] = None, run_locally: Optional[bool] = False, output_format: Optional[OutputFormat] = None, output_schema: Optional[Dict] = None, events_streaming: Optional[bool] = False, additional_context: Optional[str] = None, expected_output: Optional[str] = None) -> Task`**: Asynchronously create a new task and link it to this agent.
-  - **Parameters**: 
+
+  - **Parameters**:
     - `existing_task_id` (Optional[str]): Existing task id if exists.
     - `prompt` (Optional[str]): Task initiation prompt.
     - `file_urls` (Optional[List[str]]): URLs of files related to the task.
@@ -345,12 +377,14 @@ print(f"Output format: {agent.output_format}")
   - **Returns**: `Task` - Created Task object linked to this agent.
   - **Raises**: `ModuleException` on task creation failure.
 
-- **`create_task(self, *args, **kwargs) -> Task`**: Synchronously create a new task for this agent.
+- **`create_task(self, \*args, **kwargs) -> Task`\*\*: Synchronously create a new task for this agent.
+
   - **Parameters**: Arguments matching `acreate_task`.
   - **Returns**: `Task` - Created Task object linked to this agent.
   - **Example**: `>>> task = agent.create_task(prompt="Analyze data files")`
 
 - **`async ainvoke_tool(self, tool: Tool, payload: Any, payload_extension: Optional[Dict] = {}, task_id: Optional[str] = None, tool_call_id: Optional[str] = None) -> ToolInvocationResult`**: Asynchronously invoke a specific tool linked to the agent.
+
   - **Parameters**:
     - `tool` (Tool): Tool to be invoked during the execution.
     - `payload` (Any): Data payload to be passed to the tool.
@@ -359,14 +393,27 @@ print(f"Output format: {agent.output_format}")
     - `tool_call_id` (Optional[str]): Optional tool call identifier.
   - **Returns**: `ToolInvocationResult` - Result object with execution details.
 
-- **`invoke_tool(self, *args, **kwargs) -> ToolInvocationResult`**: Synchronously invoke a specific tool linked to the agent.
+- **`invoke_tool(self, \*args, **kwargs) -> ToolInvocationResult`\*\*: Synchronously invoke a specific tool linked to the agent.
   - **Parameters**: Arguments matching `ainvoke_tool`.
   - **Returns**: `ToolInvocationResult` - Result object with execution details.
   - **Example**: `>>> result = agent.invoke_tool(my_tool, payload={"data": "value"})`
 
 #### Knowledge Base Methods
 
+|- **`attach_knowledge_base(self, knowledge_base: Optional[KnowledgeBase] = None, knowledge_base_id: Optional[str] = None)`**: Attach a knowledge base to the agent if it is not already linked.
+
+  - **Parameters**:
+    - `knowledge_base` (Optional[KnowledgeBase]): The KnowledgeBase instance to attach.
+    - `knowledge_base_id` (Optional[str]): The unique identifier of the knowledge base.
+  - **Raises**:
+    - `ValueError`: If neither a knowledge base nor an ID is provided.
+    - `TypeError`: If a provided knowledge base is not a valid `KnowledgeBase` instance.
+  - **Example**: `>>> agent.attach_knowledge_base(knowledge_base_id="kb_12345")`
+
+  - **Note**: Changes only affect the runtime instance of the agent. To persist changes, an explicit save or sync must be called.
+
 - **`async aget_knowledge_bases()`**: Get linked knowledge bases.
+
   - **Returns**: `List[KnowledgeBase]`
 
 - **`get_knowledge_bases()`**: Synchronously get linked knowledge bases.
@@ -375,6 +422,7 @@ print(f"Output format: {agent.output_format}")
 #### Connection Methods
 
 - **`async aget_connection_string()`**: Get database connection string.
+
   - **Returns**: `DatabaseConnectionString`
   - **Raises**: `ModuleException` on failure.
 
@@ -384,11 +432,12 @@ print(f"Output format: {agent.output_format}")
 #### Session Methods
 
 - **`async aget_user_sessions(self, user_id: str)`**: Asynchronously retrieve all user sessions associated with this agent.
+
   - **Description**: This method loads all saved session records linked to the specified user ID from the agent's storage backend. It is only supported for agents using the Agno framework with session storage enabled.
-  - **Parameters**: 
+  - **Parameters**:
     - `user_id` (str): Identifier of the user whose sessions are to be retrieved.
   - **Returns**: `Any` - A list of session records associated with the user.
-  - **Raises**: 
+  - **Raises**:
     - `NotImplementedError`: If the agent framework does not support session storage.
     - `LookupError`: If session storage is not enabled for this agent.
     - `ImportError`: If required dependencies for Agno storage are not installed.
@@ -396,18 +445,20 @@ print(f"Output format: {agent.output_format}")
   - **Example**: `>>> sessions = await agent.aget_user_sessions(user_id="user_123")`
 
 - **`get_user_sessions(self, user_id: str)`**: Synchronously retrieve all user sessions associated with this agent.
+
   - **Description**: This method wraps the asynchronous `aget_user_sessions` method and returns the result in a synchronous context. It loads session data for a given user ID from the agent's storage backend.
-  - **Parameters**: 
+  - **Parameters**:
     - `user_id` (str): Identifier of the user whose sessions are to be retrieved.
   - **Returns**: `Any` - A list of sessions related to the given user.
   - **Example**: `>>> sessions = agent.get_user_sessions(user_id="user_123")`
 
 - **`async aget_session(self, session_id: str)`**: Asynchronously retrieve a single session by its session ID.
+
   - **Description**: This method accesses the agent's storage backend and loads the session record corresponding to the given session ID. It is only supported for agents using the Agno framework with session storage enabled.
-  - **Parameters**: 
+  - **Parameters**:
     - `session_id` (str): Unique identifier of the session to retrieve.
   - **Returns**: `Any` - A single session record if found, or None if the session does not exist.
-  - **Raises**: 
+  - **Raises**:
     - `NotImplementedError`: If the agent framework does not support session storage.
     - `LookupError`: If session storage is not enabled for this agent.
     - `ImportError`: If required dependencies for Agno storage are not installed.
@@ -415,17 +466,19 @@ print(f"Output format: {agent.output_format}")
   - **Example**: `>>> session = await agent.aget_session(session_id="sess_456")`
 
 - **`get_session(self, session_id: str)`**: Synchronously retrieve a single session by its session ID.
+
   - **Description**: This method wraps the asynchronous `aget_session` and returns the result in a synchronous context. It retrieves the session record from the agent's storage backend using the given session ID.
-  - **Parameters**: 
+  - **Parameters**:
     - `session_id` (str): Unique identifier of the session to retrieve.
   - **Returns**: `Any` - A single session record if found, or None if the session does not exist.
   - **Example**: `>>> session = agent.get_session(session_id="sess_456")`
 
 - **`async adelete_session(self, session_id: str)`**: Asynchronously delete a session by its session ID.
+
   - **Description**: This method removes a specific session record from the agent's storage backend based on the provided session ID. It is only supported for agents using the Agno framework with session storage enabled.
-  - **Parameters**: 
+  - **Parameters**:
     - `session_id` (str): Unique identifier of the session to delete.
-  - **Raises**: 
+  - **Raises**:
     - `NotImplementedError`: If the agent framework does not support session storage.
     - `LookupError`: If session storage is not enabled for this agent.
     - `ImportError`: If required dependencies for Agno storage are not installed.
@@ -434,38 +487,41 @@ print(f"Output format: {agent.output_format}")
 
 - **`delete_session(self, session_id: str)`**: Synchronously delete a session by its session ID.
   - **Description**: This method wraps the asynchronous `adelete_session` and removes the session record from the agent's storage backend in a synchronous context.
-  - **Parameters**: 
+  - **Parameters**:
     - `session_id` (str): Unique identifier of the session to delete.
   - **Example**: `>>> agent.delete_session(session_id="sess_456")`
 
 #### Storage and Memory Methods
 
 - **`async aget_storage()`**: Asynchronously retrieve the storage backend for this agent.
+
   - **Description**: This method returns the storage backend for agent sessions. Only supported for agents using the Agno framework with session storage enabled.
   - **Returns**: `PostgresStorage` - Initialized storage backend for agent sessions.
-  - **Raises**: 
+  - **Raises**:
     - `NotImplementedError`: If the framework does not support storage.
     - `ImportError`: If required dependencies are missing.
     - `ValueError`: If the connection string for storage is invalid.
     - `LookupError`: If session storage is not enabled for this agent.
 
 - **`get_storage()`**: Synchronously retrieve the storage backend for this agent.
+
   - **Returns**: `Any` - Initialized storage backend for agent sessions.
   - **Example**: `>>> storage = agent.get_storage()`
 
 - **`async aget_memory_handler(self, model: LLMModelT)`**: Asynchronously retrieve the memory handler backend for user memories.
+
   - **Description**: This method returns a memory handler for managing user memories associated with the provided model. Only supported for agents using the Agno framework with user memories enabled.
-  - **Parameters**: 
+  - **Parameters**:
     - `model` (LLMModelT): Language model type to associate with memory handler.
   - **Returns**: `Memory` - Initialized memory handler for user memories associated with the provided model.
-  - **Raises**: 
+  - **Raises**:
     - `NotImplementedError`: If the framework does not support user memories.
     - `ImportError`: If required dependencies are missing.
     - `ValueError`: If the connection string for memory storage is invalid.
     - `LookupError`: If user memories are not enabled for this agent.
 
 - **`get_memory_handler(self, model: LLMModelT)`**: Synchronously retrieve the memory handler backend for user memories.
-  - **Parameters**: 
+  - **Parameters**:
     - `model` (LLMModelT): Language model type to associate with memory handler.
   - **Returns**: `Any` - Initialized memory handler for user memories.
   - **Example**: `>>> memory_handler = agent.get_memory_handler(model=my_model)`
@@ -478,12 +534,14 @@ print(f"Output format: {agent.output_format}")
 
 #### Properties
 
-- **`search_knowledge`**: Check if any knowledge bases are linked to this agent.
+- **`has_knowledge_bases`**: Check if any knowledge bases are linked to this agent.
+
   - **Type**: `bool`
   - **Returns**: `True` if one or more knowledge bases are linked, otherwise `False`.
 
 - **`is_active`**: Check if the agent is active.
-  - **Type**: `bool` 
+
+  - **Type**: `bool`
   - **Returns**: `True` if the agent is active, `False` if not.
 
 - **`output`**: Construct the output settings for this agent.

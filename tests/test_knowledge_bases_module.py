@@ -93,3 +93,26 @@ async def test_create_knowledge_base_with_docs():
     await created_kb.adelete()
     kbs_list = await kbs.alist()
     assert not any(kb.id == created_kb.id for kb in kbs_list)
+
+
+@pytest.mark.asyncio
+async def test_global_knowledge_bases_in_agent():
+    agents = Agents()
+    agent = await agents.aget(agent_id=XPANDER_AGENT_ID)
+
+    assert isinstance(agent, Agent)
+    assert agent.id == XPANDER_AGENT_ID
+    
+    # get kb
+    kbs = KnowledgeBases()
+    kb = await kbs.aget(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488eca")
+    assert isinstance(kb, KnowledgeBase)
+    
+    # attach to the agent
+    agent.attach_knowledge_base(knowledge_base=kb)
+    
+    # get agent kbs
+    kbs = await agent.aget_knowledge_bases()
+    assert isinstance(kbs, list)
+    assert len(kbs) >= 1
+    assert any(k.id == kb.id for k in kbs)

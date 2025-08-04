@@ -856,4 +856,42 @@ class Agent(XPanderSharedModel):
             >>> agent.delete_session(session_id="sess_456")
         """
         return run_sync(self.adelete_session(session_id=session_id))
+    
+    def attach_knowledge_base(
+        self,
+        knowledge_base: Optional[KnowledgeBase] = None,
+        knowledge_base_id: Optional[str] = None
+    ) -> None:
+        """
+        Attach a knowledge base to the agent if it is not already linked.
 
+        This method ensures that a knowledge base is associated with the agent, either
+        via a `KnowledgeBase` instance or a raw ID. It avoids duplicate links by checking
+        for existing associations.
+
+        Args:
+            knowledge_base (Optional[KnowledgeBase]): The KnowledgeBase instance to attach.
+            knowledge_base_id (Optional[str]): The unique identifier of the knowledge base.
+
+        Raises:
+            ValueError: If neither a knowledge base nor an ID is provided.
+            TypeError: If a provided knowledge base is not a valid `KnowledgeBase` instance.
+
+        Example:
+            >>> agent.attach_knowledge_base(knowledge_base_id="kb_12345")
+            >>> agent.attach_knowledge_base(knowledge_base=my_kb_instance)
+
+        Note:
+            This change only affects the runtime instance of the agent.
+            To persist changes, an explicit save or sync must be called.
+        """
+        if not knowledge_base and not knowledge_base_id:
+            raise ValueError("You must provide either a knowledge_base instance or a knowledge_base_id.")
+
+        if knowledge_base:
+            if not isinstance(knowledge_base, KnowledgeBase):
+                raise TypeError("Expected 'knowledge_base' to be an instance of KnowledgeBase.")
+            knowledge_base_id = knowledge_base.id
+
+        if not any(kb.id == knowledge_base_id for kb in self.knowledge_bases):
+            self.knowledge_bases.append(AgentKnowledgeBase(id=knowledge_base_id))
