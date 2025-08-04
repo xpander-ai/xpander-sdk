@@ -69,7 +69,7 @@
             "name": "Python: Test events listener",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/tests/test_events_module.py",
+            "program": "${workspaceFolder}/tests/events_tester.py",
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": []
