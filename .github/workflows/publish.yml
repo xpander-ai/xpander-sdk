@@ -114,4 +114,4 @@ jobs:
             ## Documentation
             Visit [xpander.ai](https://www.xpander.ai) for full documentation and examples.
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_ACTION_PAT }}
