@@ -5,6 +5,7 @@ The Agents Module provides comprehensive functionality for creating, managing, a
 ## Overview
 
 This module handles:
+
 - Agent creation and configuration
 - Task execution and management
 - Tool integration and MCP server configuration
@@ -29,17 +30,21 @@ agents/
 ## Key Classes
 
 ### `Agents`
+
 Main interface for agent management operations.
 
 **Methods:**
+
 - `alist()` / `list()`: List all available agents
 - `aget(agent_id)` / `get(agent_id)`: Retrieve specific agent
 - Support for both async and sync operations
 
 ### `Agent`
+
 Individual agent instance with full functionality.
 
 **Key Features:**
+
 - Task execution (`arun()` / `run()`)
 - Tool management and invocation
 - Knowledge base integration
@@ -48,6 +53,7 @@ Individual agent instance with full functionality.
 - Memory and storage management
 
 **Methods:**
+
 - `aload()` / `load()`: Load agent from backend
 - `arun()` / `run()`: Execute tasks
 - `ainvoke_tool()` / `invoke_tool()`: Call tools
@@ -57,6 +63,7 @@ Individual agent instance with full functionality.
 ## Usage Examples
 
 ### Basic Agent Operations
+
 ```python
 from xpander_sdk import Agents, Agent
 
@@ -72,6 +79,7 @@ result = await agent.arun("Analyze this data")
 ```
 
 ### Tool Integration
+
 ```python
 # Invoke a tool
 tool_result = await agent.ainvoke_tool(
@@ -81,6 +89,7 @@ tool_result = await agent.ainvoke_tool(
 ```
 
 ### Knowledge Base Search
+
 ```python
 # Search knowledge base
 kb_results = await agent.aproxy_knowledge_base(
@@ -107,6 +116,7 @@ See the main [Agents Guide](/docs/AGENTS.md) for detailed API documentation.
 ## Types and Models
 
 The module includes comprehensive type definitions for:
+
 - Agent configuration and metadata
 - Execution inputs and outputs
 - Tool definitions and results
@@ -130,6 +140,7 @@ The module includes comprehensive type definitions for:
 ## Contributing
 
 When contributing to this module:
+
 1. Maintain backward compatibility
 2. Add comprehensive tests for new features
 3. Update documentation for API changes

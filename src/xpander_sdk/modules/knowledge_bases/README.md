@@ -5,6 +5,7 @@ The Knowledge Bases Module provides comprehensive functionality for managing and
 ## Overview
 
 This module handles:
+
 - Knowledge base creation and management
 - Document addition and removal
 - Search and retrieval operations
@@ -27,18 +28,22 @@ knowledge_bases/
 ## Key Classes
 
 ### `KnowledgeBases`
+
 Interface for knowledge base management operations.
 
 **Methods:**
+
 - `acreate()` / `create()`: Create a new knowledge base
 - `alist()` / `list()`: List all available knowledge bases
 - `aget(kb_id)` / `get(kb_id)`: Retrieve a specific knowledge base
 - Support for both async and sync operations
 
 ### `KnowledgeBase`
+
 Instance of a single knowledge base with search and document management capabilities.
 
 **Key Features:**
+
 - Document management (`aadd_documents()`, `adelete_multiple_documents()`)
 - Search operations (`asearch()` / `search()`)
 - Knowledge base deletion
@@ -47,6 +52,7 @@ Instance of a single knowledge base with search and document management capabili
 ## Usage Examples
 
 ### Basic Knowledge Base Operations
+
 ```python
 from xpander_sdk import KnowledgeBases, KnowledgeBase
 
@@ -65,6 +71,7 @@ kb = await kb_manager.aget(knowledge_base_id="kb-123")
 ```
 
 ### Document Management
+
 ```python
 # Add documents to knowledge base
 documents = await kb.aadd_documents([
@@ -80,6 +87,7 @@ await kb.adelete_multiple_documents(["doc1", "doc2"])
 ```
 
 ### Search Operations
+
 ```python
 # Search within knowledge base
 results = await kb.asearch(
@@ -110,6 +118,7 @@ See the main [Knowledge Guide](/docs/KNOWLEDGE.md) for detailed API documentatio
 ## Types and Models
 
 The module includes comprehensive type definitions for:
+
 - Knowledge base configuration and metadata
 - Document management and metadata
 - Search parameters and results
@@ -131,6 +140,7 @@ The module includes comprehensive type definitions for:
 ## Contributing
 
 When contributing to this module:
+
 1. Ensure backward compatibility with existing functionality
 2. Include comprehensive tests and update existing tests
 3. Update documentation for any API changes

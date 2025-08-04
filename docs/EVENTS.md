@@ -12,6 +12,7 @@ The SDK provides **two distinct event handling systems**:
 ### Agent Event Listeners
 
 This system allows developers to:
+
 - Set up event listeners for agents using `@on_task` decorators
 - Handle incoming task execution requests
 - Integrate with Server Sent Events (SSE) for agent deployment
@@ -20,6 +21,7 @@ This system allows developers to:
 ### Task Event Streaming
 
 This system allows developers to:
+
 - Stream real-time events from specific task executions
 - Monitor task progress, tool calls, and status changes
 - Handle task lifecycle events (created, updated, finished)
@@ -70,6 +72,7 @@ The `TaskUpdateEventType` enum is used to categorize task-specific events:
 - **`TaskFinished`**: Marks the completion of a task, regardless of success or failure
 
 #### Tool-Related Events
+
 These are specific to tool-related operations:
 
 - **`ToolCallRequest`**: Fired when a request is made to invoke a tool
@@ -132,14 +135,14 @@ async def handle_task(task):
     print(f"Task Received: {task.id}")
     print(f"Task Status: {task.status}")
     print(f"Task Input: {task.input.text}")
-    
+
     # Process the task
     # Your custom logic here
-    
+
     # Update task status
     task.status = "completed"
     task.result = "Task processed successfully"
-    
+
     return task
 
 # Initialize and start event listener
@@ -196,18 +199,18 @@ async for event in task.aevents():
     print(f"Event Type: {event.type}")
     print(f"Task ID: {event.task_id}")
     print(f"Timestamp: {event.time}")
-    
+
     # Use the enum for robust type checking
     if event.type == TaskUpdateEventType.TaskCreated:
         # Handle task creation
         created_task = event.data
         print(f"Task created with ID: {created_task.id}")
-        
+
     elif event.type == TaskUpdateEventType.TaskUpdated:
         # Handle task updates
         updated_task = event.data
         print(f"Task Status: {updated_task.status}")
-        
+
     elif event.type == TaskUpdateEventType.ToolCallRequest:
         # Handle tool call requests - event.data is a ToolCallRequest object
         tool_request: ToolCallRequest = event.data
@@ -216,7 +219,7 @@ async for event in task.aevents():
         print(f"  Operation ID: {tool_request.operation_id}")
         print(f"  Request ID: {tool_request.request_id}")
         print(f"  Payload: {tool_request.payload}")
-        
+
     elif event.type == TaskUpdateEventType.ToolCallResult:
         # Handle tool call results - event.data is a ToolCallResult object
         tool_result: ToolCallResult = event.data
@@ -227,7 +230,7 @@ async for event in task.aevents():
         print(f"  Success: {not tool_result.is_error}")
         if tool_result.is_error:
             print(f"  Error: {tool_result.result}")
-        
+
     elif event.type == TaskUpdateEventType.TaskFinished:
         # Handle task completion
         finished_task = event.data
@@ -235,7 +238,7 @@ async for event in task.aevents():
         print(f"Final Status: {finished_task.status}")
         print(f"Result: {finished_task.result}")
         break
-        
+
     elif event.type == TaskUpdateEventType.SubAgentTrigger:
         # Handle sub-agent triggers
         sub_agent_data = event.data
@@ -248,7 +251,7 @@ async for event in task.aevents():
 # For non-async environments
 for event in task.events():
     print(f"Event: {event.type} at {event.time}")
-    
+
     if event.type == "task_finished":
         print("Task completed!")
         break
@@ -263,7 +266,7 @@ async for event in task.aevents():
         print(f"Tool Event: {event.type}")
         if hasattr(event.data, 'tool_name'):
             print(f"Tool: {event.data.tool_name}")
-    
+
     elif event.type == "task_finished":
         break
 ```
@@ -278,10 +281,10 @@ from xpander_sdk import Events, Agent, on_task
 @on_task
 async def process_data_task(task):
     print(f"Processing task: {task.id}")
-    
+
     # Simulate processing
     await asyncio.sleep(2)
-    
+
     # Update status
     task.status = "completed"
     task.result = "Data processed successfully"
@@ -290,17 +293,17 @@ async def process_data_task(task):
 # Client-side: Create and monitor a task
 async def create_and_monitor_task():
     agent = Agent.load("data-processor-agent")
-    
+
     # Create task with streaming
     task = await agent.acreate_task(
         prompt="Process customer data",
         events_streaming=True
     )
-    
+
     # Monitor the task execution
     async for event in task.aevents():
         print(f"[{event.time}] {event.type}")
-        
+
         if event.type == "task_finished":
             final_task = event.data
             print(f"Task completed with status: {final_task.status}")
@@ -313,10 +316,10 @@ async def main():
     listener_task = asyncio.create_task(
         events.start(on_execution_request=process_data_task)
     )
-    
+
     # Create and monitor a task (client-side)
     monitor_task = asyncio.create_task(create_and_monitor_task())
-    
+
     # Wait for completion
     await asyncio.gather(listener_task, monitor_task)
 
@@ -375,19 +378,19 @@ from xpander_sdk.modules.tasks.sub_modules.task import TaskUpdateEvent
 
 async def detailed_event_handler(task):
     """Handle task events with detailed model access."""
-    
+
     async for event in task.aevents():
         # Access event metadata
         print(f"Event occurred at: {event.time}")
         print(f"Organization: {event.organization_id}")
         print(f"Task: {event.task_id}")
-        
+
         # Type-safe event handling
         match event.type:
             case TaskUpdateEventType.TaskCreated:
                 created_task = event.data
                 print(f"New task created: {created_task.id}")
-                
+
             case TaskUpdateEventType.ToolCallRequest:
                 request: ToolCallRequest = event.data
                 print(f"Tool call requested:")
@@ -396,7 +399,7 @@ async def detailed_event_handler(task):
                 print(f"  Operation: {request.operation_id}")
                 if request.graph_node_id:
                     print(f"  From node: {request.graph_node_id}")
-                    
+
             case TaskUpdateEventType.ToolCallResult:
                 result: ToolCallResult = event.data
                 print(f"Tool call completed:")
@@ -406,7 +409,7 @@ async def detailed_event_handler(task):
                     print(f"  Error: {result.result}")
                 else:
                     print(f"  Result: {result.result}")
-                    
+
             case TaskUpdateEventType.TaskFinished:
                 finished_task = event.data
                 print(f"Task completed: {finished_task.status}")
@@ -435,7 +438,7 @@ async def handle_test_task(task):
     task.result = {
         "capabilities": [
             "Data analysis",
-            "Text processing", 
+            "Text processing",
             "API integration"
         ]
     }
@@ -447,14 +450,14 @@ async def handle_test_task(task):
 ### `Events`
 
 - **`async start(on_execution_request: Callable)`**: Start the event listener
-    - **Parameters**: `on_execution_request` (Callable): Function to handle task execution requests.
+  - **Parameters**: `on_execution_request` (Callable): Function to handle task execution requests.
 
 - **`async stop()`**: Stop the event listener and cleanup resources
 
 - **`register_agent_worker(agent_id: str, on_execution_request)`**: Register a worker for tasks
-    - **Parameters**: 
-        - `agent_id` (str): Identifier for the agent
-        - `on_execution_request` (Callable): Associated task handler
+  - **Parameters**:
+    - `agent_id` (str): Identifier for the agent
+    - `on_execution_request` (Callable): Associated task handler
 
 ### `@on_task` Decorator
 
@@ -495,4 +498,3 @@ except ModuleException as e:
 - Full [SDK Documentation](https://docs.xpander.ai) available online
 
 Contact Support: dev@xpander.ai
-

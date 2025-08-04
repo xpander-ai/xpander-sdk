@@ -109,7 +109,7 @@ result = weather_tool.invoke(
 if tools_repo.should_sync_local_tools():
     local_tools = tools_repo.get_local_tools_for_sync()
     print(f"Found {len(local_tools)} tools to sync")
-    
+
     for tool in local_tools:
         print(f"Syncing tool: {tool.name}")
         # Sync logic would be handled by the platform
@@ -137,35 +137,35 @@ mcp_server = MCPServerDetails(
 ### `ToolsRepository`
 
 - **`register_tool(tool: Tool)`**: Register a local tool
-    - **Parameters**: `tool` (Tool): The tool instance to register
-    - **Returns**: None
+  - **Parameters**: `tool` (Tool): The tool instance to register
+  - **Returns**: None
 
 - **`get_tool_by_id(tool_id: str)`**: Get tool by ID
-    - **Parameters**: `tool_id` (str): Unique identifier of the tool
-    - **Returns**: Tool instance
+  - **Parameters**: `tool_id` (str): Unique identifier of the tool
+  - **Returns**: Tool instance
 
 - **`should_sync_local_tools()`**: Check sync requirements
-    - **Returns**: bool indicating if sync is needed
+  - **Returns**: bool indicating if sync is needed
 
 - **`get_local_tools_for_sync()`**: Get tools needing sync
-    - **Returns**: List of tools requiring synchronization
+  - **Returns**: List of tools requiring synchronization
 
 ### `Tool`
 
 - **`async ainvoke(agent_id: str, payload: Any, ...)`**: Invoke tool asynchronously
-    - **Parameters**: 
-        - `agent_id` (str): ID of the agent invoking the tool
-        - `payload` (Any): Input data for the tool
-        - `configuration` (Optional[Configuration]): Override configuration
-        - `task_id` (Optional[str]): Associated task ID
-    - **Returns**: ToolInvocationResult
+  - **Parameters**:
+    - `agent_id` (str): ID of the agent invoking the tool
+    - `payload` (Any): Input data for the tool
+    - `configuration` (Optional[Configuration]): Override configuration
+    - `task_id` (Optional[str]): Associated task ID
+  - **Returns**: ToolInvocationResult
 
 - **`invoke(agent_id: str, payload: Any, ...)`**: Invoke tool synchronously
-    - **Parameters**: Same as `ainvoke`
-    - **Returns**: ToolInvocationResult
+  - **Parameters**: Same as `ainvoke`
+  - **Returns**: ToolInvocationResult
 
 - **`set_configuration(configuration: Configuration)`**: Update configuration
-    - **Parameters**: `configuration` (Configuration): New configuration
+  - **Parameters**: `configuration` (Configuration): New configuration
 
 ### `@register_tool` Decorator
 
@@ -261,7 +261,7 @@ class CustomTool(Tool):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Custom initialization
-    
+
     async def custom_method(self):
         # Custom functionality
         pass

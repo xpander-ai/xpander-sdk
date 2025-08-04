@@ -5,6 +5,7 @@ The Events Module provides comprehensive functionality for handling background t
 ## Overview
 
 This module handles:
+
 - Event-driven task execution
 - Server Sent Events (SSE) integration
 - Background task management
@@ -29,17 +30,21 @@ events/
 ## Key Classes
 
 ### `Events`
+
 Main interface for event stream management and task execution.
 
 **Methods:**
+
 - `start()`: Start listening for task execution events
 - `stop()`: Stop the event listener and cleanup resources
 - `register_agent_worker()`: Register workers for specific agents
 
 ### `@on_task` Decorator
+
 Provides a simple decorator interface for registering task handlers.
 
 **Features:**
+
 - Support for both synchronous and asynchronous functions
 - Automatic task parameter validation
 - Integration with the event system
@@ -47,6 +52,7 @@ Provides a simple decorator interface for registering task handlers.
 ## Usage Examples
 
 ### Basic Event Handling
+
 ```python
 from xpander_sdk import Events, on_task
 
@@ -63,6 +69,7 @@ await events.start(on_execution_request=handle_task)
 ```
 
 ### Manual Event Management
+
 ```python
 # Initialize events module
 events = Events(configuration=config, max_sync_workers=8)
@@ -81,6 +88,7 @@ await events.stop()
 ```
 
 ### Context Manager Usage
+
 ```python
 async with Events() as events:
     await events.start(on_execution_request=handle_task)
@@ -103,6 +111,7 @@ See the main [Events Guide](/docs/EVENTS.md) for detailed API documentation.
 ## Types and Models
 
 The module includes comprehensive type definitions for:
+
 - Event types and statuses
 - Worker configurations and environments
 - Deployment assets and metadata
@@ -134,17 +143,20 @@ The module includes comprehensive type definitions for:
 ## Environment Variables
 
 Required environment variables:
+
 - `XPANDER_AGENT_ID`: Agent identifier for task routing
 - `XPANDER_ORGANIZATION_ID`: Organization identifier
 - `XPANDER_API_KEY`: API key for authentication
 
 Optional variables:
+
 - `IS_XPANDER_CLOUD`: Cloud deployment flag
 - `XPANDER_BASE_URL`: Custom API base URL
 
 ## Contributing
 
 When contributing to this module:
+
 1. Maintain backward compatibility with existing event handlers
 2. Add comprehensive tests for new event types
 3. Update documentation for API changes

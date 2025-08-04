@@ -24,12 +24,14 @@ events/
 ## Coding Conventions for AI Agents
 
 ### Event-Specific Conventions
+
 - AI agents should use the `Events` class for event stream management operations
 - Use the `@on_task` decorator to register task handlers
 - Follow async-first pattern for handling events: `start()`, `stop()`, `register_agent_worker()`
 - AI agents should implement proper error handling in event handlers
 
 ### Event Handler Registration Patterns
+
 - AI agents should define clear, concise handler functions
 - Support both async and sync handlers, using proper decorators
 - Ensure efficient processing within handlers to avoid bottlenecks
@@ -37,6 +39,7 @@ events/
 ## API Patterns for AI Agents
 
 ### Event Management Operations
+
 ```python
 # Correct pattern for starting event listener
 from xpander_sdk import Events, on_task
@@ -57,6 +60,7 @@ await events.stop()
 ```
 
 ### Manual Event Management
+
 ```python
 # Initialize events module
 events = Events(configuration=config, max_sync_workers=8)
@@ -77,18 +81,21 @@ await events.stop()
 ## Data Models and Types for AI Agents
 
 ### Core Event Models
+
 - `Event`: Main event entity for handling streams
 - `EventContext`: Data context for events
 - `EventExecutionResult`: Results from event processing
 - `EventTypes`: Enumeration of supported event types
 
 ### Task Registration Models
+
 - `AgentWorker`: Worker registration details for task handling
 - `EventHandlerContext`: Context for event handlers
 
 ## Testing Requirements for AI Agents
 
 ### Event-Specific Tests
+
 ```bash
 # Run events module tests
 pytest tests/test_events.py
@@ -100,6 +107,7 @@ pytest tests/test_events.py::test_graceful_shutdown
 ```
 
 ### Test Patterns AI Agents Should Follow
+
 - Mock external event streams and data sources
 - Test both async and sync event handling paths
 - Verify proper event lifecycle management
@@ -109,18 +117,21 @@ pytest tests/test_events.py::test_graceful_shutdown
 ## Best Practices for AI Agents
 
 ### Event Lifecycle Management
+
 1. **Registration**: Ensure proper handler registration for specific events
 2. **Startup**: Validate event listener configuration before starting
 3. **Handling**: Optimize event processing for performance
 4. **Shutdown**: Implement graceful shutdown to clean up resources
 
 ### Performance Considerations
+
 - AI agents should use async methods for event processing
 - Implement connection pooling for event streams
 - Use efficient data parsing techniques to handle large events
 - Implement retry logic for transient errors
 
 ### Event Handling Guidelines
+
 1. **Error Handling**: Implement robust error handling for event failures
 2. **Logging**: Use structured logging for event processing details
 3. **Thread Management**: Use async handlers to avoid blocking main threads
@@ -129,11 +140,13 @@ pytest tests/test_events.py::test_graceful_shutdown
 ## Integration Guidelines for AI Agents
 
 ### Agent Integration
+
 - Seamlessly connect events with agent task handling
 - Use the `register_agent_worker()` method for deploying agent workers
 - Handle agent-event associations through configuration
 
 ### Real-time Streaming Integration
+
 - Integrate Server Sent Events (SSE) for real-time task execution
 - Implement proper connection handling for SSE streams
 - AI agents should integrate event streams with existing task workflows
@@ -141,16 +154,19 @@ pytest tests/test_events.py::test_graceful_shutdown
 ## Security Guidelines for AI Agents
 
 ### Access Control
+
 - AI agents should implement proper authentication for event streams
 - Verify task execution permissions before starting
 - Handle event data securely, logging only necessary information
 
 ### Data Protection
+
 - Sanitize event data inputs before processing
 - Use secure connections for all event stream communications
 - AI agents should handle sensitive event data with care
 
 ### Error Handling Patterns
+
 ```python
 from xpander_sdk.exceptions import ModuleException
 
@@ -165,6 +181,7 @@ except Exception as e:
 ## Common Patterns AI Agents Should Follow
 
 ### Event Handler Pattern
+
 ```python
 async def process_task(task):
     """Process task with proper exception handling."""
@@ -177,6 +194,7 @@ async def process_task(task):
 ```
 
 ### Graceful Shutdown Pattern
+
 ```python
 async def stop_event_listener():
     """Gracefully stop event listener and clean up."""
@@ -190,6 +208,7 @@ async def stop_event_listener():
 ## Advanced Usage Patterns for AI Agents
 
 ### Custom Decorator Usage
+
 ```python
 from xpander_sdk import on_task
 
@@ -200,6 +219,7 @@ async def handle_task_completion(task):
 ```
 
 ### Context Manager Usage
+
 ```python
 async with Events() as events:
     await events.start(on_execution_request=handle_task)
@@ -209,12 +229,14 @@ async with Events() as events:
 ## Troubleshooting for AI Agents
 
 ### Common Issues
+
 1. **Event listener not starting**: Verify configuration and compatibilities
 2. **Task handler errors**: Check handler compatibility and performance
 3. **Connection timeouts**: Optimize connection handling and retry logic
 4. **Unhandled exceptions**: Ensure proper exception management in handlers
 
 ### Debugging Tips
+
 - Enable debug logging for event processing details
 - Use proper exception handling to capture handler errors
 - Verify network connectivity and API endpoint accessibility
@@ -223,6 +245,7 @@ async with Events() as events:
 ## Module-Specific Environment Variables
 
 Optional for event operations:
+
 - `XPANDER_EVENT_TIMEOUT`: Default timeout for event processing
 - `XPANDER_SSE_RETRY_INTERVAL`: Retry interval for SSE connections
 - `XPANDER_MAX_EVENT_WORKERS`: Maximum synchronous workers for events

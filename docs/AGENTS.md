@@ -97,7 +97,6 @@ await agent.aadd_mcp_server("data-server", mcp_config)
 ### `Agent`
 
 - **`async arun(self, input_data: Any, ...)`**: Execute a task asynchronously
-
   - **Parameters**: `input_data` (Any): The input data for the task.
   - **Returns**: Task execution result.
 

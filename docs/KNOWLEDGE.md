@@ -86,22 +86,22 @@ for result in results:
 ### `KnowledgeBases`
 
 - **`async acreate(name: str, ...)`**: Create a new knowledge base asynchronously
-    - **Parameters**: `name` (str): The knowledge base name. `description` (str): Details about the knowledge base.
-    - **Returns**: An instance of `KnowledgeBase`.
+  - **Parameters**: `name` (str): The knowledge base name. `description` (str): Details about the knowledge base.
+  - **Returns**: An instance of `KnowledgeBase`.
 
 - **`async alist()`**: List all knowledge bases
-    - **Returns**: A list of `KnowledgeBase` summary objects.
+  - **Returns**: A list of `KnowledgeBase` summary objects.
 
 - **`async aget(knowledge_base_id: str)`**: Get a knowledge base by ID
-    - **Parameters**: `knowledge_base_id` (str): The unique ID of the knowledge base.
-    - **Returns**: A complete `KnowledgeBase` object.
+  - **Parameters**: `knowledge_base_id` (str): The unique ID of the knowledge base.
+  - **Returns**: A complete `KnowledgeBase` object.
 
 ### `KnowledgeBase`
 
-- **`async add_documents(document_urls: List[str], ...): Add documents to knowledge base.
+- \*\*`async add_documents(document_urls: List[str], ...): Add documents to knowledge base.
 - **`async search(search_query: str, ...)`**: Search within the knowledge base
-    - **Parameters**: `search_query` (str): The search term or phrase.
-    - **Returns**: List of `KnowledgeBaseSearchResult`.
+  - **Parameters**: `search_query` (str): The search term or phrase.
+  - **Returns**: List of `KnowledgeBaseSearchResult`.
 
 ## Additional Information
 

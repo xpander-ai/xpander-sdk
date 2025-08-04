@@ -6,9 +6,11 @@ agents in the xpander.ai Backend-as-a-Service platform.
 """
 
 import asyncio
-from datetime import datetime
 import heapq
+from datetime import datetime
+from os import getenv
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
+
 from httpx import HTTPStatusError
 from loguru import logger
 from pydantic import ConfigDict, computed_field
@@ -19,36 +21,37 @@ from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.frameworks import AgnoSettings, Framework
-from xpander_sdk.modules.agents.utils.generic import get_db_schema_name
-from xpander_sdk.modules.knowledge_bases.models.knowledge_bases import (
-    KnowledgeBaseSearchResult,
-)
-from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
-from xpander_sdk.models.shared import LLMModelT, OutputFormat, XPanderSharedModel
+from xpander_sdk.models.shared import (LLMModelT, OutputFormat,
+                                       XPanderSharedModel)
 from xpander_sdk.models.user import User
-from xpander_sdk.modules.agents.models.agent import (
-    AgentAccessScope,
-    AgentDeploymentProvider,
-    AgentGraphItem,
-    AgentGraphItemType,
-    AgentInstructions,
-    AgentOutput,
-    AgentSourceNode,
-    AgentStatus,
-    AgentType,
-    DatabaseConnectionString,
-)
-from xpander_sdk.modules.agents.models.knowledge_bases import AgentKnowledgeBase
-from xpander_sdk.modules.knowledge_bases.knowledge_bases_module import KnowledgeBases
-from xpander_sdk.modules.knowledge_bases.sub_modules.knowledge_base import KnowledgeBase
+from xpander_sdk.modules.agents.models.agent import (AgentAccessScope,
+                                                     AgentDeploymentProvider,
+                                                     AgentGraphItem,
+                                                     AgentGraphItemType,
+                                                     AgentInstructions,
+                                                     AgentOutput,
+                                                     AgentSourceNode,
+                                                     AgentStatus, AgentType,
+                                                     DatabaseConnectionString)
+from xpander_sdk.modules.agents.models.knowledge_bases import \
+    AgentKnowledgeBase
+from xpander_sdk.modules.agents.utils.generic import get_db_schema_name
+from xpander_sdk.modules.knowledge_bases.knowledge_bases_module import \
+    KnowledgeBases
+from xpander_sdk.modules.knowledge_bases.models.knowledge_bases import \
+    KnowledgeBaseSearchResult
+from xpander_sdk.modules.knowledge_bases.sub_modules.knowledge_base import \
+    KnowledgeBase
 from xpander_sdk.modules.tasks.models.task import AgentExecutionInput
 from xpander_sdk.modules.tasks.sub_modules.task import Task
-from xpander_sdk.modules.tools_repository.models.tool_invocation_result import (
-    ToolInvocationResult,
-)
+from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
+from xpander_sdk.modules.tools_repository.models.tool_invocation_result import \
+    ToolInvocationResult
 from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
-from xpander_sdk.modules.tools_repository.tools_repository_module import ToolsRepository
-from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
+from xpander_sdk.modules.tools_repository.tools_repository_module import \
+    ToolsRepository
+from xpander_sdk.modules.tools_repository.utils.schemas import \
+    build_model_from_schema
 from xpander_sdk.utils.event_loop import run_sync
 
 
@@ -141,7 +144,7 @@ class Agent(XPanderSharedModel):
     """
 
     configuration: Optional[Configuration] = None
-    id: str
+    id: str = lambda: getenv(key="XPANDER_AGENT_ID")
     organization_id: str
     name: str
     description: Optional[str] = None
@@ -241,7 +244,7 @@ class Agent(XPanderSharedModel):
     @classmethod
     async def aload(
         cls: Type[T],
-        agent_id: str,
+        agent_id: Optional[str] = None,
         configuration: Optional[Configuration] = None,
         version: Optional[int] = None,
     ) -> T:
@@ -259,6 +262,13 @@ class Agent(XPanderSharedModel):
         Example:
             >>> agent = await Agent.aload(agent_id="agent123")
         """
+        if agent_id is None:
+            agent_id = getenv('XPANDER_AGENT_ID')
+        if not agent_id:
+            raise ModuleException(
+                status_code=400,
+                description="agent_id is required. Provide it as parameter or set XPANDER_AGENT_ID environment variable."
+            )
         try:
             client = APIClient(configuration=configuration)
             headers = {}
@@ -268,16 +278,19 @@ class Agent(XPanderSharedModel):
             response_data: dict = await client.make_request(
                 path=APIRoute.GetAgent.format(agent_id=agent_id)
             )
-            agent = cls.model_validate({**response_data, "graph": None, "tools": None})
+            agent = cls.model_validate(
+                {**response_data, "graph": None, "tools": None})
             agent.graph = AgentGraph(response_data.get("graph", []))
             agent.configuration = configuration or Configuration()
             agent.tools = ToolsRepository(
-                configuration=agent.configuration, tools=response_data.get("tools", [])
+                configuration=agent.configuration, tools=response_data.get(
+                    "tools", [])
             )
 
             if agent.tools.should_sync_local_tools():
                 asyncio.create_task(
-                    agent.sync_local_tools(tools=agent.tools.get_local_tools_for_sync())
+                    agent.sync_local_tools(
+                        tools=agent.tools.get_local_tools_for_sync())
                 )
 
             return agent
@@ -293,7 +306,7 @@ class Agent(XPanderSharedModel):
     @classmethod
     def load(
         cls: Type[T],
-        agent_id: str,
+        agent_id: Optional[str] = None,
         configuration: Optional[Configuration] = None,
         version: Optional[int] = None,
     ) -> T:
@@ -311,8 +324,16 @@ class Agent(XPanderSharedModel):
         Example:
             >>> agent = Agent.load(agent_id="agent123")
         """
+        if agent_id is None:
+            agent_id = getenv('XPANDER_AGENT_ID')
+        if not agent_id:
+            raise ModuleException(
+                status_code=400,
+                description="agent_id is required. Provide it as parameter or set XPANDER_AGENT_ID environment variable."
+            )
         return run_sync(
-            cls.aload(agent_id=agent_id, configuration=configuration, version=version)
+            cls.aload(agent_id=agent_id,
+                      configuration=configuration, version=version)
         )
 
     async def aget_connection_string(self):
@@ -330,7 +351,8 @@ class Agent(XPanderSharedModel):
             connection_string = await client.make_request(
                 path=APIRoute.GetAgentConnectionString.format(agent_id=self.id)
             )
-            self._connection_string = DatabaseConnectionString(**connection_string)
+            self._connection_string = DatabaseConnectionString(
+                **connection_string)
             return self._connection_string
         except HTTPStatusError as e:
             raise ModuleException(
@@ -612,8 +634,8 @@ class Agent(XPanderSharedModel):
             raise LookupError("User memories not enabled for this agent.")
 
         try:
-            from agno.memory.v2.memory import Memory
             from agno.memory.v2.db.postgres import PostgresMemoryDb
+            from agno.memory.v2.memory import Memory
         except ImportError as e:
             raise ImportError(
                 "The 'agno' extras must be installed to use this users memory backend. "
@@ -711,7 +733,7 @@ class Agent(XPanderSharedModel):
                 return []
 
         return search
-    
+
     @computed_field
     @property
     def is_active(self) -> bool:
@@ -722,7 +744,7 @@ class Agent(XPanderSharedModel):
             bool: True if the agent is active, False if not.
         """
         return self.status == AgentStatus.ACTIVE
-    
+
     async def aget_user_sessions(self, user_id: str):
         """
         Asynchronously retrieve all user sessions associated with this agent.
@@ -749,7 +771,7 @@ class Agent(XPanderSharedModel):
         storage = await self.aget_storage()
         sessions = await asyncio.to_thread(storage.get_recent_sessions, user_id=user_id, limit=50)
         return sessions
-    
+
     def get_user_sessions(self, user_id: str):
         """
         Synchronously retrieve all user sessions associated with this agent.
@@ -767,7 +789,7 @@ class Agent(XPanderSharedModel):
             >>> sessions = agent.get_user_sessions(user_id="user_123")
         """
         return run_sync(self.aget_user_sessions(user_id=user_id))
-    
+
     async def aget_session(self, session_id: str):
         """
         Asynchronously retrieve a single session by its session ID.
@@ -813,7 +835,7 @@ class Agent(XPanderSharedModel):
             >>> session = agent.get_session(session_id="sess_456")
         """
         return run_sync(self.aget_session(session_id=session_id))
-    
+
     async def adelete_session(self, session_id: str):
         """
         Asynchronously delete a session by its session ID.
@@ -836,7 +858,7 @@ class Agent(XPanderSharedModel):
         """
         storage = await self.aget_storage()
         await asyncio.to_thread(storage.delete_session, session_id=session_id)
-    
+
     def delete_session(self, session_id: str):
         """
         Synchronously delete a session by its session ID.
@@ -851,4 +873,3 @@ class Agent(XPanderSharedModel):
             >>> agent.delete_session(session_id="sess_456")
         """
         return run_sync(self.adelete_session(session_id=session_id))
-

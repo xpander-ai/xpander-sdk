@@ -93,8 +93,8 @@ new_task = await tasks.acreate(
 async for event in new_task.aevents():
     print(f"Event Type: {event.type}")
     print(f"Event Data: {event.data}")
-    
-# Stream task events synchronously (for non-async environments)  
+
+# Stream task events synchronously (for non-async environments)
 for event in new_task.events():
     print(f"Event: {event}")
 ```
@@ -104,21 +104,21 @@ for event in new_task.events():
 ### `Tasks`
 
 - **`async acreate(agent_id: str, ...)`**: Create a new task asynchronously
-    - **Parameters**: `agent_id` (str): The agent ID. `prompt` (str): Task description or prompt.
-    - **Returns**: An instance of `Task`.
+  - **Parameters**: `agent_id` (str): The agent ID. `prompt` (str): Task description or prompt.
+  - **Returns**: An instance of `Task`.
 
 - **`async alist(agent_id: str)`**: List tasks for an agent
-    - **Parameters**: `agent_id` (str): The unique identifier for the agent.
-    - **Returns**: A list of `TasksListItem` summary objects.
+  - **Parameters**: `agent_id` (str): The unique identifier for the agent.
+  - **Returns**: A list of `TasksListItem` summary objects.
 
 - **`async aget(task_id: str)`**: Get a task by ID
-    - **Parameters**: `task_id` (str): The unique task ID to retrieve.
-    - **Returns**: A complete `Task` object.
+  - **Parameters**: `task_id` (str): The unique task ID to retrieve.
+  - **Returns**: A complete `Task` object.
 
 ### `Task`
 
 - **`async aset_status(status: AgentExecutionStatus)`**: Set task status
-    - **Parameters**: `status` (AgentExecutionStatus): The new status.
+  - **Parameters**: `status` (AgentExecutionStatus): The new status.
 
 - **`async asave()`**: Save task changes asynchronously
 
@@ -129,4 +129,3 @@ for event in new_task.events():
 - Full [SDK Documentation](https://docs.xpander.ai) is available for more advanced use-cases.
 
 Contact Support: dev@xpander.ai
-

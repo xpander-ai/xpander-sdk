@@ -25,6 +25,7 @@ tools_repository/
 ## Coding Conventions for AI Agents
 
 ### Tool-Specific Conventions
+
 - AI agents should use the `@register_tool` decorator for local tool registration
 - AI agents should use the `ToolsRepository` class for tool management operations
 - AI agents should use the `Tool` class for individual tool operations (invoke, configure)
@@ -32,12 +33,14 @@ tools_repository/
 - Use proper type hints with tool-specific models from `/models/`
 
 ### Tool Registration Patterns
+
 - AI agents should use descriptive names and clear descriptions for tools
 - Include comprehensive parameter documentation with type hints
 - AI agents should implement proper error handling in tool functions
 - Use schema validation for tool parameters
 
-### Tool Invocation Patterns  
+### Tool Invocation Patterns
+
 - AI agents should handle `ToolInvocationResult` objects properly
 - Implement proper logging for tool execution results
 - AI agents should validate tool payloads before invocation
@@ -45,6 +48,7 @@ tools_repository/
 ## API Patterns for AI Agents
 
 ### Tool Registration Operations
+
 ```python
 # Correct pattern for registering local tools
 from xpander_sdk import register_tool
@@ -65,6 +69,7 @@ def analyze_data(data_sources: list, analysis_type: str, include_charts: bool = 
 ```
 
 ### Tool Management Operations
+
 ```python
 # Correct pattern for tool repository operations
 tools_repo = ToolsRepository(configuration=config)
@@ -79,6 +84,7 @@ weather_tool = tools_repo.get_tool_by_id("weather_check")
 ```
 
 ### Tool Invocation Operations
+
 ```python
 # AI agents should use the standard tool invocation pattern
 result = await tool.ainvoke(
@@ -97,12 +103,14 @@ else:
 ## Data Models and Types for AI Agents
 
 ### Core Tool Models
+
 - `Tool`: Main tool entity with execution capabilities
 - `ToolInvocationResult`: Results from tool execution
 - `ToolConfiguration`: Tool setup and parameters
 - `ToolSchema`: Parameter definitions and validation
 
 ### MCP Integration Models
+
 - `MCPServerDetails`: MCP server configuration
 - `MCPServerType`: Server type enumeration (STDIO, HTTP, etc.)
 - `MCPServerAuthType`: Authentication type enumeration
@@ -110,6 +118,7 @@ else:
 ## Testing Requirements for AI Agents
 
 ### Tool-Specific Tests
+
 ```bash
 # Run tools repository module tests
 pytest tests/test_tools_repository.py
@@ -121,6 +130,7 @@ pytest tests/test_tools_repository.py::test_mcp_integration
 ```
 
 ### Test Patterns AI Agents Should Follow
+
 - Mock external tool dependencies and API calls
 - Test both local and remote tool execution paths
 - Verify proper error handling for tool failures
@@ -130,18 +140,21 @@ pytest tests/test_tools_repository.py::test_mcp_integration
 ## Best Practices for AI Agents
 
 ### Tool Development Guidelines
+
 1. **Clear Documentation**: Provide detailed descriptions and parameter documentation
 2. **Type Hints**: Use proper type hints for better SDK integration
 3. **Error Handling**: Implement robust error handling in tool functions
 4. **Schema Validation**: Ensure payload schemas match expected parameters
 
 ### Performance Considerations
+
 - AI agents should use async methods for tool invocations
 - Implement caching for tool results when appropriate
 - Use batching for multiple tool calls when possible
 - AI agents should handle tool timeouts gracefully
 
 ### Security Guidelines
+
 - AI agents should validate all tool inputs before execution
 - Implement proper authorization checks for sensitive tools
 - Never log sensitive data in tool execution logs
@@ -150,11 +163,13 @@ pytest tests/test_tools_repository.py::test_mcp_integration
 ## Integration Guidelines for AI Agents
 
 ### Agent Integration
+
 - Tools are automatically available to agents once registered
 - AI agents should register tools before agent creation when possible
 - Handle agent-tool associations correctly
 
 ### MCP Server Integration
+
 ```python
 # Configure MCP server for tool integration
 from xpander_sdk import MCPServerDetails, MCPServerType
@@ -171,6 +186,7 @@ mcp_server = MCPServerDetails(
 ```
 
 ### Tool Synchronization
+
 - AI agents should check `should_sync_local_tools()` for sync requirements
 - Use `get_local_tools_for_sync()` to get tools needing synchronization
 - Handle synchronization errors gracefully
@@ -178,10 +194,11 @@ mcp_server = MCPServerDetails(
 ## Common Patterns AI Agents Should Follow
 
 ### Tool Factory Pattern
+
 ```python
 def create_database_tool(db_connection: str) -> Tool:
     """Create a database tool with specific connection."""
-    
+
     @register_tool(
         name=f"query_db_{hash(db_connection)}",
         description="Query database with specific connection"
@@ -189,16 +206,17 @@ def create_database_tool(db_connection: str) -> Tool:
     async def query_database(query: str) -> list:
         # Implementation here
         return results
-    
+
     return tools_repo.get_tool_by_id(f"query_db_{hash(db_connection)}")
 ```
 
 ### Batch Tool Execution Pattern
+
 ```python
 async def execute_tools_batch(tools_and_payloads: list, agent_id: str):
     """Execute multiple tools in batch."""
     results = []
-    
+
     for tool, payload in tools_and_payloads:
         try:
             result = await tool.ainvoke(
@@ -209,11 +227,12 @@ async def execute_tools_batch(tools_and_payloads: list, agent_id: str):
         except Exception as e:
             logger.error(f"Tool {tool.name} failed: {e}")
             results.append(None)
-    
+
     return results
 ```
 
 ### Error Handling Patterns
+
 ```python
 from xpander_sdk.exceptions import ModuleException
 
@@ -231,12 +250,14 @@ except ValueError as e:
 ## Tool Schema Guidelines for AI Agents
 
 ### Parameter Definition
+
 - AI agents should use clear parameter names and descriptions
 - Include default values where appropriate
 - Use proper Python type hints for automatic schema generation
 - Document parameter constraints and validation rules
 
 ### Schema Validation
+
 - Validate tool inputs before execution
 - Provide clear error messages for invalid parameters
 - AI agents should handle missing required parameters gracefully
@@ -244,6 +265,7 @@ except ValueError as e:
 ## Advanced Usage Patterns for AI Agents
 
 ### Dynamic Tool Registration
+
 ```python
 def register_dynamic_tool(name: str, func: callable, description: str):
     """Dynamically register a tool at runtime."""
@@ -260,6 +282,7 @@ def register_dynamic_tool(name: str, func: callable, description: str):
 ```
 
 ### Custom Tool Classes
+
 ```python
 from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 
@@ -267,7 +290,7 @@ class CustomTool(Tool):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Custom initialization
-    
+
     async def custom_method(self):
         # Custom functionality
         pass
@@ -276,12 +299,14 @@ class CustomTool(Tool):
 ## Troubleshooting for AI Agents
 
 ### Common Issues
+
 1. **Tool not found**: Verify tool registration and ID consistency
 2. **Invocation failures**: Check tool parameters and payload format
 3. **MCP server errors**: Validate server configuration and connectivity
 4. **Schema validation errors**: Ensure payload matches expected schema
 
 ### Debugging Tips
+
 - Enable debug logging for tool execution details
 - Use proper exception handling to capture tool errors
 - Verify tool registration and availability before invocation
@@ -290,6 +315,7 @@ class CustomTool(Tool):
 ## Module-Specific Environment Variables
 
 Optional for tool operations:
+
 - `XPANDER_TOOL_TIMEOUT`: Default timeout for tool execution
 - `XPANDER_MCP_SERVER_TIMEOUT`: Timeout for MCP server communications
 - Tool-specific environment variables as required by individual tools
