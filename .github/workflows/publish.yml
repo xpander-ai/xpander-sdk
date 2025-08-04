@@ -71,21 +71,34 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: twine upload dist/*
 
-      # Uncomment the below if you want to add Git tags and GitHub Releases
-      # - name: Create Git Tag
-      #   run: |
-      #     git config --global user.name "github-actions[bot]"
-      #     git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      #     git tag "v$NEW_VERSION"
-      #     git push origin "v$NEW_VERSION"
+      - name: Create Git Tag
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v$NEW_VERSION"
+          git push origin "v$NEW_VERSION"
 
-      # - name: Create GitHub Release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     tag_name: "v${{ env.NEW_VERSION }}"
-      #     name: "xpander-sdk v${{ env.NEW_VERSION }}"
-      #     body: "🚀 New release of xpander-sdk: v${{ env.NEW_VERSION }}"
-      #     draft: false
-      #     prerelease: false
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v${{ env.NEW_VERSION }}"
+          name: "xpander-sdk v${{ env.NEW_VERSION }}"
+          body: |
+            🚀 **New release of xpander-sdk: v${{ env.NEW_VERSION }}**
+            
+            ## What's New
+            See the latest pull request for detailed changes.
+            
+            We're committed to updating the SDK often to provide the best experience and cutting-edge technologies for AI agents. This release includes the latest improvements, bug fixes, and new features to help you build powerful AI applications.
+            
+            ## Installation
+            ```bash
+            pip install xpander-sdk==${{ env.NEW_VERSION }}
+            ```
+            
+            ## Documentation
+            Visit [xpander.ai](https://www.xpander.ai) for full documentation and examples.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

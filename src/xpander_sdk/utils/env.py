@@ -43,4 +43,4 @@ def get_base_url() -> str:
     is_stg = getenv(key="IS_STG", default="false") == "true"
     
     # Return appropriate URL based on environment
-    return "inbound.xpander.ai" if not is_stg else "inbound.xpander.ai"
+    return "inbound.xpander.ai" if not is_stg else "inbound.stg.xpander.ai"
