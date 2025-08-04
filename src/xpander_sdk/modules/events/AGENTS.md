@@ -47,13 +47,6 @@ async def handle_task(task):
     print(f"Processing task: {task.id}")
     # Task processing logic here
     return {"status": "completed"}
-
-# Start event listener
-events = Events()
-await events.start(on_execution_request=handle_task)
-
-# Stop the event listener
-await events.stop()
 ```
 
 ### Manual Event Management
@@ -66,12 +59,6 @@ async def custom_task_handler(task):
     # Custom task processing
     result = process_task(task)
     return result
-
-# Start listening with custom handler
-await events.start(on_execution_request=custom_task_handler)
-
-# Graceful shutdown
-await events.stop()
 ```
 
 ## Data Models and Types for AI Agents
@@ -150,18 +137,6 @@ pytest tests/test_events.py::test_graceful_shutdown
 - Use secure connections for all event stream communications
 - AI agents should handle sensitive event data with care
 
-### Error Handling Patterns
-```python
-from xpander_sdk.exceptions import ModuleException
-
-try:
-    await events.start(on_execution_request=handle_task)
-except ModuleException as e:
-    logger.error(f"Error during event handling: {e.description}")
-except Exception as e:
-    logger.error(f"Unexpected error: {str(e)}")
-```
-
 ## Common Patterns AI Agents Should Follow
 
 ### Event Handler Pattern
@@ -219,13 +194,6 @@ async def handle_test_task(task):
         ]
     }
     return task
-```
-
-### Context Manager Usage
-```python
-async with Events() as events:
-    await events.start(on_execution_request=handle_task)
-    # The event listener will automatically clean up on exit
 ```
 
 ## Troubleshooting for AI Agents

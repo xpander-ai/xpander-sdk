@@ -63,10 +63,6 @@ async def handle_task(task):
     print(f"Processing task: {task.id}")
     # Task processing logic here
     return {"status": "completed"}
-
-# Start event listener
-events = Events()
-await events.start(on_execution_request=handle_task)
 ```
 
 ### Manual Event Management
@@ -79,19 +75,6 @@ async def custom_task_handler(task):
     # Custom task processing
     result = process_task(task)
     return result
-
-# Start listening
-await events.start(on_execution_request=custom_task_handler)
-
-# Graceful shutdown
-await events.stop()
-```
-
-### Context Manager Usage
-```python
-async with Events() as events:
-    await events.start(on_execution_request=handle_task)
-    # Events will automatically cleanup on exit
 ```
 
 ### Local Task Testing

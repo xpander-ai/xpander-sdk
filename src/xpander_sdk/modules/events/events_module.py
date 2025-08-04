@@ -130,17 +130,11 @@ class Events(ModuleBase):
 
         This method sets up signal handling for graceful shutdown, registers required
         workers, and begins listening to task execution requests over SSE.
+        use on_task decorator and not the Events module directly.
 
         Args:
             on_execution_request (ExecutionRequestHandler): Callback handler
                 for processing task execution requests. Can be synchronous or asynchronous.
-
-        Example:
-            >>> async def handle_task(task):
-            ...     # Process task execution
-
-            >>> events = Events()
-            >>> await events.start(on_execution_request=handle_task)
         """
         loop = asyncio.get_running_loop()
         for sig in (signal.SIGINT, signal.SIGTERM):

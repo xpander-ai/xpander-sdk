@@ -149,11 +149,6 @@ async def handle_task(task):
     task.result = "Task processed successfully"
     
     return task
-
-# Initialize and start event listener
-# Note: This is typically used in agent deployment scenarios
-events = Events(configuration=config)
-await events.start(on_execution_request=handle_task)
 ```
 
 #### Multiple Event Handlers
@@ -313,23 +308,6 @@ async def create_and_monitor_task():
             final_task = event.data
             print(f"Task completed with status: {final_task.status}")
             break
-
-# Run both systems
-async def main():
-    # Start agent event listener (for deployment)
-    events = Events(configuration=config)
-    listener_task = asyncio.create_task(
-        events.start(on_execution_request=process_data_task)
-    )
-    
-    # Create and monitor a task (client-side)
-    monitor_task = asyncio.create_task(create_and_monitor_task())
-    
-    # Wait for completion
-    await asyncio.gather(listener_task, monitor_task)
-
-# Run the example
-await main()
 ```
 
 ## Event Models
@@ -471,15 +449,6 @@ async def handle_test_task(task):
 async def task_handler(task):
     # Implementation
     pass
-```
-
-### Error Handling
-
-```python
-try:
-    await events.start(on_execution_request=handle_task)
-except ModuleException as e:
-    print(f"Error during event handling: {e.description}")
 ```
 
 ## Best Practices

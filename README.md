@@ -162,9 +162,6 @@ def sync_task_handler(task):
     task.result = "Sync processing complete"
     return task
 
-# Start event listener
-events = Events(configuration=config)
-await events.start(on_execution_request=handle_task)
 ```
 
 ## 📚 Core Modules
