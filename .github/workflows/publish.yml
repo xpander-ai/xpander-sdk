@@ -1,4 +1,4 @@
-name: Publish xpander-sdk to PyPi
+name: Publish xpander-sdk to PyPI
 
 on:
   push:
@@ -7,8 +7,11 @@ on:
 
 jobs:
   publish:
-    name: Publish to PyPI
+    name: Build and Publish to PyPI
     runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.set_version.outputs.new_version }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -24,43 +27,37 @@ jobs:
           pip install build twine requests packaging jq
 
       - name: Get Latest Version from PyPI and Increment
+        id: set_version
         run: |
           PACKAGE_NAME="xpander-sdk"
           PYPI_URL="https://pypi.org/pypi/${PACKAGE_NAME}/json"
           VERSION=$(curl -s $PYPI_URL | jq -r '.info.version' 2>/dev/null || echo "0.0.0")
 
           if [ "$VERSION" = "null" ] || [ -z "$VERSION" ] || [ "$VERSION" = "0.0.0" ]; then
-            # First release - start with 2.0.0
             NEW_VERSION="2.0.0"
           else
-            # Parse current version
             IFS='.' read -r -a VERSION_PARTS <<< "$VERSION"
             MAJOR=${VERSION_PARTS[0]}
             MINOR=${VERSION_PARTS[1]}
             PATCH=${VERSION_PARTS[2]}
-            
-            # Check if current version is less than 2.0.0
+
             if [ "$MAJOR" -lt 2 ]; then
-              # Upgrade to 2.0.0 for new SDK version
               NEW_VERSION="2.0.0"
             elif [ "$MAJOR" -eq 2 ] && [ "$MINOR" -eq 0 ]; then
-              # Already in 2.0.x series, increment patch
               PATCH=$((PATCH + 1))
               NEW_VERSION="2.0.$PATCH"
             else
-              # For versions 2.1.0 and above, increment patch
               PATCH=$((PATCH + 1))
               NEW_VERSION="$MAJOR.$MINOR.$PATCH"
             fi
           fi
 
-          echo "Current PyPI version: $VERSION"
           echo "New version: $NEW_VERSION"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
       - name: Update Version in setup.py
         run: |
-          sed -i "s/version=\"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version=\"$NEW_VERSION\"/" setup.py
+          sed -i "s/version=\"[0-9]\+\.[0-9]\+\.[0-9]\+\"/version=\"${{ steps.set_version.outputs.new_version }}\"/" setup.py
 
       - name: Build Package
         run: python -m build
@@ -71,20 +68,38 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: twine upload dist/*
 
-      - name: Create Git Tag
+  tag:
+    name: Create Git Tag
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create Git Tag and Push
+        env:
+          GH_ACTION_PAT: ${{ secrets.GH_ACTION_PAT }}
+          NEW_VERSION: ${{ needs.publish.outputs.new_version }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
           git tag "v$NEW_VERSION"
+          git remote set-url origin https://x-access-token:${GH_ACTION_PAT}@github.com/${{ github.repository }}.git
           git push origin "v$NEW_VERSION"
 
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: tag
+    steps:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v${{ env.NEW_VERSION }}"
-          name: "xpander-sdk v${{ env.NEW_VERSION }}"
+          tag_name: "v${{ needs.publish.outputs.new_version }}"
+          name: "xpander-sdk v${{ needs.publish.outputs.new_version }}"
           body: |
-            🚀 **New release of xpander-sdk: v${{ env.NEW_VERSION }}**
+            🚀 **New release of xpander-sdk: v${{ needs.publish.outputs.new_version }}**
             
             ## What's New
             See the latest pull request for detailed changes.
@@ -93,12 +108,10 @@ jobs:
             
             ## Installation
             ```bash
-            pip install xpander-sdk==${{ env.NEW_VERSION }}
+            pip install xpander-sdk==${{ needs.publish.outputs.new_version }}
             ```
             
             ## Documentation
             Visit [xpander.ai](https://www.xpander.ai) for full documentation and examples.
-          draft: false
-          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
