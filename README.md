@@ -87,17 +87,15 @@ await task.aset_status(AgentExecutionStatus.Running)
 await task.asave()
 ```
 
-### 4. Tools Integration
+### 3. Tools Integration
 
 ```python
 from xpander_sdk import register_tool, ToolsRepository
 
 # Register a local tool
-@register_tool(
-    name="weather_check",
-    description="Check weather for a location"
-)
-def check_weather(location: str) -> str:
+@register_tool
+def weather_check(location: str) -> str:
+    """Check weather for a location"""
     return f"Weather in {location}: Sunny, 25°C"
 
 # Use tools repository
@@ -110,7 +108,7 @@ result = await weather_tool.ainvoke(
 )
 ```
 
-### 5. Knowledge Base Operations
+### 4. Knowledge Base Operations
 
 ```python
 from xpander_sdk import KnowledgeBases, KnowledgeBase
@@ -137,18 +135,47 @@ results = await kb.asearch(
 )
 ```
 
-### 6. Event-Driven Programming
+### 5. Event-Driven Programming
 
 ```python
 from xpander_sdk import on_task
 
-@on_task(status="completed")
+@on_task
 async def handle_task_completion(task):
-    print(f"Task {task.id} completed with result: {task.result}")
+    if task.status == AgentExecutionStatus.Completed:
+        print(f"Task {task.id} completed with result: {task.result}")
+```
 
-@on_task(status="failed")
-async def handle_task_failure(task):
-    print(f"Task {task.id} failed: {task.error}")
+### 6. Using with AI Frameworks (Agno)
+
+```python
+from agno.agent import Agent
+from xpander_sdk import Configuration, AgentExecutionStatus, register_tool
+from xpander_sdk.frameworks import AgnoBackend
+
+
+@register_tool
+def weather_check(location: str) -> str:
+    """Check weather for a location"""
+    return f"Weather in {location}: Sunny, 25°C"
+
+
+config = Configuration()
+
+agent_backend = AgnoBackend.load(configuration=config)
+
+agent = Agent(**agent_backend.agno_backend_args)
+
+task = agent_backend.create_task(
+    prompt='whats the weather in telaviv'
+)
+
+result = agent.run(task.to_message())
+task.set_status(status=AgentExecutionStatus.Completed,
+                result=agent.run_response.content)
+
+if task.status == AgentExecutionStatus.Completed:
+    print(f"Task {task.id} completed with result: {task.result}")
 ```
 
 ## 📚 Core Modules
@@ -321,7 +348,7 @@ This project is licensed under the MIT License - see the [LICENSE](https://githu
 
 - **Documentation**: [https://docs.xpander.ai](https://docs.xpander.ai)
 - **Issues**: [GitHub Issues](https://github.com/xpander-ai/xpander-sdk/issues)
-- **Email**: dev@xpander.ai
+- **Email**: <dev@xpander.ai>
 
 ## 🏷️ Version
 

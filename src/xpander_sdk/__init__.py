@@ -15,34 +15,33 @@ Main Components:
 For more information, visit: https://xpander.ai
 """
 
-# Agent-related imports
-from .modules.agents.agents_module import Agents, Agent, AgentsListItem
-
-# Task-related imports
-from .modules.tasks.tasks_module import Tasks, Task, TasksListItem, AgentExecutionStatus
 from xpander_sdk.modules.events.decorators.on_task import on_task
-
-# Tools and repository imports
-from .modules.tools_repository.tools_repository_module import ToolsRepository, Tool
-from .modules.tools_repository.models.tool_invocation_result import ToolInvocationResult
-from .modules.tools_repository.utils.schemas import build_model_from_schema
-from .models.user import User
-from xpander_sdk.modules.tools_repository.decorators.register_tool import register_tool
-from xpander_sdk.modules.tools_repository.models.mcp import (
-    MCPServerDetails,
-    MCPServerType,
-    MCPServerAuthType,
-)
-
 # Knowledge base imports
 from xpander_sdk.modules.knowledge_bases.knowledge_bases_module import (
-    KnowledgeBase,
-    KnowledgeBases,
-)
+    KnowledgeBase, KnowledgeBases)
+from xpander_sdk.modules.tools_repository.decorators.register_tool import \
+    register_tool
+from xpander_sdk.modules.tools_repository.models.mcp import (MCPServerAuthType,
+                                                             MCPServerDetails,
+                                                             MCPServerType)
 
+# Adapter integrations - import module, not class
+from . import adapters
 # Configuration and shared models
 from .models.configuration import Configuration
 from .models.shared import OutputFormat
+from .models.user import User
+# Agent-related imports
+from .modules.agents.agents_module import Agent, Agents, AgentsListItem
+# Task-related imports
+from .modules.tasks.tasks_module import (AgentExecutionStatus, Task, Tasks,
+                                         TasksListItem)
+from .modules.tools_repository.models.tool_invocation_result import \
+    ToolInvocationResult
+# Tools and repository imports
+from .modules.tools_repository.tools_repository_module import (Tool,
+                                                               ToolsRepository)
+from .modules.tools_repository.utils.schemas import build_model_from_schema
 
 __all__ = [
     # Agent management
@@ -70,5 +69,7 @@ __all__ = [
     # Configuration and shared
     "Configuration",
     "OutputFormat",
-    "User"
+    "User",
+    # Adapter integrations
+    "adapters"
 ]
