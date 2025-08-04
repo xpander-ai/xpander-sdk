@@ -356,8 +356,8 @@ class Agent(XPanderSharedModel):
 
     async def acreate_task(
         self,
-        existing_task_id: Optional[str] = None,
         prompt: Optional[str] = "",
+        existing_task_id: Optional[str] = None,
         file_urls: Optional[List[str]] = [],
         user_details: Optional[User] = None,
         agent_version: Optional[str] = None,
@@ -375,8 +375,8 @@ class Agent(XPanderSharedModel):
         Asynchronously create a new task and link it to this agent.
 
         Args:
-            existing_task_id (Optional[str]): Existing task id if exists.
             prompt (Optional[str]): Task initiation prompt.
+            existing_task_id (Optional[str]): Existing task id if exists.
             file_urls (Optional[List[str]]): URLs of files related to the task.
             user_details (Optional[User]): User linked to this task context.
             agent_version (Optional[str]): Optional agent version to use.
