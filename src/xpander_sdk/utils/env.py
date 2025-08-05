@@ -6,8 +6,6 @@ configuring SDK behavior based on environment settings.
 """
 
 from os import getenv
-from typing import Any
-
 
 def get_base_url() -> str:
     """
@@ -22,25 +20,25 @@ def get_base_url() -> str:
         IS_STG: Set to "true" for staging environment (optional, defaults to "false").
         
     Returns:
-        str: The base URL for xpander.ai API endpoints.
+        str: The base URL for xpander.ai API endpoints, always prefixed with "https://".
         
     Example:
-        >>> # Production environment (default)
         >>> url = get_base_url()
-        >>> print(url)  # "inbound.xpander.ai"
+        >>> print(url)  # "https://inbound.xpander.ai"
         
-        >>> # With custom override
         >>> import os
-        >>> os.environ["XPANDER_BASE_URL"] = "https://custom.api.endpoint"
+        >>> os.environ["XPANDER_BASE_URL"] = "custom.api.endpoint"
         >>> url = get_base_url()
         >>> print(url)  # "https://custom.api.endpoint"
     """
     # Support override by environment variable
-    if env_base_url := getenv(key="XPANDER_BASE_URL"):
-        return env_base_url
-        
-    # Determine environment (production vs staging)
-    is_stg = getenv(key="IS_STG", default="false") == "true"
+    base_url = getenv("XPANDER_BASE_URL")
     
-    # Return appropriate URL based on environment
-    return "inbound.xpander.ai" if not is_stg else "inbound.stg.xpander.ai"
+    if not base_url:
+        is_stg = getenv("IS_STG", "false") == "true"
+        base_url = "inbound.stg.xpander.ai" if is_stg else "inbound.xpander.ai"
+    
+    if not base_url.startswith("http://") and not base_url.startswith("https://"):
+        base_url = f"https://{base_url}"
+    
+    return base_url
