@@ -123,6 +123,7 @@ class Tool(XPanderSharedModel):
         self,
         agent_id: str,
         payload: Any,
+        agent_version: Optional[str] = None,
         payload_extension: Optional[Dict[str, Any]] = {},
         configuration: Optional[Configuration] = None,
         task_id: Optional[str] = None,
@@ -134,6 +135,7 @@ class Tool(XPanderSharedModel):
         Args:
             agent_id (str): The ID of the agent calling the tool.
             payload (Any): The request payload to be sent.
+            agent_version (Optional[str]): Optional agent version to use.
             payload_extension (Optional[Dict[str, Any]]): Additional values to merge into the payload.
             configuration (Optional[Configuration]): Optional configuration override.
             task_id (Optional[str]): ID of the execution task.
@@ -144,6 +146,9 @@ class Tool(XPanderSharedModel):
         """
         client = APIClient(configuration=configuration or self.configuration)
         headers = {}
+        
+        if agent_version:
+            headers['x-agent-version'] = str(agent_version)
 
         if task_id:
             headers["x-execution-id"] = task_id
@@ -175,6 +180,7 @@ class Tool(XPanderSharedModel):
         self,
         agent_id: str,
         payload: Any,
+        agent_version: Optional[str] = None,
         payload_extension: Optional[Dict[str, Any]] = {},
         configuration: Optional[Configuration] = None,
         task_id: Optional[str] = None,
@@ -186,6 +192,7 @@ class Tool(XPanderSharedModel):
         Args:
             agent_id (str): The ID of the agent calling the tool.
             payload (Any): The request payload.
+            agent_version (Optional[str]): Optional agent version to use.
             payload_extension (Optional[Dict[str, Any]]): Additional payload values.
             configuration (Optional[Configuration]): Configuration override.
             task_id (Optional[str]): Execution task ID.
@@ -197,6 +204,7 @@ class Tool(XPanderSharedModel):
         return run_sync(self.acall_remote_tool(
             agent_id=agent_id,
             payload=payload,
+            agent_version=agent_version,
             payload_extension=payload_extension,
             configuration=configuration,
             task_id=task_id,
@@ -206,6 +214,7 @@ class Tool(XPanderSharedModel):
     async def agraph_preflight_check(
         self,
         agent_id: str,
+        agent_version: Optional[str] = None,
         configuration: Optional[Configuration] = None,
         task_id: Optional[str] = None,
     ):
@@ -214,6 +223,7 @@ class Tool(XPanderSharedModel):
 
         Args:
             agent_id (str): The ID of the agent.
+            agent_version (Optional[str]): Optional agent version to use.
             configuration (Optional[Configuration]): Optional configuration override.
             task_id (Optional[str]): Execution task ID.
 
@@ -227,6 +237,7 @@ class Tool(XPanderSharedModel):
             result = await self.acall_remote_tool(
                 agent_id=agent_id,
                 configuration=configuration,
+                agent_version=agent_version,
                 task_id=task_id,
                 payload={},
                 is_preflight=True,
@@ -240,6 +251,7 @@ class Tool(XPanderSharedModel):
     def graph_preflight_check(
         self,
         agent_id: str,
+        agent_version: Optional[str] = None,
         configuration: Optional[Configuration] = None,
         task_id: Optional[str] = None,
     ):
@@ -248,6 +260,7 @@ class Tool(XPanderSharedModel):
 
         Args:
             agent_id (str): The ID of the agent.
+            agent_version (Optional[str]): Optional agent version to use.
             configuration (Optional[Configuration]): Optional configuration override.
             task_id (Optional[str]): Execution task ID.
 
@@ -256,6 +269,7 @@ class Tool(XPanderSharedModel):
         """
         return run_sync(self.agraph_preflight_check(
             agent_id=agent_id,
+            agent_version=agent_version,
             configuration=configuration,
             task_id=task_id,
         ))
@@ -264,6 +278,7 @@ class Tool(XPanderSharedModel):
         self,
         agent_id: str,
         payload: Any,
+        agent_version: Optional[str] = None,
         payload_extension: Optional[Dict[str, Any]] = {},
         configuration: Optional[Configuration] = None,
         task_id: Optional[str] = None,
@@ -275,6 +290,7 @@ class Tool(XPanderSharedModel):
         Args:
             agent_id (str): ID of the agent making the call.
             payload (Any): The input payload to the tool.
+            agent_version (Optional[str]): Optional agent version to use.
             payload_extension (Optional[Dict[str, Any]]): Optional additional payload data.
             configuration (Optional[Configuration]): Optional configuration override.
             task_id (Optional[str]): ID of the current task context.
@@ -303,6 +319,7 @@ class Tool(XPanderSharedModel):
             if self.is_local:
                 await self.agraph_preflight_check(
                     agent_id=agent_id,
+                    agent_version=agent_version,
                     configuration=configuration,
                     task_id=task_id,
                 )
@@ -317,6 +334,7 @@ class Tool(XPanderSharedModel):
 
             tool_invocation_result.result = await self.acall_remote_tool(
                 agent_id=agent_id,
+                agent_version=agent_version,
                 payload=payload,
                 payload_extension=payload_extension,
                 configuration=configuration,
@@ -339,6 +357,7 @@ class Tool(XPanderSharedModel):
         self,
         agent_id: str,
         payload: Any,
+        agent_version: Optional[str] = None,
         payload_extension: Optional[Dict[str, Any]] = {},
         configuration: Optional[Configuration] = None,
         task_id: Optional[str] = None,
@@ -350,6 +369,7 @@ class Tool(XPanderSharedModel):
         Args:
             agent_id (str): ID of the agent making the call.
             payload (Any): Payload to pass to the tool.
+            agent_version (Optional[str]): Optional agent version to use.
             payload_extension (Optional[Dict[str, Any]]): Optional additional payload.
             configuration (Optional[Configuration]): Optional override configuration.
             task_id (Optional[str]): Optional execution task ID.
@@ -361,6 +381,7 @@ class Tool(XPanderSharedModel):
         return run_sync(self.ainvoke(
             agent_id=agent_id,
             payload=payload,
+            agent_version=agent_version,
             payload_extension=payload_extension,
             configuration=configuration,
             task_id=task_id,

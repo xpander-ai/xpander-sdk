@@ -157,6 +157,7 @@ class ToolsRepository(XPanderSharedModel):
                     async def _run():
                         result = await tool_ref.ainvoke(
                             agent_id=State().agent.id,
+                            agent_version=State().agent.version,
                             payload=payload_dict,
                             configuration=self.configuration,
                             task_id=State().task.id if State().task else None,

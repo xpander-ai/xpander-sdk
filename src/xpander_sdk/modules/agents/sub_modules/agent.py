@@ -465,6 +465,7 @@ class Agent(XPanderSharedModel):
         return await tool.ainvoke(
             agent_id=self.id,
             payload=payload,
+            agent_version=self.version,
             payload_extension=payload_extension,
             task_id=task_id,
             tool_call_id=tool_call_id,
