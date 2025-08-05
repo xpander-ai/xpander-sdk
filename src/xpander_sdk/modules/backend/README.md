@@ -5,8 +5,8 @@ The Backend Module provides rich functionality for retrieving agent runtime argu
 ## Overview
 
 This module handles:
-- Resolving runtime arguments for agents
-- Supporting multiple frameworks
+- Resolving runtime arguments for agents, with optional fallback to environment variables
+- Supporting multiple frameworks through dispatching mechanics
 - Providing asynchronous and synchronous APIs
 
 ## Structure
@@ -35,8 +35,13 @@ Interface for retrieving agent runtime arguments.
 from xpander_sdk.modules.backend import Backend
 
 backend = Backend()
+# Option 1: Use explicit agent ID
 args = await backend.aget_args(agent_id="agent-id")
 args_sync = backend.get_args(agent_id="agent-id")
+
+# Option 2: Utilize environment variable fallback
+os.environ["XPANDER_AGENT_ID"] = "agent-id"
+args_env = await backend.aget_args()
 ```
 
 ### Framework Dispatch

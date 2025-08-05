@@ -6,8 +6,8 @@ The Backend Module in the xpander.ai SDK provides functionality for retrieving a
 
 The Backend Module allows developers to:
 
-- Retrieve runtime arguments for agents
-- Support multiple frameworks
+- Retrieve runtime arguments for agents, with optional environment variable support for agent ID
+- Support multiple frameworks, dispatching arguments accordingly
 - Provide both asynchronous and synchronous APIs
 
 ## Classes
@@ -27,15 +27,18 @@ Handles retrieval of runtime arguments for agents.
 
 ```python
 from xpander_sdk.modules.backend import Backend
+import os
 
 # Initialize Backend module
 backend = Backend()
 
-# Asynchronously get arguments
+# Option 1: Use explicit agent ID
 args = await backend.aget_args(agent_id="agent-id")
-
-# Synchronously get arguments
 args_sync = backend.get_args(agent_id="agent-id")
+
+# Option 2: Use environment variable for agent ID
+os.environ["XPANDER_AGENT_ID"] = "agent-id"
+args_env = await backend.aget_args()
 ```
 
 ### Framework Integration
@@ -45,6 +48,26 @@ from xpander_sdk.modules.backend.frameworks import dispatch_get_args
 
 # Assumes `agent` and `task` objects are available
 args = await dispatch_get_args(agent=agent, task=task)
+```
+
+### Integration with @on_task Decorator
+
+```python
+from xpander_sdk import Backend, on_task
+
+@on_task
+async def handle_agent_task(task):
+    backend = Backend(task.configuration)
+    agno_args = await backend.aget_args(
+        agent_id=task.agent_id,
+        agent_version=task.agent_version,
+        task=task
+    )
+    # Use agno_args to instantiate framework agent
+    # agno_agent = Agent(**agno_args)
+    # result = await agno_agent.arun(message=task.to_message())
+    task.result = "Task processed with Backend arguments"
+    return task
 ```
 
 ## Additional Information

@@ -33,15 +33,18 @@ backend/
 ### Runtime Argument Retrieval
 ```python
 from xpander_sdk.modules.backend import Backend
+import os
 
 # Initialize Backend module
 backend = Backend()
 
-# Asynchronously resolve arguments
+# Option 1: Use explicit agent ID
 args = await backend.aget_args(agent_id="agent-id")
-
-# Synchronously resolve arguments
 args_sync = backend.get_args(agent_id="agent-id")
+
+# Option 2: Use environment variable fallback
+os.environ["XPANDER_AGENT_ID"] = "agent-id"
+args_env = await backend.aget_args()
 ```
 
 ### Framework Dispatch Usage
@@ -69,6 +72,7 @@ pytest tests/test_backend.py
 1. **Validation**: Validate input parameters before argument retrieval
 2. **Error Handling**: Implement retries for recoverable errors
 3. **Performance**: Optimize for async operations for efficient argument handling
+4. **Environment Variables**: Leverage XPANDER_AGENT_ID for simplified agent resolution
 
 ### Framework Execution
 - Ensure correct framework identification and dispatch

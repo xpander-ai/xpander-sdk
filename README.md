@@ -305,6 +305,7 @@ The SDK supports multiple authentication methods:
 export XPANDER_API_KEY="your-api-key"
 export XPANDER_ORGANIZATION_ID="your-org-id"
 export XPANDER_BASE_URL="https://inbound.xpander.ai" # Optional
+export XPANDER_AGENT_ID="your-agent-id" # Optional for Backend module
 ```
 
 ### Configuration Object
