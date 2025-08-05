@@ -263,10 +263,10 @@ class Agent(XPanderSharedModel):
             client = APIClient(configuration=configuration)
             headers = {}
             if version:
-                headers["x-agent-version"] = version
+                headers["x-agent-version"] = str(version)
 
             response_data: dict = await client.make_request(
-                path=APIRoute.GetAgent.format(agent_id=agent_id)
+                path=APIRoute.GetAgent.format(agent_id=agent_id), headers=headers
             )
             agent = cls.model_validate({**response_data, "graph": None, "tools": None})
             agent.graph = AgentGraph(response_data.get("graph", []))
