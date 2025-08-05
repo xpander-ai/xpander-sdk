@@ -14,6 +14,13 @@ load_dotenv(test_env_path)
 
 XPANDER_AGENT_ID = os.getenv("XPANDER_AGENT_ID")
 
+@pytest.mark.asyncio
+async def test_async_get_args_with_agent_id_in_env():
+    args = await Backend().aget_args()
+    assert isinstance(args, dict)
+    assert "model" in args
+    assert "agent_id" in args
+    assert args["agent_id"] == XPANDER_AGENT_ID
 
 @pytest.mark.asyncio
 async def test_async_get_args_with_agent_id():

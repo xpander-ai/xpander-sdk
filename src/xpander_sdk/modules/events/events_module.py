@@ -336,7 +336,7 @@ class Events(ModuleBase):
         error = None
         try:
             logger.info(f"Handling task {task.id}")
-            await task.set_status(status=AgentExecutionStatus.Executing)
+            await task.aset_status(status=AgentExecutionStatus.Executing)
             if asyncio.iscoroutinefunction(on_execution_request):
                 task = await on_execution_request(task)
             else:
@@ -359,7 +359,7 @@ class Events(ModuleBase):
             ):  # let the handler set the status, if not set - mark as completed
                 task.status = AgentExecutionStatus.Completed
 
-            await task.save()
+            await task.asave()
 
             logger.info(f"Finished handling task {task.id}")
 

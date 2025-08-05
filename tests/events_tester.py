@@ -16,7 +16,8 @@ local_task = LocalTaskTest(
 )
 
 # test with local task
-@on_task(test_task=local_task)
+# @on_task(test_task=local_task)
+@on_task
 async def handle_task(task: Task):
     task.result = "My result"
     return task
