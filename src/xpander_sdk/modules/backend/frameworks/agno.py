@@ -154,20 +154,16 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
     )
 
     mcp_tools: List[MCPTools] = []
-    has_aws_mcp = False
     is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
 
     for mcp in agent.mcp_servers:
         if mcp.type == MCPServerType.Local:
             
-            # protection for serverless xpander, load in readonly
-            has_aws_mcp = True if mcp.command and "awslabs.aws_api_mcp_server.server" in mcp.command else False
-            if has_aws_mcp and is_xpander_cloud:
-                if not mcp.env_vars or "AWS_ACCESS_KEY_ID" not in mcp.env_vars or "AWS_SECRET_ACCESS_KEY" not in mcp.env_vars:
-                    logger.warning(f"setting aws mcp to readonly to missing credentials - {mcp.model_dump_json()}")
-                    if not mcp.env_vars:
-                        mcp.env_vars = {}
-                    mcp.env_vars["READ_OPERATIONS_ONLY"] = "true"
+            # protection for serverless xpander
+            is_aws_mcp = True if mcp.command and "awslabs" in mcp.command else False
+            if is_aws_mcp and is_xpander_cloud:
+                logger.warning(f"skipping aws mcp on agent {agent.id} due to xpander serverless")
+                continue
             
             command_parts = shlex.split(mcp.command)
             
@@ -194,11 +190,4 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
                 )
             )
 
-    functions = agent.tools.functions + await asyncio.gather(*[mcp.__aenter__() for mcp in mcp_tools])
-    
-    # wait until the aws mcp is ready
-    if has_aws_mcp and is_xpander_cloud:
-        logger.info("waiting for 5s until aws mcp is ready")
-        await asyncio.sleep(5)
-    
-    return functions
+    return agent.tools.functions + await asyncio.gather(*[mcp.__aenter__() for mcp in mcp_tools])
