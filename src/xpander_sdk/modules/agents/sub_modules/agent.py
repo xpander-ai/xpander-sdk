@@ -575,10 +575,11 @@ class Agent(XPanderSharedModel):
         schema = get_db_schema_name(agent_id=self.id)
 
         return PostgresStorage(
-            table_name="agent_sessions",
+            table_name="team_sessions" if self.agno_settings.coordinate_mode else "agent_sessions",
             schema=schema,
             db_url=connection_string.connection_uri.uri,
             auto_upgrade_schema=True,
+            mode="team" if self.agno_settings.coordinate_mode else "agent"
         )
 
     def get_storage(self) -> Any:

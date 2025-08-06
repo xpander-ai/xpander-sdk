@@ -24,6 +24,7 @@ class AgnoSettings(BaseModel):
         session_summaries (Optional[bool]): If True, enables generation of session summaries. Default is False.
         num_history_runs (Optional[int]): Number of historical runs to retain or consider. Default is 3.
         tool_call_limit (Optional[int]): Max tool calls per run.
+        coordinate_mode (Optional[bool]): If True, The agent will be loaded as a Team. Default is False.
     """
 
     session_storage: Optional[bool] = True
@@ -31,3 +32,4 @@ class AgnoSettings(BaseModel):
     session_summaries: Optional[bool] = False
     num_history_runs: Optional[int] = 3
     tool_call_limit: Optional[int] = None
+    coordinate_mode: Optional[bool] = False
