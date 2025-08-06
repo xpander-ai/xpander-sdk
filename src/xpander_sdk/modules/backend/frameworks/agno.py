@@ -3,11 +3,13 @@ import shlex
 from os import getenv
 from typing import Any, Dict, List, Optional
 
+from loguru import logger
+
 from xpander_sdk.models.shared import OutputFormat
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.modules.tasks.sub_modules.task import Task
+from xpander_sdk.modules.tools_repository.models.mcp import MCPServerType
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
-
 
 async def build_agent_args(
     xpander_agent: Agent,
@@ -152,10 +154,23 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
     )
 
     mcp_tools: List[MCPTools] = []
+    has_aws_mcp = False
+    is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
 
     for mcp in agent.mcp_servers:
-        if mcp.command:
+        if mcp.type == MCPServerType.Local:
+            
+            # protection for serverless xpander, load in readonly
+            has_aws_mcp = True if mcp.command and "awslabs.aws_api_mcp_server.server" in mcp.command else False
+            if has_aws_mcp and is_xpander_cloud:
+                if not mcp.env_vars or "AWS_ACCESS_KEY_ID" not in mcp.env_vars or "AWS_SECRET_ACCESS_KEY" not in mcp.env_vars:
+                    logger.warning(f"setting aws mcp to readonly to missing credentials - {mcp.model_dump_json()}")
+                    if not mcp.env_vars:
+                        mcp.env_vars = {}
+                    mcp.env_vars["READ_OPERATIONS_ONLY"] = "true"
+            
             command_parts = shlex.split(mcp.command)
+            
             mcp_tools.append(
                 MCPTools(
                     server_params=StdioServerParameters(
@@ -179,4 +194,11 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
                 )
             )
 
-    return agent.tools.functions + await asyncio.gather(*[mcp.__aenter__() for mcp in mcp_tools])
+    functions = agent.tools.functions + await asyncio.gather(*[mcp.__aenter__() for mcp in mcp_tools])
+    
+    # wait until the aws mcp is ready
+    if has_aws_mcp and is_xpander_cloud:
+        logger.info("waiting for 5s until aws mcp is ready")
+        await asyncio.sleep(5)
+    
+    return functions
