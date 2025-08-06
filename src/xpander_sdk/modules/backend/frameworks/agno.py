@@ -5,36 +5,67 @@ from typing import Any, Dict, List, Optional
 
 from loguru import logger
 
+from xpander_sdk import Configuration
 from xpander_sdk.models.shared import OutputFormat
+from xpander_sdk.modules.agents.agents_module import Agents
+from xpander_sdk.modules.agents.models.agent import AgentGraphItemType
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.modules.tasks.sub_modules.task import Task
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerTransport, MCPServerType
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
+from agno.agent import Agent as AgnoAgent
 
 async def build_agent_args(
     xpander_agent: Agent,
     task: Optional[Task] = None,
     override: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
-    model = _load_llm_model(xpander_agent, override)
+    model = _load_llm_model(agent=xpander_agent, override=override)
     args: Dict[str, Any] = {}
 
-    _configure_output(args, xpander_agent, task)
-    _configure_session_storage(args, xpander_agent, task)
-    _configure_user_memory(args, xpander_agent, task)
-    await _attach_async_dependencies(args, xpander_agent, task, model)
-    _configure_knowledge_bases(args, xpander_agent)
-    _configure_additional_context(args, xpander_agent, task)
+    _configure_output(args=args, agent=xpander_agent, task=task)
+    _configure_session_storage(args=args, agent=xpander_agent, task=task)
+    _configure_user_memory(args=args, agent=xpander_agent, task=task)
+    await _attach_async_dependencies(args=args, agent=xpander_agent, task=task, model=model)
+    _configure_knowledge_bases(args=args, agent=xpander_agent)
+    _configure_additional_context(args=args, agent=xpander_agent, task=task)
 
-    args["tools"] = await _resolve_agent_tools(xpander_agent)
+    args["tools"] = await _resolve_agent_tools(agent=xpander_agent)
 
+    # team
+    if xpander_agent.agno_settings.coordinate_mode:
+        sub_agents = [gi for gi in xpander_agent.graph.items if gi.type == AgentGraphItemType.AGENT]
+        
+        # load sub agents
+        sub_agents = await asyncio.gather(
+            *[Agents(configuration=Configuration(api_key=xpander_agent.configuration.api_key,organization_id=xpander_agent.configuration.organization_id,base_url=xpander_agent.configuration.base_url)).aget(agent_id=sub_agent.item_id) for sub_agent in sub_agents]
+        )
+        # convert to members
+        members = await asyncio.gather(
+            *[build_agent_args(xpander_agent=sub_agent,override=override) for sub_agent in sub_agents]
+        )
+        
+        args.update({
+            "team_id": xpander_agent.id,
+            "success_criteria": xpander_agent.instructions.goal_str,
+            "mode": "coordinate",
+            "members": [AgnoAgent(**member) for member in members],
+            "add_member_tools_to_system_message": True,
+            "enable_agentic_context": True,
+            "share_member_interactions": True,
+            "show_members_responses": True
+        })
+    else: # regular agent
+        args.update({
+            "agent_id": xpander_agent.id,
+            "goal": xpander_agent.instructions.goal_str,
+        })
+    
     args.update({
-        "agent_id": xpander_agent.id,
         "name": xpander_agent.name,
         "model": model,
         "description": xpander_agent.instructions.description,
         "instructions": xpander_agent.instructions.instructions,
-        "goal": xpander_agent.instructions.goal_str,
         "expected_output": task.expected_output if task and task.expected_output else xpander_agent.expected_output,
         "show_tool_calls": True,
         "add_datetime_to_instructions": True,
