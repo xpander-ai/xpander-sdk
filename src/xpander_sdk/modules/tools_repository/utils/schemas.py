@@ -1,7 +1,7 @@
-from typing import Any, Optional, Type
+from typing import Optional, Type
 from copy import deepcopy
 
-from pydantic import BaseModel, ConfigDict, create_model
+from pydantic import BaseModel, create_model
 
 from xpander_sdk.modules.tools_repository.utils.generic import json_type_to_python, pascal_case
 
@@ -22,7 +22,7 @@ def build_model_from_schema(model_name: str, schema: dict) -> Type[BaseModel]:
         else:
             fields[prop_name] = (Optional[base_type], None)
 
-    return create_model(model_name, **fields, __config__=ConfigDict(extra="forbid"))
+    return create_model(model_name, **fields)
 
 def schema_enforcement_block_and_descriptions(target_schema: dict, reference_schema: dict) -> dict:
     updated_schema = deepcopy(target_schema)
