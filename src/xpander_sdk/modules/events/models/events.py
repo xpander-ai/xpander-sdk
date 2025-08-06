@@ -39,11 +39,12 @@ class WorkerRegistrationEvent(EventMessageBase):
 
 class WorkerFinishedEvent(EventMessageBase):
     event: EventType = EventType.WorkerFinished
+    data: Optional[dict] = {}
 
 
 class WorkerHeartbeat(EventMessageBase):
     event: EventType = EventType.WorkerHeartbeat
-    data: str = Field(default_factory=lambda: str(datetime.now()))
+    data: datetime = Field(default_factory=datetime.now)
 
 
 class WorkerExecutionRequest(EventMessageBase):

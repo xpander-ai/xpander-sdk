@@ -248,7 +248,7 @@ class Events(ModuleBase):
             "POST",
             url,
             headers=get_events_headers(configuration=self.configuration),
-            json=WorkerFinishedEvent().model_dump_safe(),
+            json=WorkerFinishedEvent(data={}).model_dump_safe(),
         )
 
     async def _make_heartbeat(self, worker_id: str) -> None:
@@ -266,26 +266,6 @@ class Events(ModuleBase):
             json=WorkerHeartbeat().model_dump_safe(),
         )
 
-    async def _mark_execution_as_executing(self, task_id: str) -> None:
-        """
-        Update the execution status of a task to 'executing'.
-
-        Args:
-            task_id (str): The unique identifier of the task.
-        """
-        base = get_events_base(configuration=self.configuration).replace(
-            "/events", "/agent-execution"
-        )
-        url = f"{base}/{task_id}/finish"
-        await self._request_with_retries(
-            "PATCH",
-            url,
-            headers=get_events_headers(configuration=self.configuration),
-            json={
-                "result": "",
-                "status": AgentExecutionStatus.Executing.value.lower(),
-            },
-        )
 
     # ----------------------- SSE helpers with retry ---------------------- #
 
