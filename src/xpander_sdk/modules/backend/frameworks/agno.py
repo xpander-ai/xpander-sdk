@@ -28,6 +28,7 @@ async def build_agent_args(
 
     args.update({
         "agent_id": xpander_agent.id,
+        "name": xpander_agent.name,
         "model": model,
         "description": xpander_agent.instructions.description,
         "instructions": xpander_agent.instructions.instructions,

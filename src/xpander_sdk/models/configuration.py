@@ -9,6 +9,7 @@ from typing import Optional
 from os import getenv
 from pydantic import BaseModel, Field
 
+from xpander_sdk.core.state import State
 from xpander_sdk.utils.env import get_base_url
 
 
@@ -49,6 +50,12 @@ class Configuration(BaseModel):
     organization_id: Optional[str] = Field(
         default_factory=lambda: getenv(key="XPANDER_ORGANIZATION_ID"),
         description="Organization identifier for xpander.ai account",
+    )
+    
+    state: Optional[State] = Field(
+        default=State(),
+        description="Configuration level in-memory state",
+        exclude=True,  # This ensures it's excluded by default
     )
 
     def get_full_url(self) -> str:

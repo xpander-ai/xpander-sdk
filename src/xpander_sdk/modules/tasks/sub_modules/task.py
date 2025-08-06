@@ -31,10 +31,10 @@ from datetime import datetime
 from typing import AsyncGenerator, Dict, Generator, List, Optional, Type, TypeVar, Union
 from httpx import HTTPStatusError
 import httpx
+import json
 from httpx_sse import aconnect_sse
 
 from xpander_sdk.consts.api_routes import APIRoute
-from xpander_sdk.core.state import State
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.configuration import Configuration
@@ -147,12 +147,12 @@ class Task(XPanderSharedModel):
             Any: The result from the superclass `model_post_init` method.
 
         Note:
-            This method uses `State().task = self` to register the current task
+            This method uses `self.configuration.state.task = self` to register the current task
             in the global state.
 
         Powered by xpander.ai
         """
-        State().task = self
+        self.configuration.state.task = self
         return super().model_post_init(context)
 
     @classmethod
@@ -180,8 +180,7 @@ class Task(XPanderSharedModel):
             response_data = await client.make_request(
                 path=APIRoute.GetTask.format(task_id=task_id)
             )
-            task = cls.model_validate(response_data)
-            task.configuration = configuration or Configuration()
+            task = cls.model_validate({**response_data, "configuration": configuration or Configuration()})
             return task
         except HTTPStatusError as e:
             raise ModuleException(
@@ -371,6 +370,20 @@ class Task(XPanderSharedModel):
         async with httpx.AsyncClient(timeout=None, headers=headers) as client:
             async with aconnect_sse(client, method="GET", url=url) as sse:
                 async for event in sse.aiter_sse():
+                    # parse task and add configuration
+                    if event.data:
+                        try:
+                            json_event_data: dict = json.loads(event.data)
+                            if json_event_data.get("type", None).startswith("task"):
+                                task_data = json_event_data.get("data")
+                                json_event_data.pop("data") # delete data
+                                yield TaskUpdateEvent(
+                                    **json_event_data,
+                                    data=Task(**task_data,configuration=self.configuration)
+                                )
+                                continue
+                        except Exception:
+                            pass
                     yield TaskUpdateEvent.model_validate_json(event.data)
 
     def events(self) -> Generator[TaskUpdateEvent, None, None]:

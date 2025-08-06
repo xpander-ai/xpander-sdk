@@ -14,7 +14,6 @@ from loguru import logger
 from pydantic import ConfigDict, computed_field
 
 from xpander_sdk.consts.api_routes import APIRoute
-from xpander_sdk.core.state import State
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.configuration import Configuration
@@ -194,12 +193,12 @@ class Agent(XPanderSharedModel):
             Any: The result from the superclass `model_post_init` method.
 
         Note:
-            This method uses `State().agent = self` to register the current agent
+            This method uses `self.configuration.state.agent = self` to register the current agent
             in the global state.
 
         Powered by xpander.ai
         """
-        State().agent = self
+        self.configuration.state.agent = self
         return super().model_post_init(context)
 
     @computed_field
@@ -268,9 +267,8 @@ class Agent(XPanderSharedModel):
             response_data: dict = await client.make_request(
                 path=APIRoute.GetAgent.format(agent_id=agent_id), headers=headers
             )
-            agent = cls.model_validate({**response_data, "graph": None, "tools": None})
+            agent = cls.model_validate({**response_data, "graph": None, "tools": None, "configuration": configuration or Configuration()})
             agent.graph = AgentGraph(response_data.get("graph", []))
-            agent.configuration = configuration or Configuration()
             agent.tools = ToolsRepository(
                 configuration=agent.configuration, tools=response_data.get("tools", []), agent_graph=agent.graph
             )

@@ -152,15 +152,15 @@ class ToolsRepository(XPanderSharedModel):
                     """
 
                     # Convert the validated Pydantic model to a dict for the backend
-                    payload_dict = payload.model_dump()
+                    payload_dict = payload.model_dump(exclude_none=True)
 
                     async def _run():
                         result = await tool_ref.ainvoke(
-                            agent_id=State().agent.id,
-                            agent_version=State().agent.version,
+                            agent_id=self.configuration.state.agent.id,
+                            agent_version=self.configuration.state.agent.version,
                             payload=payload_dict,
                             configuration=self.configuration,
-                            task_id=State().task.id if State().task else None,
+                            task_id=self.configuration.state.task.id if self.configuration.state.task else None,
                         )
                         return result
 
