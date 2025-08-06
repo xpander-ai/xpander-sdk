@@ -52,6 +52,7 @@ async def build_agent_args(
             "members": [AgnoAgent(**member) for member in members],
             "add_member_tools_to_system_message": True,
             "enable_agentic_context": True,
+            "enable_team_history": True,
             "share_member_interactions": True,
             "show_members_responses": True
         })
