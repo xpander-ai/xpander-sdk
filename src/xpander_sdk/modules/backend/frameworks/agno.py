@@ -8,7 +8,7 @@ from loguru import logger
 from xpander_sdk.models.shared import OutputFormat
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.modules.tasks.sub_modules.task import Task
-from xpander_sdk.modules.tools_repository.models.mcp import MCPServerType
+from xpander_sdk.modules.tools_repository.models.mcp import MCPServerTransport, MCPServerType
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
 
 async def build_agent_args(
@@ -157,6 +157,7 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
     is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
 
     for mcp in agent.mcp_servers:
+        transport = mcp.transport.value.lower()
         if mcp.type == MCPServerType.Local:
             
             # protection for serverless xpander
@@ -166,9 +167,9 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
                 continue
             
             command_parts = shlex.split(mcp.command)
-            
             mcp_tools.append(
                 MCPTools(
+                    transport=transport,
                     server_params=StdioServerParameters(
                         command=command_parts[0],
                         args=command_parts[1:],
@@ -179,9 +180,7 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
                 )
             )
         elif mcp.url:
-            is_sse = ("mcp" in mcp.url and "xpander.ai" in mcp.url) or mcp.url.endswith("/sse")
-            transport = "sse" if is_sse else "streamable-http"
-            params_cls = SSEClientParams if is_sse else StreamableHTTPClientParams
+            params_cls = SSEClientParams if mcp.transport == MCPServerTransport.SSE else StreamableHTTPClientParams
             mcp_tools.append(
                 MCPTools(
                     transport=transport,
