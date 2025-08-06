@@ -36,6 +36,7 @@ from xpander_sdk.modules.agents.models.agent import (
     AgentStatus,
     AgentType,
     DatabaseConnectionString,
+    LLMCredentials,
 )
 from xpander_sdk.modules.agents.models.knowledge_bases import AgentKnowledgeBase
 from xpander_sdk.modules.knowledge_bases.knowledge_bases_module import KnowledgeBases
@@ -131,7 +132,7 @@ class Agent(XPanderSharedModel):
             type: Optional[AgentType]
             output_format: Optional[OutputFormat]
             output_schema: Optional[Dict]
-            llm_credentials_key: Optional[str]
+            llm_credentials: Optional[LLMCredentials]
             expected_output: Optional[str]
             agno_settings: Optional[AgnoSettings]
 
@@ -171,7 +172,7 @@ class Agent(XPanderSharedModel):
     output_format: Optional[OutputFormat] = OutputFormat.Markdown
     output_schema: Optional[Dict] = None
 
-    llm_credentials_key: Optional[str] = None
+    llm_credentials: Optional[LLMCredentials] = None
     expected_output: Optional[str] = ""
     agno_settings: Optional[AgnoSettings] = AgnoSettings()
 

@@ -7,6 +7,7 @@ The Backend Module in the xpander.ai SDK provides functionality for retrieving a
 The Backend Module allows developers to:
 
 - Retrieve runtime arguments for agents, with optional environment variable support for agent ID
+- Automatically resolve custom LLM API keys with environment variable fallback
 - Support multiple frameworks, dispatching arguments accordingly
 - Provide both asynchronous and synchronous APIs
 
@@ -70,9 +71,20 @@ async def handle_agent_task(task):
     return task
 ```
 
+## Custom LLM Key Resolution
+
+The Backend module automatically handles custom LLM API key resolution:
+
+- **Priority Logic**: 
+  - xpander Cloud: Custom LLM Key → Environment Variable
+  - Local Environment: Environment Variable → Custom LLM Key
+- **Automatic Fallback**: When custom keys aren't available, environment variables are used
+- **Secure Handling**: Custom keys are never exposed in logs or responses
+
 ## Additional Information
 
 - The Module supports framework-specific argument dispatching.
+- Custom LLM keys are automatically resolved during argument retrieval.
 - Refer to the [Agents Guide](AGENTS.md) for related operations.
 - Full [SDK Documentation](https://docs.xpander.ai) is available for more advanced use-cases.
 

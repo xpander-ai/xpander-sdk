@@ -52,13 +52,33 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
 
     provider = agent.model_provider.lower()
 
+    is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
+    has_custom_llm_key = True if agent.llm_credentials and agent.llm_credentials.value else False
+    
+    # if xpander cloud: llm key >> env
+    # if local: env >> llm key
+    def get_llm_key(env_var_name: str):
+        env_llm_key = getenv(env_var_name)
+        
+        # default
+        if not has_custom_llm_key:
+            return env_llm_key
+        
+        # xpander cloud: custom and fallback to env
+        if is_xpander_cloud:
+            return agent.llm_credentials.value or env_llm_key
+        else:
+            return env_llm_key or agent.llm_credentials.value
+    
+    
+    
     if provider == "openai":
         from agno.models.openai import OpenAIChat
-        return OpenAIChat(id=agent.model_name, api_key=getenv("AGENTS_OPENAI_API_KEY"))
+        return OpenAIChat(id=agent.model_name, api_key=get_llm_key("AGENTS_OPENAI_API_KEY"))
 
     elif provider == "anthropic":
         from agno.models.anthropic import Claude
-        return Claude(id=agent.model_name, api_key=getenv("ANTHROPIC_API_KEY"))
+        return Claude(id=agent.model_name, api_key=get_llm_key("ANTHROPIC_API_KEY"))
 
     raise NotImplementedError(f"Provider '{provider}' is not supported for agno agents.")
 

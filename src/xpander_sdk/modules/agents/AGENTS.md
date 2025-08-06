@@ -32,9 +32,10 @@ agents/
 
 ### Agent Configuration Management
 - AI agents should use the Configuration class for all API settings
-- Agent credentials should be handled through environment variables
+- Agent credentials should be handled through environment variables or custom LLM keys
 - AI agents should support model provider abstraction (OpenAI, Anthropic, etc.)
 - Configuration should be injected, not hardcoded in agent logic
+- Check for custom LLM credentials before using environment variables
 
 ### Tool Integration Patterns
 - AI agents should use the `ainvoke_tool()` method for tool execution
@@ -76,6 +77,11 @@ task_with_options = await agent.acreate_task(
 # Verify task creation results
 assert task.agent_id == agent.id
 assert task.input.text == prompt
+
+# Check for custom LLM credentials (recommended pattern)
+if agent.llm_credentials:
+    print(f"Agent uses custom LLM key: {agent.llm_credentials.name}")
+    assert agent.llm_credentials.value is not None  # Securely stored
 ```
 
 ### Tool Invocation Patterns
@@ -168,6 +174,7 @@ pytest tests/test_agents.py::test_tool_integration
 - Cache agent configurations when appropriate
 - Implement connection pooling for HTTP requests
 - Use streaming for large task outputs
+- Custom LLM keys are resolved automatically by the Backend module
 
 ### Error Handling Patterns
 ```python
@@ -206,6 +213,7 @@ except Exception as e:
 
 ### Authentication and Authorization
 - AI agents should never expose API keys in logs or responses
+- Custom LLM API keys are securely stored and never exposed in logs
 - Use the Configuration class for credential management
 - Implement proper input validation for agent parameters
 
@@ -224,6 +232,8 @@ Optional:
 - `XPANDER_BASE_URL`: Custom API endpoint
 - `XPANDER_DEFAULT_MODEL_PROVIDER`: Default model provider
 - `XPANDER_DEFAULT_MODEL_NAME`: Default model name
+- `AGENTS_OPENAI_API_KEY`: OpenAI API key (fallback when no custom key)
+- `ANTHROPIC_API_KEY`: Anthropic API key (fallback when no custom key)
 
 ## Common Patterns AI Agents Should Follow
 
@@ -256,6 +266,36 @@ async def process_multiple_agents(agent_ids: list, task: str):
     return results
 ```
 
+## Custom LLM API Keys for AI Agents
+
+### Understanding Custom LLM Keys
+- Agents can be configured with custom LLM API keys that override environment variables
+- Priority depends on deployment environment:
+  - **xpander Cloud**: Custom LLM Key → Environment Variable
+  - **Local Environment**: Environment Variable → Custom LLM Key
+
+### AI Agent Patterns for Custom Keys
+```python
+# AI agents should check for custom credentials
+if agent.llm_credentials:
+    logger.info(f"Using custom LLM key: {agent.llm_credentials.name}")
+    # Key value is securely managed - never log it
+else:
+    logger.info("Using environment variable for LLM key")
+
+# When using Backend module, keys are resolved automatically
+from xpander_sdk import Backend
+backend = Backend()
+args = await backend.aget_args(agent=agent)
+# The resolved model uses appropriate API key based on priority
+```
+
+### Best Practices for AI Agents
+1. **Never log custom LLM key values** - they are sensitive credentials
+2. **Check for custom keys before falling back to environment variables**
+3. **Use Backend module for automatic key resolution**
+4. **Handle missing keys gracefully with appropriate error messages**
+
 ## Troubleshooting for AI Agents
 
 ### Common Issues
@@ -265,6 +305,7 @@ async def process_multiple_agents(agent_ids: list, task: str):
 4. **Configuration errors**: Validate environment variables and settings
 5. **Knowledge base attachment failures**: Verify knowledge base ID exists and agent has proper permissions
 6. **Knowledge base search errors**: Check if knowledge bases are properly attached before searching
+7. **LLM key issues**: Verify custom keys are properly configured or environment variables are set
 
 ### Debugging Tips
 - Enable debug logging with loguru

@@ -10,6 +10,7 @@ This module handles:
 - Tool integration and MCP server configuration
 - Agent graph management and execution flow
 - Storage and memory management
+- Custom LLM API keys configuration
 
 ## Structure
 
@@ -46,6 +47,7 @@ Individual agent instance with full functionality.
 - MCP server configuration
 - Graph-based execution flow
 - Memory and storage management
+- Custom LLM API credentials support
 
 **Methods:**
 - `aload()` / `load()`: Load agent from backend  
@@ -72,6 +74,10 @@ assert len(agent_list) != 0
 # Load specific agent
 agent = await agents.aget("agent-id")
 assert isinstance(agent, Agent)
+
+# Check for custom LLM credentials
+if agent.llm_credentials:
+    print(f"Agent uses custom LLM key: {agent.llm_credentials.name}")
 
 # Load agent from list item
 full_agent = await agent_list[0].aload()
@@ -158,11 +164,28 @@ await agent.adelete_session(session_id="session-id")
 Agents support various configuration options:
 
 - **Model Settings**: Provider, model name, credentials
+- **Custom LLM Keys**: Override default API keys with agent-specific credentials
 - **Framework**: Execution framework (e.g., Agno)
 - **Tools**: Available tools and integrations
 - **Knowledge Bases**: Connected knowledge repositories
 - **Graph**: Execution flow definition
 - **Output**: Format and schema specifications
+
+### Custom LLM API Keys
+
+Agents can be configured with custom LLM API keys that override environment variables:
+
+```python
+# Check if agent has custom credentials
+if agent.llm_credentials:
+    print(f"Custom key name: {agent.llm_credentials.name}")
+    print(f"Description: {agent.llm_credentials.description}")
+    # The actual key value is securely managed
+```
+
+**Key Priority Logic:**
+- **xpander Cloud**: Custom LLM Key → Environment Variable
+- **Local Environment**: Environment Variable → Custom LLM Key
 
 ## API Reference
 

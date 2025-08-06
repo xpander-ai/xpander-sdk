@@ -15,6 +15,7 @@ With the Agents Module, developers can:
 - Handle database connection strings for agents
 - Manage user sessions and agent interactions
 - Access agent storage and memory backends
+- Configure custom LLM API keys for individual agents
 
 ## Classes
 
@@ -47,6 +48,7 @@ Represents a specific agent with capabilities to manage tasks, invoke tools, acc
 - **`mcp_servers`**: List of MCPServerDetails configured for this agent.
 - **`tools`**: ToolsRepository instance providing access to all agent tools.
 - **`graph`**: Agent execution graph with all configured items.
+- **`llm_credentials`**: Optional custom LLM API credentials for this agent.
 
 #### Key Methods
 
@@ -197,6 +199,34 @@ kb = await kb_manager.aget(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488e
 
 # Attach knowledge base to agent using the instance
 agent.attach_knowledge_base(knowledge_base=kb)
+```
+
+### Custom LLM API Keys
+
+Agents support custom LLM API keys that override default environment variables. The priority depends on the deployment environment:
+
+```python
+# For xpander cloud deployments:
+# Priority: Custom LLM Key > Environment Variable
+
+# For local deployments:
+# Priority: Environment Variable > Custom LLM Key
+
+# Example agent with custom LLM credentials
+agent = await agents_manager.aget(agent_id="your-agent-id")
+
+# Check if agent has custom LLM credentials configured
+if agent.llm_credentials:
+    print(f"Agent has custom LLM key: {agent.llm_credentials.name}")
+    print(f"Description: {agent.llm_credentials.description}")
+    # Note: The actual key value is securely stored and not displayed
+
+# When using the Backend module, custom keys are automatically resolved:
+from xpander_sdk import Backend
+
+backend = Backend()
+args = await backend.aget_args(agent=agent)
+# The resolved model will use the appropriate API key based on priority
 
 # Or attach using just the knowledge base ID
 agent.attach_knowledge_base(knowledge_base_id="d8fd14c0-51e1-469e-a5bb-b470e8488eca")
