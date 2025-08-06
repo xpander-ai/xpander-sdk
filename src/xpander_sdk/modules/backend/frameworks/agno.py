@@ -106,11 +106,11 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
     
     if provider == "openai":
         from agno.models.openai import OpenAIChat
-        return OpenAIChat(id=agent.model_name, api_key=get_llm_key("AGENTS_OPENAI_API_KEY"))
+        return OpenAIChat(id=agent.model_name, api_key=get_llm_key("AGENTS_OPENAI_API_KEY"), temperature=0.0)
 
     elif provider == "anthropic":
         from agno.models.anthropic import Claude
-        return Claude(id=agent.model_name, api_key=get_llm_key("ANTHROPIC_API_KEY"))
+        return Claude(id=agent.model_name, api_key=get_llm_key("ANTHROPIC_API_KEY"),temperature=0.0)
 
     raise NotImplementedError(f"Provider '{provider}' is not supported for agno agents.")
 
