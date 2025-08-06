@@ -10,7 +10,7 @@ from enum import Enum
 from typing import Dict, List, Literal, Optional, Type
 from pydantic import BaseModel, computed_field
 
-from xpander_sdk.models.shared import OutputFormat
+from xpander_sdk.models.shared import OutputFormat, XPanderSharedModel
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
 
 
@@ -413,3 +413,8 @@ class AgentOutput(BaseModel):
     output_schema: Optional[Type[BaseModel]] = None
     is_markdown: Optional[bool] = False
     use_json_mode: Optional[bool] = False
+
+class LLMCredentials(XPanderSharedModel):
+    name: str
+    description: Optional[str] = None
+    value: str
