@@ -1,5 +1,5 @@
 import re
-from typing import Any
+from typing import Any, List
 
 
 def deep_merge(a: dict, b: dict) -> dict:
@@ -16,7 +16,12 @@ def deep_merge(a: dict, b: dict) -> dict:
     return result
 
 
-def json_type_to_python(json_type: str) -> type:
+def json_type_to_python(json_type: str, prop_schema: dict = None):
+    # Extend to support arrays of objects, etc.
+    if json_type == "array" and prop_schema:
+        items = prop_schema.get("items", {})
+        item_type = json_type_to_python(items.get("type"), items)
+        return List[item_type]
     return {
         "string": str,
         "integer": int,
@@ -24,6 +29,7 @@ def json_type_to_python(json_type: str) -> type:
         "boolean": bool,
         "object": dict,
         "array": list,
+        None: Any
     }.get(json_type, Any)
 
 
