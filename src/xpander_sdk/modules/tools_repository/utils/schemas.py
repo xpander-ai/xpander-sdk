@@ -1,7 +1,7 @@
 from typing import Optional, Type
 from copy import deepcopy
 
-from pydantic import BaseModel, ConfigDict, create_model
+from pydantic import BaseModel, ConfigDict, Field, create_model
 
 from xpander_sdk.modules.tools_repository.utils.generic import json_type_to_python, pascal_case
 
@@ -17,27 +17,97 @@ def build_model_from_schema(
     properties = schema.get("properties", {})
     required = set(schema.get("required", []))
 
-    # If with_defaults is True and schema is empty, set required params with default empty dicts
+    FIELD_SPECS = {
+        "body_params": (
+            Optional[Dict[str, Any]],
+            Field(
+                default={},
+                description="Request body parameters (default: empty object)."
+            )
+        ),
+        "query_params": (
+            Optional[Dict[str, Any]],
+            Field(
+                default={},
+                description="Request query parameters (default: empty object)."
+            )
+        ),
+        "path_params": (
+            Optional[Dict[str, Any]],
+            Field(
+                default={},
+                description="Request path parameters (default: empty object)."
+            )
+        ),
+    }
+
+    # If with_defaults is True and schema is empty, set all three params
     if with_defaults and not properties:
-        # Each field: required (ellipsis), but default is {}
-        fields["body_params"] = (dict, ...)
-        fields["query_params"] = (dict, ...)
-        fields["path_params"] = (dict, ...)
+        fields = FIELD_SPECS.copy()
     else:
         for prop_name, prop_schema in properties.items():
-            # You may need to implement pascal_case and json_type_to_python
-            if prop_schema.get("type") == "object" and "properties" in prop_schema:
+            prop_type = prop_schema.get("type")
+            description = prop_schema.get("description", None)
+            default = prop_schema.get("default", None)
+
+            # Nested object support
+            if prop_type == "object" and "properties" in prop_schema:
                 nested_model_name = f"{model_name}{pascal_case(prop_name)}"
                 base_type = build_model_from_schema(nested_model_name, prop_schema)
             else:
-                base_type = json_type_to_python(prop_schema.get("type"))
+                base_type = json_type_to_python(prop_type, prop_schema)
 
+            # Field annotation and Field() construction
+            annotation = base_type if prop_name in required else Optional[base_type]
+            field_args = {}
+            if description:
+                field_args["description"] = description
+
+            # Set default or ... (required)
             if prop_name in required:
-                fields[prop_name] = (base_type, ...)
+                if default is not None:
+                    field_info = Field(default, **field_args)
+                else:
+                    field_info = Field(..., **field_args)
             else:
-                fields[prop_name] = (Optional[base_type], None)
+                if default is not None:
+                    field_info = Field(default, **field_args)
+                else:
+                    field_info = Field(None, **field_args)
 
-    model_config = ConfigDict(strict=True, extra="allow")
+            fields[prop_name] = (annotation, field_info)
+
+
+        # Ensure the presence of all three params if with_defaults is True
+        if with_defaults:
+            for key, (annotation, field_info) in FIELD_SPECS.items():
+                if key not in fields:
+                    fields[key] = (annotation, field_info)
+
+    # After building fields, relax body/query/path if present and not already optional with a default
+    for param in ("body_params", "query_params", "path_params"):
+        if param in fields:
+            ann, fld = fields[param]
+            # If field is required (not optional) or required with default=None
+            # or does not have a default
+            if (ann is dict or
+                ann is Dict[str, Any] or
+                (hasattr(ann, '__origin__') and ann.__origin__ is dict) or
+                (hasattr(ann, '__origin__') and ann.__origin__ is Dict)) \
+                or (getattr(fld, 'default', None) is None and getattr(fld, 'default_factory', None) is None):
+                # Make it Optional[Dict[str, Any]], with default={}
+                desc = getattr(fld, 'description', None) or f"Request {param.replace('_', ' ')} (default: empty object)."
+                fields[param] = (
+                    Optional[Dict[str, Any]],
+                    Field(default={}, description=desc)
+                )
+
+    model_config = ConfigDict(
+        strict=True,
+        extra="allow",
+        title=model_name,
+        description="Pay attention: All fields marked as required must be present. Optional fields are allowed to be omitted. Extra fields are permitted and will be accepted."
+    )
     return create_model(
         model_name,
         __config__=model_config,
