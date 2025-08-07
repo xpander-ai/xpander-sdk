@@ -55,13 +55,27 @@ def build_model_from_schema(
                 nested_model_name = f"{model_name}{pascal_case(prop_name)}"
                 base_type = build_model_from_schema(nested_model_name, prop_schema)
             else:
+                # Pass the full property schema to handle anyOf correctly
                 base_type = json_type_to_python(prop_type, prop_schema)
 
             # Field annotation and Field() construction
             annotation = base_type if prop_name in required else Optional[base_type]
             field_args = {}
-            if description:
-                field_args["description"] = description
+            
+            # Enhance description to clarify optional vs required status
+            enhanced_description = description or f"Parameter: {prop_name}"
+            if prop_name in required:
+                if default is not None:
+                    enhanced_description = f"[REQUIRED with default] {enhanced_description} (default: {default})"
+                else:
+                    enhanced_description = f"[REQUIRED] {enhanced_description}"
+            else:
+                if default is not None:
+                    enhanced_description = f"[OPTIONAL with default] {enhanced_description} (default: {default})"
+                else:
+                    enhanced_description = f"[OPTIONAL] {enhanced_description} - can be omitted or set to null"
+            
+            field_args["description"] = enhanced_description
 
             # Set default or ... (required)
             if prop_name in required:
@@ -70,10 +84,12 @@ def build_model_from_schema(
                 else:
                     field_info = Field(..., **field_args)
             else:
+                # For optional fields, be more explicit about defaults
                 if default is not None:
                     field_info = Field(default, **field_args)
                 else:
-                    field_info = Field(None, **field_args)
+                    # Make sure optional fields are clearly marked as optional with explicit default
+                    field_info = Field(default=None, **field_args)
 
             fields[prop_name] = (annotation, field_info)
 
@@ -103,10 +119,10 @@ def build_model_from_schema(
                 )
 
     model_config = ConfigDict(
-        strict=True,
+        strict=False,  # Allow flexibility with types to handle AI agent inputs better
         extra="allow",
         title=model_name,
-        description="Pay attention: All fields marked as required must be present. Optional fields are allowed to be omitted. Extra fields are permitted and will be accepted."
+        description="IMPORTANT: Required fields must be provided. Optional fields can be omitted entirely or set to null. All parameters with defaults will use those defaults if not provided. Check the 'required' array in the schema to see which fields are mandatory."
     )
     return create_model(
         model_name,
