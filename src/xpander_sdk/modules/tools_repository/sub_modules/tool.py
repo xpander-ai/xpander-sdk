@@ -100,7 +100,8 @@ class Tool(XPanderSharedModel):
         
         return build_model_from_schema(
             model_name=model_name,
-            schema=schema
+            schema=schema,
+            with_defaults=self.is_local == False
         )
 
     @model_validator(mode="before")
