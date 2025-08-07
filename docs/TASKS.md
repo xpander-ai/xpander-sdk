@@ -9,6 +9,7 @@ This module allows developers to:
 - Create tasks and associate them with agents
 - List and retrieve existing tasks
 - Update task states and manage execution
+- Report external task execution results to the platform
 - Stream real-time events during task execution
 - Stop and manage task lifecycle
 
@@ -57,6 +58,8 @@ Represents a single task, providing methods to interact with task configurations
 
 - **`aload`**: Asynchronously load a task by ID (class method).
 - **`load`**: Synchronously load a task by ID (class method).
+- **`areport_external_task`**: Asynchronously report an external task execution (class method).
+- **`report_external_task`**: Synchronously report an external task execution (class method).
 - **`aset_status`**: Asynchronously change the task's status.
 - **`set_status`**: Synchronously change the task's status.
 - **`asave`**: Asynchronously save task changes back to the xpander platform.
@@ -121,6 +124,54 @@ async for event in new_task.aevents():
 # Stream task events synchronously (for non-async environments)  
 for event in new_task.events():
     print(f"Event: {event}")
+```
+
+### Report External Task Execution
+
+```python
+import uuid
+from xpander_sdk.modules.tasks.sub_modules.task import Task
+from xpander_sdk.models.shared import Tokens
+
+# Report a simple external task execution
+task_id = str(uuid.uuid4())
+reported_task = await Task.areport_external_task(
+    agent_id="agent123",
+    id=task_id,
+    input="Process inventory data",
+    result="Successfully updated 500 inventory items"
+)
+
+# Report with comprehensive execution details
+tokens = Tokens(
+    completion_tokens=200,
+    prompt_tokens=75,
+    total_tokens=275
+)
+
+reported_task = await Task.areport_external_task(
+    agent_id="agent123",
+    id=str(uuid.uuid4()),
+    input="Generate monthly financial report",
+    llm_response={"content": "Report generated successfully", "model": "gpt-4"},
+    tokens=tokens,
+    is_success=True,
+    result="Monthly financial report generated with insights",
+    duration=8.7,
+    used_tools=["financial_analyzer", "chart_generator", "pdf_creator"]
+)
+
+# Synchronous external task reporting
+reported_task_sync = Task.report_external_task(
+    agent_id="agent123",
+    id=str(uuid.uuid4()),
+    input="Send weekly status update",
+    result="Status update sent to stakeholders",
+    used_tools=["email_sender", "template_engine"]
+)
+
+print(f"Reported task ID: {reported_task.id}")
+print(f"Task status: {reported_task.status}")
 ```
 
 ## API Reference

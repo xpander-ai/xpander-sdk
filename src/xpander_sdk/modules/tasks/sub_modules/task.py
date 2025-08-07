@@ -28,7 +28,7 @@ Typical usage example:
 """
 
 from datetime import datetime
-from typing import AsyncGenerator, Dict, Generator, List, Optional, Type, TypeVar, Union
+from typing import Any, AsyncGenerator, Dict, Generator, List, Optional, Type, TypeVar, Union
 from httpx import HTTPStatusError
 import httpx
 import json
@@ -43,13 +43,14 @@ from xpander_sdk.models.events import (
     ToolCallRequest,
     ToolCallResult,
 )
-from xpander_sdk.models.shared import OutputFormat, XPanderSharedModel
+from xpander_sdk.models.shared import OutputFormat, Tokens, XPanderSharedModel
 from xpander_sdk.modules.events.utils.generic import get_events_base, get_events_headers
 from xpander_sdk.modules.tasks.models.task import (
     AgentExecutionInput,
     AgentExecutionStatus,
     HumanInTheLoop,
     PendingECARequest,
+    TaskReportRequest,
 )
 from xpander_sdk.utils.event_loop import run_sync
 
@@ -420,3 +421,137 @@ class Task(XPanderSharedModel):
 
         while queue:
             yield queue.pop(0)
+    
+    @classmethod
+    async def areport_external_task(
+        cls: Type[T], 
+        configuration: Optional[Configuration] = None,
+        agent_id: Optional[str] = None,
+        id: Optional[str] = None,
+        input: Optional[str] = None,
+        llm_response: Optional[Any] = None,
+        tokens: Optional[Tokens] = None,
+        is_success: Optional[bool] = True,
+        result: Optional[str] = None,
+        duration: Optional[float] = 0,
+        used_tools: Optional[List[str]] = []
+    ) -> T:
+        """
+        Asynchronously reports an external task to the xpander.ai backend.
+
+        This method is used to report the result of a task that was executed
+        externally (outside the xpander.ai platform). It submits execution details,
+        including inputs, outputs, success status, and resource usage, to the backend.
+        
+        Args:
+            configuration (Optional[Configuration]): Optional configuration for API calls.
+            agent_id (Optional[str]): Identifier of the agent associated with the task.
+            id (Optional[str]): Task identifier (external or internal).
+            input (Optional[str]): The input parameters or data used in execution.
+            llm_response (Optional[Any]): The raw LLM response or relevant output object.
+            tokens (Optional[Tokens]): Tokens used in the execution.
+            is_success (Optional[bool]): Whether the task execution was successful. Defaults to True.
+            result (Optional[str]): String representation of the final result.
+            duration (Optional[float]): Task execution duration, in seconds. Defaults to 0.
+            used_tools (Optional[List[str]]): List of tools used during the execution. Defaults to empty list.
+        
+        Returns:
+            T: Instance of the Task class, representing the reported task.
+        
+        Raises:
+            ModuleException: Raised on backend or network errors.
+        
+        Example:
+            >>> task = await Task.areport_external_task(
+            ...     agent_id="agent_xyz",
+            ...     id="external_task_123",
+            ...     input="User message",
+            ...     result="Done"
+            ... )
+        """
+        try:
+            configuration = configuration or Configuration()
+            client = APIClient(configuration=configuration)
+            task_report_request = TaskReportRequest(
+                id=id,
+                input=input,
+                llm_response=llm_response,
+                tokens=tokens,
+                is_success=is_success,
+                result=result,
+                duration=duration,
+                used_tools=used_tools
+            )
+            response_data = await client.make_request(
+                path=APIRoute.ReportExternalTask.format(agent_id=agent_id),
+                method="POST",
+                payload=task_report_request.model_dump_safe(),
+            )
+            return cls.model_validate({**response_data, "configuration": configuration})
+        except HTTPStatusError as e:
+            raise ModuleException(
+                status_code=e.response.status_code, description=e.response.text
+            )
+        except Exception as e:
+            raise ModuleException(
+                status_code=500, description=f"Failed to report external task - {str(e)}"
+            )
+
+    @classmethod
+    def report_external_task(
+        cls: Type[T], 
+        configuration: Optional[Configuration] = None,
+        agent_id: Optional[str] = None,
+        id: Optional[str] = None,
+        input: Optional[str] = None,
+        llm_response: Optional[Any] = None,
+        tokens: Optional[Tokens] = None,
+        is_success: Optional[bool] = True,
+        result: Optional[str] = None,
+        duration: Optional[float] = 0,
+        used_tools: Optional[List[str]] = []
+    ) -> T:
+        """
+        Synchronously reports an external task to the xpander.ai backend.
+
+        This function wraps the asynchronous `areport_external_task` method for
+        synchronous usage. It submits execution details, including inputs, outputs,
+        success status, and resource usage, to the backend.
+
+        Args:
+            configuration (Optional[Configuration]): Optional configuration for API calls.
+            agent_id (Optional[str]): Identifier of the agent associated with the task.
+            id (Optional[str]): Task identifier (external or internal).
+            input (Optional[str]): The input parameters or data used in execution.
+            llm_response (Optional[Any]): The raw LLM response or relevant output object.
+            tokens (Optional[Tokens]): Tokens used in the execution.
+            is_success (Optional[bool]): Whether the task execution was successful. Defaults to True.
+            result (Optional[str]): String representation of the final result.
+            duration (Optional[float]): Task execution duration, in seconds. Defaults to 0.
+            used_tools (Optional[List[str]]): List of tools used during the execution. Defaults to empty list.
+
+        Returns:
+            T: Instance of the Task class, representing the reported task.
+
+        Example:
+            >>> task = Task.report_external_task(
+            ...     agent_id="agent_xyz",
+            ...     id="external_task_123",
+            ...     input="User message",
+            ...     result="Done"
+            ... )
+        """
+        return run_sync(
+            cls.areport_external_task(
+                configuration=configuration,
+                agent_id=agent_id,
+                id=id,
+                input=input,
+                llm_response=llm_response,
+                tokens=tokens,
+                is_success=is_success,
+                result=result,
+                duration=duration,
+                used_tools=used_tools,
+            )
+        )

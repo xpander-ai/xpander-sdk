@@ -4,7 +4,7 @@ This AGENTS.md file provides specific guidance for AI agents working with the Ba
 
 ## Module Overview
 
-The Backend module retrieves agent runtime arguments for execution across multiple frameworks in the xpander.ai platform. It supports both asynchronous and synchronous APIs for easy integration with existing agents.
+The Backend module retrieves agent runtime arguments for execution across multiple frameworks in the xpander.ai platform. It also provides functionality for reporting external task execution results back to the platform. It supports both asynchronous and synchronous APIs for easy integration with existing agents.
 
 ## Module Structure for AI Agents
 
@@ -53,6 +53,52 @@ from xpander_sdk.modules.backend.frameworks import dispatch_get_args
 
 # Dispatch arguments for given agent and task
 args = await dispatch_get_args(agent=agent, task=task)
+```
+
+### External Task Reporting Patterns
+```python
+import uuid
+from xpander_sdk.modules.backend import Backend
+from xpander_sdk.models.shared import Tokens
+
+# Initialize Backend module
+backend = Backend()
+
+# Report simple external task execution
+reported_task = await backend.areport_external_task(
+    agent_id="agent-id",
+    id=str(uuid.uuid4()),
+    input="Execute data pipeline",
+    result="Pipeline completed successfully",
+    duration=15.3
+)
+
+# Report with comprehensive execution details
+tokens = Tokens(
+    completion_tokens=250,
+    prompt_tokens=80,
+    total_tokens=330
+)
+
+reported_task = await backend.areport_external_task(
+    agent_id="agent-id",
+    id=str(uuid.uuid4()),
+    input="Complex analysis task",
+    llm_response={"content": "Analysis completed", "model": "gpt-4"},
+    tokens=tokens,
+    is_success=True,
+    result="Comprehensive analysis report generated",
+    duration=12.8,
+    used_tools=["analyzer", "visualizer", "reporter"]
+)
+
+# Synchronous reporting for non-async environments
+reported_task_sync = backend.report_external_task(
+    agent_id="agent-id",
+    id=str(uuid.uuid4()),
+    input="Cleanup task",
+    result="Cleanup completed"
+)
 ```
 
 ## Testing Requirements for AI Agents

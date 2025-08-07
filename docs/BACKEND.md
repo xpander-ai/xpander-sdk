@@ -9,6 +9,7 @@ The Backend Module allows developers to:
 - Retrieve runtime arguments for agents, with optional environment variable support for agent ID
 - Automatically resolve custom LLM API keys with environment variable fallback
 - Support multiple frameworks, dispatching arguments accordingly
+- Report external task execution results to the xpander.ai platform
 - Provide both asynchronous and synchronous APIs
 
 ## Classes
@@ -21,6 +22,8 @@ Handles retrieval of runtime arguments for agents.
 
 - **`aget_args(agent_id: Optional[str], agent: Optional[Agent], ...)`**: Asynchronously resolve runtime arguments.
 - **`get_args(agent_id: Optional[str], agent: Optional[Agent], ...)`**: Synchronously resolve runtime arguments.
+- **`areport_external_task(agent_id: Optional[str], agent: Optional[Agent], ...)`**: Asynchronously report external task execution results.
+- **`report_external_task(agent_id: Optional[str], agent: Optional[Agent], ...)`**: Synchronously report external task execution results.
 
 ## Examples
 
@@ -69,6 +72,55 @@ async def handle_agent_task(task):
     # result = await agno_agent.arun(message=task.to_message())
     task.result = "Task processed with Backend arguments"
     return task
+```
+
+### Report External Task Execution
+
+```python
+import uuid
+from xpander_sdk.modules.backend import Backend
+from xpander_sdk.models.shared import Tokens
+
+# Initialize Backend module
+backend = Backend()
+
+# Report a simple external task execution
+task_id = str(uuid.uuid4())
+reported_task = await backend.areport_external_task(
+    agent_id="agent-123",
+    id=task_id,
+    input="Process customer data",
+    result="Successfully processed 100 customer records",
+    duration=2.5
+)
+
+# Report with comprehensive execution details
+tokens = Tokens(
+    completion_tokens=150,
+    prompt_tokens=50,
+    total_tokens=200
+)
+
+reported_task = await backend.areport_external_task(
+    agent_id="agent-123",
+    id=str(uuid.uuid4()),
+    input="Analyze sales data and generate report",
+    llm_response={"content": "Analysis complete", "model": "gpt-4"},
+    tokens=tokens,
+    is_success=True,
+    result="Generated comprehensive sales analysis report",
+    duration=4.2,
+    used_tools=["data_analyzer", "chart_generator", "report_writer"]
+)
+
+# Synchronous reporting
+reported_task_sync = backend.report_external_task(
+    agent_id="agent-123",
+    id=str(uuid.uuid4()),
+    input="Send notification email",
+    result="Email sent successfully",
+    used_tools=["email_sender"]
+)
 ```
 
 ## Custom LLM Key Resolution

@@ -4,7 +4,7 @@ This AGENTS.md file provides specific guidance for AI agents working with the Ta
 
 ## Module Overview
 
-The Tasks module enables comprehensive management of task execution within the xpander.ai platform. It supports agent-based task execution and integrates seamlessly with other modules.
+The Tasks module enables comprehensive management of task execution within the xpander.ai platform. It supports agent-based task execution, external task reporting, and integrates seamlessly with other modules.
 
 ## Module Structure for AI Agents
 
@@ -63,6 +63,52 @@ created_task = await tasks.acreate(
     events_streaming=True
 )
 assert created_task.events_streaming is True
+```
+
+### External Task Reporting Patterns (Test-Verified)
+```python
+import uuid
+from xpander_sdk.modules.tasks.sub_modules.task import Task
+from xpander_sdk.models.shared import Tokens
+
+# AI agents should follow these patterns for reporting external tasks
+# Basic external task reporting
+task_id = str(uuid.uuid4())
+reported_task = await Task.areport_external_task(
+    agent_id=XPANDER_AGENT_ID,
+    id=task_id,
+    input="External processing task",
+    result="Task completed successfully"
+)
+assert isinstance(reported_task, Task)
+assert reported_task.agent_id == XPANDER_AGENT_ID
+
+# Comprehensive external task reporting with tokens and tools
+tokens = Tokens(
+    completion_tokens=150,
+    prompt_tokens=50,
+    total_tokens=200
+)
+
+reported_task = await Task.areport_external_task(
+    agent_id=XPANDER_AGENT_ID,
+    id=str(uuid.uuid4()),
+    input="Complex external analysis",
+    llm_response={"content": "Analysis completed", "model": "gpt-4"},
+    tokens=tokens,
+    is_success=True,
+    result="Detailed analysis report generated",
+    duration=5.7,
+    used_tools=["analyzer", "formatter", "validator"]
+)
+
+# Synchronous external task reporting for non-async environments
+reported_task_sync = Task.report_external_task(
+    agent_id=XPANDER_AGENT_ID,
+    id=str(uuid.uuid4()),
+    input="Sync external task",
+    result="Sync task completed"
+)
 ```
 
 ## Data Models and Types for AI Agents

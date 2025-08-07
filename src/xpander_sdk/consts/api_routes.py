@@ -36,6 +36,7 @@ and deleting resources.
     GetTask = "/agent-execution/{task_id}/status"
     TaskCrud = "/agent-execution/{agent_or_task_id}"
     UpdateTask = "/agent-execution/{task_id}/update"
+    ReportExternalTask = "/agent-execution/{agent_id}/report_task"
     
     # Knowledge Bases Endpoints
     ListKnowledgeBases = "/knowledge_bases"
