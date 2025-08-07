@@ -7,6 +7,7 @@ The Backend Module provides rich functionality for retrieving agent runtime argu
 This module handles:
 - Resolving runtime arguments for agents, with optional fallback to environment variables
 - Supporting multiple frameworks through dispatching mechanics
+- Reporting external task execution results to the xpander.ai platform
 - Providing asynchronous and synchronous APIs
 
 ## Structure
@@ -27,6 +28,8 @@ Interface for retrieving agent runtime arguments.
 **Methods:**
 - `aget_args()`: Asynchronously resolve runtime arguments
 - `get_args()`: Synchronously resolve runtime arguments
+- `areport_external_task()`: Asynchronously report external task execution results
+- `report_external_task()`: Synchronously report external task execution results
 
 ## Usage Examples
 
@@ -49,6 +52,26 @@ args_env = await backend.aget_args()
 from xpander_sdk.modules.backend.frameworks import dispatch_get_args
 
 args = await dispatch_get_args(agent=agent, task=task)
+```
+
+### External Task Reporting
+```python
+import uuid
+from xpander_sdk.modules.backend import Backend
+
+backend = Backend()
+
+# Report external task execution
+reported_task = await backend.areport_external_task(
+    agent_id="agent-id",
+    id=str(uuid.uuid4()),
+    input="Process data batch",
+    result="Successfully processed 1000 records",
+    duration=3.2,
+    used_tools=["data_processor", "validator"]
+)
+
+print(f"Reported task: {reported_task.id}")
 ```
 
 ## Dependencies

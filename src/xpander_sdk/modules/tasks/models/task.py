@@ -6,9 +6,9 @@ and inputs for agents within the xpander.ai platform.
 """
 
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, model_validator
-from xpander_sdk.models.shared import OutputFormat
+from xpander_sdk.models.shared import OutputFormat, Tokens, XPanderSharedModel
 from xpander_sdk.models.user import User
 
 
@@ -138,3 +138,13 @@ class LocalTaskTest(BaseModel):
     agent_version: Optional[str] = None
     output_format: Optional[OutputFormat] = None
     output_schema: Optional[Dict] = None
+
+class TaskReportRequest(XPanderSharedModel):
+    id: Optional[str] = None
+    input: Optional[str] = None
+    llm_response: Optional[Any] = None
+    tokens: Optional[Tokens] = None
+    is_success: Optional[bool] = True
+    result: Optional[str] = None
+    duration: Optional[float] = 0
+    used_tools: Optional[List[str]] = []
