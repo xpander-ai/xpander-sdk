@@ -16,6 +16,7 @@ setup(
     package_dir={"": "src"},
     install_requires=[
         "python-dotenv",
+        "packaging",
         "pydantic",
         "loguru",
         "httpx",

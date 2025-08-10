@@ -16,3 +16,4 @@ nest-asyncio
 mcp
 openai
 anthropic
+packaging
