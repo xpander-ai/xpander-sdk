@@ -44,6 +44,15 @@ Manages event streams for task execution, offering real-time interaction with de
 
 Provides a simple way to register functions as event-driven task handlers.
 
+### `@on_boot` and `@on_shutdown` Decorators
+
+Provide lifecycle management for application boot and shutdown phases:
+
+- **`@on_boot`**: Executes before event listeners are set up, ideal for initialization
+- **`@on_shutdown`**: Executes during shutdown, ideal for cleanup tasks
+
+Both support async and sync functions and execute in registration order. See [Boot and Shutdown Handlers Guide](BOOT_SHUTDOWN_HANDLERS.md) for detailed usage.
+
 #### Usage
 
 - Attach to any function to make it a task handler

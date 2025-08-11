@@ -91,6 +91,26 @@ class AgentGraph(XPanderSharedModel):
             if getattr(gi, attr, None) == value:
                 return gi
         return None
+    
+    @computed_field
+    @property
+    def sub_agents(self) -> List[str]:
+        """
+        Retrieve the list of sub-agent IDs associated with this agent.
+
+        This property returns the IDs of all agents that are nested under the current agent.
+        A sub-agent is identified when the `type` of the graph item matches `AgentGraphItemType.AGENT`.
+
+        Returns:
+            List[str]:  
+                A list of unique string IDs representing the agents nested under this agent.
+        """
+        return [
+            gi.item_id
+            for gi in self.items
+            if gi.type == AgentGraphItemType.AGENT
+        ]
+
 
 
 T = TypeVar("T", bound="Agent")

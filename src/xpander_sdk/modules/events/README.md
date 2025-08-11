@@ -39,6 +39,11 @@ Main interface for event stream management and task execution.
 ### `@on_task` Decorator
 Provides a simple decorator interface for registering task handlers.
 
+### `@on_boot` and `@on_shutdown` Decorators
+Provide lifecycle management decorators:
+- `@on_boot`: Executes before event listeners are set up (initialization)
+- `@on_shutdown`: Executes during shutdown (cleanup)
+
 **Features:**
 - Support for both synchronous and asynchronous functions
 - Automatic task parameter validation

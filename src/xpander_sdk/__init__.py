@@ -24,6 +24,8 @@ from .modules.agents.agents_module import Agents, Agent, AgentsListItem
 # Task-related imports
 from .modules.tasks.tasks_module import Tasks, Task, TasksListItem, AgentExecutionStatus
 from xpander_sdk.modules.events.decorators.on_task import on_task
+from xpander_sdk.modules.events.decorators.on_boot import on_boot
+from xpander_sdk.modules.events.decorators.on_shutdown import on_shutdown
 
 # Tools and repository imports
 from .modules.tools_repository.tools_repository_module import ToolsRepository, Tool
@@ -60,6 +62,8 @@ __all__ = [
     "Task",
     "TasksListItem",
     "on_task",
+    "on_boot",
+    "on_shutdown",
     # Tools and repository
     "ToolsRepository",
     "Tool",
