@@ -13,7 +13,7 @@ import signal
 import sys
 from os import getenv
 from concurrent.futures import ThreadPoolExecutor
-from typing import Any, Awaitable, Callable, Optional, Set, Union
+from typing import Any, Awaitable, Callable, Optional, Set, Union, List
 
 import httpx
 from httpx_sse import aconnect_sse
@@ -44,6 +44,16 @@ ExecutionRequestHandler = Union[
     Callable[[Task], Awaitable[Task]],
 ]
 
+BootHandler = Union[
+    Callable[[], None],
+    Callable[[], Awaitable[None]],
+]
+
+ShutdownHandler = Union[
+    Callable[[], None],
+    Callable[[], Awaitable[None]],
+]
+
 
 class Events(ModuleBase):
     """
@@ -65,6 +75,10 @@ class Events(ModuleBase):
 
     worker: Optional[DeployedAsset] = None
     test_task: Optional[LocalTaskTest] = None
+    
+    # Class-level registries for boot and shutdown handlers
+    _boot_handlers: List[BootHandler] = []
+    _shutdown_handlers: List[ShutdownHandler] = []
 
     def __init__(
         self,
@@ -136,6 +150,9 @@ class Events(ModuleBase):
             on_execution_request (ExecutionRequestHandler): Callback handler
                 for processing task execution requests. Can be synchronous or asynchronous.
         """
+        # Execute boot handlers first, before any event listeners are set up
+        await self._execute_boot_handlers()
+        
         loop = asyncio.get_running_loop()
         for sig in (signal.SIGINT, signal.SIGTERM):
             loop.add_signal_handler(
@@ -175,6 +192,10 @@ class Events(ModuleBase):
 
         self._pool.shutdown(wait=False, cancel_futures=True)
         self._bg.clear()
+        
+        # Execute shutdown handlers after stopping event listeners but before final cleanup
+        await self._execute_shutdown_handlers()
+        
         logger.info("Listener stopped.")
 
     async def __aenter__(self) -> "Events":
@@ -500,3 +521,80 @@ class Events(ModuleBase):
         except RuntimeError:
             # No running loop, safe to run
             asyncio.run(self.start(on_task))
+    
+    # --------------------------------------------------------------------- #
+    # Boot and Shutdown Handler Management                                  #
+    # --------------------------------------------------------------------- #
+    
+    @classmethod
+    def register_boot_handler(cls, handler: BootHandler) -> None:
+        """
+        Register a boot handler to be executed before event listeners are set up.
+        
+        Args:
+            handler (BootHandler): The boot handler function to register.
+        """
+        cls._boot_handlers.append(handler)
+        logger.debug(f"Boot handler registered: {handler.__name__ if hasattr(handler, '__name__') else 'anonymous'}")
+    
+    @classmethod
+    def register_shutdown_handler(cls, handler: ShutdownHandler) -> None:
+        """
+        Register a shutdown handler to be executed during application shutdown.
+        
+        Args:
+            handler (ShutdownHandler): The shutdown handler function to register.
+        """
+        cls._shutdown_handlers.append(handler)
+        logger.debug(f"Shutdown handler registered: {handler.__name__ if hasattr(handler, '__name__') else 'anonymous'}")
+    
+    @classmethod
+    async def _execute_boot_handlers(cls) -> None:
+        """
+        Execute all registered boot handlers.
+        
+        Raises:
+            Exception: If any boot handler fails, the application will not start.
+        """
+        if not cls._boot_handlers:
+            return
+            
+        logger.info(f"Executing {len(cls._boot_handlers)} boot handler(s)...")
+        
+        for handler in cls._boot_handlers:
+            try:
+                if asyncio.iscoroutinefunction(handler):
+                    await handler()
+                else:
+                    handler()
+                logger.debug(f"Boot handler executed successfully: {handler.__name__ if hasattr(handler, '__name__') else 'anonymous'}")
+            except Exception as e:
+                logger.error(f"Boot handler failed: {handler.__name__ if hasattr(handler, '__name__') else 'anonymous'} - {e}")
+                raise
+                
+        logger.info("All boot handlers executed successfully")
+    
+    @classmethod
+    async def _execute_shutdown_handlers(cls) -> None:
+        """
+        Execute all registered shutdown handlers.
+        
+        Note: Exceptions in shutdown handlers are logged but do not prevent shutdown.
+        """
+        if not cls._shutdown_handlers:
+            return
+            
+        logger.info(f"Executing {len(cls._shutdown_handlers)} shutdown handler(s)...")
+        
+        for handler in cls._shutdown_handlers:
+            try:
+                if asyncio.iscoroutinefunction(handler):
+                    await handler()
+                else:
+                    handler()
+                logger.debug(f"Shutdown handler executed successfully: {handler.__name__ if hasattr(handler, '__name__') else 'anonymous'}")
+            except Exception as e:
+                logger.error(f"Shutdown handler failed: {handler.__name__ if hasattr(handler, '__name__') else 'anonymous'} - {e}")
+                # Continue with other shutdown handlers even if one fails
+                
+        logger.info("All shutdown handlers executed")

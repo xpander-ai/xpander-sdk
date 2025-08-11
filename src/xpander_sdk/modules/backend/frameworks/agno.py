@@ -34,7 +34,7 @@ async def build_agent_args(
 
     # team
     if xpander_agent.agno_settings.coordinate_mode:
-        sub_agents = [gi for gi in xpander_agent.graph.items if gi.type == AgentGraphItemType.AGENT]
+        sub_agents = xpander_agent.graph.sub_agents
         
         # load sub agents
         sub_agents = await asyncio.gather(
