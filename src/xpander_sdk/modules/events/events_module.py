@@ -420,7 +420,7 @@ class Events(ModuleBase):
 
                 if self.test_task:
                     logger.info(f"Sending test task {self.test_task.model_dump_json()}")
-                    await Tasks(configuration=self.configuration).create(
+                    created_task = await Tasks(configuration=self.configuration).acreate(
                         agent_id=self.agent_id,
                         prompt=self.test_task.input.text,
                         file_urls=self.test_task.input.files,
@@ -429,7 +429,15 @@ class Events(ModuleBase):
                         worker_id=self.worker.id,
                         output_format=self.test_task.output_format,
                         output_schema=self.test_task.output_schema,
+                        run_locally=True
                     )
+                    self.track(
+                    asyncio.create_task(
+                        self.handle_task_execution_request(
+                            agent_worker, created_task, on_execution_request
+                        )
+                    )
+                )
 
                 self.track(asyncio.create_task(self.heartbeat_loop(agent_worker.id)))
 
