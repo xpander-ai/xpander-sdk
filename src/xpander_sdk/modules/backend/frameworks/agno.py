@@ -233,6 +233,10 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
             )
         elif mcp.url:
             params_cls = SSEClientParams if mcp.transport == MCPServerTransport.SSE else StreamableHTTPClientParams
+            if mcp.api_key:
+                if not mcp.headers:
+                    mcp.headers = {}
+                mcp.headers['Authorization'] = f"Bearer {mcp.api_key}"
             mcp_tools.append(
                 MCPTools(
                     transport=transport,
