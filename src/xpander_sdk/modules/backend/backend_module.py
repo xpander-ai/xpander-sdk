@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional, Union
 
 from xpander_sdk.core.module_base import ModuleBase
 from xpander_sdk.models.configuration import Configuration
+from xpander_sdk.models.shared import Tokens
 from xpander_sdk.modules.agents.agents_module import Agents
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.modules.backend.frameworks.dispatch import dispatch_get_args
@@ -114,7 +115,7 @@ class Backend(ModuleBase):
         id: Optional[str] = None,
         input: Optional[str] = None,
         llm_response: Optional[Any] = None,
-        tokens: Optional[Any] = None,
+        tokens: Optional[Tokens] = None,
         is_success: Optional[bool] = True,
         result: Optional[str] = None,
         duration: Optional[float] = 0,
@@ -133,7 +134,7 @@ class Backend(ModuleBase):
             id (Optional[str]): Task identifier.
             input (Optional[str]): The input parameters or message for the task.
             llm_response (Optional[Any]): The LLM's response object.
-            tokens (Optional[Any]): The tokens used.
+            tokens (Optional[Tokens]): The tokens used.
             is_success (Optional[bool]): Task success status.
             result (Optional[str]): Final result string.
             duration (Optional[float]): Execution duration (seconds).
