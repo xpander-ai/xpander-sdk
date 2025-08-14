@@ -8,6 +8,7 @@ across the entire SDK for consistent data handling and serialization.
 from abc import ABC
 from enum import Enum
 import json
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -81,3 +82,8 @@ LLM (Large Language Model) implementations that can be used with xpander.ai.
 The models should inherit from ABC (Abstract Base Class) to ensure
 proper interface implementation.
 """
+
+class Tokens(BaseModel):
+    completion_tokens: Optional[int] = 0
+    prompt_tokens: Optional[int] = 0
+    total_tokens: Optional[int] = 0

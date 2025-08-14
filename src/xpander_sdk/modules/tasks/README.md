@@ -7,6 +7,7 @@ The Tasks Module provides rich functionality for managing tasks within the xpand
 This module handles:
 - Task creation and execution with agents
 - Task management and status updates
+- Reporting external task execution results to the platform
 - Integration with tools and services
 - Asynchronous and synchronous operations
 
@@ -39,6 +40,7 @@ Instance of a single task with execution capabilities.
 
 **Key Features:**
 - Status management (`aset_status()` / `set_status()`)
+- External task reporting (`areport_external_task()` / `report_external_task()`)
 - Obtain and set task execution result
 - Stream task events for real-time updates
 - Support for documents, files, and other task attachments
@@ -96,6 +98,24 @@ task = await tasks_manager.acreate(
 # Stream task events
 async for event in task.aevents():
     print(f"Event: {event.type}, Data: {event.data}")
+```
+
+### External Task Reporting
+```python
+import uuid
+from xpander_sdk.modules.tasks.sub_modules.task import Task
+
+# Report external task execution
+reported_task = await Task.areport_external_task(
+    agent_id="agent-id",
+    id=str(uuid.uuid4()),
+    input="Process quarterly reports",
+    result="Generated 4 quarterly reports successfully",
+    duration=6.2,
+    used_tools=["report_generator", "data_formatter"]
+)
+
+print(f"Task reported: {reported_task.id}")
 ```
 
 ## Configuration

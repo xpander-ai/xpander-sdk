@@ -47,7 +47,7 @@ from xpander_sdk.modules.knowledge_bases.knowledge_bases_module import (
 
 # Configuration and shared models
 from .models.configuration import Configuration
-from .models.shared import OutputFormat
+from .models.shared import OutputFormat, Tokens
 
 __all__ = [
     # xpander.ai Backend
@@ -79,5 +79,6 @@ __all__ = [
     # Configuration and shared
     "Configuration",
     "OutputFormat",
-    "User"
+    "User",
+    "Tokens"
 ]

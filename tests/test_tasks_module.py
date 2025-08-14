@@ -1,4 +1,5 @@
 import os
+import uuid
 from pathlib import Path
 from dotenv import load_dotenv
 import pytest
@@ -132,3 +133,145 @@ async def test_create_task_with_events():
             break  # Test succeeds once we receive the 'created' event
 
     assert found_created_event, "Expected 'created' event not found in task stream"
+
+
+@pytest.mark.asyncio
+async def test_async_report_external_task():
+    """Test reporting an external task through the Task class asynchronously."""
+    task_id = str(uuid.uuid4())
+    
+    reported_task = await Task.areport_external_task(
+        agent_id=XPANDER_AGENT_ID,
+        id=task_id,
+        input="Test external task input via Task class",
+        result="Task completed successfully through Task.areport_external_task"
+    )
+    
+    assert reported_task is not None
+    assert isinstance(reported_task, Task)
+    assert reported_task.agent_id == XPANDER_AGENT_ID
+    assert hasattr(reported_task, 'id')
+    assert hasattr(reported_task, 'status')
+
+
+@pytest.mark.asyncio
+async def test_async_report_external_task_with_tokens():
+    """Test reporting an external task with token usage."""
+    from xpander_sdk.models.shared import Tokens
+    
+    task_id = str(uuid.uuid4())
+    tokens = Tokens(
+        completion_tokens=100,
+        prompt_tokens=25,
+        total_tokens=125
+    )
+    
+    reported_task = await Task.areport_external_task(
+        agent_id=XPANDER_AGENT_ID,
+        id=task_id,
+        input="Task with token tracking",
+        llm_response={"content": "Response with token tracking", "model": "gpt-3.5-turbo"},
+        tokens=tokens,
+        is_success=True,
+        result="Task completed with token usage tracked",
+        duration=1.8,
+        used_tools=["token_counter", "text_processor"]
+    )
+    
+    assert reported_task is not None
+    assert isinstance(reported_task, Task)
+    assert reported_task.agent_id == XPANDER_AGENT_ID
+    assert hasattr(reported_task, 'id')
+    assert hasattr(reported_task, 'status')
+
+
+@pytest.mark.asyncio
+async def test_async_report_external_task_failure():
+    """Test reporting a failed external task."""
+    task_id = str(uuid.uuid4())
+    
+    reported_task = await Task.areport_external_task(
+        agent_id=XPANDER_AGENT_ID,
+        id=task_id,
+        input="Task that will fail",
+        result="Task failed due to external error",
+        is_success=False,
+        duration=0.3
+    )
+    
+    assert reported_task is not None
+    assert isinstance(reported_task, Task)
+    assert reported_task.agent_id == XPANDER_AGENT_ID
+    assert hasattr(reported_task, 'id')
+    assert hasattr(reported_task, 'status')
+
+
+def test_sync_report_external_task():
+    """Test reporting an external task synchronously through the Task class."""
+    task_id = str(uuid.uuid4())
+    
+    reported_task = Task.report_external_task(
+        agent_id=XPANDER_AGENT_ID,
+        id=task_id,
+        input="Synchronous external task via Task class",
+        result="Sync task completed successfully through Task.report_external_task",
+        duration=2.1
+    )
+    
+    assert reported_task is not None
+    assert isinstance(reported_task, Task)
+    assert reported_task.agent_id == XPANDER_AGENT_ID
+    assert hasattr(reported_task, 'id')
+    assert hasattr(reported_task, 'status')
+
+
+def test_sync_report_external_task_with_multiple_tools():
+    """Test reporting an external task with multiple tools synchronously."""
+    task_id = str(uuid.uuid4())
+    
+    reported_task = Task.report_external_task(
+        agent_id=XPANDER_AGENT_ID,
+        id=task_id,
+        input="Task utilizing multiple external tools",
+        result="Successfully completed task using multiple tools",
+        duration=4.2,
+        used_tools=["web_scraper", "data_analyzer", "report_generator", "email_notifier"]
+    )
+    
+    assert reported_task is not None
+    assert isinstance(reported_task, Task)
+    assert reported_task.agent_id == XPANDER_AGENT_ID
+    assert hasattr(reported_task, 'id')
+    assert hasattr(reported_task, 'status')
+
+
+def test_sync_report_external_task_with_llm_response():
+    """Test reporting an external task with detailed LLM response."""
+    task_id = str(uuid.uuid4())
+    
+    llm_response = {
+        "content": "This is a detailed LLM response with structured data",
+        "model": "gpt-4",
+        "finish_reason": "stop",
+        "usage": {
+            "prompt_tokens": 45,
+            "completion_tokens": 75,
+            "total_tokens": 120
+        }
+    }
+    
+    reported_task = Task.report_external_task(
+        agent_id=XPANDER_AGENT_ID,
+        id=task_id,
+        input="Task with comprehensive LLM response",
+        llm_response=llm_response,
+        result="Task completed with detailed LLM interaction",
+        duration=3.5,
+        is_success=True
+    )
+    
+    assert reported_task is not None
+    assert isinstance(reported_task, Task)
+    assert reported_task.agent_id == XPANDER_AGENT_ID
+    assert hasattr(reported_task, 'id')
+    assert hasattr(reported_task, 'status')

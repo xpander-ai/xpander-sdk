@@ -106,3 +106,117 @@ class Backend(ModuleBase):
                 override=override
             )
         )
+    
+    async def areport_external_task(
+        self,
+        agent_id: Optional[str] = None,
+        agent: Optional[Agent] = None,
+        id: Optional[str] = None,
+        input: Optional[str] = None,
+        llm_response: Optional[Any] = None,
+        tokens: Optional[Any] = None,
+        is_success: Optional[bool] = True,
+        result: Optional[str] = None,
+        duration: Optional[float] = 0,
+        used_tools: Optional[list] = None,
+        configuration: Optional[Configuration] = None,
+    ) -> Task:
+        """
+        Asynchronously report the result of an external task.
+
+        This method will use a provided agent or agent_id. If agent is not provided or not persisted,
+        it will load the agent using the agent_id (or from the environment variable).
+
+        Args:
+            agent_id (Optional[str]): The agent's ID.
+            agent (Optional[Agent]): Optional preloaded Agent instance (takes precedence).
+            id (Optional[str]): Task identifier.
+            input (Optional[str]): The input parameters or message for the task.
+            llm_response (Optional[Any]): The LLM's response object.
+            tokens (Optional[Any]): The tokens used.
+            is_success (Optional[bool]): Task success status.
+            result (Optional[str]): Final result string.
+            duration (Optional[float]): Execution duration (seconds).
+            used_tools (Optional[list]): List of tool names used.
+            configuration (Optional[Configuration]): Optional configuration override.
+
+        Returns:
+            Task: The reported Task object from the backend.
+
+        Raises:
+            ValueError: If neither agent nor agent_id is provided.
+        """
+        used_tools = used_tools or []
+        configuration = configuration or self.configuration
+
+        agent_id = agent.id if agent else agent_id
+        agent_id = agent_id or getenv("XPANDER_AGENT_ID")
+        
+        # Call Task.areport_external_task with all arguments.
+        return await Task.areport_external_task(
+            configuration=configuration,
+            agent_id=agent_id,
+            id=id,
+            input=input,
+            llm_response=llm_response,
+            tokens=tokens,
+            is_success=is_success,
+            result=result,
+            duration=duration,
+            used_tools=used_tools,
+        )
+
+    def report_external_task(
+        self,
+        agent_id: Optional[str] = None,
+        agent: Optional[Agent] = None,
+        id: Optional[str] = None,
+        input: Optional[str] = None,
+        llm_response: Optional[Any] = None,
+        tokens: Optional[Any] = None,
+        is_success: Optional[bool] = True,
+        result: Optional[str] = None,
+        duration: Optional[float] = 0,
+        used_tools: Optional[list] = None,
+        configuration: Optional[Configuration] = None,
+    ) -> Task:
+        """
+        Synchronously report the result of an external task.
+
+        This is the blocking version of areport_external_task(). It supports either a provided Agent
+        instance (preferred), or loads by agent_id as needed.
+
+        Args:
+            agent_id (Optional[str]): The agent's ID.
+            agent (Optional[Agent]): Optional preloaded Agent instance (takes precedence).
+            id (Optional[str]): Task identifier.
+            input (Optional[str]): The input parameters or message for the task.
+            llm_response (Optional[Any]): The LLM's response object.
+            tokens (Optional[Any]): The tokens used.
+            is_success (Optional[bool]): Task success status.
+            result (Optional[str]): Final result string.
+            duration (Optional[float]): Execution duration (seconds).
+            used_tools (Optional[list]): List of tool names used.
+            configuration (Optional[Configuration]): Optional configuration override.
+
+        Returns:
+            Task: The reported Task object from the backend.
+
+        Raises:
+            ValueError: If neither agent nor agent_id is provided.
+        """
+        return run_sync(
+            self.areport_external_task(
+                agent_id=agent_id,
+                agent=agent,
+                id=id,
+                input=input,
+                llm_response=llm_response,
+                tokens=tokens,
+                is_success=is_success,
+                result=result,
+                duration=duration,
+                used_tools=used_tools,
+                configuration=configuration,
+            )
+        )
