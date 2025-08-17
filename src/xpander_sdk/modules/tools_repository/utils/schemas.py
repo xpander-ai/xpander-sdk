@@ -46,6 +46,9 @@ def build_model_from_schema(
         fields = FIELD_SPECS.copy()
     else:
         for prop_name, prop_schema in properties.items():
+            # Skip invalid field names starting with "_"
+            if prop_name.startswith("_"):
+                continue
             prop_type = prop_schema.get("type")
             description = prop_schema.get("description", None)
             default = prop_schema.get("default", None)
