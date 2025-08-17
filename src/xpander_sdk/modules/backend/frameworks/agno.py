@@ -38,7 +38,7 @@ async def build_agent_args(
         
         # load sub agents
         sub_agents = await asyncio.gather(
-            *[Agents(configuration=Configuration(api_key=xpander_agent.configuration.api_key,organization_id=xpander_agent.configuration.organization_id,base_url=xpander_agent.configuration.base_url)).aget(agent_id=sub_agent.item_id) for sub_agent in sub_agents]
+            *[Agents(configuration=Configuration(api_key=xpander_agent.configuration.api_key,organization_id=xpander_agent.configuration.organization_id,base_url=xpander_agent.configuration.base_url)).aget(agent_id=sub_agent_id) for sub_agent_id in sub_agents]
         )
         # convert to members
         members = await asyncio.gather(
