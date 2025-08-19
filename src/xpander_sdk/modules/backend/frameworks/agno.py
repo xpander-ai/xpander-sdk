@@ -14,6 +14,7 @@ from xpander_sdk.modules.tasks.sub_modules.task import Task
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerTransport, MCPServerType
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
 from agno.agent import Agent as AgnoAgent
+from agno.team import Team as AgnoTeam
 
 async def build_agent_args(
     xpander_agent: Agent,
@@ -49,7 +50,7 @@ async def build_agent_args(
             "team_id": xpander_agent.id,
             "success_criteria": xpander_agent.instructions.goal_str,
             "mode": "coordinate",
-            "members": [AgnoAgent(**member) for member in members],
+            "members": [AgnoAgent(**member) if "agent_id" in member else AgnoTeam(**member) for member in members],
             "add_member_tools_to_system_message": True,
             "enable_agentic_context": True,
             "enable_team_history": True,
