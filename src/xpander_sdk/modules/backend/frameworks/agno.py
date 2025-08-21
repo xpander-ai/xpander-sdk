@@ -48,7 +48,7 @@ async def build_agent_args(
         
         args.update({
             "team_id": xpander_agent.id,
-            "success_criteria": xpander_agent.instructions.goal_str,
+            "success_criteria": xpander_agent.expected_output if xpander_agent.expected_output and len(xpander_agent.expected_output) != 0 else xpander_agent.instructions.goal_str,
             "mode": "coordinate",
             "members": [AgnoAgent(**member) if "agent_id" in member else AgnoTeam(**member) for member in members],
             "add_member_tools_to_system_message": True,
