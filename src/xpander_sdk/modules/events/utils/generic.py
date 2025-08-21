@@ -1,6 +1,6 @@
 from xpander_sdk.models.configuration import Configuration
 
-EVENT_STREAMING_ENDPOINT = "{base}/{organization_id}/events"
+EVENT_STREAMING_ENDPOINT = "{base}/{organization_id}/events/"
 
 
 def backoff_delay(attempt: int) -> int:
