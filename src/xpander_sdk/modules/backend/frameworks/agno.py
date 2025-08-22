@@ -214,7 +214,7 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
         if mcp.type == MCPServerType.Local:
             
             # protection for serverless xpander
-            is_aws_mcp = True if mcp.command and "awslabs" in mcp.command else False
+            is_aws_mcp = True if mcp.command and "aws-api-mcp-server" in mcp.command else False
             if is_aws_mcp and is_xpander_cloud:
                 logger.warning(f"skipping aws mcp on agent {agent.id} due to xpander serverless")
                 continue
