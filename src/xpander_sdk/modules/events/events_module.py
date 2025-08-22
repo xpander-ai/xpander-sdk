@@ -298,11 +298,14 @@ class Events(ModuleBase):
                 async with httpx.AsyncClient(
                     timeout=None, follow_redirects=True
                 ) as client:
+                    if not url.endswith('/'):
+                        url += "/"
                     async with aconnect_sse(
                         client,
                         "GET",
                         url,
                         headers=get_events_headers(configuration=self.configuration),
+                        follow_redirects=True
                     ) as event_source:
                         async for sse in event_source.aiter_sse():
                             yield sse
