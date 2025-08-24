@@ -1,7 +1,7 @@
 import asyncio
 import shlex
 from os import getenv
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from loguru import logger
 
@@ -12,6 +12,7 @@ from xpander_sdk.modules.agents.models.agent import AgentGraphItemType
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.modules.tasks.sub_modules.task import Task
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerTransport, MCPServerType
+from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
 from agno.agent import Agent as AgnoAgent
 from agno.team import Team as AgnoTeam
@@ -75,7 +76,44 @@ async def build_agent_args(
 
     if override:
         args.update(override)
+        
+    # append tools hooks
+    async def on_tool_call_hook(
+        function_name: str, function_call: Callable, arguments: Dict[str, Any]
+    ):
+        # preflight and monitoring + metrics
+        try:
+            matched_tool = (xpander_agent.tools.get_tool_by_id(tool_id=function_name) or xpander_agent.tools.get_tool_by_name(tool_name=function_name)) if xpander_agent.tools and len(xpander_agent.tools.list) != 0 else None
+            if not matched_tool and task: # agent / mcp tool
+                tool_instance = Tool(
+                    configuration=xpander_agent.configuration,
+                    id=function_name,
+                    name=function_name,
+                    method="GET",
+                    path=f"/tools/{function_name}",
+                    should_add_to_graph=False,
+                    is_local=True,
+                    is_synced=True,
+                    description=function_name
+                )
+                await tool_instance.agraph_preflight_check(agent_id=xpander_agent.id, configuration=tool_instance.configuration, task_id=task.id)
+        except Exception:
+            pass
+        
+        # Call the function
+        if asyncio.iscoroutinefunction(function_call):
+            result = await function_call(**arguments)
+        else:
+            result = function_call(**arguments)
 
+        # Return the result
+        return result
+
+    if not 'tool_hooks' in args:
+        args['tool_hooks'] = []
+    
+    args['tool_hooks'].append(on_tool_call_hook)
+    
     return args
 
 

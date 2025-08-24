@@ -98,7 +98,19 @@ class ToolsRepository(XPanderSharedModel):
         Returns:
             Tool: The tool corresponding to the given ID.
         """
-        return next((tool for tool in self.list if tool.id == tool_id))
+        return next((tool for tool in self.list if tool.id == tool_id), None)
+
+    def get_tool_by_name(self, tool_name: str):
+        """
+        Retrieve a tool by its unique identifier.
+
+        Args:
+            tool_name (str): The ID of the tool to retrieve.
+
+        Returns:
+            Tool: The tool corresponding to the given ID.
+        """
+        return next((tool for tool in self.list if tool.name == tool_name), None)
 
     def should_sync_local_tools(self):
         """
