@@ -6,14 +6,13 @@ the xpander.ai Backend-as-a-Service platform, supporting tool syncronization and
 integration with AI agents.
 """
 
-import asyncio
 from inspect import Parameter, Signature
 from typing import Any, Callable, ClassVar, List, Optional, Type
 from pydantic import BaseModel, computed_field
-from xpander_sdk.core.state import State
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
+from xpander_sdk.utils.event_loop import run_sync
 
 class ToolsRepository(XPanderSharedModel):
     """
@@ -176,12 +175,7 @@ class ToolsRepository(XPanderSharedModel):
                         )
                         return result
 
-                    try:
-                        loop = asyncio.get_running_loop()
-                    except RuntimeError:
-                        return asyncio.run(_run())
-                    else:
-                        return loop.run_until_complete(_run())
+                    return run_sync(_run())
 
                 # Set metadata for agno compatibility
                 tool_function.__name__ = tool_ref.id
