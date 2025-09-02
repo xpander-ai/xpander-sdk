@@ -8,7 +8,7 @@ and inputs for agents within the xpander.ai platform.
 from enum import Enum
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, model_validator
-from xpander_sdk.models.shared import OutputFormat, Tokens, XPanderSharedModel
+from xpander_sdk.models.shared import ExecutionTokens, OutputFormat, Tokens, XPanderSharedModel
 from xpander_sdk.models.user import User
 
 
@@ -148,3 +148,20 @@ class TaskReportRequest(XPanderSharedModel):
     result: Optional[str] = None
     duration: Optional[float] = 0
     used_tools: Optional[List[str]] = []
+
+class ExecutionMetricsReport(XPanderSharedModel):
+    execution_id: str
+    source: str
+    sub_executions: Optional[list[str]] = []
+    memory_thread_id: str
+    task: str
+    triggered_by: Optional[str] = "N/A"
+    skills: Optional[list[str]] = []
+    status: str
+    duration: float
+    ai_model: str
+    worker: Optional[str] = None
+    ai_employee_id: Optional[str] = None
+    api_calls_made: Optional[List[Any]] = None
+    result: Optional[str]
+    llm_tokens: Optional[ExecutionTokens] = ExecutionTokens()

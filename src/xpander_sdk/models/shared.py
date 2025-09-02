@@ -9,7 +9,7 @@ from abc import ABC
 from enum import Enum
 import json
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 
 
 class XPanderSharedModel(BaseModel):
@@ -86,4 +86,13 @@ proper interface implementation.
 class Tokens(BaseModel):
     completion_tokens: Optional[int] = 0
     prompt_tokens: Optional[int] = 0
-    total_tokens: Optional[int] = 0
+    
+    @computed_field
+    @property
+    def total_tokens(self) -> int:
+        return self.completion_tokens+self.prompt_tokens
+
+
+class ExecutionTokens(BaseModel):
+    inner: Optional[Tokens] = Tokens()
+    worker: Optional[Tokens] = Tokens()
