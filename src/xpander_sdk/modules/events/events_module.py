@@ -353,6 +353,8 @@ class Events(ModuleBase):
             logger.exception(f"Execution handler failed - {str(e)}")
             error = str(e)
         finally:
+            task_used_tokens = task.tokens
+            task_used_tools = task.used_tools
             await self._release_worker(agent_worker.id)
 
             if error:
@@ -364,6 +366,11 @@ class Events(ModuleBase):
                 task.status = AgentExecutionStatus.Completed
 
             await task.asave()
+            task.tokens = task_used_tokens
+            task.used_tools = task_used_tools
+            
+            if task.tokens:
+                await task.areport_metrics()
 
             logger.info(f"Finished handling task {task.id}")
 

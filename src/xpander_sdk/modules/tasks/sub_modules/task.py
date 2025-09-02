@@ -43,12 +43,13 @@ from xpander_sdk.models.events import (
     ToolCallRequest,
     ToolCallResult,
 )
-from xpander_sdk.models.shared import OutputFormat, Tokens, XPanderSharedModel
+from xpander_sdk.models.shared import ExecutionTokens, OutputFormat, Tokens, XPanderSharedModel
 from xpander_sdk.modules.events.utils.generic import get_events_base, get_events_headers
 from xpander_sdk.modules.tasks.models.task import (
     AgentExecutionInput,
     AgentExecutionStatus,
     HumanInTheLoop,
+    ExecutionMetricsReport,
     PendingECARequest,
     TaskReportRequest,
 )
@@ -133,6 +134,11 @@ class Task(XPanderSharedModel):
     events_streaming: Optional[bool] = False
     additional_context: Optional[str] = None
     expected_output: Optional[str] = None,
+    
+    # metrics
+    tokens: Optional[Tokens] = None
+    used_tools: Optional[List[str]] = []
+    duration: Optional[float] = 0
 
     def model_post_init(self, context):
         """
@@ -421,6 +427,86 @@ class Task(XPanderSharedModel):
 
         while queue:
             yield queue.pop(0)
+    
+    async def areport_metrics(
+        self,
+        configuration: Optional[Configuration] = None
+    ):
+        """
+        Asynchronously report LLM task metrics to xpander.ai.
+
+        Args:
+            configuration (Optional[Configuration], optional): 
+                API client configuration. If not provided, a new instance is created. Defaults to None.
+
+        Raises:
+            ModuleException: If the request fails due to an HTTP or unexpected error.
+
+        Returns:
+            None
+        """
+        try:
+            configuration = configuration or Configuration()
+            client = APIClient(configuration=configuration)
+            
+            if not self.tokens:
+                raise ValueError("tokens must be provided. task.tokens = Tokens()")
+            
+            task_report_request = ExecutionMetricsReport(
+                execution_id=self.id,
+                source=self.source,
+                memory_thread_id=self.id,
+                task=self.input.text or "",
+                status=self.status.value,
+                duration=0.0,
+                ai_model="xpander",
+                api_calls_made=self.used_tools,
+                result=self.result or None,
+                llm_tokens=ExecutionTokens(worker=self.tokens)
+            )
+
+            await client.make_request(
+                path=APIRoute.ReportExecutionMetrics.format(
+                    agent_id=self.agent_id
+                ),
+                method="POST",
+                payload=task_report_request.model_dump_safe(),
+            )
+
+        except HTTPStatusError as e:
+            raise ModuleException(
+                status_code=e.response.status_code,
+                description=e.response.text
+            )
+        except Exception as e:
+            raise ModuleException(
+                status_code=500,
+                description=f"Failed to report metrics - {str(e)}"
+            )
+
+
+    def report_metrics(
+        self,
+        configuration: Optional[Configuration] = None
+    ):
+        """
+        Report LLM task metrics to xpander.ai.
+
+        Args:
+            configuration (Optional[Configuration], optional): 
+                API client configuration. If not provided, a new instance is created. Defaults to None.
+
+        Raises:
+            ModuleException: If the request fails due to an HTTP or unexpected error.
+
+        Returns:
+            None
+        """
+        return run_sync(
+            self.areport_metrics(
+                configuration=configuration
+            )
+        )
     
     @classmethod
     async def areport_external_task(
