@@ -35,7 +35,7 @@ async def build_agent_args(
     args["tools"] = await _resolve_agent_tools(agent=xpander_agent)
 
     # team
-    if xpander_agent.agno_settings.coordinate_mode:
+    if xpander_agent.agno_settings.coordinate_mode and xpander_agent.graph.sub_agents and len(xpander_agent.graph.sub_agents) != 0:
         sub_agents = xpander_agent.graph.sub_agents
         
         # load sub agents
