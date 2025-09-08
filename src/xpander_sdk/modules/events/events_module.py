@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import signal
 import sys
 from os import getenv
@@ -22,6 +23,7 @@ from loguru import logger
 from xpander_sdk.core.module_base import ModuleBase
 from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.configuration import Configuration
+from xpander_sdk.modules.agents.models.agent import SourceNodeType
 from xpander_sdk.modules.tasks.tasks_module import Tasks
 
 from .utils.git_init import configure_git_credentials
@@ -377,7 +379,25 @@ class Events(ModuleBase):
             # local test task, finish? kill the worker
             if self.test_task:
                 logger.info("Local task handled, exiting")
-                sys.exit(0)
+                
+                # Print the task result for CLI
+                if task.result:
+                    logger.info("\n" + "="*50)
+                    logger.info("TASK RESULT:")
+                    logger.info("="*50)
+                    if isinstance(task.result, (dict, list)):
+                        import json
+                        logger.info(json.dumps(task.result, indent=2))
+                    else:
+                        logger.info(task.result)
+                    logger.info("="*50 + "\n")
+                else:
+                    logger.info("\n" + "="*50)
+                    logger.info("TASK COMPLETED (No result set)")
+                    logger.info("="*50 + "\n")
+                
+                # Use os._exit to avoid exception traceback from asyncio
+                os._exit(0)
 
     async def register_agent_worker(
         self,
@@ -429,7 +449,7 @@ class Events(ModuleBase):
                     )
 
                 if self.test_task:
-                    logger.info(f"Sending test task {self.test_task.model_dump_json()}")
+                    logger.info(f"Invoking agent {self.test_task.model_dump_json()}")
                     created_task = await Tasks(configuration=self.configuration).acreate(
                         agent_id=self.agent_id,
                         prompt=self.test_task.input.text,
@@ -439,7 +459,8 @@ class Events(ModuleBase):
                         worker_id=self.worker.id,
                         output_format=self.test_task.output_format,
                         output_schema=self.test_task.output_schema,
-                        run_locally=True
+                        run_locally=True,
+                        source=SourceNodeType.SDK.value
                     )
                     self.track(
                     asyncio.create_task(
