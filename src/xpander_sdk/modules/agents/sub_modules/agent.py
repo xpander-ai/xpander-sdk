@@ -599,7 +599,7 @@ class Agent(XPanderSharedModel):
             schema=schema,
             db_url=connection_string.connection_uri.uri,
             auto_upgrade_schema=True,
-            mode="team" if self.agno_settings.coordinate_mode else "agent"
+            mode="team" if self.agno_settings.coordinate_mode and self.graph.sub_agents and len(self.graph.sub_agents) != 0 else "agent"
         )
 
     def get_storage(self) -> Any:
