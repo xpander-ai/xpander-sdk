@@ -24,8 +24,7 @@ setup(
         "nest-asyncio",
     ],
     extras_require={
-        # TODO: add more frameworks
-        "agno": ["agno", "sqlalchemy", "psycopg2-binary"],
+        "agno": ["agno<2.0", "sqlalchemy", "psycopg2-binary"],
         "dev": ["black", "pre-commit", "pytest", "anthropic", "mcp", "openai"],
     },
     classifiers=[
