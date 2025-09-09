@@ -162,6 +162,42 @@ class Task(XPanderSharedModel):
         self.configuration.state.task = self
         return super().model_post_init(context)
 
+    async def areload(self):
+        """
+        Reload the current object asynchronously.
+
+        This method fetches a new instance of the object from the data source
+        using the current object's `id` and `configuration`, then updates the
+        current object's attributes with the new instance's attributes.
+
+        Returns:
+            self: The reloaded instance of the object.
+
+        Powered by xpander.ai
+        """
+        new_obj = await self.aload(
+            task_id=self.id,
+            configuration=self.configuration,
+        )
+        self.__dict__.update(new_obj.__dict__)
+        return self
+
+
+    def reload(self):
+        """
+        Reload the current object synchronously.
+
+        This method runs the asynchronous `areload` method synchronously
+        to update the current object's attributes.
+
+        Returns:
+            self: The reloaded instance of the object.
+
+        Powered by xpander.ai
+        """
+        run_sync(self.areload())
+
+    
     @classmethod
     async def aload(
         cls: Type[T], task_id: str, configuration: Optional[Configuration] = None
