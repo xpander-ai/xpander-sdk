@@ -35,7 +35,7 @@ async def build_agent_args(
     args["tools"] = await _resolve_agent_tools(agent=xpander_agent)
 
     # team
-    if xpander_agent.agno_settings.coordinate_mode and xpander_agent.graph.sub_agents and len(xpander_agent.graph.sub_agents) != 0:
+    if xpander_agent.is_a_team:
         sub_agents = xpander_agent.graph.sub_agents
         
         # load sub agents
@@ -50,7 +50,7 @@ async def build_agent_args(
         args.update({
             "team_id": xpander_agent.id,
             "success_criteria": xpander_agent.expected_output if xpander_agent.expected_output and len(xpander_agent.expected_output) != 0 else xpander_agent.instructions.goal_str,
-            "mode": "coordinate",
+            "mode": "coordinate" if xpander_agent.agno_settings.coordinate_mode else "route",
             "members": [AgnoAgent(**member) if "agent_id" in member else AgnoTeam(**member) for member in members],
             "add_member_tools_to_system_message": True,
             "enable_agentic_context": True,

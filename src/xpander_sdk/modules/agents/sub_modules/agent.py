@@ -595,11 +595,11 @@ class Agent(XPanderSharedModel):
         schema = get_db_schema_name(agent_id=self.id)
 
         return PostgresStorage(
-            table_name="team_sessions" if self.agno_settings.coordinate_mode else "agent_sessions",
+            table_name="team_sessions" if self.is_a_team else "agent_sessions",
             schema=schema,
             db_url=connection_string.connection_uri.uri,
             auto_upgrade_schema=True,
-            mode="team" if self.agno_settings.coordinate_mode and self.graph.sub_agents and len(self.graph.sub_agents) != 0 else "agent"
+            mode="team" if self.is_a_team else "agent"
         )
 
     def get_storage(self) -> Any:
@@ -688,6 +688,17 @@ class Agent(XPanderSharedModel):
             bool: True if one or more knowledge bases are linked, otherwise False.
         """
         return len(self.knowledge_bases) != 0
+    
+    @computed_field
+    @property
+    def is_a_team(self) -> bool:
+        """
+        Check if this agent run in Team mode
+
+        Returns:
+            bool: True if has sub agents, otherwise False.
+        """
+        return self.graph.sub_agents and len(self.graph.sub_agents) != 0
 
     def knowledge_bases_retriever(
         self,
