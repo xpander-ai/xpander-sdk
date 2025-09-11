@@ -9,6 +9,9 @@ integration with AI agents.
 from inspect import Parameter, Signature
 from typing import Any, Callable, ClassVar, List, Optional, Type
 from pydantic import BaseModel, computed_field
+from xpander_sdk.consts.api_routes import APIRoute
+from xpander_sdk.core.xpander_api_client import APIClient
+from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
@@ -47,6 +50,7 @@ class ToolsRepository(XPanderSharedModel):
     tools: List[Tool] = []
     
     agent_graph: Optional[Any] = None
+    is_async: Optional[bool] = False
 
     # Immutable registry for tools defined via decorator
     _local_tools: ClassVar[List[Tool]] = []
@@ -83,7 +87,8 @@ class ToolsRepository(XPanderSharedModel):
 
         for tool in tools:
             tool.set_configuration(configuration=self.configuration)
-            tool.set_schema_overrides(agent_graph=self.agent_graph)
+            if self.agent_graph:
+                tool.set_schema_overrides(agent_graph=self.agent_graph)
 
         return tools
 
@@ -155,43 +160,81 @@ class ToolsRepository(XPanderSharedModel):
             schema_cls: Type[BaseModel] = tool.schema
 
             # Create closure to capture tool and schema_cls
-            def make_tool_function(tool_ref, schema_ref):
-                def tool_function(payload: schema_ref) -> Any:
-                    """
-                    Normalized tool function that accepts a single Pydantic model payload.
-                    This payload exactly matches the tool's expected schema structure.
-                    """
+            def make_tool_function(tool_ref, schema_ref, is_async: bool = False):
+                """
+                Factory that builds a normalized tool function.
+                - If is_async=True, returns an async function (awaitable).
+                - If is_async=False, returns a sync function (blocking, calls run_sync).
+                """
 
-                    # Convert the validated Pydantic model to a dict for the backend
-                    payload_dict = payload.model_dump(exclude_none=True)
-
-                    async def _run():
-                        result = await tool_ref.ainvoke(
-                            agent_id=self.configuration.state.agent.id,
-                            agent_version=self.configuration.state.agent.version,
+                async def _execute(payload_dict: dict) -> Any:
+                    if tool_ref.is_standalone:
+                        return await tool_ref.ainvoke_standalone(
                             payload=payload_dict,
                             configuration=self.configuration,
-                            task_id=self.configuration.state.task.id if self.configuration.state.task else None,
                         )
-                        return result
+                    return await tool_ref.ainvoke(
+                        agent_id=self.configuration.state.agent.id,
+                        agent_version=self.configuration.state.agent.version,
+                        payload=payload_dict,
+                        configuration=self.configuration,
+                        task_id=self.configuration.state.task.id if self.configuration.state.task else None,
+                    )
 
-                    return run_sync(_run())
+                if is_async:
+                    async def tool_function(payload: schema_ref) -> Any:
+                        """
+                        Normalized async tool function that accepts a single Pydantic model payload.
+                        """
+                        payload_dict = payload.model_dump(exclude_none=True)
+                        return await _execute(payload_dict)
 
-                # Set metadata for agno compatibility
+                else:
+                    def tool_function(payload: schema_ref) -> Any:
+                        """
+                        Normalized sync tool function that accepts a single Pydantic model payload.
+                        """
+                        payload_dict = payload.model_dump(exclude_none=True)
+                        return run_sync(_execute(payload_dict))
+
+                # --- Metadata ---
                 tool_function.__name__ = tool_ref.id
                 tool_function.__doc__ = tool_ref.description or tool_ref.name
 
-                # Create signature manually since the type annotation approach doesn't work
+                # --- Signature ---
                 payload_param = Parameter(
                     name="payload",
                     kind=Parameter.POSITIONAL_OR_KEYWORD,
                     annotation=schema_ref,
                 )
-                tool_function.__signature__ = Signature([payload_param])
+                tool_function.__signature__ = Signature(
+                    [payload_param],
+                    return_annotation=Any,
+                )
+
+                # --- Annotations (for libraries that read __annotations__) ---
+                ann = getattr(tool_function, "__annotations__", {})
+                ann["payload"] = schema_ref
+                ann["return"] = Any
+                tool_function.__annotations__ = ann
 
                 return tool_function
 
-            fn = make_tool_function(tool, schema_cls)
+            fn = make_tool_function(tool, schema_cls, self.is_async)
             fn_list.append(fn)
 
         return fn_list
+
+    async def aload_tool_by_id(self, tool_id: str):
+        try:
+            connector_id, operation_id = tool_id.split("_")
+            client = APIClient(configuration=self.configuration)
+            tool = await client.make_request(
+                path=APIRoute.GetOrInvokeToolById.format(tool_id=tool_id)
+            )
+            self.tools = [Tool(configuration=self.configuration, **tool, method="POST", path="tool", is_standalone=True, connector_id=connector_id, operation_id=operation_id)]
+        except Exception as e:
+            raise ModuleException(500, f"Failed to load tool by id - {str(e)}")
+    
+    def load_tool_by_id(self, tool_id: str):
+        return run_sync(self.aload_tool_by_id(tool_id=tool_id))

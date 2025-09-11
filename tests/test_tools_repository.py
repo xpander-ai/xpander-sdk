@@ -1,21 +1,57 @@
 import asyncio
 import os
 from pathlib import Path
+from typing import Callable
 from dotenv import load_dotenv
 from pydantic import BaseModel
 import pytest
 
 from xpander_sdk import Agents, Agent
+from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.modules.tools_repository.decorators.register_tool import register_tool
+from xpander_sdk.modules.tools_repository.models.tool_invocation_result import ToolInvocationResult
 from xpander_sdk.modules.tools_repository.tools_repository_module import ToolsRepository
 
 # Load test environment variables
 test_env_path = Path(__file__).parent / ".env"
 load_dotenv(test_env_path)
+print(test_env_path)
 
 XPANDER_AGENT_ID = os.getenv("XPANDER_AGENT_ID")
 XPANDER_TASK_ID = os.getenv("XPANDER_TASK_ID")
 
+@pytest.mark.asyncio
+async def test_get_tool_by_id():
+    repo = ToolsRepository(configuration=Configuration())
+    tool_id = "1b46e570-c7c4-45e3-937f-739689e2251a_68c281bd7598616cf59b1534"
+    await repo.aload_tool_by_id(tool_id=tool_id)
+    tool = repo.functions[0]
+    assert tool is not None
+    assert isinstance(tool, Callable)
+
+@pytest.mark.asyncio
+async def test_invoke_tool_by_id():
+    repo = ToolsRepository(configuration=Configuration(), is_async=True)
+    tool_id = "1b46e570-c7c4-45e3-937f-739689e2251a_68c281bd7598616cf59b1534"
+    
+    await repo.aload_tool_by_id(tool_id=tool_id)
+    
+    tool = repo.functions[0]
+    assert tool is not None
+    assert isinstance(tool, Callable)
+    
+    payload = repo.tools[0].schema.model_validate({
+        "body_params":{},
+        "path_params":{},
+        "query_params":{
+            "engine": "google",
+            "q": "xpander"
+        }
+    })
+    
+    result = await tool(payload=payload)
+    assert result is not None
+    assert isinstance(result, ToolInvocationResult)
 
 @pytest.mark.asyncio
 async def test_invoke_remote_tool():

@@ -43,10 +43,13 @@ class Tool(XPanderSharedModel):
     path: str
     should_add_to_graph: Optional[bool] = False
     is_local: Optional[bool] = False
+    is_standalone: Optional[bool] = False
     is_synced: Optional[bool] = False
     schema_overrides: Optional[AgentGraphItemSchema] = None
     description: str = ""
     parameters: Dict[str, Any] = {}
+    connector_id: Optional[str] = None
+    operation_id: Optional[str] = None
 
     fn: Optional[Callable] = Field(default=None, exclude=True)
 
@@ -388,3 +391,50 @@ class Tool(XPanderSharedModel):
             task_id=task_id,
             tool_call_id=tool_call_id,
         ))
+    
+    async def ainvoke_standalone(
+        self,
+        payload: Any,
+        configuration: Optional[Configuration] = None,
+    ) -> ToolInvocationResult:
+        tool_invocation_result = ToolInvocationResult(
+            tool_id=self.id,
+            payload=payload,
+            is_local=self.is_local,
+        )
+
+        try:
+            if self.schema and payload:
+                try:
+                    self.schema.model_validate(payload)
+                except Exception as validation_error:
+                    raise ValueError(
+                        f"Invalid payload for tool '{self.name}': {validation_error}"
+                    ) from validation_error
+            
+            client = APIClient(configuration=configuration or self.configuration)
+            tool_invocation_result.result = await client.make_request(
+                path=APIRoute.GetOrInvokeToolById.format(tool_id=f"{self.connector_id}_{self.operation_id}"),
+                method="POST",
+                payload=payload,
+            )
+            
+            tool_invocation_result.is_success = True
+
+        except Exception as e:
+            tool_invocation_result.is_error = True
+            if isinstance(e, HTTPStatusError):
+                tool_invocation_result.status_code = e.response.status_code
+                tool_invocation_result.result = e.response.text
+            else:
+                tool_invocation_result.status_code = 500
+                tool_invocation_result.result = str(e)
+
+        return tool_invocation_result
+    
+    def invoke_standalone(
+        self,
+        payload: Any,
+        configuration: Optional[Configuration] = None,
+    ) -> ToolInvocationResult:
+        return run_sync(self.ainvoke_standalone(payload=payload,configuration=configuration))
