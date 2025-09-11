@@ -145,6 +145,7 @@ class Agent(XPanderSharedModel):
             knowledge_bases: Optional[List[AgentKnowledgeBase]]
             version: Optional[int]
             created_by: Optional[str]
+            using_nemo: Optional[bool]
             model_provider: str
             model_name: str
             webhook_url: Optional[str]
@@ -184,6 +185,7 @@ class Agent(XPanderSharedModel):
     knowledge_bases: Optional[List[AgentKnowledgeBase]] = []
     version: Optional[int] = 1
     created_by: Optional[str] = None
+    using_nemo: Optional[bool] = False
     model_provider: str
     model_name: str
     webhook_url: Optional[str] = None

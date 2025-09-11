@@ -117,7 +117,9 @@ async def build_agent_args(
     if not 'tool_hooks' in args:
         args['tool_hooks'] = []
     
-    args['tool_hooks'].append(on_tool_call_hook)
+    # disable hooks for NeMo due to issue with tool_hooks and NeMo
+    if xpander_agent.using_nemo == False:
+        args['tool_hooks'].append(on_tool_call_hook)
     
     return args
 
