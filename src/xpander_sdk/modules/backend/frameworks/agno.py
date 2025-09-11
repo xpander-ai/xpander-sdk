@@ -20,7 +20,9 @@ from agno.team import Team as AgnoTeam
 async def build_agent_args(
     xpander_agent: Agent,
     task: Optional[Task] = None,
-    override: Optional[Dict[str, Any]] = None
+    override: Optional[Dict[str, Any]] = None,
+    tools: Optional[List[Callable]] = None
+    
 ) -> Dict[str, Any]:
     model = _load_llm_model(agent=xpander_agent, override=override)
     args: Dict[str, Any] = {}
@@ -33,6 +35,9 @@ async def build_agent_args(
     _configure_additional_context(args=args, agent=xpander_agent, task=task)
 
     args["tools"] = await _resolve_agent_tools(agent=xpander_agent)
+    
+    if tools and len(tools) != 0:
+        args["tools"].extend(tools)
 
     # team
     if xpander_agent.is_a_team:

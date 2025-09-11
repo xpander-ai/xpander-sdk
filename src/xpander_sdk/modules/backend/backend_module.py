@@ -1,6 +1,6 @@
 import json
 from os import getenv
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional, Union
 
 from xpander_sdk.core.module_base import ModuleBase
 from xpander_sdk.models.configuration import Configuration
@@ -228,7 +228,8 @@ class Backend(ModuleBase):
         agent: Optional[Agent] = None,
         agent_version: Optional[int] = None,
         task: Optional[Task] = None,
-        override: Optional[Dict[str, Any]] = None
+        override: Optional[Dict[str, Any]] = None,
+        tools: Optional[List[Callable]] = None,
     ) -> Dict[str, Any]:
         """
         Asynchronously resolve runtime arguments for the specified agent.
@@ -239,6 +240,7 @@ class Backend(ModuleBase):
             agent_version (Optional[int]): Optional version to resolve.
             task (Optional[Task]): Optional Task object providing runtime input/output context.
             override (Optional[Dict[str, Any]]): Optional overrides for final arguments.
+            tools (Optional[List[Callable]]): Optional additional tools to be added to the agent arguments.
 
         Returns:
             Dict[str, Any]: Resolved argument dictionary to use with the agent.
@@ -263,7 +265,7 @@ class Backend(ModuleBase):
                 "or set via the 'XPANDER_AGENT_ID' environment variable."
             )
 
-        return await dispatch_get_args(agent=xpander_agent, task=task, override=override)
+        return await dispatch_get_args(agent=xpander_agent, task=task, override=override, tools=tools)
 
     def get_args(
         self,
@@ -271,7 +273,8 @@ class Backend(ModuleBase):
         agent: Optional[Agent] = None,
         agent_version: Optional[int] = None,
         task: Optional[Task] = None,
-        override: Optional[Dict[str, Any]] = None
+        override: Optional[Dict[str, Any]] = None,
+        tools: Optional[List[Callable]] = None,
     ) -> Dict[str, Any]:
         """
         Synchronously resolve runtime arguments for the specified agent.
@@ -285,6 +288,7 @@ class Backend(ModuleBase):
             agent_version (Optional[int]): Optional version to resolve.
             task (Optional[Task]): Optional Task object providing runtime input/output context.
             override (Optional[Dict[str, Any]]): Optional overrides for final arguments.
+            tools (Optional[List[Callable]]): Optional additional tools to be added to the agent arguments.
 
         Returns:
             Dict[str, Any]: Resolved argument dictionary to use with the agent.
@@ -298,7 +302,8 @@ class Backend(ModuleBase):
                 agent=agent,
                 agent_version=agent_version,
                 task=task,
-                override=override
+                override=override,
+                tools=tools
             )
         )
     
