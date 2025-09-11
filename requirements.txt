@@ -10,7 +10,7 @@ black
 pre-commit
 pytest-asyncio
 sqlalchemy
-"agno<2.0"
+agno<2.0
 psycopg2-binary
 nest-asyncio
 mcp
