@@ -46,6 +46,9 @@ and deleting resources.
     ListKnowledgeBaseDocuments = "/knowledge_bases/{knowledge_base_id}/list"
     KnowledgeBaseDocumentsCrud = "/knowledge_bases/{knowledge_base_id}"
     GetKnowledgeBaseDetails = "/knowledge_bases/{knowledge_base_id}/details"
+    
+    # Tools
+    GetOrInvokeToolById = "/tools/{tool_id}"
 
     def __str__(self) -> str:
         return str(self.value)
