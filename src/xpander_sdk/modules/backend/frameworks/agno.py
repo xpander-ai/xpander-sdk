@@ -248,7 +248,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
         )
 
     # NVIDIA NIM Provider - supports NVIDIA's inference microservices
-    elif provider == "nvidiaNim":
+    elif provider == "nim":
         from agno.models.nvidia import Nvidia
 
         return Nvidia(
