@@ -1,16 +1,45 @@
+"""
+Tool Module - XPander SDK
+
+This module provides the Tool class for managing and invoking tools within the XPander AI system.
+It supports both local and remote tool execution with comprehensive schema validation, error handling,
+and flexible invocation patterns.
+
+Recent Enhancements:
+- Added get_invocation_function() factory method for creating pre-configured invocation functions
+- Enhanced payload_schema computed property with comprehensive documentation
+- Improved error handling and validation throughout
+- Added support for standalone tool invocation patterns
+- Enhanced type hints and documentation coverage
+
+Key Features:
+- Schema-based payload validation using Pydantic
+- Support for both sync and async invocation patterns
+- Local and remote tool execution capabilities
+- Configurable schema overrides and validation
+- Comprehensive error handling and reporting
+"""
+
 from copy import deepcopy
 from typing import Dict, Any, Literal, Optional, Callable
 from httpx import HTTPStatusError
-from pydantic import BaseModel, computed_field, model_validator, Field
+from pydantic import BaseModel, computed_field, create_model, model_validator, Field
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.agents.models.agent import AgentGraphItemSchema
-from xpander_sdk.modules.tools_repository.models.tool_invocation_result import ToolInvocationResult
+from xpander_sdk.modules.tools_repository.models.tool_invocation_result import (
+    ToolInvocationResult,
+)
 from xpander_sdk.modules.tools_repository.utils.generic import deep_merge, pascal_case
 from xpander_sdk.modules.tools_repository.utils.local_tools import invoke_local_fn
-from xpander_sdk.modules.tools_repository.utils.schemas import apply_permanent_values_to_payload, build_model_from_schema, enforce_schema_on_response, schema_enforcement_block_and_descriptions
+from xpander_sdk.modules.tools_repository.utils.schemas import (
+    apply_permanent_values_to_payload,
+    build_model_from_schema,
+    enforce_schema_on_response,
+    schema_enforcement_block_and_descriptions,
+)
 from xpander_sdk.utils.event_loop import run_sync
 
 
@@ -61,7 +90,7 @@ class Tool(XPanderSharedModel):
             configuration (Configuration): The configuration instance to associate with this tool.
         """
         self.configuration = configuration
-    
+
     def set_schema_overrides(self, agent_graph: Any):
         """
         Apply schema overrides from the agent graph item if available.
@@ -77,13 +106,20 @@ class Tool(XPanderSharedModel):
                 by a key-value match, where the key is 'item_id' and value is `self.id`.
         """
         if gi := agent_graph.get_graph_item("item_id", self.id):
-            if gi.settings and gi.settings.schemas and isinstance(gi.settings.schemas, AgentGraphItemSchema):
+            if (
+                gi.settings
+                and gi.settings.schemas
+                and isinstance(gi.settings.schemas, AgentGraphItemSchema)
+            ):
                 self.schema_overrides = gi.settings.schemas
 
+    def has_schema_override(self, type: Literal["input", "output"]) -> bool:
+        return (
+            self.schema_overrides
+            and hasattr(self.schema_overrides, type)
+            and isinstance(getattr(self.schema_overrides, type), dict)
+        )
 
-    def has_schema_override(self, type: Literal["input","output"]) -> bool:
-        return self.schema_overrides and hasattr(self.schema_overrides, type) and isinstance(getattr(self.schema_overrides,type), dict)
-    
     @computed_field
     @property
     def schema(self) -> type[BaseModel]:
@@ -94,22 +130,24 @@ class Tool(XPanderSharedModel):
             type[BaseModel]: A dynamically constructed Pydantic model class.
         """
         model_name = f"{pascal_case(self.id)}PayloadSchema"
-        
+
         schema = deepcopy(self.parameters)
-        
+
         # apply input schema enforcement
         if self.has_schema_override(type="input"):
-            schema = schema_enforcement_block_and_descriptions(target_schema=schema, reference_schema=self.schema_overrides.input)
-        
+            schema = schema_enforcement_block_and_descriptions(
+                target_schema=schema, reference_schema=self.schema_overrides.input
+            )
+
         return build_model_from_schema(
-            model_name=model_name,
-            schema=schema,
-            with_defaults=self.is_local == False
+            model_name=model_name, schema=schema, with_defaults=self.is_local == False
         )
 
     @model_validator(mode="before")
     @classmethod
-    def set_description_from_function_desc(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+    def set_description_from_function_desc(
+        cls, values: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Automatically sets the tool's description from the 'function_description' field if not already set.
 
@@ -150,34 +188,52 @@ class Tool(XPanderSharedModel):
         """
         client = APIClient(configuration=configuration or self.configuration)
         headers = {}
-        
+
         if agent_version:
-            headers['x-agent-version'] = str(agent_version)
+            headers["x-agent-version"] = str(agent_version)
 
         if task_id:
             headers["x-execution-id"] = task_id
 
-        if isinstance(payload, dict) and isinstance(payload_extension, dict) and payload_extension:
+        if (
+            isinstance(payload, dict)
+            and isinstance(payload_extension, dict)
+            and payload_extension
+        ):
             payload = deep_merge(a=payload, b=payload_extension)
 
         if is_preflight:
             headers["x-preflight-check"] = "true"
 
         # apply input schema
-        if not is_preflight and self.has_schema_override(type="input") and payload and (isinstance(payload, dict) or isinstance(payload, list)):
-            payload = apply_permanent_values_to_payload(schema=self.schema_overrides.input, payload=payload)
-        
+        if (
+            not is_preflight
+            and self.has_schema_override(type="input")
+            and payload
+            and (isinstance(payload, dict) or isinstance(payload, list))
+        ):
+            payload = apply_permanent_values_to_payload(
+                schema=self.schema_overrides.input, payload=payload
+            )
+
         result = await client.make_request(
             path=APIRoute.InvokeTool.format(agent_id=agent_id, tool_id=self.id),
             method="POST",
             payload=None if is_preflight else payload,
             headers=headers,
         )
-        
+
         # apply output schema
-        if not is_preflight and self.has_schema_override(type="output") and result and (isinstance(result, dict) or isinstance(result, list)):
-            result = enforce_schema_on_response(schema=self.schema_overrides.output, response=result)
-        
+        if (
+            not is_preflight
+            and self.has_schema_override(type="output")
+            and result
+            and (isinstance(result, dict) or isinstance(result, list))
+        ):
+            result = enforce_schema_on_response(
+                schema=self.schema_overrides.output, response=result
+            )
+
         return result
 
     def call_remote_tool(
@@ -205,15 +261,17 @@ class Tool(XPanderSharedModel):
         Returns:
             Any: The response from the API.
         """
-        return run_sync(self.acall_remote_tool(
-            agent_id=agent_id,
-            payload=payload,
-            agent_version=agent_version,
-            payload_extension=payload_extension,
-            configuration=configuration,
-            task_id=task_id,
-            is_preflight=is_preflight,
-        ))
+        return run_sync(
+            self.acall_remote_tool(
+                agent_id=agent_id,
+                payload=payload,
+                agent_version=agent_version,
+                payload_extension=payload_extension,
+                configuration=configuration,
+                task_id=task_id,
+                is_preflight=is_preflight,
+            )
+        )
 
     async def agraph_preflight_check(
         self,
@@ -271,12 +329,14 @@ class Tool(XPanderSharedModel):
         Returns:
             Any: Result of the preflight check.
         """
-        return run_sync(self.agraph_preflight_check(
-            agent_id=agent_id,
-            agent_version=agent_version,
-            configuration=configuration,
-            task_id=task_id,
-        ))
+        return run_sync(
+            self.agraph_preflight_check(
+                agent_id=agent_id,
+                agent_version=agent_version,
+                configuration=configuration,
+                task_id=task_id,
+            )
+        )
 
     async def ainvoke(
         self,
@@ -329,7 +389,9 @@ class Tool(XPanderSharedModel):
                 )
 
                 if self.fn is None:
-                    raise RuntimeError(f"No local function provided for this tool ({self.id}).")
+                    raise RuntimeError(
+                        f"No local function provided for this tool ({self.id})."
+                    )
 
                 result = await invoke_local_fn(fn=self.fn, payload=payload)
                 tool_invocation_result.result = result
@@ -382,59 +444,130 @@ class Tool(XPanderSharedModel):
         Returns:
             ToolInvocationResult: Result of the tool invocation.
         """
-        return run_sync(self.ainvoke(
-            agent_id=agent_id,
-            payload=payload,
-            agent_version=agent_version,
-            payload_extension=payload_extension,
-            configuration=configuration,
-            task_id=task_id,
-            tool_call_id=tool_call_id,
-        ))
-    
-    async def ainvoke_standalone(
-        self,
-        payload: Any,
-        configuration: Optional[Configuration] = None,
-    ) -> ToolInvocationResult:
-        tool_invocation_result = ToolInvocationResult(
-            tool_id=self.id,
-            payload=payload,
-            is_local=self.is_local,
+        return run_sync(
+            self.ainvoke(
+                agent_id=agent_id,
+                payload=payload,
+                agent_version=agent_version,
+                payload_extension=payload_extension,
+                configuration=configuration,
+                task_id=task_id,
+                tool_call_id=tool_call_id,
+            )
         )
 
-        try:
-            if self.schema and payload:
-                try:
-                    self.schema.model_validate(payload)
-                except Exception as validation_error:
-                    raise ValueError(
-                        f"Invalid payload for tool '{self.name}': {validation_error}"
-                    ) from validation_error
-            
-            client = APIClient(configuration=configuration or self.configuration)
-            tool_invocation_result.result = await client.make_request(
-                path=APIRoute.GetOrInvokeToolById.format(tool_id=f"{self.connector_id}_{self.operation_id}"),
-                method="POST",
-                payload=payload,
-            )
-            
-            tool_invocation_result.is_success = True
-
-        except Exception as e:
-            tool_invocation_result.is_error = True
-            if isinstance(e, HTTPStatusError):
-                tool_invocation_result.status_code = e.response.status_code
-                tool_invocation_result.result = e.response.text
-            else:
-                tool_invocation_result.status_code = 500
-                tool_invocation_result.result = str(e)
-
-        return tool_invocation_result
-    
-    def invoke_standalone(
+    def get_invocation_function(
         self,
-        payload: Any,
+        is_async: Optional[bool] = False,
         configuration: Optional[Configuration] = None,
-    ) -> ToolInvocationResult:
-        return run_sync(self.ainvoke_standalone(payload=payload,configuration=configuration))
+    ) -> Callable:
+        """
+        Factory method that creates a tool invocation function with bound configuration.
+
+        This method provides a convenient way to create a pre-configured invocation function
+        that can be used without repeatedly passing configuration parameters. The returned
+        function will handle schema validation, API communication, and error handling.
+
+        Args:
+            is_async (Optional[bool]): If True, returns an async function. If False, returns
+                a synchronous function that wraps the async implementation. Defaults to False.
+            configuration (Optional[Configuration]): Configuration to bind to the invocation
+                function. If None, uses the tool's default configuration.
+
+        Returns:
+            Callable: A function that takes payload and returns ToolInvocationResult.
+                The function signature depends on is_async:
+                - If async: async def(payload: schema) -> ToolInvocationResult
+                - If sync: def(payload: schema) -> ToolInvocationResult
+
+        Example:
+            >>> # Get async invocation function
+            >>> async_invoke = tool.get_invocation_function(is_async=True)
+            >>> result = await async_invoke({"param": "value"})
+
+            >>> # Get sync invocation function
+            >>> sync_invoke = tool.get_invocation_function(is_async=False)
+            >>> result = sync_invoke({"param": "value"})
+
+        Note:
+            This method is primarily intended for standalone tool invocation where you
+            don't have agent context. For agent-based invocations, use the `ainvoke`
+            or `invoke` methods instead.
+        """
+        bound_config = configuration or self.configuration
+
+        async def ainvoke_standalone(payload: Any) -> ToolInvocationResult:
+            """Async standalone invocation implementation."""
+            tool_invocation_result = ToolInvocationResult(
+                tool_id=self.id,
+                payload=payload,
+                is_local=self.is_local,
+            )
+
+            try:
+                # Validate payload against schema if available
+                if self.schema and payload:
+                    try:
+                        self.schema.model_validate(payload)
+                    except Exception as validation_error:
+                        raise ValueError(
+                            f"Invalid payload for tool '{self.name}': {validation_error}"
+                        ) from validation_error
+
+                # Make API request to invoke the tool
+                client = APIClient(configuration=bound_config)
+                tool_invocation_result.result = await client.make_request(
+                    path=APIRoute.GetOrInvokeToolById.format(
+                        tool_id=f"{self.connector_id}_{self.operation_id}"
+                    ),
+                    method="POST",
+                    payload=payload,
+                )
+                tool_invocation_result.is_success = True
+
+            except Exception as e:
+                tool_invocation_result.is_error = True
+                if isinstance(e, HTTPStatusError):
+                    tool_invocation_result.status_code = e.response.status_code
+                    tool_invocation_result.result = e.response.text
+                else:
+                    tool_invocation_result.status_code = 500
+                    tool_invocation_result.result = str(e)
+
+            return tool_invocation_result
+
+        if is_async:
+            return ainvoke_standalone
+
+        def invoke_standalone(payload: Any) -> ToolInvocationResult:
+            """Sync standalone invocation implementation."""
+            return run_sync(ainvoke_standalone(payload=payload))
+
+        return invoke_standalone
+
+    @computed_field
+    @property
+    def payload_schema(self) -> type[BaseModel]:
+        """
+        Computed property that creates a wrapper schema for the tool's payload.
+
+        This property dynamically generates a Pydantic model that wraps the tool's
+        schema in a 'payload' field. This is useful for APIs or frameworks that
+        expect a specific payload structure.
+
+        Returns:
+            type[BaseModel]: A dynamically created Pydantic model class with a single
+                'payload' field containing the tool's schema.
+
+        Example:
+            >>> tool = Tool(...)
+            >>> PayloadModel = tool.payload_schema
+            >>> instance = PayloadModel(payload={"param": "value"})
+            >>> print(instance.payload)  # Access the actual tool payload
+
+        Note:
+            The generated model class name follows the pattern: {OriginalSchema}Payload
+        """
+        return create_model(
+            f"{self.schema.__name__}Payload", payload=(self.schema, ...)
+        )

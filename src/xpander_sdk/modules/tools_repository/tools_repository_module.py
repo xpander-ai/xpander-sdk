@@ -17,6 +17,7 @@ from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 from xpander_sdk.utils.event_loop import run_sync
 
+
 class ToolsRepository(XPanderSharedModel):
     """
     Repository for managing tools in xpander.ai.
@@ -48,7 +49,7 @@ class ToolsRepository(XPanderSharedModel):
 
     # Mutable list that can be set/overwritten by backend
     tools: List[Tool] = []
-    
+
     agent_graph: Optional[Any] = None
     is_async: Optional[bool] = False
 
@@ -168,20 +169,20 @@ class ToolsRepository(XPanderSharedModel):
                 """
 
                 async def _execute(payload_dict: dict) -> Any:
-                    if tool_ref.is_standalone:
-                        return await tool_ref.ainvoke_standalone(
-                            payload=payload_dict,
-                            configuration=self.configuration,
-                        )
                     return await tool_ref.ainvoke(
                         agent_id=self.configuration.state.agent.id,
                         agent_version=self.configuration.state.agent.version,
                         payload=payload_dict,
                         configuration=self.configuration,
-                        task_id=self.configuration.state.task.id if self.configuration.state.task else None,
+                        task_id=(
+                            self.configuration.state.task.id
+                            if self.configuration.state.task
+                            else None
+                        ),
                     )
 
                 if is_async:
+
                     async def tool_function(payload: schema_ref) -> Any:
                         """
                         Normalized async tool function that accepts a single Pydantic model payload.
@@ -190,6 +191,7 @@ class ToolsRepository(XPanderSharedModel):
                         return await _execute(payload_dict)
 
                 else:
+
                     def tool_function(payload: schema_ref) -> Any:
                         """
                         Normalized sync tool function that accepts a single Pydantic model payload.
@@ -232,9 +234,19 @@ class ToolsRepository(XPanderSharedModel):
             tool = await client.make_request(
                 path=APIRoute.GetOrInvokeToolById.format(tool_id=tool_id)
             )
-            self.tools = [Tool(configuration=self.configuration, **tool, method="POST", path="tool", is_standalone=True, connector_id=connector_id, operation_id=operation_id)]
+            self.tools = [
+                Tool(
+                    configuration=self.configuration,
+                    **tool,
+                    method="POST",
+                    path="tool",
+                    is_standalone=True,
+                    connector_id=connector_id,
+                    operation_id=operation_id,
+                )
+            ]
         except Exception as e:
             raise ModuleException(500, f"Failed to load tool by id - {str(e)}")
-    
+
     def load_tool_by_id(self, tool_id: str):
         return run_sync(self.aload_tool_by_id(tool_id=tool_id))
