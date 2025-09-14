@@ -195,7 +195,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
 
     Supported Providers:
         - "openai": Uses OpenAIChat with fallback API key resolution
-        - "nvidiaNim": Uses NVIDIA NIM models via Nvidia class
+        - "nim": Uses NVIDIA NIM models via Nvidia class
         - "anthropic": Uses Claude models via Anthropic integration
 
     API Key Resolution Logic:
