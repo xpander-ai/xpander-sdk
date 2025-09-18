@@ -29,7 +29,6 @@ class AgentsListItem(BaseModel):
     
     Attributes:
         id (str): Unique identifier for the agent.
-        deployment_provider (AgentDeploymentProvider): Platform where the agent is deployed.
         name (str): Human-readable name of the agent.
         icon (str): Icon identifier or URL for the agent.
         instructions (AgentInstructions): Basic instructions and configuration for the agent.
@@ -51,7 +50,6 @@ class AgentsListItem(BaseModel):
     """
     
     id: str
-    deployment_provider: AgentDeploymentProvider
     name: str
     icon: str
     instructions: AgentInstructions

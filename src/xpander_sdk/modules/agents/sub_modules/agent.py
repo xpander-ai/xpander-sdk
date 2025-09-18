@@ -133,7 +133,6 @@ class Agent(XPanderSharedModel):
             unique_name: str
             origin_template: Optional[str]
             environment_id: str
-            deployment_provider: Optional[AgentDeploymentProvider]
             tools: Optional[ToolsRepository]
             icon: Optional[str]
             source_nodes: Optional[List[AgentSourceNode]]
@@ -169,9 +168,6 @@ class Agent(XPanderSharedModel):
     unique_name: str
     origin_template: Optional[str] = None
     environment_id: str = None
-    deployment_provider: Optional[AgentDeploymentProvider] = (
-        AgentDeploymentProvider.XPander
-    )
     tools: Optional[ToolsRepository] = None
     icon: Optional[str] = "🚀"
     source_nodes: Optional[List[AgentSourceNode]] = []
