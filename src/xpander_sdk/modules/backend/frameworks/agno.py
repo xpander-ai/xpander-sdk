@@ -171,6 +171,10 @@ async def build_agent_args(
     if xpander_agent.using_nemo == False:
         args["tool_hooks"].append(on_tool_call_hook)
 
+    # fix gpt-5 temp
+    if args["model"] and args["model"].id and args["model"].id.startswith("gpt-5"):
+        del args["model"].temperature
+    
     return args
 
 
