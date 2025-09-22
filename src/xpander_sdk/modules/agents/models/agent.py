@@ -86,7 +86,7 @@ class AgentInstructions(BaseModel):
         return f"""
         <instructions>
             {self.role}
-        </instructions
+        </instructions>
         <goals>
             {self.goal_str}
         </goals>

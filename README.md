@@ -25,7 +25,7 @@ pip install xpander-sdk
 ### With Optional Dependencies
 
 ```bash
-# For Agno framework support
+# For Agno framework support (2.0+)
 pip install xpander-sdk[agno]
 
 # For development

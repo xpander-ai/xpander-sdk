@@ -411,17 +411,17 @@ print(f"Output format: {agent.output_format}")
 
 #### Knowledge Base Methods
 
-|- **`attach_knowledge_base(self, knowledge_base: Optional[KnowledgeBase] = None, knowledge_base_id: Optional[str] = None)`**: Attach a knowledge base to the agent if it is not already linked.
+- **`attach_knowledge_base(self, knowledge_base: Optional[KnowledgeBase] = None, knowledge_base_id: Optional[str] = None)`**: Attach a knowledge base to the agent if it is not already linked.
 
-- **Parameters**:
-  - `knowledge_base` (Optional[KnowledgeBase]): The KnowledgeBase instance to attach.
-  - `knowledge_base_id` (Optional[str]): The unique identifier of the knowledge base.
-- **Raises**:
-  - `ValueError`: If neither a knowledge base nor an ID is provided.
-  - `TypeError`: If a provided knowledge base is not a valid `KnowledgeBase` instance.
-- **Example**: `>>> agent.attach_knowledge_base(knowledge_base_id="kb_12345")`
+  - **Parameters**:
+    - `knowledge_base` (Optional[KnowledgeBase]): The KnowledgeBase instance to attach.
+    - `knowledge_base_id` (Optional[str]): The unique identifier of the knowledge base.
+  - **Raises**:
+    - `ValueError`: If neither a knowledge base nor an ID is provided.
+    - `TypeError`: If a provided knowledge base is not a valid `KnowledgeBase` instance.
+  - **Example**: `>>> agent.attach_knowledge_base(knowledge_base_id="kb_12345")`
 
-- **Note**: Changes only affect the runtime instance of the agent. To persist changes, an explicit save or sync must be called.
+  - **Note**: Changes only affect the runtime instance of the agent. To persist changes, an explicit save or sync must be called.
 
 - **`async aget_knowledge_bases()`**: Get linked knowledge bases.
 
