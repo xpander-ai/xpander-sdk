@@ -556,12 +556,12 @@ class Agent(XPanderSharedModel):
         except Exception as e:
             logger.warning(f"Failed to sync local tools - {str(e)}")
 
-    async def aget_storage(self):
+    async def aget_db(self):
         """
-        Asynchronously retrieve the storage backend for this agent.
+        Asynchronously retrieve the db for this agent.
 
         Returns:
-            PostgresStorage: Initialized storage backend for agent sessions.
+            PostgresDb: Initialized db (Agno PG) for agent sessions.
 
         Raises:
             NotImplementedError: If the framework does not support storage.
@@ -577,104 +577,37 @@ class Agent(XPanderSharedModel):
             raise LookupError("Session storage is not enabled for this agent.")
 
         try:
-            from agno.storage.postgres import PostgresStorage
+            from agno.db.postgres import PostgresDb
         except ImportError as e:
             raise ImportError(
-                "The 'agno' extras must be installed to use this storage backend. "
+                "The 'agno' extras must be installed to use this db. "
                 "Run `pip install xpander-sdk[agno]`."
             ) from e
 
         connection_string = await self.aget_connection_string()
         if not connection_string or not connection_string.connection_uri.uri:
             raise ValueError(
-                "Invalid connection string provided for Agno storage backend."
+                "Invalid connection string provided for Agno db."
             )
 
         schema = get_db_schema_name(agent_id=self.id)
 
-        return PostgresStorage(
-            table_name="team_sessions" if self.is_a_team else "agent_sessions",
-            schema=schema,
+        return PostgresDb(
+            db_schema=schema,
             db_url=connection_string.connection_uri.uri,
-            auto_upgrade_schema=True,
-            mode="team" if self.is_a_team else "agent"
         )
 
-    def get_storage(self) -> Any:
+    def get_db(self) -> Any:
         """
-        Synchronously retrieve the storage backend for this agent.
+        Synchronously retrieve the db for this agent.
 
         Returns:
-            Any: Initialized storage backend for agent sessions.
+            Any: Initialized db for agent sessions.
 
         Example:
-            >>> storage = agent.get_storage()
+            >>> db = agent.get_db()
         """
-        return run_sync(self.aget_storage())
-
-    async def aget_memory_handler(self, model: LLMModelT):
-        """
-        Asynchronously retrieve the memory handler backend for user memories.
-
-        Args:
-            model (LLMModelT): Language model type to associate with memory handler.
-
-        Returns:
-            Memory: Initialized memory handler for user memories associated with the provided model.
-
-        Raises:
-            NotImplementedError: If the framework does not support user memories.
-            ImportError: If required dependencies are missing.
-            ValueError: If the connection string for memory storage is invalid.
-        """
-        if self.framework != Framework.Agno:
-            raise NotImplementedError(
-                f"Memory for framework '{self.framework}' is not supported."
-            )
-
-        if not self.agno_settings.user_memories:
-            raise LookupError("User memories not enabled for this agent.")
-
-        try:
-            from agno.memory.v2.memory import Memory
-            from agno.memory.v2.db.postgres import PostgresMemoryDb
-        except ImportError as e:
-            raise ImportError(
-                "The 'agno' extras must be installed to use this users memory backend. "
-                "Run `pip install xpander-sdk[agno]`."
-            ) from e
-
-        connection_string = await self.aget_connection_string()
-        if not connection_string or not connection_string.connection_uri.uri:
-            raise ValueError(
-                "Invalid connection string provided for Agno storage backend."
-            )
-
-        schema = get_db_schema_name(agent_id=self.id)
-
-        return Memory(
-            model=model,
-            db=PostgresMemoryDb(
-                table_name="user_memories",
-                schema=schema,
-                db_url=connection_string.connection_uri.uri,
-            ),
-        )
-
-    def get_memory_handler(self, model: LLMModelT) -> Any:
-        """
-        Synchronously retrieve the memory handler backend for user memories.
-
-        Args:
-            model (LLMModelT): Language model type to associate with memory handler.
-
-        Returns:
-            Any: Initialized memory handler for user memories.
-
-        Example:
-            >>> memory_handler = agent.get_memory_handler(model=my_model)
-        """
-        return run_sync(self.aget_memory_handler(model=model))
+        return run_sync(self.aget_db())
 
     @computed_field
     @property
@@ -763,7 +696,7 @@ class Agent(XPanderSharedModel):
         Asynchronously retrieve all user sessions associated with this agent.
 
         This method loads all saved session records linked to the specified user ID from
-        the agent's storage backend. It is only supported for agents using the Agno framework
+        the agent's db. It is only supported for agents using the Agno framework
         with session storage enabled.
 
         Args:
@@ -781,8 +714,9 @@ class Agent(XPanderSharedModel):
         Example:
             >>> sessions = await agent.aget_user_sessions(user_id="user_123")
         """
-        storage = await self.aget_storage()
-        sessions = await asyncio.to_thread(storage.get_recent_sessions, user_id=user_id, limit=50)
+        db = await self.aget_db()
+        from agno.db import SessionType
+        sessions = await asyncio.to_thread(db.get_sessions, user_id=user_id, limit=50, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
         return sessions
     
     def get_user_sessions(self, user_id: str):
@@ -790,7 +724,7 @@ class Agent(XPanderSharedModel):
         Synchronously retrieve all user sessions associated with this agent.
 
         This method wraps the asynchronous `aget_user_sessions` method and returns the result
-        in a synchronous context. It loads session data for a given user ID from the agent's storage backend.
+        in a synchronous context. It loads session data for a given user ID from the agent's db.
 
         Args:
             user_id (str): Identifier of the user whose sessions are to be retrieved.
@@ -807,7 +741,7 @@ class Agent(XPanderSharedModel):
         """
         Asynchronously retrieve a single session by its session ID.
 
-        This method accesses the agent's storage backend and loads the session record
+        This method accesses the agent's db and loads the session record
         corresponding to the given session ID. It is only supported for agents using
         the Agno framework with session storage enabled.
 
@@ -826,8 +760,9 @@ class Agent(XPanderSharedModel):
         Example:
             >>> session = await agent.aget_session(session_id="sess_456")
         """
-        storage = await self.aget_storage()
-        session = await asyncio.to_thread(storage.read, session_id=session_id)
+        db = await self.aget_db()
+        from agno.db import SessionType
+        session = await asyncio.to_thread(db.get_session, session_id=session_id, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
         return session
 
     def get_session(self, session_id: str):
@@ -836,7 +771,7 @@ class Agent(XPanderSharedModel):
 
         This method wraps the asynchronous `aget_session` and returns the result
         in a synchronous context. It retrieves the session record from the agent's
-        storage backend using the given session ID.
+        db using the given session ID.
 
         Args:
             session_id (str): Unique identifier of the session to retrieve.
@@ -853,7 +788,7 @@ class Agent(XPanderSharedModel):
         """
         Asynchronously delete a session by its session ID.
 
-        This method removes a specific session record from the agent's storage backend
+        This method removes a specific session record from the agent's db
         based on the provided session ID. It is only supported for agents using the
         Agno framework with session storage enabled.
 
@@ -869,15 +804,15 @@ class Agent(XPanderSharedModel):
         Example:
             >>> await agent.adelete_session(session_id="sess_456")
         """
-        storage = await self.aget_storage()
-        await asyncio.to_thread(storage.delete_session, session_id=session_id)
+        db = await self.aget_db()
+        await asyncio.to_thread(db.delete_session, session_id=session_id)
     
     def delete_session(self, session_id: str):
         """
         Synchronously delete a session by its session ID.
 
         This method wraps the asynchronous `adelete_session` and removes the session
-        record from the agent's storage backend in a synchronous context.
+        record from the agent's db in a synchronous context.
 
         Args:
             session_id (str): Unique identifier of the session to delete.

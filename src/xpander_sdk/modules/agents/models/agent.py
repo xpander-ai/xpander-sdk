@@ -10,7 +10,7 @@ from enum import Enum
 from typing import Dict, List, Literal, Optional, Type
 from pydantic import BaseModel, computed_field
 
-from xpander_sdk.models.shared import OutputFormat, XPanderSharedModel
+from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
 
 
@@ -83,7 +83,14 @@ class AgentInstructions(BaseModel):
         Returns:
             List[str]: List of role instructions.
         """
-        return self.role
+        return f"""
+        <instructions>
+            {self.role}
+        </instructions>
+        <goals>
+            {self.goal_str}
+        </goals>
+        """
 
     @computed_field
     @property
