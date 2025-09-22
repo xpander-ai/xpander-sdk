@@ -556,12 +556,12 @@ class Agent(XPanderSharedModel):
         except Exception as e:
             logger.warning(f"Failed to sync local tools - {str(e)}")
 
-    async def aget_storage(self):
+    async def aget_db(self):
         """
         Asynchronously retrieve the storage backend for this agent.
 
         Returns:
-            PostgresStorage: Initialized storage backend for agent sessions.
+            PostgresDb: Initialized storage backend (Agno PG) for agent sessions.
 
         Raises:
             NotImplementedError: If the framework does not support storage.
@@ -577,7 +577,7 @@ class Agent(XPanderSharedModel):
             raise LookupError("Session storage is not enabled for this agent.")
 
         try:
-            from agno.storage.postgres import PostgresStorage
+            from agno.db.postgres import PostgresDb
         except ImportError as e:
             raise ImportError(
                 "The 'agno' extras must be installed to use this storage backend. "
@@ -592,15 +592,12 @@ class Agent(XPanderSharedModel):
 
         schema = get_db_schema_name(agent_id=self.id)
 
-        return PostgresStorage(
-            table_name="team_sessions" if self.is_a_team else "agent_sessions",
-            schema=schema,
+        return PostgresDb(
+            db_schema=schema,
             db_url=connection_string.connection_uri.uri,
-            auto_upgrade_schema=True,
-            mode="team" if self.is_a_team else "agent"
         )
 
-    def get_storage(self) -> Any:
+    def get_db(self) -> Any:
         """
         Synchronously retrieve the storage backend for this agent.
 
@@ -610,71 +607,7 @@ class Agent(XPanderSharedModel):
         Example:
             >>> storage = agent.get_storage()
         """
-        return run_sync(self.aget_storage())
-
-    async def aget_memory_handler(self, model: LLMModelT):
-        """
-        Asynchronously retrieve the memory handler backend for user memories.
-
-        Args:
-            model (LLMModelT): Language model type to associate with memory handler.
-
-        Returns:
-            Memory: Initialized memory handler for user memories associated with the provided model.
-
-        Raises:
-            NotImplementedError: If the framework does not support user memories.
-            ImportError: If required dependencies are missing.
-            ValueError: If the connection string for memory storage is invalid.
-        """
-        if self.framework != Framework.Agno:
-            raise NotImplementedError(
-                f"Memory for framework '{self.framework}' is not supported."
-            )
-
-        if not self.agno_settings.user_memories:
-            raise LookupError("User memories not enabled for this agent.")
-
-        try:
-            from agno.memory.v2.memory import Memory
-            from agno.memory.v2.db.postgres import PostgresMemoryDb
-        except ImportError as e:
-            raise ImportError(
-                "The 'agno' extras must be installed to use this users memory backend. "
-                "Run `pip install xpander-sdk[agno]`."
-            ) from e
-
-        connection_string = await self.aget_connection_string()
-        if not connection_string or not connection_string.connection_uri.uri:
-            raise ValueError(
-                "Invalid connection string provided for Agno storage backend."
-            )
-
-        schema = get_db_schema_name(agent_id=self.id)
-
-        return Memory(
-            model=model,
-            db=PostgresMemoryDb(
-                table_name="user_memories",
-                schema=schema,
-                db_url=connection_string.connection_uri.uri,
-            ),
-        )
-
-    def get_memory_handler(self, model: LLMModelT) -> Any:
-        """
-        Synchronously retrieve the memory handler backend for user memories.
-
-        Args:
-            model (LLMModelT): Language model type to associate with memory handler.
-
-        Returns:
-            Any: Initialized memory handler for user memories.
-
-        Example:
-            >>> memory_handler = agent.get_memory_handler(model=my_model)
-        """
-        return run_sync(self.aget_memory_handler(model=model))
+        return run_sync(self.aget_db())
 
     @computed_field
     @property
@@ -781,8 +714,9 @@ class Agent(XPanderSharedModel):
         Example:
             >>> sessions = await agent.aget_user_sessions(user_id="user_123")
         """
-        storage = await self.aget_storage()
-        sessions = await asyncio.to_thread(storage.get_recent_sessions, user_id=user_id, limit=50)
+        db = await self.aget_db()
+        from agno.db import SessionType
+        sessions = await asyncio.to_thread(db.get_sessions, user_id=user_id, limit=50, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
         return sessions
     
     def get_user_sessions(self, user_id: str):
@@ -826,8 +760,9 @@ class Agent(XPanderSharedModel):
         Example:
             >>> session = await agent.aget_session(session_id="sess_456")
         """
-        storage = await self.aget_storage()
-        session = await asyncio.to_thread(storage.read, session_id=session_id)
+        db = await self.aget_db()
+        from agno.db import SessionType
+        session = await asyncio.to_thread(db.get_session, session_id=session_id, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
         return session
 
     def get_session(self, session_id: str):
@@ -869,8 +804,8 @@ class Agent(XPanderSharedModel):
         Example:
             >>> await agent.adelete_session(session_id="sess_456")
         """
-        storage = await self.aget_storage()
-        await asyncio.to_thread(storage.delete_session, session_id=session_id)
+        db = await self.aget_db()
+        await asyncio.to_thread(db.delete_session, session_id=session_id)
     
     def delete_session(self, session_id: str):
         """

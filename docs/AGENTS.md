@@ -280,7 +280,7 @@ if agent.graph and agent.graph.items:
 ```python
 # Access agent's storage backend (requires Agno framework)
 try:
-    storage = await agent.aget_storage()
+    storage = await agent.aget_db()
     print(f"Storage backend initialized: {storage}")
 
     # Example usage would depend on the storage backend API
@@ -289,25 +289,6 @@ except NotImplementedError as e:
     print(f"Storage not supported: {e}")
 except LookupError as e:
     print(f"Storage not enabled: {e}")
-```
-
-### Memory Handler Usage
-
-```python
-from your_llm_models import OpenAIModel  # Example model
-
-# Get memory handler for user memories (requires Agno framework)
-try:
-    model = OpenAIModel("gpt-4")
-    memory_handler = await agent.aget_memory_handler(model=model)
-    print(f"Memory handler initialized: {memory_handler}")
-
-    # Example usage would depend on the memory handler API
-    # Typically used for maintaining user conversation context
-except NotImplementedError as e:
-    print(f"Memory handler not supported: {e}")
-except LookupError as e:
-    print(f"User memories not enabled: {e}")
 ```
 
 ### Knowledge Base Search Integration
@@ -432,15 +413,15 @@ print(f"Output format: {agent.output_format}")
 
 |- **`attach_knowledge_base(self, knowledge_base: Optional[KnowledgeBase] = None, knowledge_base_id: Optional[str] = None)`**: Attach a knowledge base to the agent if it is not already linked.
 
-  - **Parameters**:
-    - `knowledge_base` (Optional[KnowledgeBase]): The KnowledgeBase instance to attach.
-    - `knowledge_base_id` (Optional[str]): The unique identifier of the knowledge base.
-  - **Raises**:
-    - `ValueError`: If neither a knowledge base nor an ID is provided.
-    - `TypeError`: If a provided knowledge base is not a valid `KnowledgeBase` instance.
-  - **Example**: `>>> agent.attach_knowledge_base(knowledge_base_id="kb_12345")`
+- **Parameters**:
+  - `knowledge_base` (Optional[KnowledgeBase]): The KnowledgeBase instance to attach.
+  - `knowledge_base_id` (Optional[str]): The unique identifier of the knowledge base.
+- **Raises**:
+  - `ValueError`: If neither a knowledge base nor an ID is provided.
+  - `TypeError`: If a provided knowledge base is not a valid `KnowledgeBase` instance.
+- **Example**: `>>> agent.attach_knowledge_base(knowledge_base_id="kb_12345")`
 
-  - **Note**: Changes only affect the runtime instance of the agent. To persist changes, an explicit save or sync must be called.
+- **Note**: Changes only affect the runtime instance of the agent. To persist changes, an explicit save or sync must be called.
 
 - **`async aget_knowledge_bases()`**: Get linked knowledge bases.
 
@@ -523,38 +504,20 @@ print(f"Output format: {agent.output_format}")
 
 #### Storage and Memory Methods
 
-- **`async aget_storage()`**: Asynchronously retrieve the storage backend for this agent.
+- **`async aget_db()`**: Asynchronously retrieve the storage backend for this agent.
 
   - **Description**: This method returns the storage backend for agent sessions. Only supported for agents using the Agno framework with session storage enabled.
-  - **Returns**: `PostgresStorage` - Initialized storage backend for agent sessions.
+  - **Returns**: `PostgresDb` - Initialized storage backend for agent sessions.
   - **Raises**:
     - `NotImplementedError`: If the framework does not support storage.
     - `ImportError`: If required dependencies are missing.
     - `ValueError`: If the connection string for storage is invalid.
     - `LookupError`: If session storage is not enabled for this agent.
 
-- **`get_storage()`**: Synchronously retrieve the storage backend for this agent.
+- **`get_db()`**: Synchronously retrieve the storage backend for this agent.
 
   - **Returns**: `Any` - Initialized storage backend for agent sessions.
-  - **Example**: `>>> storage = agent.get_storage()`
-
-- **`async aget_memory_handler(self, model: LLMModelT)`**: Asynchronously retrieve the memory handler backend for user memories.
-
-  - **Description**: This method returns a memory handler for managing user memories associated with the provided model. Only supported for agents using the Agno framework with user memories enabled.
-  - **Parameters**:
-    - `model` (LLMModelT): Language model type to associate with memory handler.
-  - **Returns**: `Memory` - Initialized memory handler for user memories associated with the provided model.
-  - **Raises**:
-    - `NotImplementedError`: If the framework does not support user memories.
-    - `ImportError`: If required dependencies are missing.
-    - `ValueError`: If the connection string for memory storage is invalid.
-    - `LookupError`: If user memories are not enabled for this agent.
-
-- **`get_memory_handler(self, model: LLMModelT)`**: Synchronously retrieve the memory handler backend for user memories.
-  - **Parameters**:
-    - `model` (LLMModelT): Language model type to associate with memory handler.
-  - **Returns**: `Any` - Initialized memory handler for user memories.
-  - **Example**: `>>> memory_handler = agent.get_memory_handler(model=my_model)`
+  - **Example**: `>>> storage = agent.get_db()`
 
 #### Utility Methods
 
