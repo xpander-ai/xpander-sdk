@@ -34,7 +34,7 @@ Main interface for event stream management and task execution.
 **Methods:**
 - `start()`: Start listening for task execution events
 - `stop()`: Stop the event listener and cleanup resources
-- `register_agent_worker()`: Register workers for specific agents
+- `register_agent_worker()`: Register agent worker directly (no parent worker hierarchy)
 
 ### `@on_task` Decorator
 Provides a simple decorator interface for registering task handlers.

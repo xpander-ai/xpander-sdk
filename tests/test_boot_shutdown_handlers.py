@@ -305,11 +305,9 @@ class TestEventsIntegration:
             executed.append("boot_executed")
 
         # Mock the Events class to avoid full startup
-        with patch.object(Events, 'register_parent_worker', new_callable=AsyncMock) as mock_register, \
-             patch.object(Events, 'register_agent_worker', new_callable=AsyncMock) as mock_worker, \
+        with patch.object(Events, 'register_agent_worker', new_callable=AsyncMock) as mock_worker, \
              patch('asyncio.gather', new_callable=AsyncMock) as mock_gather:
             
-            mock_register.return_value = Mock()
             mock_gather.return_value = None
             
             # Mock environment variables

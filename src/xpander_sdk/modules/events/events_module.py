@@ -63,10 +63,11 @@ class Events(ModuleBase):
 
     This class manages Server Sent Events (SSE) for real-time task execution requests
     and integrates with agents deployed on xpander.ai. It handles event streaming,
-    retry logic, and background task management.
+    retry logic, and background task management. The worker is directly attached
+    to the agent without a parent worker hierarchy.
 
     Attributes:
-        worker (Optional[DeployedAsset]): Represents the deployed asset/agent.
+        worker (Optional[DeployedAsset]): Represents the deployed asset/agent worker.
         test_task (Optional[LocalTaskTest]): Task to be tested within the local environment.
         configuration (Configuration): SDK configuration with credentials and endpoints.
 
@@ -129,7 +130,6 @@ class Events(ModuleBase):
             thread_name_prefix="xpander-handler",
         )
         self._bg: Set[asyncio.Task] = set()
-        self._root_worker: DeployedAsset | None = None
 
         logger.debug(
             f"Events initialised (base_url={self.configuration.base_url}, "
@@ -144,9 +144,9 @@ class Events(ModuleBase):
         """
         Start the event listener and register handlers for task execution events.
 
-        This method sets up signal handling for graceful shutdown, registers required
-        workers, and begins listening to task execution requests over SSE.
-        use on_task decorator and not the Events module directly.
+        This method sets up signal handling for graceful shutdown, registers the
+        agent worker directly, and begins listening to task execution requests over SSE.
+        Use the @on_task decorator instead of calling this method directly.
 
         Args:
             on_execution_request (ExecutionRequestHandler): Callback handler
@@ -161,10 +161,7 @@ class Events(ModuleBase):
                 sig, lambda s=sig: asyncio.create_task(self.stop(s))
             )
 
-        # Register root worker (blocks until first WorkerRegistration)
-        self._root_worker = await self.register_parent_worker()
-
-        # One SSE consumer per agent
+        # Register agent worker directly
         self.track(
             asyncio.create_task(
                 self.register_agent_worker(self.agent_id, on_execution_request)
@@ -266,7 +263,7 @@ class Events(ModuleBase):
         Args:
             worker_id (str): The unique identifier of the worker to release.
         """
-        url = f"{get_events_base(configuration=self.configuration)}/{worker_id}"
+        url = f"{get_events_base(configuration=self.configuration)}/{worker_id}?type=worker"
         await self._request_with_retries(
             "POST",
             url,
@@ -281,7 +278,7 @@ class Events(ModuleBase):
         Args:
             worker_id (str): The unique identifier of the worker to update.
         """
-        url = f"{get_events_base(configuration=self.configuration)}/{worker_id}"
+        url = f"{get_events_base(configuration=self.configuration)}/{worker_id}?type=worker&agent_id={self.agent_id}"
         await self._request_with_retries(
             "POST",
             url,
@@ -411,10 +408,9 @@ class Events(ModuleBase):
             agent_id (str): The unique identifier of the agent to register.
             on_execution_request (ExecutionRequestHandler): The callback function to process task execution requests.
         """
-        assert self._root_worker, "Root worker must be registered first"
         environment = "xpander" if self.is_xpander_cloud else "local"
 
-        url = f"{get_events_base(configuration=self.configuration)}/{self._root_worker.id}/{agent_id}?environment={environment}"
+        url = f"{get_events_base(configuration=self.configuration)}/{agent_id}?environment={environment}"
 
         async for event in self._sse_events_with_retries(url):
             if event.event == EventType.EnvironmentConflict:
@@ -482,25 +478,6 @@ class Events(ModuleBase):
                     )
                 )
 
-    async def register_parent_worker(self) -> DeployedAsset:
-        """
-        Register the parent worker asset and start receiving events.
-
-        Returns:
-            DeployedAsset: The deployed asset for the root worker after successful registration.
-
-        Raises:
-            RuntimeError: If registration fails due to absence of WorkerRegistration events.
-        """
-        url = get_events_base(configuration=self.configuration)
-
-        async for event in self._sse_events_with_retries(url):
-            if event.event == EventType.WorkerRegistration:
-                return DeployedAsset(**json.loads(event.data))
-
-        raise RuntimeError(
-            "Failed to register root worker – no WorkerRegistration received"
-        )
 
     # --------------------------------------------------------------------- #
     # Misc helpers                                                          #
