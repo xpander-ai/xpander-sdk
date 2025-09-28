@@ -53,6 +53,7 @@ from xpander_sdk.modules.tasks.models.task import (
     PendingECARequest,
     TaskReportRequest,
 )
+from xpander_sdk.modules.tasks.utils.files import categorize_files, fetch_urls, fetch_file
 from xpander_sdk.utils.event_loop import run_sync
 
 # Type variable for Task class methods
@@ -359,6 +360,47 @@ class Task(XPanderSharedModel):
         """
         return run_sync(self.astop())
 
+    def get_files(self) -> list[Any]:
+        if not self.input.files or len(self.input.files) == 0:
+            return []
+        
+        categorized_files = categorize_files(file_urls=self.input.files)
+        
+        if not categorized_files.pdfs or len(categorized_files.pdfs) == 0:
+            return []
+
+        try:
+            from agno.media import File # test import
+            return [fetch_file(url=url) for url in categorized_files.pdfs]
+        except Exception:
+            return categorized_files.pdfs
+    
+    def get_images(self) -> list[Any]:
+        if not self.input.files or len(self.input.files) == 0:
+            return []
+        
+        categorized_files = categorize_files(file_urls=self.input.files)
+        
+        if not categorized_files.images or len(categorized_files.images) == 0:
+            return []
+
+        try:
+            from agno.media import Image
+            return [Image(url=url) for url in categorized_files.images]
+        except Exception:
+            return categorized_files.images
+    
+    def get_human_readable_files(self) -> list[Any]:
+        if not self.input.files or len(self.input.files) == 0:
+            return []
+        
+        categorized_files = categorize_files(file_urls=self.input.files)
+        
+        if not categorized_files.files or len(categorized_files.files) == 0:
+            return []
+
+        return run_sync(fetch_urls(urls=categorized_files.files))
+    
     def to_message(self) -> str:
         """
         Converts the input data into a formatted message string.
@@ -380,6 +422,13 @@ class Task(XPanderSharedModel):
             if len(message) != 0:
                 message += "\n"
             message += "Files: " + (", ".join(self.input.files))
+        
+        # append human readable content like csv and such
+        readable_files = self.get_human_readable_files()
+        if readable_files and len(readable_files) != 0:
+            message += "\nFiles contents:"
+            for f in readable_files:
+                message += f"\n{json.dumps(f)}"
 
         return message
 
