@@ -108,6 +108,15 @@ class Task(XPanderSharedModel):
         >>> task = Task.load(task_id="task_123")
         >>> task.set_status(AgentExecutionStatus.Running)
         >>> task.save()
+        >>> 
+        >>> # Get files for Agno integration
+        >>> files = task.get_files()  # PDF files as Agno File objects
+        >>> images = task.get_images()  # Image files as Agno Image objects
+        >>> result = await agno_agent.arun(
+        ...     input=task.to_message(),
+        ...     files=files,
+        ...     images=images
+        ... )
     """
 
     configuration: Optional[Configuration] = None
@@ -361,6 +370,24 @@ class Task(XPanderSharedModel):
         return run_sync(self.astop())
 
     def get_files(self) -> list[Any]:
+        """
+        Get PDF files from task input, formatted for Agno integration.
+        
+        Returns PDF files as Agno File objects when the Agno framework is available,
+        or as URL strings otherwise. This method is designed for seamless integration
+        with Agno agents.
+        
+        Returns:
+            list[Any]: List of File objects (when Agno is available) or URL strings.
+                      Returns empty list if no PDF files are present in task input.
+        
+        Example:
+            >>> files = task.get_files()
+            >>> result = await agno_agent.arun(
+            ...     input=task.to_message(),
+            ...     files=files
+            ... )
+        """
         if not self.input.files or len(self.input.files) == 0:
             return []
         
@@ -376,6 +403,24 @@ class Task(XPanderSharedModel):
             return categorized_files.pdfs
     
     def get_images(self) -> list[Any]:
+        """
+        Get image files from task input, formatted for Agno integration.
+        
+        Returns image files as Agno Image objects when the Agno framework is available,
+        or as URL strings otherwise. This method is designed for seamless integration
+        with Agno agents that support image processing.
+        
+        Returns:
+            list[Any]: List of Image objects (when Agno is available) or URL strings.
+                      Returns empty list if no image files are present in task input.
+        
+        Example:
+            >>> images = task.get_images()
+            >>> result = await agno_agent.arun(
+            ...     input=task.to_message(),
+            ...     images=images
+            ... )
+        """
         if not self.input.files or len(self.input.files) == 0:
             return []
         
@@ -391,6 +436,23 @@ class Task(XPanderSharedModel):
             return categorized_files.images
     
     def get_human_readable_files(self) -> list[Any]:
+        """
+        Get human-readable files from task input with their content.
+        
+        Returns text-based files (like .txt, .csv, .json, .py, etc.) with their content
+        fetched and parsed. This method is automatically used by to_message() to include
+        file contents in the task message.
+        
+        Returns:
+            list[dict[str, str]]: List of dictionaries with 'url' and 'content' keys.
+                                 Returns empty list if no human-readable files are present.
+        
+        Example:
+            >>> readable_files = task.get_human_readable_files()
+            >>> for file_data in readable_files:
+            ...     print(f"File: {file_data['url']}")
+            ...     print(f"Content: {file_data['content']}")
+        """
         if not self.input.files or len(self.input.files) == 0:
             return []
         

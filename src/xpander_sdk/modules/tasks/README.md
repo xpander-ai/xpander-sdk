@@ -43,6 +43,7 @@ Instance of a single task with execution capabilities.
 - External task reporting (`areport_external_task()` / `report_external_task()`)
 - Obtain and set task execution result
 - Stream task events for real-time updates
+- File handling methods for Agno integration (`get_files()`, `get_images()`, `get_human_readable_files()`)
 - Support for documents, files, and other task attachments
 
 ## Usage Examples
@@ -116,6 +117,35 @@ reported_task = await Task.areport_external_task(
 )
 
 print(f"Task reported: {reported_task.id}")
+```
+
+### Task File Handling for Agno Integration
+```python
+# Task with file attachments
+task = await tasks_manager.acreate(
+    agent_id="agent-id",
+    prompt="Analyze the attached documents and images",
+    file_urls=[
+        "https://example.com/report.pdf",
+        "https://example.com/chart.png", 
+        "https://example.com/data.csv"
+    ]
+)
+
+# Get files formatted for Agno integration
+files = task.get_files()  # PDF files as Agno File objects
+images = task.get_images()  # Image files as Agno Image objects
+readable_files = task.get_human_readable_files()  # Text files with content
+
+# Use with Agno agent
+from agno.agent import Agent
+agno_agent = Agent(**backend.get_args())
+
+result = await agno_agent.arun(
+    input=task.to_message(),
+    files=files,
+    images=images
+)
 ```
 
 ## Configuration

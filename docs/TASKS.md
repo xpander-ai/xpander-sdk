@@ -68,6 +68,10 @@ Represents a single task, providing methods to interact with task configurations
 - **`stop`**: Synchronously stop the task.
 - **`aevents`**: Asynchronously stream task events.
 - **`events`**: Synchronously stream task events.
+- **`get_files`**: Get PDF files formatted for Agno integration.
+- **`get_images`**: Get image files formatted for Agno integration.
+- **`get_human_readable_files`**: Get text-based files with their content.
+- **`to_message`**: Convert task input to a formatted message string.
 
 ## Examples
 
@@ -172,6 +176,48 @@ reported_task_sync = Task.report_external_task(
 
 print(f"Reported task ID: {reported_task.id}")
 print(f"Task status: {reported_task.status}")
+```
+
+### Task File Handling for Agno Integration
+
+```python
+# Create a task with various file types
+task = await tasks.acreate(
+    agent_id="agent123",
+    prompt="Analyze the attached documents and images",
+    file_urls=[
+        "https://example.com/report.pdf",      # PDF document
+        "https://example.com/chart.png",       # Image file
+        "https://example.com/data.csv",        # Human-readable file
+        "https://example.com/logo.jpg"         # Another image
+    ]
+)
+
+# Get files categorized by type for Agno integration
+files = task.get_files()    # Returns Agno File objects for PDFs
+images = task.get_images()  # Returns Agno Image objects for images
+
+# Use with Agno agent
+from xpander_sdk import Backend
+from agno.agent import Agent
+
+backend = Backend()
+agno_agent = Agent(**backend.get_args())
+
+# Pass files and images directly to Agno
+result = await agno_agent.arun(
+    input=task.to_message(),  # Includes text + file URLs + readable file content
+    files=files,              # PDF files as Agno File objects
+    images=images            # Image files as Agno Image objects
+)
+
+print(f"Analysis result: {result.content}")
+
+# Access human-readable files separately if needed
+readable_files = task.get_human_readable_files()
+for file_data in readable_files:
+    print(f"File: {file_data['url']}")
+    print(f"Content preview: {file_data['content'][:200]}...")
 ```
 
 ## API Reference
