@@ -28,7 +28,9 @@ async def build_agent_args(
     tools: Optional[List[Callable]] = None,
 ) -> Dict[str, Any]:
     model = _load_llm_model(agent=xpander_agent, override=override)
-    args: Dict[str, Any] = {}
+    args: Dict[str, Any] = {
+        "id": xpander_agent.id,
+    }
 
     _configure_output(args=args, agent=xpander_agent, task=task)
     _configure_session_storage(args=args, agent=xpander_agent, task=task)
@@ -55,50 +57,33 @@ async def build_agent_args(
                     configuration=Configuration(
                         api_key=xpander_agent.configuration.api_key,
                         organization_id=xpander_agent.configuration.organization_id,
-                        base_url=xpander_agent.configuration.base_url,
+                        base_url=xpander_agent.configuration.base_url
                     )
                 ).aget(agent_id=sub_agent_id)
                 for sub_agent_id in sub_agents
             ]
         )
+        if sub_agents and len(sub_agents):
+            base_state = xpander_agent.configuration.state.model_copy()
+            for sub_agent in sub_agents:
+                sub_agent.configuration.state.task = base_state.task
         # convert to members
         members = await asyncio.gather(
             *[
-                build_agent_args(xpander_agent=sub_agent, override=override)
+                build_agent_args(xpander_agent=sub_agent, override=override, task=task)
                 for sub_agent in sub_agents
             ]
         )
 
         args.update(
             {
-                "team_id": xpander_agent.id,
-                "success_criteria": (
-                    xpander_agent.expected_output
-                    if xpander_agent.expected_output
-                    and len(xpander_agent.expected_output) != 0
-                    else xpander_agent.instructions.goal_str
-                ),
-                "mode": (
-                    "coordinate"
-                    if xpander_agent.agno_settings.coordinate_mode
-                    else "route"
-                ),
                 "members": [
-                    AgnoAgent(**member) if "agent_id" in member else AgnoTeam(**member)
+                    AgnoAgent(**member) if "id" in member else AgnoTeam(**member)
                     for member in members
                 ],
-                "add_member_tools_to_system_message": True,
-                "enable_agentic_context": True,
-                "enable_team_history": True,
+                "add_member_tools_to_context": True,
                 "share_member_interactions": True,
                 "show_members_responses": True,
-            }
-        )
-    else:  # regular agent
-        args.update(
-            {
-                "agent_id": xpander_agent.id,
-                "goal": xpander_agent.instructions.goal_str,
             }
         )
 
@@ -113,10 +98,16 @@ async def build_agent_args(
                 if task and task.expected_output
                 else xpander_agent.expected_output
             ),
-            "show_tool_calls": True,
-            "add_datetime_to_instructions": True,
+            "add_datetime_to_context": True,
         }
     )
+    
+    if xpander_agent.is_a_team and xpander_agent.expected_output and len(xpander_agent.expected_output) != 0:
+        args["instructions"] += f"""\n
+            <expected_output>
+            {xpander_agent.expected_output}
+            </expected_output>
+        """
 
     if override:
         args.update(override)
@@ -277,7 +268,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
 def _configure_output(args: Dict[str, Any], agent: Agent, task: Optional[Task]) -> None:
     if agent.output.use_json_mode:
         args["use_json_mode"] = True
-        args["response_model"] = agent.output.output_schema
+        args["output_schema"] = agent.output.output_schema
     elif agent.output.is_markdown:
         args["markdown"] = True
 
@@ -285,7 +276,7 @@ def _configure_output(args: Dict[str, Any], agent: Agent, task: Optional[Task]) 
         if task.output_format == OutputFormat.Json:
             args["use_json_mode"] = True
             args["markdown"] = False
-            args["response_model"] = build_model_from_schema(
+            args["output_schema"] = build_model_from_schema(
                 "StructuredOutput", task.output_schema
             )
         elif task.output_format == OutputFormat.Markdown:
@@ -300,7 +291,7 @@ def _configure_session_storage(
     if not agent.agno_settings.session_storage:
         return
 
-    args["add_history_to_messages"] = True
+    args["add_history_to_context"] = True
     args["session_id"] = task.id if task else None
     args["user_id"] = (
         task.input.user.id if task and task.input and task.input.user else None
@@ -327,24 +318,14 @@ def _configure_user_memory(
 async def _attach_async_dependencies(
     args: Dict[str, Any], agent: Agent, task: Optional[Task], model: Any
 ) -> None:
-    awaitables = {}
-
-    if agent.agno_settings.session_storage:
-        awaitables["storage"] = agent.aget_storage()
-
     user = task.input.user if task and task.input and task.input.user else None
-    if agent.agno_settings.user_memories and user and user.id:
-        awaitables["memory"] = agent.aget_memory_handler(model=model)
-
-    if awaitables:
-        results = await asyncio.gather(*awaitables.values())
-        for key, result in zip(awaitables.keys(), results):
-            args[key] = result
-
+    should_use_users_memory = True if agent.agno_settings.user_memories and user and user.id else False
+    if agent.agno_settings.session_storage or should_use_users_memory:
+        args["db"] = await agent.aget_db()
 
 def _configure_knowledge_bases(args: Dict[str, Any], agent: Agent) -> None:
     if agent.knowledge_bases:
-        args["retriever"] = agent.knowledge_bases_retriever()
+        args["knowledge_retriever"] = agent.knowledge_bases_retriever()
         args["search_knowledge"] = True
 
 
