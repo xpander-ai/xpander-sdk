@@ -263,7 +263,7 @@ class Events(ModuleBase):
         Args:
             worker_id (str): The unique identifier of the worker to release.
         """
-        url = f"{get_events_base(configuration=self.configuration)}/{worker_id}?type=worker"
+        url = f"{get_events_base(configuration=self.configuration)}/{worker_id}?type=worker&agent_id={self.agent_id}"
         await self._request_with_retries(
             "POST",
             url,
