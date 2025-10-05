@@ -125,6 +125,7 @@ class Task(XPanderSharedModel):
     organization_id: str
     input: AgentExecutionInput
     status: Optional[AgentExecutionStatus] = AgentExecutionStatus.Pending
+    internal_status: Optional[str] = None
     last_executed_node_id: Optional[str] = None
     agent_version: Optional[str] = None
     created_at: datetime
@@ -605,6 +606,7 @@ class Task(XPanderSharedModel):
                 memory_thread_id=self.id,
                 task=self.input.text or "",
                 status=self.status.value,
+                internal_status=self.internal_status,
                 duration=0.0,
                 ai_model="xpander",
                 api_calls_made=self.used_tools,
