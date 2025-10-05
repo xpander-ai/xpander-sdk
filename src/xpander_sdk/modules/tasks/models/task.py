@@ -158,6 +158,7 @@ class ExecutionMetricsReport(XPanderSharedModel):
     triggered_by: Optional[str] = "N/A"
     skills: Optional[list[str]] = []
     status: str
+    internal_status: Optional[str] = None
     duration: float
     ai_model: str
     worker: Optional[str] = None
