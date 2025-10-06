@@ -14,21 +14,17 @@ from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
 
 
-class AgentDeploymentProvider(str, Enum):
+class AgentDeploymentType(str, Enum):
     """
-    Enumeration of supported deployment providers for agents.
+    Enumeration of supported deployment types for agents.
     
     Values:
-        XPander: Deploy on xpander.ai's managed infrastructure.
-        Worker: Deploy on worker nodes.
-        GpuCloud: Deploy on GPU cloud infrastructure.
-        K8s: Deploy on Kubernetes clusters.
+        Serverless: Serverless agent.
+        Container: Containerized agent.
     """
     
-    XPander = "xpander"
-    Worker = "worker"
-    GpuCloud = "gpuCloud"
-    K8s = "k8s"
+    Serverless = "serverless"
+    Container = "container"
 
 
 class AgentStatus(str, Enum):

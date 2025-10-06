@@ -11,7 +11,7 @@ from pydantic import BaseModel
 
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.modules.agents.models.agent import (
-    AgentDeploymentProvider,
+    AgentDeploymentType,
     AgentInstructions,
     AgentStatus,
 )

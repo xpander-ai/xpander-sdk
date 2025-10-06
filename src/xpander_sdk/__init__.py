@@ -20,6 +20,7 @@ from .modules.backend.backend_module import Backend
 
 # Agent-related imports
 from .modules.agents.agents_module import Agents, Agent, AgentsListItem
+from .modules.agents.models.agent import AgentDeploymentType
 
 # Task-related imports
 from .modules.tasks.tasks_module import Tasks, Task, TasksListItem, AgentExecutionStatus
@@ -57,6 +58,7 @@ __all__ = [
     "Agent",
     "AgentsListItem",
     "AgentExecutionStatus",
+    "AgentDeploymentType",
     # Task management
     "Tasks",
     "Task",
