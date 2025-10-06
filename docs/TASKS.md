@@ -238,7 +238,7 @@ for file_data in readable_files:
 
 ### Internal Status Tracking
 
-The `internal_status` field allows customers to maintain their own custom status tracking alongside the standard task status. This field has a maximum length of 255 characters.
+The `internal_status` field allows customers to set custom context information alongside the standard task status. This optional field has a maximum length of 255 characters and is set once before the task is saved or returned.
 
 ```python
 # Create a task and set internal status
@@ -247,22 +247,21 @@ task = await tasks.acreate(
     prompt="Analyze customer feedback"
 )
 
-# Set custom internal status for tracking
-task.internal_status = "Analyzing sentiment patterns"
-await task.asave()
+# Your processing logic here
+# ... analyze customer feedback ...
 
-# Update internal status as work progresses
-task.internal_status = "Generating insights report"
-await task.asave()
+# Set custom internal status once before saving (max 255 characters)
+task.internal_status = "Sentiment analysis completed with 95% confidence"
+await task.asave()  # internal_status is persisted here
 
 # The internal_status field is independent of the main status
-print(f"Task Status: {task.status}")           # e.g., "Executing"
-print(f"Internal Status: {task.internal_status}")  # e.g., "Generating insights report"
+print(f"Task Status: {task.status}")           # e.g., "Executing" or "Completed"
+print(f"Internal Status: {task.internal_status}")  # "Sentiment analysis completed with 95% confidence"
 
 # Internal status is also tracked in execution metrics
-# This allows customers to report detailed progress information
+# This allows customers to provide additional context information
 # that complements the standard task lifecycle status
-# Note: internal_status is limited to 255 characters
+# Note: internal_status is limited to 255 characters and set once per task
 ```
 
 ## API Reference
