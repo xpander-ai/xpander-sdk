@@ -49,6 +49,7 @@ Represents a specific agent with capabilities to manage tasks, invoke tools, acc
 - **`tools`**: ToolsRepository instance providing access to all agent tools.
 - **`graph`**: Agent execution graph with all configured items.
 - **`llm_credentials`**: Optional custom LLM API credentials for this agent.
+- **`deployment_type`**: Deployment type for the agent (Serverless or Container).
 
 #### Key Methods
 
@@ -328,6 +329,23 @@ print(f"Agent framework: {agent.framework}")
 print(f"Model provider: {agent.model_provider}")
 print(f"Model name: {agent.model_name}")
 print(f"Output format: {agent.output_format}")
+print(f"Deployment type: {agent.deployment_type}")
+```
+
+### Agent Deployment Configuration
+
+```python
+from xpander_sdk import AgentDeploymentType
+
+# Check agent deployment type
+if agent.deployment_type == AgentDeploymentType.Serverless:
+    print("Agent is configured for serverless deployment")
+elif agent.deployment_type == AgentDeploymentType.Container:
+    print("Agent is configured for container deployment")
+
+# The deployment type affects how the agent is executed:
+# - Serverless: Agent runs in a serverless environment, ideal for lightweight tasks
+# - Container: Agent runs in a containerized environment, suitable for resource-intensive operations
 ```
 
 ## API Reference

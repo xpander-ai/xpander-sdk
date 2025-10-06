@@ -53,7 +53,7 @@ config = Configuration(
 ### 2. Basic Agent Operations
 
 ```python
-from xpander_sdk import Agents, Agent, Tasks
+from xpander_sdk import Agents, Agent, Tasks, AgentDeploymentType
 
 # Initialize agents module
 agents = Agents(configuration=config)

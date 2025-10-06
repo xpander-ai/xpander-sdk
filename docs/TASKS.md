@@ -50,6 +50,7 @@ Represents a single task, providing methods to interact with task configurations
 - **`id`**: Unique identifier for the task.
 - **`agent_id`**: Identifier for the associated agent.
 - **`status`**: Current status of the task (Pending, Executing, Completed, etc.).
+- **`internal_status`**: Optional internal status field that customers can use to report their own status (max 255 characters).
 - **`input`**: The input parameters for agent execution.
 - **`result`**: Result of the task execution.
 - **`events_streaming`**: Flag indicating if the task has events streaming enabled.
@@ -105,6 +106,10 @@ specific_task = await tasks.aget(task_id="task456")
 # Update task status
 # Note: aset_status is an asynchronous function
 await specific_task.aset_status(AgentExecutionStatus.Completed)
+
+# Set internal status for custom tracking
+specific_task.internal_status = "Processing customer data"
+
 # Note: asave is an asynchronous function
 await specific_task.asave()
 ```
@@ -165,6 +170,17 @@ reported_task = await Task.areport_external_task(
     used_tools=["financial_analyzer", "chart_generator", "pdf_creator"]
 )
 
+# Report external task with internal status tracking
+reported_task_with_status = await Task.areport_external_task(
+    agent_id="agent123",
+    id=str(uuid.uuid4()),
+    input="Process customer orders",
+    result="Successfully processed 150 orders",
+    # Note: internal_status can be set on the task after reporting
+)
+reported_task_with_status.internal_status = "Orders validated and shipped"
+await reported_task_with_status.asave()
+
 # Synchronous external task reporting
 reported_task_sync = Task.report_external_task(
     agent_id="agent123",
@@ -218,6 +234,35 @@ readable_files = task.get_human_readable_files()
 for file_data in readable_files:
     print(f"File: {file_data['url']}")
     print(f"Content preview: {file_data['content'][:200]}...")
+```
+
+### Internal Status Tracking
+
+The `internal_status` field allows customers to maintain their own custom status tracking alongside the standard task status. This field has a maximum length of 255 characters.
+
+```python
+# Create a task and set internal status
+task = await tasks.acreate(
+    agent_id="agent123",
+    prompt="Analyze customer feedback"
+)
+
+# Set custom internal status for tracking
+task.internal_status = "Analyzing sentiment patterns"
+await task.asave()
+
+# Update internal status as work progresses
+task.internal_status = "Generating insights report"
+await task.asave()
+
+# The internal_status field is independent of the main status
+print(f"Task Status: {task.status}")           # e.g., "Executing"
+print(f"Internal Status: {task.internal_status}")  # e.g., "Generating insights report"
+
+# Internal status is also tracked in execution metrics
+# This allows customers to report detailed progress information
+# that complements the standard task lifecycle status
+# Note: internal_status is limited to 255 characters
 ```
 
 ## API Reference
