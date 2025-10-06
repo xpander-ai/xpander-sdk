@@ -27,7 +27,7 @@ from xpander_sdk.models.shared import LLMModelT, OutputFormat, XPanderSharedMode
 from xpander_sdk.models.user import User
 from xpander_sdk.modules.agents.models.agent import (
     AgentAccessScope,
-    AgentDeploymentProvider,
+    AgentDeploymentType,
     AgentGraphItem,
     AgentGraphItemType,
     AgentInstructions,
@@ -170,6 +170,7 @@ class Agent(XPanderSharedModel):
     environment_id: str = None
     tools: Optional[ToolsRepository] = None
     icon: Optional[str] = "🚀"
+    deployment_type: Optional[AgentDeploymentType] = AgentDeploymentType.Serverless
     source_nodes: Optional[List[AgentSourceNode]] = []
     access_scope: Optional[AgentAccessScope] = AgentAccessScope.Organizational
     instructions: Optional[AgentInstructions] = AgentInstructions(
