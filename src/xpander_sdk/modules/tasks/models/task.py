@@ -7,7 +7,7 @@ and inputs for agents within the xpander.ai platform.
 
 from enum import Enum
 from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel
 from xpander_sdk.models.shared import ExecutionTokens, OutputFormat, Tokens, XPanderSharedModel
 from xpander_sdk.models.user import User
 
@@ -80,21 +80,6 @@ class AgentExecutionInput(BaseModel):
     text: Optional[str] = ""
     files: Optional[List[str]] = []
     user: Optional[User] = None
-
-    @model_validator(mode="after")
-    def validate_at_least_one(cls, values):
-        """
-        Validate that at least one field is provided (text or files).
-        
-        Raises:
-            ValueError: If neither text nor files are provided.
-        """
-        if not values.text and not values.files:
-            raise ValueError(
-                "Agent execution input should have either 'text' or 'files'. Please provide at least one."
-            )
-        return values
-
 
 class PendingECARequest(BaseModel):
     """
