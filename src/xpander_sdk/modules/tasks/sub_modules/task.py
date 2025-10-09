@@ -42,6 +42,7 @@ from xpander_sdk.models.events import (
     TaskUpdateEventType,
     ToolCallRequest,
     ToolCallResult,
+    AgentExecutionPlan
 )
 from xpander_sdk.models.shared import ExecutionTokens, OutputFormat, Tokens, XPanderSharedModel
 from xpander_sdk.modules.events.utils.generic import get_events_base, get_events_headers
@@ -51,7 +52,7 @@ from xpander_sdk.modules.tasks.models.task import (
     HumanInTheLoop,
     ExecutionMetricsReport,
     PendingECARequest,
-    TaskReportRequest,
+    TaskReportRequest
 )
 from xpander_sdk.modules.tasks.utils.files import categorize_files, fetch_urls, fetch_file
 from xpander_sdk.utils.event_loop import run_sync
@@ -59,7 +60,7 @@ from xpander_sdk.utils.event_loop import run_sync
 # Type variable for Task class methods
 T = TypeVar("T", bound="Task")
 
-TaskUpdateEventData = Union[T, ToolCallRequest, ToolCallResult]
+TaskUpdateEventData = Union[T, ToolCallRequest, ToolCallResult, AgentExecutionPlan]
 
 
 class TaskUpdateEvent(XPanderSharedModel):
