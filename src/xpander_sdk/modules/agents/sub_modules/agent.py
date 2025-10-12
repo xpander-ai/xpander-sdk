@@ -388,6 +388,7 @@ class Agent(XPanderSharedModel):
         events_streaming: Optional[bool] = False,
         additional_context: Optional[str] = None,
         expected_output: Optional[str] = None,
+        mcp_servers: Optional[List[MCPServerDetails]] = []
     ) -> Task:
         """
         Asynchronously create a new task and link it to this agent.
@@ -407,6 +408,7 @@ class Agent(XPanderSharedModel):
             events_streaming (Optional[bool]): Flag idicating for events are required for this task.
             additional_context (Optional[str]): Additional context to be passed to the agent.
             expected_output (Optional[str]): Expected output of the execution.
+            mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
 
         Returns:
             Task: Created Task object linked to this agent.
@@ -435,7 +437,8 @@ class Agent(XPanderSharedModel):
                     "run_locally": run_locally,
                     "events_streaming": events_streaming,
                     "additional_context": additional_context,
-                    "expected_output": expected_output
+                    "expected_output": expected_output,
+                    "mcp_servers": [server.model_dump() for server in mcp_servers]
                 },
             )
             return Task(**created_task, configuration=self.configuration)

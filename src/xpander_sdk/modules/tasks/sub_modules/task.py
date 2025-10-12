@@ -55,6 +55,7 @@ from xpander_sdk.modules.tasks.models.task import (
     TaskReportRequest
 )
 from xpander_sdk.modules.tasks.utils.files import categorize_files, fetch_urls, fetch_file
+from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
 from xpander_sdk.utils.event_loop import run_sync
 
 # Type variable for Task class methods
@@ -104,6 +105,7 @@ class Task(XPanderSharedModel):
         events_streaming (Optional[bool]): Flag indicating if the task has events streaming.
         additional_context (Optional[str]): Additional context to be passed to the agent.
         expected_output (Optional[str]): Expected output of the execution.
+        mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
 
     Example:
         >>> task = Task.load(task_id="task_123")
@@ -146,6 +148,7 @@ class Task(XPanderSharedModel):
     events_streaming: Optional[bool] = False
     additional_context: Optional[str] = None
     expected_output: Optional[str] = None,
+    mcp_servers: Optional[List[MCPServerDetails]] = [],
     
     # metrics
     tokens: Optional[Tokens] = None

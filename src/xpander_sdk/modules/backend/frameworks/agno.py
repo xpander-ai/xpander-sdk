@@ -41,7 +41,7 @@ async def build_agent_args(
     _configure_knowledge_bases(args=args, agent=xpander_agent)
     _configure_additional_context(args=args, agent=xpander_agent, task=task)
 
-    args["tools"] = await _resolve_agent_tools(agent=xpander_agent)
+    args["tools"] = await _resolve_agent_tools(agent=xpander_agent, task=task)
 
     if tools and len(tools) != 0:
         args["tools"].extend(tools)
@@ -344,8 +344,14 @@ def _configure_additional_context(
         args["tool_call_limit"] = agent.agno_settings.tool_call_limit
 
 
-async def _resolve_agent_tools(agent: Agent) -> List[Any]:
-    if not agent.mcp_servers:
+async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> List[Any]:
+    mcp_servers = agent.mcp_servers
+    
+    # combine task mcps and agent mcps
+    if task.mcp_servers:
+        mcp_servers.extend(task.mcp_servers)
+        
+    if not mcp_servers:
         return agent.tools.functions
 
     # Import MCP only if mcp_servers is present
@@ -359,7 +365,7 @@ async def _resolve_agent_tools(agent: Agent) -> List[Any]:
     mcp_tools: List[MCPTools] = []
     is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
 
-    for mcp in agent.mcp_servers:
+    for mcp in mcp_servers:
         transport = mcp.transport.value.lower()
         if mcp.type == MCPServerType.Local:
 
