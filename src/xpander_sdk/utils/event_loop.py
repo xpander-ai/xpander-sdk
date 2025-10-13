@@ -17,8 +17,8 @@ def run_sync(coro: Awaitable[Any]) -> Any:
     web frameworks such as FastAPI.
     
     This function detects and manages running event loops to prevent
-    runtime errors, applying the `nest_asyncio` package if necessary
-    to allow reentrant execution.
+    runtime errors. For uvloop compatibility, it uses asyncio.create_task
+    and waits for completion instead of nest_asyncio when uvloop is detected.
     
     Args:
         coro (Awaitable[Any]): The coroutine to be executed.
@@ -38,10 +38,30 @@ def run_sync(coro: Awaitable[Any]) -> Any:
     try:
         loop = asyncio.get_running_loop()
         if loop.is_running():
-            # Use `nest_asyncio` to allow nested event loops (e.g., Jupyter, FastAPI)
-            import nest_asyncio
-            nest_asyncio.apply()
-            return loop.run_until_complete(coro)
+            # Check if we're running with uvloop
+            loop_module = type(loop).__module__
+            if 'uvloop' in loop_module.lower():
+                # uvloop doesn't support nest_asyncio, so we need a different approach
+                # Create a task and run it in the current loop context
+                import concurrent.futures
+                
+                # Use a separate thread with a new event loop
+                def _run_in_thread():
+                    new_loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(new_loop)
+                    try:
+                        return new_loop.run_until_complete(coro)
+                    finally:
+                        new_loop.close()
+                
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                    future = executor.submit(_run_in_thread)
+                    return future.result()
+            else:
+                # Use `nest_asyncio` for standard asyncio loops
+                import nest_asyncio
+                nest_asyncio.apply()
+                return loop.run_until_complete(coro)
     except RuntimeError:
         # No event loop in this context, safe to run
         return asyncio.run(coro)
