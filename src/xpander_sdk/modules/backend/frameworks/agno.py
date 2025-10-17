@@ -348,7 +348,7 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> Lis
     mcp_servers = agent.mcp_servers
     
     # combine task mcps and agent mcps
-    if task.mcp_servers:
+    if task and task.mcp_servers:
         mcp_servers.extend(task.mcp_servers)
         
     if not mcp_servers:
