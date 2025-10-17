@@ -57,7 +57,7 @@ async def build_agent_args(
                     configuration=Configuration(
                         api_key=xpander_agent.configuration.api_key,
                         organization_id=xpander_agent.configuration.organization_id,
-                        base_url=xpander_agent.configuration.base_url
+                        base_url=xpander_agent.configuration.base_url,
                     )
                 ).aget(agent_id=sub_agent_id)
                 for sub_agent_id in sub_agents
@@ -101,9 +101,15 @@ async def build_agent_args(
             "add_datetime_to_context": True,
         }
     )
-    
-    if xpander_agent.is_a_team and xpander_agent.expected_output and len(xpander_agent.expected_output) != 0:
-        args["instructions"] += f"""\n
+
+    if (
+        xpander_agent.is_a_team
+        and xpander_agent.expected_output
+        and len(xpander_agent.expected_output) != 0
+    ):
+        args[
+            "instructions"
+        ] += f"""\n
             <expected_output>
             {xpander_agent.expected_output}
             </expected_output>
@@ -165,7 +171,7 @@ async def build_agent_args(
     # fix gpt-5 temp
     if args["model"] and args["model"].id and args["model"].id.startswith("gpt-5"):
         del args["model"].temperature
-    
+
     return args
 
 
@@ -319,9 +325,12 @@ async def _attach_async_dependencies(
     args: Dict[str, Any], agent: Agent, task: Optional[Task], model: Any
 ) -> None:
     user = task.input.user if task and task.input and task.input.user else None
-    should_use_users_memory = True if agent.agno_settings.user_memories and user and user.id else False
+    should_use_users_memory = (
+        True if agent.agno_settings.user_memories and user and user.id else False
+    )
     if agent.agno_settings.session_storage or should_use_users_memory:
         args["db"] = await agent.aget_db()
+
 
 def _configure_knowledge_bases(args: Dict[str, Any], agent: Agent) -> None:
     if agent.knowledge_bases:
@@ -346,11 +355,11 @@ def _configure_additional_context(
 
 async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> List[Any]:
     mcp_servers = agent.mcp_servers
-    
+
     # combine task mcps and agent mcps
-    if task.mcp_servers:
+    if task and task.mcp_servers:
         mcp_servers.extend(task.mcp_servers)
-        
+
     if not mcp_servers:
         return agent.tools.functions
 
