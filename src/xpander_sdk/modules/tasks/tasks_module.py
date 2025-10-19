@@ -54,7 +54,7 @@ class Tasks(ModuleBase):
         """
         super().__init__(configuration)
 
-    async def alist(self, agent_id: str) -> List[TasksListItem]:
+    async def alist(self, agent_id: str, filters: Optional[Dict] = None) -> List[TasksListItem]:
         """
         Asynchronously list all tasks for a specific agent.
 
@@ -63,6 +63,7 @@ class Tasks(ModuleBase):
 
         Args:
             agent_id (str): The unique identifier of the agent whose tasks should be listed.
+            filters (Optional[Dict]): Optional filters to be used on the query. supported filters: user_id, parent_task_id, triggering_agent_id, status, internal_status
 
         Returns:
             List[TasksListItem]: List of task summary objects related to the agent.
@@ -79,7 +80,8 @@ class Tasks(ModuleBase):
         try:
             client = APIClient(configuration=self.configuration)
             tasks = await client.make_request(
-                path=APIRoute.ListTasks.format(agent_id=agent_id)
+                path=APIRoute.ListTasks.format(agent_id=agent_id),
+                query=filters or {}
             )
             return [TasksListItem(**task) for task in tasks]
         except Exception as e:
@@ -87,7 +89,7 @@ class Tasks(ModuleBase):
                 raise ModuleException(e.response.status_code, e.response.text)
             raise ModuleException(500, f"Failed to list tasks - {str(e)}")
 
-    async def alist_user_tasks(self, user_id: str) -> List[TasksListItem]:
+    async def alist_user_tasks(self, user_id: str, filters: Optional[Dict] = None) -> List[TasksListItem]:
         """
         Asynchronously list all tasks for a specific user.
 
@@ -96,6 +98,7 @@ class Tasks(ModuleBase):
 
         Args:
             user_id (str): The unique identifier of the user whose tasks should be listed.
+            filters (Optional[Dict]): Optional filters to be used on the query. supported filters: parent_task_id, triggering_agent_id, status, internal_status
 
         Returns:
             List[TasksListItem]: List of task summary objects related to the user.
@@ -112,7 +115,8 @@ class Tasks(ModuleBase):
         try:
             client = APIClient(configuration=self.configuration)
             tasks = await client.make_request(
-                path=APIRoute.ListUserTasks.format(user_id=user_id)
+                path=APIRoute.ListUserTasks.format(user_id=user_id),
+                query=filters or {}
             )
             return [TasksListItem(**task) for task in tasks]
         except Exception as e:
@@ -120,7 +124,7 @@ class Tasks(ModuleBase):
                 raise ModuleException(e.response.status_code, e.response.text)
             raise ModuleException(500, f"Failed to list user tasks - {str(e)}")
     
-    def list(self, agent_id: str) -> List[TasksListItem]:
+    def list(self, agent_id: str, filters: Optional[Dict] = None) -> List[TasksListItem]:
         """
         Synchronously list all tasks for a specific agent.
 
@@ -129,6 +133,7 @@ class Tasks(ModuleBase):
 
         Args:
             agent_id (str): The unique identifier of the agent whose tasks should be listed.
+            filters (Optional[Dict]): Optional filters to be used on the query. supported filters: user_id, parent_task_id, triggering_agent_id, status, internal_status
 
         Returns:
             List[TasksListItem]: List of task summary objects related to the agent.
@@ -141,9 +146,9 @@ class Tasks(ModuleBase):
             >>> task_list = tasks.list(agent_id="agent123")
             >>> print(f"Found {len(task_list)} tasks")
         """
-        return run_sync(self.alist(agent_id=agent_id))
+        return run_sync(self.alist(agent_id=agent_id,filters=filters))
     
-    def list_user_tasks(self, user_id: str) -> List[TasksListItem]:
+    def list_user_tasks(self, user_id: str, filters: Optional[Dict] = None) -> List[TasksListItem]:
         """
         Synchronously list all tasks for a specific user.
 
@@ -152,6 +157,7 @@ class Tasks(ModuleBase):
 
         Args:
             user_id (str): The unique identifier of the user whose tasks should be listed.
+            filters (Optional[Dict]): Optional filters to be used on the query. supported filters: parent_task_id, triggering_agent_id, status, internal_status
 
         Returns:
             List[TasksListItem]: List of task summary objects related to the user.
@@ -164,7 +170,7 @@ class Tasks(ModuleBase):
             >>> task_list = tasks.list(user_id="user123")
             >>> print(f"Found {len(task_list)} tasks")
         """
-        return run_sync(self.alist_user_tasks(user_id=user_id))
+        return run_sync(self.alist_user_tasks(user_id=user_id, filters=filters))
 
     async def aget(self, task_id: str) -> Task:
         """
