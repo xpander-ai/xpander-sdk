@@ -46,6 +46,8 @@ class TasksListItem(BaseModel):
     
     id: str = Field(..., description="Unique identifier for this execution")
     agent_id: str = Field(..., description="ID of the agent being executed")
+    user_id: Optional[str] = Field(default=None, description="ID of the user that created the task")
+    parent_task_id: Optional[str] = Field(default=None, description="ID of the parent task that triggered this task")
     organization_id: str = Field(..., description="ID of the organization that owns the agent")
     status: AgentExecutionStatus = Field(..., description="Current execution status")
     created_at: Optional[datetime] = Field(default=None, description="Timestamp when the execution was created")
