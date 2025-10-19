@@ -31,6 +31,7 @@ class TasksListItem(BaseModel):
         updated_at (Optional[datetime]): Timestamp of the last update to this execution.
         source_node_type (Optional[str]): The type of the source node that triggered execution.
         result (Optional[str]): Final result of the execution, if available.
+        title (Optional[str]): Task title.
         
     Methods:
         aload: Asynchronously load the full task details.
@@ -55,6 +56,7 @@ class TasksListItem(BaseModel):
     updated_at: Optional[datetime] = Field(default=None, description="Timestamp of the last update to this execution")
     source_node_type: Optional[str] = Field(default=None, description="Type of the source node that triggered this execution (if any)")
     result: Optional[str] = Field(default=None, description="Final result of the execution, if available")
+    title: Optional[str] = Field(default=None, description="Task title")
 
     async def aload(self, configuration: Optional[Configuration] = None) -> Task:
         """
