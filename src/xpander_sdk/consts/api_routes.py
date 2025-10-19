@@ -33,6 +33,7 @@ and deleting resources.
     
     # Tasks Endpoints
     ListTasks = "/agent-execution/executions/history/{agent_id}"
+    ListUserTasks = "/agent-execution/executions/history/user/{user_id}"
     GetTask = "/agent-execution/{task_id}/status"
     TaskCrud = "/agent-execution/{agent_or_task_id}"
     UpdateTask = "/agent-execution/{task_id}/update"

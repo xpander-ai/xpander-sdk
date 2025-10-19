@@ -87,6 +87,39 @@ class Tasks(ModuleBase):
                 raise ModuleException(e.response.status_code, e.response.text)
             raise ModuleException(500, f"Failed to list tasks - {str(e)}")
 
+    async def alist_user_tasks(self, user_id: str) -> List[TasksListItem]:
+        """
+        Asynchronously list all tasks for a specific user.
+
+        Retrieves a list of all tasks associated with a given user, providing
+        basic information for display and selection purposes.
+
+        Args:
+            user_id (str): The unique identifier of the user whose tasks should be listed.
+
+        Returns:
+            List[TasksListItem]: List of task summary objects related to the user.
+
+        Raises:
+            ModuleException: If the API request fails or returns an error.
+
+        Example:
+            >>> tasks = Tasks()
+            >>> task_list = await tasks.alist(user_id="user123")
+            >>> for task in task_list:
+            ...     print(f"Task: {task.id} - Status: {task.status}")
+        """
+        try:
+            client = APIClient(configuration=self.configuration)
+            tasks = await client.make_request(
+                path=APIRoute.ListUserTasks.format(user_id=user_id)
+            )
+            return [TasksListItem(**task) for task in tasks]
+        except Exception as e:
+            if isinstance(e, HTTPStatusError):
+                raise ModuleException(e.response.status_code, e.response.text)
+            raise ModuleException(500, f"Failed to list user tasks - {str(e)}")
+    
     def list(self, agent_id: str) -> List[TasksListItem]:
         """
         Synchronously list all tasks for a specific agent.
@@ -109,6 +142,29 @@ class Tasks(ModuleBase):
             >>> print(f"Found {len(task_list)} tasks")
         """
         return run_sync(self.alist(agent_id=agent_id))
+    
+    def list_user_tasks(self, user_id: str) -> List[TasksListItem]:
+        """
+        Synchronously list all tasks for a specific user.
+
+        This is the synchronous version of alist(). It internally calls the
+        asynchronous method and waits for completion.
+
+        Args:
+            user_id (str): The unique identifier of the user whose tasks should be listed.
+
+        Returns:
+            List[TasksListItem]: List of task summary objects related to the user.
+
+        Raises:
+            ModuleException: If the API request fails or returns an error.
+
+        Example:
+            >>> tasks = Tasks()
+            >>> task_list = tasks.list(user_id="user123")
+            >>> print(f"Found {len(task_list)} tasks")
+        """
+        return run_sync(self.alist_user_tasks(user_id=user_id))
 
     async def aget(self, task_id: str) -> Task:
         """
