@@ -23,10 +23,6 @@ class Task(XPanderSharedModel):
     error: Optional[str] = Field(None, description="Error message if failed")
     parent_id: Optional[str] = Field(None, description="Parent task id if related")
 
-class AgentExecutionPlan(XPanderSharedModel):
-    finished: bool = Field(..., description="Whether all tasks are complete")
-    tasks: List[Task] = Field(..., description="List of tasks to create or update")
-
 
 class ToolCallRequest(XPanderSharedModel):
     request_id: str
