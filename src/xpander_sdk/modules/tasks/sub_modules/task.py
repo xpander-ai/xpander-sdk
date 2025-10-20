@@ -105,6 +105,8 @@ class Task(XPanderSharedModel):
         additional_context (Optional[str]): Additional context to be passed to the agent.
         expected_output (Optional[str]): Expected output of the execution.
         mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
+        triggering_agent_id (Optional[str]): Optional triggering agent id.
+        title (Optional[str]): Optional task title.
 
     Example:
         >>> task = Task.load(task_id="task_123")
@@ -148,6 +150,8 @@ class Task(XPanderSharedModel):
     additional_context: Optional[str] = None
     expected_output: Optional[str] = None,
     mcp_servers: Optional[List[MCPServerDetails]] = [],
+    triggering_agent_id: Optional[str] = None,
+    title: Optional[str] = None,
     
     # metrics
     tokens: Optional[Tokens] = None
