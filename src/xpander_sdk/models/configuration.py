@@ -53,7 +53,7 @@ class Configuration(BaseModel):
     )
     
     state: Optional[State] = Field(
-        default=State(),
+        default_factory=State,
         description="Configuration level in-memory state",
         exclude=True,  # This ensures it's excluded by default
     )
