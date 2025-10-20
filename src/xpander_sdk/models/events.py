@@ -46,7 +46,6 @@ class TaskUpdateEventType(str, Enum):
     TaskCreated = "task_created"
     TaskUpdated = "task_updated"
     TaskFinished = "task_finished"
-    TaskPlanUpdate = "task_plan_update"
 
     ToolCallRequest = "tool_call_request"
     ToolCallResult = "tool_call_result"
