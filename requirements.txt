@@ -17,3 +17,4 @@ mcp
 openai
 anthropic
 packaging
+fireworks-ai
