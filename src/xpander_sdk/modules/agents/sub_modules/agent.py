@@ -147,6 +147,7 @@ class Agent(XPanderSharedModel):
             using_nemo: Optional[bool]
             model_provider: str
             model_name: str
+            llm_api_base: Optional[str]
             webhook_url: Optional[str]
             created_at: Optional[datetime]
             type: Optional[AgentType]
@@ -185,6 +186,7 @@ class Agent(XPanderSharedModel):
     using_nemo: Optional[bool] = False
     model_provider: str
     model_name: str
+    llm_api_base: Optional[str] = None
     webhook_url: Optional[str] = None
     created_at: Optional[datetime] = None
     type: Optional[AgentType] = None

@@ -230,6 +230,10 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
             # Local deployment: prioritize environment, fallback to custom
             return env_llm_key or agent.llm_credentials.value
 
+    llm_args = {}
+    if agent.llm_api_base and len(agent.llm_api_base) != 0:
+        llm_args["base_url"] = agent.llm_api_base
+    
     # OpenAI Provider - supports GPT models with dual API key fallback
     if provider == "openai":
         from agno.models.openai import OpenAIChat
@@ -240,14 +244,27 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
             api_key=get_llm_key("AGENTS_OPENAI_API_KEY")
             or get_llm_key("OPENAI_API_KEY"),
             temperature=0.0,
+            **llm_args
         )
+    # Fireworks AI Provider
+    elif provider == "fireworks":
+        from agno.models.fireworks import Fireworks
 
+        return Fireworks(
+            id=agent.model_name,
+            # Try xpander.ai-specific key first, fallback to standard OpenAI key
+            api_key=get_llm_key("FIREWORKS_API_KEY"),
+            **llm_args
+        )
     # NVIDIA NIM Provider - supports NVIDIA's inference microservices
     elif provider == "nim":
         from agno.models.nvidia import Nvidia
-
+        
         return Nvidia(
-            id=agent.model_name, api_key=get_llm_key("NVIDIA_API_KEY"), temperature=0.0
+            id=agent.model_name,
+            api_key=get_llm_key("NVIDIA_API_KEY"),
+            temperature=0.0,
+            **llm_args
         )
 
     # Anthropic Provider - supports Claude models
