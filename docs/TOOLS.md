@@ -110,7 +110,7 @@ result = weather_tool.invoke(
 if tools_repo.should_sync_local_tools():
     local_tools = tools_repo.get_local_tools_for_sync()
     print(f"Found {len(local_tools)} tools to sync")
-    
+
     for tool in local_tools:
         print(f"Syncing tool: {tool.name}")
         # Sync logic would be handled by the platform
@@ -138,57 +138,65 @@ mcp_server = MCPServerDetails(
 ### `ToolsRepository`
 
 - **`register_tool(cls, tool: Tool)`**: Register a local tool (class method)
-    - **Parameters**: `tool` (Tool): The tool instance to register
-    - **Returns**: None
-    - **Description**: Adds a tool to the local tools registry for later use.
+
+  - **Parameters**: `tool` (Tool): The tool instance to register
+  - **Returns**: None
+  - **Description**: Adds a tool to the local tools registry for later use.
 
 - **`get_tool_by_id(self, tool_id: str) -> Tool`**: Get tool by ID
-    - **Parameters**: `tool_id` (str): Unique identifier of the tool
-    - **Returns**: Tool instance corresponding to the given ID
-    - **Description**: Retrieves a tool from the combined list of backend and local tools.
+
+  - **Parameters**: `tool_id` (str): Unique identifier of the tool
+  - **Returns**: Tool instance corresponding to the given ID
+  - **Description**: Retrieves a tool from the combined list of backend and local tools.
 
 - **`should_sync_local_tools(self) -> bool`**: Check sync requirements
-    - **Returns**: bool indicating if any local tools need syncing with the backend
-    - **Description**: Determines if local tools marked for graph addition need synchronization.
+
+  - **Returns**: bool indicating if any local tools need syncing with the backend
+  - **Description**: Determines if local tools marked for graph addition need synchronization.
 
 - **`get_local_tools_for_sync(self) -> List[Tool]`**: Get tools needing sync
-    - **Returns**: List of local tools marked for graph addition that are not yet synced
-    - **Description**: Retrieves local tools that require synchronization with the backend.
+
+  - **Returns**: List of local tools marked for graph addition that are not yet synced
+  - **Description**: Retrieves local tools that require synchronization with the backend.
 
 - **`list (property) -> List[Tool]`**: Return all available tools
-    - **Returns**: List of all tools (both backend-managed and locally registered)
-    - **Description**: Merges backend tools and local tools, ensuring no duplicates by ID.
+
+  - **Returns**: List of all tools (both backend-managed and locally registered)
+  - **Description**: Merges backend tools and local tools, ensuring no duplicates by ID.
 
 - **`functions (property) -> List[Callable[..., Any]]`**: Get normalized callable functions
-    - **Returns**: List of callable functions corresponding to each registered tool
-    - **Description**: Provides schema-validated callable functions for direct execution.
+  - **Returns**: List of callable functions corresponding to each registered tool
+  - **Description**: Provides schema-validated callable functions for direct execution.
 
 ### `Tool`
 
 - **`async ainvoke(self, agent_id: str, payload: Any, payload_extension: Optional[Dict[str, Any]] = {}, configuration: Optional[Configuration] = None, task_id: Optional[str] = None, tool_call_id: Optional[str] = None) -> ToolInvocationResult`**: Asynchronously invoke the tool (local or remote), with schema validation and error handling.
-    - **Parameters**: 
-        - `agent_id` (str): ID of the agent making the call
-        - `payload` (Any): The input payload to the tool
-        - `payload_extension` (Optional[Dict[str, Any]]): Optional additional payload data
-        - `configuration` (Optional[Configuration]): Optional configuration override
-        - `task_id` (Optional[str]): ID of the current task context
-        - `tool_call_id` (Optional[str]): Unique ID of the tool call
-    - **Returns**: ToolInvocationResult - Result object encapsulating invocation output and status
-    - **Description**: Main method for invoking tools with full validation and error handling.
+
+  - **Parameters**:
+    - `agent_id` (str): ID of the agent making the call
+    - `payload` (Any): The input payload to the tool
+    - `payload_extension` (Optional[Dict[str, Any]]): Optional additional payload data
+    - `configuration` (Optional[Configuration]): Optional configuration override
+    - `task_id` (Optional[str]): ID of the current task context
+    - `tool_call_id` (Optional[str]): Unique ID of the tool call
+  - **Returns**: ToolInvocationResult - Result object encapsulating invocation output and status
+  - **Description**: Main method for invoking tools with full validation and error handling.
 
 - **`invoke(self, agent_id: str, payload: Any, payload_extension: Optional[Dict[str, Any]] = {}, configuration: Optional[Configuration] = None, task_id: Optional[str] = None, tool_call_id: Optional[str] = None) -> ToolInvocationResult`**: Synchronous wrapper for `ainvoke`.
-    - **Parameters**: Same as `ainvoke`
-    - **Returns**: ToolInvocationResult - Result of the tool invocation
-    - **Description**: Synchronous version of tool invocation for non-async environments.
+
+  - **Parameters**: Same as `ainvoke`
+  - **Returns**: ToolInvocationResult - Result of the tool invocation
+  - **Description**: Synchronous version of tool invocation for non-async environments.
 
 - **`set_configuration(self, configuration: Configuration)`**: Set the configuration object for this tool.
-    - **Parameters**: `configuration` (Configuration): The configuration instance to associate with this tool
-    - **Returns**: None
-    - **Description**: Updates the tool's configuration for API communication.
+
+  - **Parameters**: `configuration` (Configuration): The configuration instance to associate with this tool
+  - **Returns**: None
+  - **Description**: Updates the tool's configuration for API communication.
 
 - **`schema (property) -> type[BaseModel]`**: Generate Pydantic model schema
-    - **Returns**: A dynamically constructed Pydantic model class based on tool parameters
-    - **Description**: Provides schema validation for tool payloads.
+  - **Returns**: A dynamically constructed Pydantic model class based on tool parameters
+  - **Description**: Provides schema validation for tool payloads.
 
 ### `@register_tool` Decorator
 
@@ -211,9 +219,11 @@ def tool_function(param1: type, param2: type = default) -> return_type:
 ```
 
 **Parameters:**
+
 - `add_to_graph` (Optional[bool]): Whether to automatically add this tool to agent execution graphs. Defaults to False.
 
 **Behavior:**
+
 - Tool name is automatically derived from the function name
 - Tool description is extracted from the function's docstring
 - Function parameters and type hints are used to generate the tool schema
@@ -301,7 +311,7 @@ class CustomTool(Tool):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         # Custom initialization
-    
+
     async def custom_method(self):
         # Custom functionality
         pass
@@ -344,13 +354,13 @@ def call_api_endpoint(endpoint: str, method: str = "GET") -> dict:
 ### Database Integration
 
 ```python
-import asyncpg
+import psycopg
 from xpander_sdk import register_tool
 
 @register_tool
 async def query_database(query: str, params: list = None) -> list:
     """Execute a database query."""
-    conn = await asyncpg.connect("postgresql://...")
+    conn = await psycopg.connect("postgresql://...")
     try:
         result = await conn.fetch(query, *(params or []))
         return [dict(row) for row in result]

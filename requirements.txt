@@ -9,9 +9,10 @@ pytest
 black
 pre-commit
 pytest-asyncio
-sqlalchemy
 agno
-psycopg2-binary
+sqlalchemy
+psycopg
+greenlet
 nest-asyncio
 mcp
 openai
