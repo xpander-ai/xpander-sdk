@@ -42,6 +42,8 @@ async def build_agent_args(
     )
     _configure_knowledge_bases(args=args, agent=xpander_agent)
     _configure_additional_context(args=args, agent=xpander_agent, task=task)
+    # Configure pre-hooks (guardrails, etc.)
+    _configure_pre_hooks(args=args, agent=xpander_agent)
 
     args["tools"] = await _resolve_agent_tools(agent=xpander_agent, task=task)
 
@@ -163,9 +165,6 @@ async def build_agent_args(
     # disable hooks for NeMo due to issue with tool_hooks and NeMo
     if xpander_agent.using_nemo == False:
         args["tool_hooks"].append(on_tool_call_hook)
-    
-    # Configure pre-hooks (guardrails, etc.)
-    _configure_pre_hooks(args=args, agent=xpander_agent)
 
     # fix gpt-5 temp
     if args["model"] and args["model"].id and args["model"].id.startswith("gpt-5"):
