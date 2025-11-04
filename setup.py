@@ -24,7 +24,7 @@ setup(
         "nest-asyncio",
     ],
     extras_require={
-        "agno": ["agno", "sqlalchemy", "psycopg2-binary"],
+        "agno": ["agno", "sqlalchemy" ,"psycopg", "greenlet"],
         "dev": ["black", "pre-commit", "pytest", "anthropic", "mcp", "openai", "fireworks-ai"],
     },
     classifiers=[

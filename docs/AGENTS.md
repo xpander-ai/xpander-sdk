@@ -525,7 +525,7 @@ elif agent.deployment_type == AgentDeploymentType.Container:
 - **`async aget_db()`**: Asynchronously retrieve the storage backend for this agent.
 
   - **Description**: This method returns the storage backend for agent sessions. Only supported for agents using the Agno framework with session storage enabled.
-  - **Returns**: `PostgresDb` - Initialized storage backend for agent sessions.
+  - **Returns**: `AsyncPostgresDb` - Initialized storage backend for agent sessions.
   - **Raises**:
     - `NotImplementedError`: If the framework does not support storage.
     - `ImportError`: If required dependencies are missing.
