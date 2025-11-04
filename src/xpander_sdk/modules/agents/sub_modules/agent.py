@@ -775,7 +775,7 @@ class Agent(XPanderSharedModel):
         db = await self.aget_db()
         from agno.db import SessionType
         session = await asyncio.to_thread(db.get_session, session_id=session_id, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
-        return session
+        return await session
 
     def get_session(self, session_id: str):
         """
