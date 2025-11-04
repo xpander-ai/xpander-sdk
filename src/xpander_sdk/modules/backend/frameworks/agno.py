@@ -19,7 +19,9 @@ from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
 from agno.agent import Agent as AgnoAgent
 from agno.team import Team as AgnoTeam
-
+from agno.guardrails import PIIDetectionGuardrail
+from agno.guardrails import PromptInjectionGuardrail
+from agno.guardrails import OpenAIModerationGuardrail
 
 async def build_agent_args(
     xpander_agent: Agent,
@@ -161,6 +163,9 @@ async def build_agent_args(
     # disable hooks for NeMo due to issue with tool_hooks and NeMo
     if xpander_agent.using_nemo == False:
         args["tool_hooks"].append(on_tool_call_hook)
+    
+    # Configure pre-hooks (guardrails, etc.)
+    _configure_pre_hooks(args=args, agent=xpander_agent)
 
     # fix gpt-5 temp
     if args["model"] and args["model"].id and args["model"].id.startswith("gpt-5"):
@@ -318,6 +323,8 @@ def _configure_session_storage(
         args["enable_session_summaries"] = True
     if agent.agno_settings.num_history_runs:
         args["num_history_runs"] = agent.agno_settings.num_history_runs
+    if agent.agno_settings.max_tool_calls_from_history and agent.agno_settings.max_tool_calls_from_history >= 1:
+        args["max_tool_calls_from_history"] = agent.agno_settings.max_tool_calls_from_history
 
 
 def _configure_user_memory(
@@ -359,6 +366,49 @@ def _configure_additional_context(
 
     if agent.agno_settings.tool_call_limit:
         args["tool_call_limit"] = agent.agno_settings.tool_call_limit
+
+
+def _configure_pre_hooks(args: Dict[str, Any], agent: Agent) -> None:
+    """
+    Configure pre-hooks (guardrails) for the agent based on settings.
+    
+    Pre-hooks are executed before the agent processes input. This includes
+    guardrails like PII detection, prompt injection detection, and content
+    moderation that validate or transform input.
+    
+    Args:
+        args (Dict[str, Any]): Agent configuration arguments to be updated.
+        agent (Agent): The agent instance containing pre-hook settings.
+    """
+    # Add PII detection guardrail with optional masking
+    if agent.agno_settings.pii_detection_enabled:
+        if "pre_hooks" not in args:
+            args["pre_hooks"] = []
+        
+        pii_guardrail = PIIDetectionGuardrail(
+            mask_pii=agent.agno_settings.pii_detection_mask
+        )
+        args["pre_hooks"].append(pii_guardrail)
+    
+    # Add prompt injection detection guardrail
+    if agent.agno_settings.prompt_injection_detection_enabled:
+        if "pre_hooks" not in args:
+            args["pre_hooks"] = []
+        
+        prompt_injection_guardrail = PromptInjectionGuardrail()
+        args["pre_hooks"].append(prompt_injection_guardrail)
+    
+    # Add OpenAI moderation guardrail
+    if agent.agno_settings.openai_moderation_enabled:
+        if "pre_hooks" not in args:
+            args["pre_hooks"] = []
+        
+        moderation_kwargs = {}
+        if agent.agno_settings.openai_moderation_categories:
+            moderation_kwargs["raise_for_categories"] = agent.agno_settings.openai_moderation_categories
+        
+        openai_moderation_guardrail = OpenAIModerationGuardrail(**moderation_kwargs)
+        args["pre_hooks"].append(openai_moderation_guardrail)
 
 
 async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> List[Any]:
