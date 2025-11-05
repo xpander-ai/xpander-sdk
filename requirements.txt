@@ -11,7 +11,7 @@ pre-commit
 pytest-asyncio
 agno
 sqlalchemy
-psycopg[binary]
+psycopg[binary,pool]
 greenlet
 nest-asyncio
 mcp
