@@ -28,6 +28,7 @@ async def build_agent_args(
     task: Optional[Task] = None,
     override: Optional[Dict[str, Any]] = None,
     tools: Optional[List[Callable]] = None,
+    is_async: Optional[bool] = True
 ) -> Dict[str, Any]:
     model = _load_llm_model(agent=xpander_agent, override=override)
     args: Dict[str, Any] = {
@@ -38,7 +39,7 @@ async def build_agent_args(
     _configure_session_storage(args=args, agent=xpander_agent, task=task)
     _configure_user_memory(args=args, agent=xpander_agent, task=task)
     await _attach_async_dependencies(
-        args=args, agent=xpander_agent, task=task, model=model
+        args=args, agent=xpander_agent, task=task, model=model, is_async=is_async
     )
     _configure_knowledge_bases(args=args, agent=xpander_agent)
     _configure_additional_context(args=args, agent=xpander_agent, task=task)
@@ -339,12 +340,12 @@ def _configure_user_memory(
 
 
 async def _attach_async_dependencies(
-    args: Dict[str, Any], agent: Agent, task: Optional[Task], model: Any
+    args: Dict[str, Any], agent: Agent, task: Optional[Task], model: Any, is_async: Optional[bool] = True
 ) -> None:
     user = task.input.user if task and task.input and task.input.user else None
     should_use_users_memory = True if agent.agno_settings.user_memories and user and user.id else False
     if agent.agno_settings.session_storage or should_use_users_memory:
-        args["db"] = await agent.aget_db()
+        args["db"] = await agent.aget_db(async_db=is_async)
 
 def _configure_knowledge_bases(args: Dict[str, Any], agent: Agent) -> None:
     if agent.knowledge_bases:
