@@ -23,7 +23,10 @@ class Task(XPanderSharedModel):
     error: Optional[str] = Field(None, description="Error message if failed")
     parent_id: Optional[str] = Field(None, description="Parent task id if related")
 
-
+class ToolCallRequestReasoning(XPanderSharedModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    
 class ToolCallRequest(XPanderSharedModel):
     request_id: str
     operation_id: str
@@ -31,6 +34,7 @@ class ToolCallRequest(XPanderSharedModel):
     graph_node_id: Optional[str] = None
     tool_name: Optional[str] = None
     payload: Optional[Any] = None
+    reasoning: Optional[ToolCallRequestReasoning] = None
 
 
 class ToolCallResult(ToolCallRequest):
