@@ -382,7 +382,7 @@ class Agent(XPanderSharedModel):
         user_details: Optional[User] = None,
         agent_version: Optional[str] = None,
         tool_call_payload_extension: Optional[dict] = None,
-        source: Optional[str] = None,
+        source: Optional[str] = "sdk",
         worker_id: Optional[str] = None,
         run_locally: Optional[bool] = False,
         output_format: Optional[OutputFormat] = None,
@@ -404,7 +404,7 @@ class Agent(XPanderSharedModel):
             user_details (Optional[User]): User linked to this task context.
             agent_version (Optional[str]): Optional agent version to use.
             tool_call_payload_extension (Optional[dict]): Extend payload with additional information.
-            source (Optional[str]): Origin or source of the request.
+            source (Optional[str]): Origin or source of the request. default = "sdk".
             worker_id (Optional[str]): Worker identifier if applicable.
             run_locally (Optional[bool]): Indicates if task should run locally.
             output_format (Optional[OutputFormat]): Format for output response.
