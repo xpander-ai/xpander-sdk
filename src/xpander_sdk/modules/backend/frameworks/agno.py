@@ -423,10 +423,10 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> Lis
     # Import MCP only if mcp_servers is present
     from agno.tools.mcp import (
         MCPTools,
-        StdioServerParameters,
         SSEClientParams,
         StreamableHTTPClientParams,
     )
+    from mcp import StdioServerParameters
 
     mcp_tools: List[MCPTools] = []
     is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
