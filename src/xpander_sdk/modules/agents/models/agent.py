@@ -162,6 +162,7 @@ class AgentGraphItemType(str, Enum):
         AGENT: Standard agent node.
         TOOL: Tool or function node.
         HUMAN_IN_THE_LOOP: Human approval/interaction node.
+        SLEEP: Allow the agent to sleep between iterations.
         CUSTOM_AGENT: Custom agent implementation.
         STORAGE: Data storage node.
         CODING_AGENT: Specialized coding agent.
@@ -172,6 +173,7 @@ class AgentGraphItemType(str, Enum):
     AGENT = "agent"
     TOOL = "tool"
     HUMAN_IN_THE_LOOP = "human_in_the_loop"
+    SLEEP = "xpsleep-agent-delay"
     CUSTOM_AGENT = "custom_agent"
     STORAGE = "storage"
     CODING_AGENT = "coding_agent"
