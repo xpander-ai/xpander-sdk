@@ -568,12 +568,15 @@ class Agent(XPanderSharedModel):
         except Exception as e:
             logger.warning(f"Failed to sync local tools - {str(e)}")
 
-    async def aget_db(self):
+    async def aget_db(self, async_db: Optional[bool] = True):
         """
         Asynchronously retrieve the db for this agent.
 
+        Args:
+            async_db (Optional[bool]): Should return async database client.
+        
         Returns:
-            AsyncPostgresDb: Initialized async db (Agno PG) for agent sessions.
+            AsyncPostgresDb|PostgresDb: Initialized (async?) db (Agno PG) for agent sessions.
 
         Raises:
             NotImplementedError: If the framework does not support storage.
@@ -589,7 +592,7 @@ class Agent(XPanderSharedModel):
             raise LookupError("Session storage is not enabled for this agent.")
 
         try:
-            from agno.db.postgres import AsyncPostgresDb
+            from agno.db.postgres import AsyncPostgresDb, PostgresDb
         except ImportError as e:
             raise ImportError(
                 "The 'agno' extras must be installed to use this db. "
@@ -603,10 +606,12 @@ class Agent(XPanderSharedModel):
             )
 
         schema = get_db_schema_name(agent_id=self.id)
+        
+        client_type = AsyncPostgresDb if async_db else PostgresDb
 
-        return AsyncPostgresDb(
+        return client_type(
             db_schema=schema,
-            db_url=connection_string.connection_uri.uri.replace("postgresql", "postgresql+psycopg_async"),
+            db_url=connection_string.connection_uri.uri.replace("postgresql", "postgresql+psycopg"+("_async" if async_db else "")),
         )
 
     def get_db(self) -> Any:
@@ -619,7 +624,7 @@ class Agent(XPanderSharedModel):
         Example:
             >>> db = agent.get_db()
         """
-        return run_sync(self.aget_db())
+        return run_sync(self.aget_db(async_db=False))
 
     @computed_field
     @property

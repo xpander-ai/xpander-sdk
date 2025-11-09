@@ -230,6 +230,7 @@ class Backend(ModuleBase):
         task: Optional[Task] = None,
         override: Optional[Dict[str, Any]] = None,
         tools: Optional[List[Callable]] = None,
+        is_async: Optional[bool] = True
     ) -> Dict[str, Any]:
         """
         Asynchronously resolve runtime arguments for the specified agent.
@@ -241,6 +242,7 @@ class Backend(ModuleBase):
             task (Optional[Task]): Optional Task object providing runtime input/output context.
             override (Optional[Dict[str, Any]]): Optional overrides for final arguments.
             tools (Optional[List[Callable]]): Optional additional tools to be added to the agent arguments.
+            is_async (Optional[bool]): Is in Async Context?.
 
         Returns:
             Dict[str, Any]: Resolved argument dictionary to use with the agent.
@@ -265,7 +267,7 @@ class Backend(ModuleBase):
                 "or set via the 'XPANDER_AGENT_ID' environment variable."
             )
 
-        return await dispatch_get_args(agent=xpander_agent, task=task, override=override, tools=tools)
+        return await dispatch_get_args(agent=xpander_agent, task=task, override=override, tools=tools, is_async=is_async)
 
     def get_args(
         self,
@@ -303,7 +305,8 @@ class Backend(ModuleBase):
                 agent_version=agent_version,
                 task=task,
                 override=override,
-                tools=tools
+                tools=tools,
+                is_async=False
             )
         )
     
