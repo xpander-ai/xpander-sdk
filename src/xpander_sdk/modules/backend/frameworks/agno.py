@@ -146,24 +146,27 @@ async def build_agent_args(
             error = str(e)
             raise
         finally:
-            if not matched_tool and task:  # agent / mcp tool
-                tool_instance = Tool(
-                    configuration=xpander_agent.configuration,
-                    id=function_name,
-                    name=function_name,
-                    method="GET",
-                    path=f"/tools/{function_name}",
-                    should_add_to_graph=False,
-                    is_local=True,
-                    is_synced=True,
-                    description=function_name,
-                )
-                await tool_instance.agraph_preflight_check(
-                    agent_id=xpander_agent.id,
-                    configuration=tool_instance.configuration,
-                    task_id=task.id,
-                    payload={"input": arguments, "output": error or result} if isinstance(arguments, dict) else None
-                )
+            try:
+                if not matched_tool and task:  # agent / mcp tool
+                    tool_instance = Tool(
+                        configuration=xpander_agent.configuration,
+                        id=function_name,
+                        name=function_name,
+                        method="GET",
+                        path=f"/tools/{function_name}",
+                        should_add_to_graph=False,
+                        is_local=True,
+                        is_synced=True,
+                        description=function_name,
+                    )
+                    await tool_instance.agraph_preflight_check(
+                        agent_id=xpander_agent.id,
+                        configuration=tool_instance.configuration,
+                        task_id=task.id,
+                        payload={"input": arguments, "output": error or result} if isinstance(arguments, dict) else None
+                    )
+            except Exception:
+                pass
 
         # Return the result
         return result
