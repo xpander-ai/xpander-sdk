@@ -159,11 +159,17 @@ async def build_agent_args(
                         is_synced=True,
                         description=function_name,
                     )
+                    parsed_result = None
+                    try:
+                        parsed_result = dict(result)
+                    except Exception:
+                        parsed_result = result
+                        
                     await tool_instance.agraph_preflight_check(
                         agent_id=xpander_agent.id,
                         configuration=tool_instance.configuration,
                         task_id=task.id,
-                        payload={"input": arguments, "output": error or result} if isinstance(arguments, dict) else None
+                        payload={"input": arguments, "output": error or parsed_result} if isinstance(arguments, dict) else None
                     )
             except Exception:
                 pass
