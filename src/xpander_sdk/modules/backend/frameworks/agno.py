@@ -162,7 +162,7 @@ async def build_agent_args(
                     agent_id=xpander_agent.id,
                     configuration=tool_instance.configuration,
                     task_id=task.id,
-                    payload={"input": arguments, "output": error or dict(result if result else {"result": "N/A"})} if isinstance(arguments, dict) else None
+                    payload={"input": arguments, "output": error or result} if isinstance(arguments, dict) else None
                 )
 
         # Return the result
