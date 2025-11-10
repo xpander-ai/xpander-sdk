@@ -131,6 +131,21 @@ async def build_agent_args(
                 if xpander_agent.tools and len(xpander_agent.tools.list) != 0
                 else None
             )
+        except Exception:
+            pass
+        
+        error = None
+        try:
+            # Call the function
+            if asyncio.iscoroutinefunction(function_call):
+                result = await function_call(**arguments)
+            else:
+                result = function_call(**arguments)
+            
+        except Exception as e:
+            error = str(e)
+            raise
+        finally:
             if not matched_tool and task:  # agent / mcp tool
                 tool_instance = Tool(
                     configuration=xpander_agent.configuration,
@@ -147,15 +162,8 @@ async def build_agent_args(
                     agent_id=xpander_agent.id,
                     configuration=tool_instance.configuration,
                     task_id=task.id,
+                    payload={"input": arguments, "output": error or dict(result if result else {"result": "N/A"})} if isinstance(arguments, dict) else None
                 )
-        except Exception:
-            pass
-
-        # Call the function
-        if asyncio.iscoroutinefunction(function_call):
-            result = await function_call(**arguments)
-        else:
-            result = function_call(**arguments)
 
         # Return the result
         return result

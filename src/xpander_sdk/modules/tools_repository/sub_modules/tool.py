@@ -170,6 +170,7 @@ class Tool(XPanderSharedModel):
         configuration: Optional[Configuration] = None,
         task_id: Optional[str] = None,
         is_preflight: Optional[bool] = False,
+        append_payload: Optional[bool] = False,
     ) -> Any:
         """
         Asynchronously invoke the tool remotely using xpander.ai API.
@@ -182,6 +183,7 @@ class Tool(XPanderSharedModel):
             configuration (Optional[Configuration]): Optional configuration override.
             task_id (Optional[str]): ID of the execution task.
             is_preflight (Optional[bool]): If True, performs a preflight check only.
+            append_payload (Optional[bool]): If True, appends the payload also for preflights.
 
         Returns:
             Any: The response from the remote API.
@@ -219,7 +221,7 @@ class Tool(XPanderSharedModel):
         result = await client.make_request(
             path=APIRoute.InvokeTool.format(agent_id=agent_id, tool_id=self.id),
             method="POST",
-            payload=None if is_preflight else payload,
+            payload=None if is_preflight and not append_payload else payload,
             headers=headers,
         )
 
@@ -279,6 +281,7 @@ class Tool(XPanderSharedModel):
         agent_version: Optional[str] = None,
         configuration: Optional[Configuration] = None,
         task_id: Optional[str] = None,
+        payload: Optional[Any] = None
     ):
         """
         Perform an asynchronous preflight check on the tool execution graph.
@@ -288,6 +291,7 @@ class Tool(XPanderSharedModel):
             agent_version (Optional[str]): Optional agent version to use.
             configuration (Optional[Configuration]): Optional configuration override.
             task_id (Optional[str]): Execution task ID.
+            payload (Optional[Any]): Tool call payload.
 
         Raises:
             Exception: If the preflight check returns an error.
@@ -301,8 +305,9 @@ class Tool(XPanderSharedModel):
                 configuration=configuration,
                 agent_version=agent_version,
                 task_id=task_id,
-                payload={},
+                payload={"body_params": payload} if isinstance(payload, dict) else None,
                 is_preflight=True,
+                append_payload=True
             )
 
             if isinstance(result, dict) and (error := result.get("error")):
