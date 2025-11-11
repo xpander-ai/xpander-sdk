@@ -40,7 +40,7 @@ class AgnoSettings(BaseModel):
     tool_call_limit: Optional[int] = None
     coordinate_mode: Optional[bool] = False
     pii_detection_enabled: Optional[bool] = False
-    pii_detection_mask: Optional[bool] = False
+    pii_detection_mask: Optional[bool] = True
     prompt_injection_detection_enabled: Optional[bool] = False
     openai_moderation_enabled: Optional[bool] = False
     openai_moderation_categories: Optional[List[str]] = None
