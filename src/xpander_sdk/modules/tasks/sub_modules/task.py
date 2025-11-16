@@ -152,7 +152,6 @@ class Task(XPanderSharedModel):
     mcp_servers: Optional[List[MCPServerDetails]] = [],
     triggering_agent_id: Optional[str] = None,
     title: Optional[str] = None,
-    with_reasoning: Optional[bool] = False
     
     # metrics
     tokens: Optional[Tokens] = None
