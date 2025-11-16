@@ -33,6 +33,7 @@ async def build_agent_args(
     model = _load_llm_model(agent=xpander_agent, override=override)
     args: Dict[str, Any] = {
         "id": xpander_agent.id,
+        "store_events": True
     }
 
     _configure_output(args=args, agent=xpander_agent, task=task)
