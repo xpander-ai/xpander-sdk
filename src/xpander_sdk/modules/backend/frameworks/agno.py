@@ -19,6 +19,7 @@ from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
 from agno.agent import Agent as AgnoAgent
 from agno.team import Team as AgnoTeam
+from agno.memory import MemoryManager
 from agno.guardrails import PIIDetectionGuardrail
 from agno.guardrails import PromptInjectionGuardrail
 from agno.guardrails import OpenAIModerationGuardrail
@@ -351,6 +352,7 @@ def _configure_user_memory(
     user = task.input.user if task and task.input and task.input.user else None
     if agent.agno_settings.user_memories and user and user.id:
         args["enable_user_memories"] = True
+        args["memory_manager"] = MemoryManager(delete_memories=True)
         args["enable_agentic_memory"] = True
 
     if user:  # add user details to the agent
