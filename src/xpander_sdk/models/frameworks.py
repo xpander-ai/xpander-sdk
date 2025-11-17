@@ -20,7 +20,7 @@ class AgnoSettings(BaseModel):
 
     Attributes:
         session_storage (Optional[bool]): If True, enables session-level storage. Default is True.
-        user_memories (Optional[bool]): If True, enables memory of user interactions. Default is False.
+        user_memories (Optional[bool]): If True, enables memory of user interactions. Default is True.
         session_summaries (Optional[bool]): If True, enables generation of session summaries. Default is False.
         num_history_runs (Optional[int]): Number of historical runs to retain or consider. Default is 3.
         tool_call_limit (Optional[int]): Max tool calls per run.
@@ -33,7 +33,7 @@ class AgnoSettings(BaseModel):
     """
 
     session_storage: Optional[bool] = True
-    user_memories: Optional[bool] = False
+    user_memories: Optional[bool] = True
     session_summaries: Optional[bool] = False
     num_history_runs: Optional[int] = 3
     max_tool_calls_from_history: Optional[int] = 0
