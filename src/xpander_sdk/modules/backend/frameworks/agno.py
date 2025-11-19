@@ -50,9 +50,21 @@ async def build_agent_args(
 
     args["tools"] = await _resolve_agent_tools(agent=xpander_agent, task=task)
 
+    
     if tools and len(tools) != 0:
         args["tools"].extend(tools)
 
+    if not xpander_agent.is_a_team and xpander_agent.agno_settings.reasoning_tools_enabled:
+        from agno.tools.reasoning import ReasoningTools
+        args["tools"].append(
+            ReasoningTools(
+                enable_think=True,
+                enable_analyze=True,
+                add_instructions=True,
+                add_few_shot=True,
+            )
+        )
+        
     # team
     if xpander_agent.is_a_team:
         sub_agents = xpander_agent.graph.sub_agents

@@ -30,6 +30,7 @@ class AgnoSettings(BaseModel):
         prompt_injection_detection_enabled (Optional[bool]): If True, enables prompt injection detection guardrail. Default is False.
         openai_moderation_enabled (Optional[bool]): If True, enables OpenAI content moderation guardrail. Default is False.
         openai_moderation_categories (Optional[List[str]]): List of specific OpenAI moderation categories to enforce. If None, all categories are checked.
+        reasoning_tools_enabled (Optional[bool]): If True, enables Agno's reasoning tools (analyze, think, instructions and few shot). Default is False.
     """
 
     session_storage: Optional[bool] = True
@@ -44,3 +45,4 @@ class AgnoSettings(BaseModel):
     prompt_injection_detection_enabled: Optional[bool] = False
     openai_moderation_enabled: Optional[bool] = False
     openai_moderation_categories: Optional[List[str]] = None
+    reasoning_tools_enabled: Optional[bool] = False

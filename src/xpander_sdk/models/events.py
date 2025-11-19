@@ -47,11 +47,21 @@ class ToolCallResult(ToolCallRequest):
 
 
 class TaskUpdateEventType(str, Enum):
+    # tasks
     TaskCreated = "task_created"
     TaskUpdated = "task_updated"
     TaskFinished = "task_finished"
+    
+    # streaming
+    Chunk = "chunk"
 
+    # tool calls
     ToolCallRequest = "tool_call_request"
     ToolCallResult = "tool_call_result"
 
+    # multi agents
     SubAgentTrigger = "sub_agent_trigger"
+    
+    # reasoning
+    Think = "think"
+    Analyze = "analyze"
