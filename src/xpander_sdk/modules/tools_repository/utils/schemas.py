@@ -62,6 +62,8 @@ def build_model_from_schema(
                 base_type = json_type_to_python(prop_type, prop_schema)
 
             # Field annotation and Field() construction
+            # IMPORTANT: For fields marked as required in the JSON schema, don't wrap in Optional[]
+            # Even if they might be nullable, the type annotation determines Pydantic's required array
             annotation = base_type if prop_name in required else Optional[base_type]
             field_args = {}
             
@@ -81,17 +83,21 @@ def build_model_from_schema(
             field_args["description"] = enhanced_description
 
             # Set default or ... (required)
+            # The key insight: Pydantic includes a field in the 'required' array of model_json_schema()
+            # if and only if the field has Field(...) (no default) AND is not Optional[] in type annotation
             if prop_name in required:
                 if default is not None:
+                    # Has a default but still required in schema - use the default
                     field_info = Field(default, **field_args)
                 else:
+                    # No default and required - use ellipsis  
                     field_info = Field(..., **field_args)
             else:
-                # For optional fields, be more explicit about defaults
+                # Optional fields - always provide a default to keep them out of 'required' array
                 if default is not None:
                     field_info = Field(default, **field_args)
                 else:
-                    # Make sure optional fields are clearly marked as optional with explicit default
+                    # Optional with no explicit default - use None
                     field_info = Field(default=None, **field_args)
 
             fields[prop_name] = (annotation, field_info)
