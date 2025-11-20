@@ -821,7 +821,7 @@ class Agent(XPanderSharedModel):
         Example:
             >>> await agent.adelete_session(session_id="sess_456")
         """
-        db = await self.aget_db()
+        db = await self.aget_db(async_db=False)
         await asyncio.to_thread(db.delete_session, session_id=session_id)
     
     def delete_session(self, session_id: str):
