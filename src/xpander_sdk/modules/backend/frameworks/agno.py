@@ -62,6 +62,7 @@ async def build_agent_args(
                 enable_analyze=True,
                 add_instructions=True,
                 add_few_shot=True,
+                instructions="Never reasonate on internal tasks, always by the user MAIN request"
             )
         )
         
