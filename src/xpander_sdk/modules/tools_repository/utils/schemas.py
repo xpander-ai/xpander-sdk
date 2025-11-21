@@ -16,6 +16,17 @@ def build_model_from_schema(
     fields = {}
     properties = schema.get("properties", {})
     required = set(schema.get("required", []))
+    
+    # CRITICAL FIX: Add default={} to empty parameter containers
+    # This allows LLMs to omit them when they have no actual content
+    for param_name in ("body_params", "query_params", "path_params", "headers"):
+        if param_name in properties:
+            param_schema = properties[param_name]
+            if (param_schema.get("type") == "object" and
+                "properties" in param_schema and
+                len(param_schema.get("properties", {})) == 0 and
+                "default" not in param_schema):
+                param_schema["default"] = {}
 
     FIELD_SPECS = {
         "body_params": (
@@ -54,9 +65,24 @@ def build_model_from_schema(
             default = prop_schema.get("default", None)
 
             # Nested object support
+            # CRITICAL: Check if this is an empty parameter container
+            is_empty_param_container = False
             if prop_type == "object" and "properties" in prop_schema:
-                nested_model_name = f"{model_name}{pascal_case(prop_name)}"
-                base_type = build_model_from_schema(nested_model_name, prop_schema)
+                nested_props = prop_schema.get("properties", {})
+                nested_required = prop_schema.get("required", [])
+                # Empty if no properties or all properties are optional/empty
+                is_empty_param_container = len(nested_props) == 0 or \
+                    (len(nested_required) == 0 and all(
+                        p.get("type") == "object" and len(p.get("properties", {})) == 0 
+                        for p in nested_props.values()
+                    ))
+                
+                # For empty parameter containers, use Dict instead of nested model
+                if is_empty_param_container and prop_name in ("body_params", "query_params", "path_params", "headers"):
+                    base_type = Dict[str, Any]
+                else:
+                    nested_model_name = f"{model_name}{pascal_case(prop_name)}"
+                    base_type = build_model_from_schema(nested_model_name, prop_schema)
             else:
                 # Pass the full property schema to handle anyOf correctly
                 base_type = json_type_to_python(prop_type, prop_schema)
@@ -64,12 +90,19 @@ def build_model_from_schema(
             # Field annotation and Field() construction
             # IMPORTANT: For fields marked as required in the JSON schema, don't wrap in Optional[]
             # Even if they might be nullable, the type annotation determines Pydantic's required array
-            annotation = base_type if prop_name in required else Optional[base_type]
+            # EXCEPTION: Empty parameter containers should always be Optional with default={}
+            if is_empty_param_container:
+                annotation = Optional[base_type]
+            else:
+                annotation = base_type if prop_name in required else Optional[base_type]
+            
             field_args = {}
             
             # Enhance description to clarify optional vs required status
             enhanced_description = description or f"Parameter: {prop_name}"
-            if prop_name in required:
+            if is_empty_param_container:
+                enhanced_description = f"[OPTIONAL - empty container] {enhanced_description} (default: empty object)"
+            elif prop_name in required:
                 if default is not None:
                     enhanced_description = f"[REQUIRED with default] {enhanced_description} (default: {default})"
                 else:
@@ -85,7 +118,10 @@ def build_model_from_schema(
             # Set default or ... (required)
             # The key insight: Pydantic includes a field in the 'required' array of model_json_schema()
             # if and only if the field has Field(...) (no default) AND is not Optional[] in type annotation
-            if prop_name in required:
+            if is_empty_param_container:
+                # Empty containers always get default={}
+                field_info = Field(default={}, **field_args)
+            elif prop_name in required:
                 if default is not None:
                     # Has a default but still required in schema - use the default
                     field_info = Field(default, **field_args)
@@ -110,17 +146,19 @@ def build_model_from_schema(
                     fields[key] = (annotation, field_info)
 
     # After building fields, relax body/query/path if present and not already optional with a default
+    # CRITICAL FIX: Empty parameter containers (query_params, path_params, body_params) that are marked
+    # as required but have no actual properties should default to {} so LLMs can omit them
     for param in ("body_params", "query_params", "path_params"):
         if param in fields:
             ann, fld = fields[param]
-            # If field is required (not optional) or required with default=None
-            # or does not have a default
-            if (ann is dict or
-                ann is Dict[str, Any] or
-                (hasattr(ann, '__origin__') and ann.__origin__ is dict) or
-                (hasattr(ann, '__origin__') and ann.__origin__ is Dict)) \
-                or (getattr(fld, 'default', None) is None and getattr(fld, 'default_factory', None) is None):
-                # Make it Optional[Dict[str, Any]], with default={}
+            # Check if this field is required (has Ellipsis as default) or has no useful default
+            has_no_default = (getattr(fld, 'default', ...) is ... or 
+                            getattr(fld, 'default', None) is None) and \
+                           getattr(fld, 'default_factory', None) is None
+            
+            # Always make param containers Optional with default={} to allow LLMs to omit empty ones
+            if has_no_default or ann is dict or ann is Dict[str, Any] or \
+               (hasattr(ann, '__origin__') and ann.__origin__ in (dict, Dict)):
                 desc = getattr(fld, 'description', None) or f"Request {param.replace('_', ' ')} (default: empty object)."
                 fields[param] = (
                     Optional[Dict[str, Any]],
