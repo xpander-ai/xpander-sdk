@@ -23,7 +23,7 @@ from xpander_sdk.modules.knowledge_bases.models.knowledge_bases import (
     KnowledgeBaseSearchResult,
 )
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
-from xpander_sdk.models.shared import LLMModelT, OutputFormat, XPanderSharedModel
+from xpander_sdk.models.shared import LLMModelT, OutputFormat, ThinkMode, XPanderSharedModel
 from xpander_sdk.models.user import User
 from xpander_sdk.modules.agents.models.agent import (
     AgentAccessScope,
@@ -393,6 +393,7 @@ class Agent(XPanderSharedModel):
         mcp_servers: Optional[List[MCPServerDetails]] = [],
         triggering_agent_id: Optional[str] = None,
         title: Optional[str] = None,
+        think_mode: Optional[ThinkMode] = ThinkMode.Default
     ) -> Task:
         """
         Asynchronously create a new task and link it to this agent.
@@ -414,7 +415,8 @@ class Agent(XPanderSharedModel):
             expected_output (Optional[str]): Expected output of the execution.
             mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
             triggering_agent_id (Optional[str]): Optional triggering agent id.
-        title (Optional[str]): Optional task title.
+            title (Optional[str]): Optional task title.
+            think_mode (Optional[ThinkMode]): Optional task think mode, defaults to "default".
 
         Returns:
             Task: Created Task object linked to this agent.
@@ -447,6 +449,7 @@ class Agent(XPanderSharedModel):
                     "mcp_servers": [server.model_dump() for server in mcp_servers],
                     "triggering_agent_id": triggering_agent_id,
                     "title": title,
+                    "think_mode": think_mode.value,
                 },
             )
             return Task(**created_task, configuration=self.configuration)

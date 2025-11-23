@@ -43,7 +43,7 @@ from xpander_sdk.models.events import (
     ToolCallRequest,
     ToolCallResult,
 )
-from xpander_sdk.models.shared import ExecutionTokens, OutputFormat, Tokens, XPanderSharedModel
+from xpander_sdk.models.shared import ExecutionTokens, OutputFormat, ThinkMode, Tokens, XPanderSharedModel
 from xpander_sdk.modules.events.utils.generic import get_events_base, get_events_headers
 from xpander_sdk.modules.tasks.models.task import (
     AgentExecutionInput,
@@ -152,6 +152,7 @@ class Task(XPanderSharedModel):
     mcp_servers: Optional[List[MCPServerDetails]] = [],
     triggering_agent_id: Optional[str] = None,
     title: Optional[str] = None,
+    think_mode: Optional[ThinkMode] = ThinkMode.Default
     
     # metrics
     tokens: Optional[Tokens] = None

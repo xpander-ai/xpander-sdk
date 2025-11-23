@@ -14,7 +14,7 @@ from xpander_sdk.core.module_base import ModuleBase
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.configuration import Configuration
-from xpander_sdk.models.shared import OutputFormat
+from xpander_sdk.models.shared import OutputFormat, ThinkMode
 from xpander_sdk.models.user import User
 from xpander_sdk.modules.tasks.models.task import (
     AgentExecutionInput,
@@ -238,6 +238,7 @@ class Tasks(ModuleBase):
         mcp_servers: Optional[List[MCPServerDetails]] = [],
         triggering_agent_id: Optional[str] = None,
         title: Optional[str] = None,
+        think_mode: Optional[ThinkMode] = ThinkMode.Default
     ) -> Task:
         """
         Asynchronously create a new task for a specific agent.
@@ -264,6 +265,7 @@ class Tasks(ModuleBase):
             mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
             triggering_agent_id (Optional[str]): Optional triggering agent id.
             title (Optional[str]): Optional task title.
+            think_mode (Optional[ThinkMode]): Optional task think mode, defaults to "default".
 
         Returns:
             Task: Newly created task object containing all initial configuration data.
@@ -306,7 +308,8 @@ class Tasks(ModuleBase):
                     "expected_output": expected_output,
                     "mcp_servers": [server.model_dump() for server in mcp_servers],
                     "triggering_agent_id": triggering_agent_id,
-                    "title": title
+                    "title": title,
+                    "think_mode": think_mode.value,
                 },
             )
             return Task(**created_task, configuration=self.configuration)

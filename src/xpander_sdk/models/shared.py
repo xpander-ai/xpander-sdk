@@ -96,3 +96,7 @@ class Tokens(BaseModel):
 class ExecutionTokens(BaseModel):
     inner: Optional[Tokens] = Tokens()
     worker: Optional[Tokens] = Tokens()
+
+class ThinkMode(str, Enum):
+    Default = "default"
+    Harder = "harder"
