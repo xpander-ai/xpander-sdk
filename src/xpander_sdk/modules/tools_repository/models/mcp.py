@@ -10,6 +10,7 @@ class MCPServerType(str, Enum):
     
 class MCPServerAuthType(str, Enum):
     APIKey = "api_key"
+    OAuth2 = "oauth2"
     CustomHeaders = "custom_headers"
     _None = "none"
 
