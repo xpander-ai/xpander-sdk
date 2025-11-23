@@ -54,18 +54,21 @@ async def build_agent_args(
     if tools and len(tools) != 0:
         args["tools"].extend(tools)
 
-    if not xpander_agent.is_a_team and xpander_agent.agno_settings.reasoning_tools_enabled:
+    should_use_reasoning_tools = True if xpander_agent.agno_settings.reasoning_tools_enabled else False
+    if task and task.think_mode:
+        if task.think_mode == ThinkMode.Harder:
+            should_use_reasoning_tools = True
+
+    if not xpander_agent.is_a_team and should_use_reasoning_tools:
         from agno.tools.reasoning import ReasoningTools
-        is_default_reasoning = True if task and task.think_mode and task.think_mode == ThinkMode.Default else False
-        if is_default_reasoning:
-            args["tools"].append(
-                ReasoningTools(
-                    enable_think=True,
-                    enable_analyze=True,
-                    add_instructions=True,
-                    add_few_shot=True
-                )
+        args["tools"].append(
+            ReasoningTools(
+                enable_think=True,
+                enable_analyze=True,
+                add_instructions=True,
+                add_few_shot=True
             )
+        )
         
     # team
     if xpander_agent.is_a_team:
