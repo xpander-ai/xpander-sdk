@@ -6,7 +6,7 @@ from typing import Any, Callable, Dict, List, Optional
 from loguru import logger
 
 from xpander_sdk import Configuration
-from xpander_sdk.models.shared import OutputFormat
+from xpander_sdk.models.shared import OutputFormat, ThinkMode
 from xpander_sdk.modules.agents.agents_module import Agents
 from xpander_sdk.modules.agents.models.agent import AgentGraphItemType
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
@@ -56,14 +56,16 @@ async def build_agent_args(
 
     if not xpander_agent.is_a_team and xpander_agent.agno_settings.reasoning_tools_enabled:
         from agno.tools.reasoning import ReasoningTools
-        args["tools"].append(
-            ReasoningTools(
-                enable_think=True,
-                enable_analyze=True,
-                add_instructions=True,
-                add_few_shot=True
+        is_default_reasoning = True if task and task.think_mode and task.think_mode == ThinkMode.Default else False
+        if is_default_reasoning:
+            args["tools"].append(
+                ReasoningTools(
+                    enable_think=True,
+                    enable_analyze=True,
+                    add_instructions=True,
+                    add_few_shot=True
+                )
             )
-        )
         
     # team
     if xpander_agent.is_a_team:
