@@ -39,6 +39,7 @@ and deleting resources.
     UpdateTask = "/agent-execution/{task_id}/update"
     ReportExternalTask = "/agent-execution/{agent_id}/report_task"
     ReportExecutionMetrics = "/agents-metrics/{agent_id}/execution"
+    PushExecutionEventToQueue = "/agent-execution/{task_id}/events/push"
     
     # Knowledge Bases Endpoints
     ListKnowledgeBases = "/knowledge_bases"
@@ -47,6 +48,9 @@ and deleting resources.
     ListKnowledgeBaseDocuments = "/knowledge_bases/{knowledge_base_id}/list"
     KnowledgeBaseDocumentsCrud = "/knowledge_bases/{knowledge_base_id}"
     GetKnowledgeBaseDetails = "/knowledge_bases/{knowledge_base_id}/details"
+    
+    # MCP Auth
+    GetUserMCPAuthToken = "/mcp_auth/{agent_id}/{user_id}/get_token"
     
     # Tools
     GetOrInvokeToolById = "/tools/{tool_id}"

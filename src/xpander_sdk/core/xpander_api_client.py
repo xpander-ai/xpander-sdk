@@ -8,6 +8,7 @@ requests to the xpander.ai Backend-as-a-Service platform.
 from abc import ABC
 from typing import Optional, Any, Literal, Dict
 import httpx
+from pydantic import BaseModel
 
 from xpander_sdk.models.configuration import Configuration
 
@@ -67,6 +68,7 @@ class APIClient(ABC):
         query: Optional[Dict[str, Any]] = None,
         headers: Optional[Dict[str, Any]] = None,
         configuration: Optional[Configuration] = None,
+        model: Optional[BaseModel] = None,
     ) -> Any:
         """
         Make an authenticated HTTP request to the xpander.ai API.
@@ -78,6 +80,7 @@ class APIClient(ABC):
             query (Optional[Dict[str, Any]]): Query string parameters.
             headers (Optional[Dict[str, Any]]): Extra headers.
             configuration (Optional[Configuration]): Overrides self.configuration.
+            model (Optional[BaseModel]): pydantic model to use when constructing the result.
         
         Returns:
             Any: Parsed response body (JSON or text).
@@ -110,7 +113,7 @@ class APIClient(ABC):
             content_type = response.headers.get("Content-Type", "")
             if "application/json" in content_type:
                 try:
-                    return response.json()
+                    return response.json() if not model else model(**response.json())
                 except Exception:
                     return response.text
             return response.text
