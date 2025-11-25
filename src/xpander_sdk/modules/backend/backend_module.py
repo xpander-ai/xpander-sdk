@@ -1,6 +1,6 @@
 import json
 from os import getenv
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional
 
 from xpander_sdk.core.module_base import ModuleBase
 from xpander_sdk.models.configuration import Configuration
@@ -230,7 +230,7 @@ class Backend(ModuleBase):
         task: Optional[Task] = None,
         override: Optional[Dict[str, Any]] = None,
         tools: Optional[List[Callable]] = None,
-        is_async: Optional[bool] = True
+        is_async: Optional[bool] = True,
     ) -> Dict[str, Any]:
         """
         Asynchronously resolve runtime arguments for the specified agent.

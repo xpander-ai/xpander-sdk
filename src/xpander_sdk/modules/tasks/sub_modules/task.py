@@ -54,13 +54,13 @@ from xpander_sdk.modules.tasks.models.task import (
     TaskReportRequest
 )
 from xpander_sdk.modules.tasks.utils.files import categorize_files, fetch_urls, fetch_file
-from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
+from xpander_sdk.modules.tools_repository.models.mcp import MCPOAuthGetTokenResponse, MCPServerDetails
 from xpander_sdk.utils.event_loop import run_sync
 
 # Type variable for Task class methods
 T = TypeVar("T", bound="Task")
 
-TaskUpdateEventData = Union[T, ToolCallRequest, ToolCallResult]
+TaskUpdateEventData = Union[T, ToolCallRequest, ToolCallResult, MCPOAuthGetTokenResponse]
 
 
 class TaskUpdateEvent(XPanderSharedModel):

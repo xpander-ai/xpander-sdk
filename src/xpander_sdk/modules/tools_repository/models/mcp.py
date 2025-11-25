@@ -1,7 +1,9 @@
 from enum import Enum
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel
+
+from xpander_sdk.models.shared import XPanderSharedModel
 
 
 class MCPServerType(str, Enum):
@@ -32,3 +34,33 @@ class MCPServerDetails(BaseModel):
     headers: Optional[Dict] = {}
     env_vars: Optional[Dict] = {}
     allowed_tools: Optional[List[str]] = []
+
+
+class MCPOAuthResponseType(str, Enum):
+    NOT_SUPPORTED = "not_supported"
+    LOGIN_REQUIRED = "login_required"
+    TOKEN_ISSUE = "token_issue"
+    TOKEN_READY = "token_ready"
+
+
+class MCPOAuthGetTokenGenericResponse(XPanderSharedModel):
+    message: str
+
+
+class MCPOAuthGetTokenLoginRequiredResponse(XPanderSharedModel):
+    url: str
+    server_url: str
+    server_name: str
+
+
+class MCPOAuthGetTokenTokenReadyResponse(XPanderSharedModel):
+    access_token: str
+
+
+class MCPOAuthGetTokenResponse(XPanderSharedModel):
+    type: MCPOAuthResponseType
+    data: Union[
+        MCPOAuthGetTokenTokenReadyResponse,
+        MCPOAuthGetTokenLoginRequiredResponse,
+        MCPOAuthGetTokenGenericResponse,
+    ]

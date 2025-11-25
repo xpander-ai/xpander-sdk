@@ -9,7 +9,7 @@ async def dispatch_get_args(
     task: Optional[Task] = None,
     override: Optional[Dict[str, Any]] = None,
     tools: Optional[List[Callable]] = None,
-    is_async: Optional[bool] = True
+    is_async: Optional[bool] = True,
 ) -> Dict[str, Any]:
     """
     Dispatch to the correct framework-specific argument resolver.

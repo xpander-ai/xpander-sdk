@@ -10,8 +10,12 @@ from xpander_sdk.models.shared import OutputFormat, ThinkMode
 from xpander_sdk.modules.agents.agents_module import Agents
 from xpander_sdk.modules.agents.models.agent import AgentGraphItemType
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
+from xpander_sdk.modules.backend.utils.mcp_oauth import authenticate_mcp_server
 from xpander_sdk.modules.tasks.sub_modules.task import Task
 from xpander_sdk.modules.tools_repository.models.mcp import (
+    MCPOAuthGetTokenResponse,
+    MCPOAuthResponseType,
+    MCPServerAuthType,
     MCPServerTransport,
     MCPServerType,
 )
@@ -29,7 +33,7 @@ async def build_agent_args(
     task: Optional[Task] = None,
     override: Optional[Dict[str, Any]] = None,
     tools: Optional[List[Callable]] = None,
-    is_async: Optional[bool] = True
+    is_async: Optional[bool] = True,
 ) -> Dict[str, Any]:
     model = _load_llm_model(agent=xpander_agent, override=override)
     args: Dict[str, Any] = {
@@ -502,6 +506,22 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> Lis
                 if mcp.transport == MCPServerTransport.SSE
                 else StreamableHTTPClientParams
             )
+            
+            # handle mcp auth
+            if mcp.auth_type == MCPServerAuthType.OAuth2:
+                if not task:
+                    raise ValueError("MCP server with OAuth authentication detected but task not sent")
+                
+                if not task.input.user or not task.input.user.id:
+                    raise ValueError("MCP server with OAuth authentication detected but user id not set on the task (task.input.user.id)")
+                
+                auth_result: MCPOAuthGetTokenResponse = await authenticate_mcp_server(mcp_server=mcp,task=task,user_id=task.input.user.id)
+                if not auth_result:
+                    raise ValueError("MCP Server authentication failed")
+                if auth_result.type != MCPOAuthResponseType.TOKEN_READY:
+                    raise ValueError("MCP Server authentication timeout")
+                mcp.api_key = auth_result.data.access_token
+            
             if mcp.api_key:
                 if not mcp.headers:
                     mcp.headers = {}

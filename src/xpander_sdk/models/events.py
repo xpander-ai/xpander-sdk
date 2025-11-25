@@ -54,6 +54,9 @@ class TaskUpdateEventType(str, Enum):
     
     # streaming
     Chunk = "chunk"
+    
+    # MCP Auth
+    AuthEvent = "auth_event"
 
     # tool calls
     ToolCallRequest = "tool_call_request"
