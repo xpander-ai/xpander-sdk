@@ -1,6 +1,6 @@
 import base64
 import mimetypes
-from typing import List
+from typing import List, Optional
 from urllib.parse import urlparse
 import os
 from pydantic import BaseModel
@@ -47,7 +47,7 @@ def categorize_files(file_urls: list[str]) -> FileCategorization:
 
     return FileCategorization(**result)
 
-async def fetch_urls(urls: list[str]) -> list[dict[str, str]]:
+async def fetch_urls(urls: list[str], disable_attachment_injection: Optional[bool] = False) -> list[dict[str, str]]:
     """
     Fetches the content of multiple URLs asynchronously.
 
@@ -57,9 +57,12 @@ async def fetch_urls(urls: list[str]) -> list[dict[str, str]]:
     Returns:
         list[dict[str, str]]: A list of dictionaries containing the URL and its content.
                               Example: [{"url": "...", "content": "..."}]
+        disable_attachment_injection (Optional[bool]): Optional selection if to disable attachment injection to the context window.
     """
     async def fetch(client: httpx.AsyncClient, url: str) -> dict[str, str]:
         try:
+            if disable_attachment_injection:
+                return {"url": url}
             response = await client.get(url, timeout=10.0)
             response.raise_for_status()
             return {"url": url, "content": response.text}

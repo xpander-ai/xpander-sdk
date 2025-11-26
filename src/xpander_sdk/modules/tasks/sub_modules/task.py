@@ -398,6 +398,7 @@ class Task(XPanderSharedModel):
             ...     files=files
             ... )
         """
+        
         if not self.input.files or len(self.input.files) == 0:
             return []
         
@@ -471,7 +472,7 @@ class Task(XPanderSharedModel):
         if not categorized_files.files or len(categorized_files.files) == 0:
             return []
 
-        return run_sync(fetch_urls(urls=categorized_files.files))
+        return run_sync(fetch_urls(urls=categorized_files.files, disable_attachment_injection=self.disable_attachment_injection))
     
     def to_message(self) -> str:
         """
