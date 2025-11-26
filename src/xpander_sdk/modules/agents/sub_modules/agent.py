@@ -393,7 +393,8 @@ class Agent(XPanderSharedModel):
         mcp_servers: Optional[List[MCPServerDetails]] = [],
         triggering_agent_id: Optional[str] = None,
         title: Optional[str] = None,
-        think_mode: Optional[ThinkMode] = ThinkMode.Default
+        think_mode: Optional[ThinkMode] = ThinkMode.Default,
+        disable_attachment_injection: Optional[bool] = False,
     ) -> Task:
         """
         Asynchronously create a new task and link it to this agent.
@@ -417,6 +418,7 @@ class Agent(XPanderSharedModel):
             triggering_agent_id (Optional[str]): Optional triggering agent id.
             title (Optional[str]): Optional task title.
             think_mode (Optional[ThinkMode]): Optional task think mode, defaults to "default".
+            disable_attachment_injection (Optional[bool]): Optional selection if to disable attachment injection to the context window.
 
         Returns:
             Task: Created Task object linked to this agent.
@@ -450,6 +452,7 @@ class Agent(XPanderSharedModel):
                     "triggering_agent_id": triggering_agent_id,
                     "title": title,
                     "think_mode": think_mode.value,
+                    "disable_attachment_injection": disable_attachment_injection,
                 },
             )
             return Task(**created_task, configuration=self.configuration)

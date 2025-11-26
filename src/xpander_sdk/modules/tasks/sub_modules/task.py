@@ -153,6 +153,7 @@ class Task(XPanderSharedModel):
     triggering_agent_id: Optional[str] = None,
     title: Optional[str] = None,
     think_mode: Optional[ThinkMode] = ThinkMode.Default
+    disable_attachment_injection: Optional[bool] = False
     
     # metrics
     tokens: Optional[Tokens] = None
