@@ -1,6 +1,6 @@
 import asyncio
 import shlex
-from os import getenv
+from os import getenv, environ
 from typing import Any, Callable, Dict, List, Optional
 
 from loguru import logger
@@ -308,6 +308,15 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
         return Nvidia(
             id=agent.model_name,
             api_key=get_llm_key("NVIDIA_API_KEY"),
+            temperature=0.0,
+            **llm_args
+        )
+    # Amazon Bedrock Provider
+    elif provider == "amazon_bedrock":
+        from agno.models.aws.bedrock import AwsBedrock
+        environ["AWS_BEARER_TOKEN_BEDROCK"] = get_llm_key("AWS_BEARER_TOKEN_BEDROCK") # set to env
+        return AwsBedrock(
+            id=agent.model_name,
             temperature=0.0,
             **llm_args
         )
