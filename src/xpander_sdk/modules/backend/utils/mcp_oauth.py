@@ -42,9 +42,12 @@ async def get_token(mcp_server: MCPServerDetails, task: Task, user_id: str) -> M
 async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user_id: str) -> MCPOAuthGetTokenResponse:
     try:
         logger.info(f"Authenticating MCP Server {mcp_server.url}")
+        
+        user_identifier = user_id if mcp_server.share_user_token_across_other_agents else f"{task.agent_id}_{user_id}"
+        
         client = APIClient(configuration=task.configuration)
         result: MCPOAuthGetTokenResponse = await client.make_request(
-            path=APIRoute.GetUserMCPAuthToken.format(agent_id=task.agent_id, user_id=user_id),
+            path=APIRoute.GetUserMCPAuthToken.format(agent_id=task.agent_id, user_id=user_identifier),
             method="POST",
             payload=mcp_server.model_dump(),
             model=MCPOAuthGetTokenResponse
@@ -65,7 +68,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
                 elapsed_time += POLLING_INTERVAL
                 
                 # Check for token
-                token_result = await get_token(mcp_server=mcp_server, task=task, user_id=user_id)
+                token_result = await get_token(mcp_server=mcp_server, task=task, user_id=user_identifier)
                 if token_result and token_result.type == MCPOAuthResponseType.TOKEN_READY:
                     logger.info(f"Successful login for MCP Server {mcp_server.url}")
                     redacted_token_result = MCPOAuthGetTokenResponse(**token_result.model_dump_safe())
