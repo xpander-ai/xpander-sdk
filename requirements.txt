@@ -19,3 +19,4 @@ openai
 anthropic
 packaging
 fireworks-ai
+google-genai
