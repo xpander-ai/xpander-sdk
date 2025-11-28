@@ -50,7 +50,7 @@ async def build_agent_args(
     _configure_knowledge_bases(args=args, agent=xpander_agent)
     _configure_additional_context(args=args, agent=xpander_agent, task=task)
     # Configure pre-hooks (guardrails, etc.)
-    _configure_pre_hooks(args=args, agent=xpander_agent)
+    _configure_pre_hooks(args=args, agent=xpander_agent, model=model)
 
     args["tools"] = await _resolve_agent_tools(agent=xpander_agent, task=task)
 
@@ -418,7 +418,7 @@ def _configure_additional_context(
         args["tool_call_limit"] = agent.agno_settings.tool_call_limit
 
 
-def _configure_pre_hooks(args: Dict[str, Any], agent: Agent) -> None:
+def _configure_pre_hooks(args: Dict[str, Any], agent: Agent, model: Any) -> None:
     """
     Configure pre-hooks (guardrails) for the agent based on settings.
     
@@ -454,6 +454,12 @@ def _configure_pre_hooks(args: Dict[str, Any], agent: Agent) -> None:
             args["pre_hooks"] = []
         
         moderation_kwargs = {}
+        try:
+            if model and model.provider == "OpenAI":
+                moderation_kwargs["api_key"] = model.api_key
+        except:
+            pass
+        
         if agent.agno_settings.openai_moderation_categories:
             moderation_kwargs["raise_for_categories"] = agent.agno_settings.openai_moderation_categories
         
