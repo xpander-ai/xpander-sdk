@@ -244,7 +244,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
     """
     if override and "model" in override:
         return override["model"]
-
+    
     provider = agent.model_provider.lower()
 
     is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
@@ -289,6 +289,16 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
             api_key=get_llm_key("AGENTS_OPENAI_API_KEY")
             or get_llm_key("OPENAI_API_KEY"),
             temperature=0.0,
+            **llm_args
+        )
+    # Google AI Studio - supports gemini models
+    elif provider == "google_ai_studio":
+        from agno.models.google import Gemini
+
+        return Gemini(
+            id=agent.model_name,
+            # Try xpander.ai-specific key first, fallback to standard OpenAI key
+            api_key=get_llm_key("GOOGLE_API_KEY"),
             **llm_args
         )
     # Fireworks AI Provider
