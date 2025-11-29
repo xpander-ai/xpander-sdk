@@ -291,6 +291,17 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
             temperature=0.0,
             **llm_args
         )
+    # Helicone
+    elif provider == "helicone":
+        from agno.models.openai.like import OpenAILike
+
+        return OpenAILike(
+            id=agent.model_name,
+            # Try xpander.ai-specific key first, fallback to standard OpenAI key
+            api_key=get_llm_key("HELICONE_API_KEY"),
+            base_url="https://ai-gateway.helicone.ai/v1",
+            **llm_args
+        )
     # Google AI Studio - supports gemini models
     elif provider == "google_ai_studio":
         from agno.models.google import Gemini
