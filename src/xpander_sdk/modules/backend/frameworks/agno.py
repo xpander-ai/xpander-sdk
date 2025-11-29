@@ -302,6 +302,26 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
             base_url="https://ai-gateway.helicone.ai/v1",
             **llm_args
         )
+    # Nebius
+    elif provider == "nebius":
+        from agno.models.nebius import Nebius
+
+        return Nebius(
+            id=agent.model_name,
+            # Try xpander.ai-specific key first, fallback to standard OpenAI key
+            api_key=get_llm_key("NEBIUS_API_KEY"),
+            **llm_args
+        )
+    # OpenRouter
+    elif provider == "open_router":
+        from agno.models.openrouter import OpenRouter
+
+        return OpenRouter(
+            id=agent.model_name,
+            # Try xpander.ai-specific key first, fallback to standard OpenAI key
+            api_key=get_llm_key("OPENROUTER_API_KEY"),
+            **llm_args
+        )
     # Google AI Studio - supports gemini models
     elif provider == "google_ai_studio":
         from agno.models.google import Gemini
