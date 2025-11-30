@@ -47,6 +47,11 @@ class Configuration(BaseModel):
         description="Base URL for xpander.ai API endpoints"
     )
     
+    agent_id: Optional[str] = Field(
+        default= None, 
+        description="Agent ID To work on"
+    )
+    
     organization_id: Optional[str] = Field(
         default_factory=lambda: getenv(key="XPANDER_ORGANIZATION_ID"),
         description="Organization identifier for xpander.ai account",

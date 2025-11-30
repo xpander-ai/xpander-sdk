@@ -6,7 +6,7 @@ within the xpander.ai Backend-as-a-Service platform.
 """
 
 from typing import List, Optional
-
+from os import getenv
 from httpx import HTTPStatusError
 
 from xpander_sdk.consts.api_routes import APIRoute
@@ -99,7 +99,7 @@ class Agents(ModuleBase):
         """
         return run_sync(self.alist())
 
-    async def aget(self, agent_id: str, version: Optional[int] = None) -> Agent:
+    async def aget(self, agent_id: Optional[str] = None, version: Optional[int] = None) -> Agent:
         """
         Asynchronously retrieve a specific agent by ID.
         
@@ -108,7 +108,7 @@ class Agents(ModuleBase):
         a specific version of the agent.
         
         Args:
-            agent_id (str): Unique identifier of the agent to retrieve.
+            agent_id (Optional[str]): Unique identifier of the agent to retrieve, Fallback to XPANDER_AGENT_ID.
             version (Optional[int]): Specific version number to load. If None,
                 loads the latest version.
                 
@@ -127,9 +127,12 @@ class Agents(ModuleBase):
             >>> # Load specific version
             >>> agent_v2 = await agents.aget("agent-123", version=2)
         """
-        return await Agent.aload(agent_id=agent_id, configuration=self.configuration, version=version)
+        return await Agent.aload(
+            agent_id=agent_id or self.configuration.agent_id or getenv("XPANDER_AGENT_ID"),
+            configuration=self.configuration, version=version
+        )
 
-    def get(self, agent_id: str, version: Optional[int] = None) -> Agent:
+    def get(self, agent_id: Optional[str] = None, version: Optional[int] = None) -> Agent:
         """
         Synchronously retrieve a specific agent by ID.
         
@@ -137,7 +140,7 @@ class Agents(ModuleBase):
         asynchronous method and waits for completion.
         
         Args:
-            agent_id (str): Unique identifier of the agent to retrieve.
+            agent_id (Optional[str]): Unique identifier of the agent to retrieve, Fallback to XPANDER_AGENT_ID.
             version (Optional[int]): Specific version number to load. If None,
                 loads the latest version.
                 
@@ -153,4 +156,9 @@ class Agents(ModuleBase):
             >>> agent = agents.get("agent-123")
             >>> result = agent.execute("What is the weather today?")
         """
-        return run_sync(self.aget(agent_id=agent_id, version=version))
+        return run_sync(
+            self.aget(
+            agent_id=agent_id,
+            version=version
+            )
+        )

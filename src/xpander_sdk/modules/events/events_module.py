@@ -106,7 +106,7 @@ class Events(ModuleBase):
         configure_git_credentials()
 
         self.is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
-        self.agent_id = getenv("XPANDER_AGENT_ID", None)
+        self.agent_id = self.configuration.agent_id or getenv("XPANDER_AGENT_ID", None)
 
         if not self.agent_id:
             raise ModuleException(
