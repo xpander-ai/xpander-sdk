@@ -72,7 +72,7 @@ class AgentInstructions(BaseModel):
     
     @computed_field
     @property
-    def instructions(self) -> List[str]:
+    def instructions(self) -> str:
         """
         Get the role-specific instructions for the agent.
         
@@ -80,6 +80,27 @@ class AgentInstructions(BaseModel):
             List[str]: List of role instructions.
         """
         return f"""
+        <instructions>
+            {self.role}
+        </instructions>
+        <goals>
+            {self.goal_str}
+        </goals>
+        """
+    
+    @computed_field
+    @property
+    def full(self) -> str:
+        """
+        Get the role-specific instructions for the agent.
+        
+        Returns:
+            List[str]: List of role instructions.
+        """
+        return f"""
+        <description>
+            {self.description}
+        </description>
         <instructions>
             {self.role}
         </instructions>
