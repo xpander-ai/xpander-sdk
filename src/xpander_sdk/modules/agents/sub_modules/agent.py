@@ -8,6 +8,7 @@ agents in the xpander.ai Backend-as-a-Service platform.
 import asyncio
 from datetime import datetime
 import heapq
+import re
 from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
 from httpx import HTTPStatusError
 from loguru import logger
@@ -921,3 +922,19 @@ class Agent(XPanderSharedModel):
             )
         
         return tools
+    
+    @computed_field
+    @property
+    def sanitized_name(self) -> str:
+        # Replace invalid characters with underscores
+        sanitized = re.sub(r'[^A-Za-z0-9_]', '_', self.name)
+
+        # If the first character is invalid, prefix with underscore
+        if not re.match(r'[A-Za-z_]', sanitized):
+            sanitized = '_' + sanitized
+
+        # Prevent empty result
+        if not sanitized:
+            sanitized = '_agent'
+
+        return sanitized

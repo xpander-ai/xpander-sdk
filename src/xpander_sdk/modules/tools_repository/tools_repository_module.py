@@ -196,7 +196,10 @@ class ToolsRepository(XPanderSharedModel):
                         """
                         Normalized sync tool function that accepts a single Pydantic model payload.
                         """
-                        payload_dict = payload.model_dump(exclude_none=True)
+                        if isinstance(payload, dict):
+                            payload_dict = payload
+                        else:
+                            payload_dict = payload.model_dump(exclude_none=True)
                         return run_sync(_execute(payload_dict))
 
                 # --- Metadata ---
