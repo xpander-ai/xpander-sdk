@@ -358,7 +358,7 @@ class Events(ModuleBase):
 
             if error:
                 task.result = error
-                task.status = AgentExecutionStatus.Failed
+                task.status = AgentExecutionStatus.Error
             elif (
                 task.status == AgentExecutionStatus.Executing
             ):  # let the handler set the status, if not set - mark as completed
