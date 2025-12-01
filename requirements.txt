@@ -21,3 +21,4 @@ packaging
 fireworks-ai
 google-genai
 strands-agents
+openai-agents

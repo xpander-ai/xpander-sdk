@@ -14,7 +14,6 @@ from httpx import HTTPStatusError
 from loguru import logger
 from pydantic import ConfigDict, computed_field
 from strands import tool as strands_tool
-
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.exceptions.module_exception import ModuleException
@@ -52,6 +51,7 @@ from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 from xpander_sdk.modules.tools_repository.tools_repository_module import ToolsRepository
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
 from xpander_sdk.utils.event_loop import run_sync
+from xpander_sdk.utils.tools import get_openai_agents_sdk_tools
 
 
 class AgentGraph(XPanderSharedModel):
@@ -938,3 +938,8 @@ class Agent(XPanderSharedModel):
             sanitized = '_agent'
 
         return sanitized
+    
+    @computed_field
+    @property
+    def openai_agents_sdk_tools(self) -> List[Any]:
+        return get_openai_agents_sdk_tools(self)

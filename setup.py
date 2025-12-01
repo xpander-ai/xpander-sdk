@@ -23,6 +23,7 @@ setup(
         "httpx_sse",
         "nest-asyncio",
         "strands-agents",
+        "openai-agents",
     ],
     extras_require={
         "agno": ["agno", "sqlalchemy" ,"psycopg[binary,pool]", "greenlet"],
