@@ -20,3 +20,4 @@ anthropic
 packaging
 fireworks-ai
 google-genai
+strands-agents

@@ -12,6 +12,7 @@ from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
 from httpx import HTTPStatusError
 from loguru import logger
 from pydantic import ConfigDict, computed_field
+from strands import tool as strands_tool
 
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
@@ -883,3 +884,40 @@ class Agent(XPanderSharedModel):
 
         if not any(kb.id == knowledge_base_id for kb in self.knowledge_bases):
             self.knowledge_bases.append(AgentKnowledgeBase(id=knowledge_base_id))
+
+    @computed_field
+    @property
+    def strands_tools(self) -> List[Any]:
+        tools = []
+        for _tool in self.tools.list:
+            def make_tool(_tool_def: Tool):
+                async def invoke(payload: dict):
+                    return await _tool_def.ainvoke(
+                        task_id=self.configuration.state.task.id
+                            if self.configuration.state.task
+                            else None,
+                        agent_id=self.id,
+                        agent_version=self.version,
+                        payload=payload,
+                        configuration=_tool.configuration
+                    )
+                return invoke
+            
+            tools.append(
+                strands_tool(
+                    func=make_tool(_tool),
+                    name=_tool.id,
+                    description=_tool.description,
+                    inputSchema={
+                        "json": {
+                            "type": "object",
+                            "properties":{
+                                "payload": _tool.parameters
+                            },
+                            "required": ["payload"]
+                        }
+                    }
+                )
+            )
+        
+        return tools

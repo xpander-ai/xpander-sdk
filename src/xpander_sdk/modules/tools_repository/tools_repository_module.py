@@ -65,7 +65,7 @@ class ToolsRepository(XPanderSharedModel):
             tool (Tool): The tool to register.
         """
         cls._local_tools.append(tool)
-
+    
     @computed_field
     @property
     def list(self) -> List[Tool]:
