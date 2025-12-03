@@ -591,7 +591,8 @@ class Agent(XPanderSharedModel):
             ImportError: If required dependencies are missing.
             ValueError: If the connection string for storage is invalid.
         """
-        if self.framework != Framework.Agno:
+        framework = Framework.Agno # will be removed
+        if self.framework != framework:
             raise NotImplementedError(
                 f"Storage for framework '{self.framework}' is not supported."
             )
