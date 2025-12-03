@@ -24,6 +24,7 @@ async def dispatch_get_args(
     Returns:
         Dict[str, Any]: Arguments for instantiating the framework agent.
     """
+    agent.framework = Framework.Agno
     match agent.framework:
         case Framework.Agno:
             from .agno import build_agent_args

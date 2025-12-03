@@ -12,6 +12,10 @@ class Framework(str, Enum):
     """
 
     Agno = "agno"
+    GoogleADK = "google-adk"
+    LangChain = "langchain"
+    OpenAIAgents = "open-ai-agents"
+    Strands = "strands-agents"
 
 
 class AgnoSettings(BaseModel):
