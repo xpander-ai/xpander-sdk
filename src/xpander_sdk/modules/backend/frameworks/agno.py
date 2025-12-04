@@ -44,6 +44,7 @@ async def build_agent_args(
     _configure_output(args=args, agent=xpander_agent, task=task)
     _configure_session_storage(args=args, agent=xpander_agent, task=task)
     _configure_user_memory(args=args, agent=xpander_agent, task=task)
+    _configure_tool_calls_compression(args=args, agent=xpander_agent)
     await _attach_async_dependencies(
         args=args, agent=xpander_agent, task=task, model=model, is_async=is_async
     )
@@ -416,6 +417,17 @@ def _configure_session_storage(
     if agent.agno_settings.max_tool_calls_from_history and agent.agno_settings.max_tool_calls_from_history >= 1:
         args["max_tool_calls_from_history"] = agent.agno_settings.max_tool_calls_from_history
 
+
+def _configure_tool_calls_compression(
+    args: Dict[str, Any], agent: Agent
+) -> None:
+    if agent.agno_settings.tool_calls_compression and agent.agno_settings.tool_calls_compression.enabled:
+        from agno.compression.manager import CompressionManager
+        args["compression_manager"] = CompressionManager(
+            compress_tool_results=True,
+            compress_tool_results_limit=agent.agno_settings.tool_calls_compression.threshold,
+            compress_tool_call_instructions=agent.agno_settings.tool_calls_compression.instructions,
+        )
 
 def _configure_user_memory(
     args: Dict[str, Any], agent: Agent, task: Optional[Task]

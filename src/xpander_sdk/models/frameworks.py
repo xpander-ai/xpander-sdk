@@ -17,6 +17,10 @@ class Framework(str, Enum):
     OpenAIAgents = "open-ai-agents"
     Strands = "strands-agents"
 
+class AgnoToolCallsCompressionSettings(BaseModel):
+    enabled: Optional[bool] = False
+    threshold: Optional[int] = 3
+    instructions: Optional[str] = ""
 
 class AgnoSettings(BaseModel):
     """
@@ -50,3 +54,5 @@ class AgnoSettings(BaseModel):
     openai_moderation_enabled: Optional[bool] = False
     openai_moderation_categories: Optional[List[str]] = None
     reasoning_tools_enabled: Optional[bool] = False
+    
+    tool_calls_compression: Optional[AgnoToolCallsCompressionSettings] = None
