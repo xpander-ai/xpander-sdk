@@ -616,6 +616,7 @@ class Agent(XPanderSharedModel):
 
         schema = get_db_schema_name(agent_id=self.id)
         
+        async_db = False
         client_type = AsyncPostgresDb if async_db else PostgresDb
 
         return client_type(
