@@ -43,7 +43,7 @@ async def build_agent_args(
 
     _configure_output(args=args, agent=xpander_agent, task=task)
     _configure_session_storage(args=args, agent=xpander_agent, task=task)
-    _configure_user_memory(args=args, agent=xpander_agent, task=task)
+    _configure_agentic_memory(args=args, agent=xpander_agent, task=task)
     _configure_tool_calls_compression(args=args, agent=xpander_agent)
     await _attach_async_dependencies(
         args=args, agent=xpander_agent, task=task, model=model, is_async=is_async
@@ -429,14 +429,26 @@ def _configure_tool_calls_compression(
             compress_tool_call_instructions=agent.agno_settings.tool_calls_compression.instructions,
         )
 
-def _configure_user_memory(
+def _configure_agentic_memory(
     args: Dict[str, Any], agent: Agent, task: Optional[Task]
 ) -> None:
     user = task.input.user if task and task.input and task.input.user else None
-    if agent.agno_settings.user_memories and user and user.id:
+    user_memories_enabled = True if agent.agno_settings.user_memories and user and user.id else False
+    agent_memories_enabled = True if agent.agno_settings.agent_memories else False
+    
+    if user_memories_enabled:
         args["enable_user_memories"] = True
-        args["memory_manager"] = MemoryManager(delete_memories=True)
-        args["enable_agentic_memory"] = True
+        args["memory_manager"] = MemoryManager(delete_memories=True,clear_memories=True)
+        args["enable_agentic_memory"] = agent.agno_settings.agentic_memory
+    
+    if agent_memories_enabled:
+        args["add_culture_to_context"] = True
+        
+        if agent.agno_settings.agentic_culture:
+            args["enable_agentic_culture"] = True
+        else:
+            args["update_cultural_knowledge"] = True
+                
 
     if user:  # add user details to the agent
         args["additional_context"] = f"User details: {user.model_dump_json()}"
