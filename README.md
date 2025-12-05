@@ -2,7 +2,6 @@
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Documentation](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://docs.xpander.ai) [![PyPI Version](https://img.shields.io/pypi/v/xpander-sdk?label=PyPI)](https://pypi.org/project/xpander-sdk/) [![Downloads](https://pepy.tech/badge/xpander-sdk)](https://pepy.tech/project/xpander-sdk)
 
-
 The official Python SDK for xpander.ai - a powerful Backend-as-a-Service (BaaS) platform for building, deploying, and managing AI agents at scale.
 
 ## 🚀 Overview
@@ -259,7 +258,7 @@ async def handle_test_task(task):
     task.result = {
         "capabilities": [
             "Data analysis",
-            "Text processing", 
+            "Text processing",
             "API integration"
         ]
     }
