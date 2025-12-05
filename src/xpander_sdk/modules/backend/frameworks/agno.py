@@ -565,7 +565,7 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> Lis
                         env=mcp.env_vars,
                     ),
                     include_tools=mcp.allowed_tools or None,
-                    timeout_seconds=60,
+                    timeout_seconds=120,
                 )
             )
         elif mcp.url:
@@ -599,6 +599,7 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> Lis
                     transport=transport,
                     server_params=params_cls(url=mcp.url, headers=mcp.headers),
                     include_tools=mcp.allowed_tools or None,
+                    timeout_seconds=120
                 )
             )
 
