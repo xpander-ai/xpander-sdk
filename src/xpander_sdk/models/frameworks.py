@@ -42,7 +42,13 @@ class AgnoSettings(BaseModel):
     """
 
     session_storage: Optional[bool] = True
-    user_memories: Optional[bool] = True
+    
+    user_memories: Optional[bool] = False
+    agentic_memory: Optional[bool] = False
+    
+    agent_memories: Optional[bool] = False
+    agentic_culture: Optional[bool] = False
+    
     session_summaries: Optional[bool] = False
     num_history_runs: Optional[int] = 3
     max_tool_calls_from_history: Optional[int] = 0
