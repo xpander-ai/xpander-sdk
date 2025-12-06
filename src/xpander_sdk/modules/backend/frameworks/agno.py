@@ -458,8 +458,8 @@ async def _attach_async_dependencies(
     args: Dict[str, Any], agent: Agent, task: Optional[Task], model: Any, is_async: Optional[bool] = True
 ) -> None:
     user = task.input.user if task and task.input and task.input.user else None
-    should_use_users_memory = True if agent.agno_settings.user_memories and user and user.id else False
-    if agent.agno_settings.session_storage or should_use_users_memory:
+    should_use_db = True if (agent.agno_settings.user_memories and user and user.id) or agent.agno_settings.agent_memories else False
+    if agent.agno_settings.session_storage or should_use_db:
         args["db"] = await agent.aget_db(async_db=is_async)
 
 def _configure_knowledge_bases(args: Dict[str, Any], agent: Agent) -> None:
