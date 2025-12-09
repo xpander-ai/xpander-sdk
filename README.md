@@ -356,7 +356,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - **Documentation**: [https://docs.xpander.ai](https://docs.xpander.ai)
 - **Issues**: [GitHub Issues](https://github.com/xpander-ai/xpander-sdk/issues)
-- **Email**: dev@xpander.ai
+- **Email**: support@xpander.ai
 
 ---
 
