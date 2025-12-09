@@ -393,7 +393,7 @@ class AIAgentConnectivityDetailsA2AAuthType(str, Enum):
 
 class AIAgentConnectivityDetailsBase(XPanderSharedModel):
     custom_headers: Optional[Dict[str, str]] = {}
-    auth_type: Optional[AIAgentConnectivityDetailsA2AAuthType] = None
+    auth_type: Optional[AIAgentConnectivityDetailsA2AAuthType] = AIAgentConnectivityDetailsA2AAuthType.NoAuth
     api_key_header_name: Optional[str] = "X-API-Key"
 
 class AIAgentConnectivityDetailsA2A(AIAgentConnectivityDetailsBase):
