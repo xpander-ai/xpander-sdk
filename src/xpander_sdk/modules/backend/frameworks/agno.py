@@ -71,7 +71,8 @@ async def build_agent_args(
                 enable_think=True,
                 enable_analyze=True,
                 add_instructions=True,
-                add_few_shot=True
+                add_few_shot=True,
+                instructions="use 'think' and 'analyze' ONLY when its not a simple task of 'hi', 'what can you do' and such low complexity tasks"
             )
         )
         
