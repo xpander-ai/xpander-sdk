@@ -384,6 +384,29 @@ class AgentGraphItem(BaseModel):
     is_first: Optional[bool] = False
 
 
+
+class AIAgentConnectivityDetailsA2AAuthType(str, Enum):
+    NoAuth = "none"
+    ApiKey = "api_key"
+    Basic = "basic"
+    Bearer = "bearer"
+
+class AIAgentConnectivityDetailsBase(XPanderSharedModel):
+    custom_headers: Optional[Dict[str, str]] = {}
+    auth_type: Optional[AIAgentConnectivityDetailsA2AAuthType] = None
+    api_key_header_name: Optional[str] = "X-API-Key"
+
+class AIAgentConnectivityDetailsA2A(AIAgentConnectivityDetailsBase):
+    agent_url: str
+
+class AIAgentConnectivityDetailsCurl(AIAgentConnectivityDetailsBase):
+    curl_command: str
+    invoke_url: Optional[str] = None # post analysis (auto populate by llm)
+    method: Optional[str] = "POST" # post analysis (auto populate by llm)
+    prompt_field_name: Optional[str] = "" # post analysis (auto populate by llm) - CAN BE SET BY THE USER
+    files_field_name: Optional[str] = "" # post analysis (auto populate by llm) - CAN BE SET BY THE USER
+    task_id_field_name: Optional[str] = "" # post analysis (auto populate by llm) - CAN BE SET BY THE USER
+
 class AgentType(str, Enum):
     """
     Enumeration of agent types.
@@ -391,10 +414,14 @@ class AgentType(str, Enum):
     Values:
         Manager: Agent that manages and coordinates other agents.
         Regular: Standard agent for individual task execution.
+        A2A: Agent that is used via A2A protocol.
+        Curl: Custom Agent that is used via curl.
     """
 
     Manager = "manager"
     Regular = "regular"
+    A2A = "a2a"
+    Curl = "curl"
 
 
 @dataclass

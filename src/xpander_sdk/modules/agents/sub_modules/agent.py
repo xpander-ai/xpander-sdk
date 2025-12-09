@@ -9,7 +9,7 @@ import asyncio
 from datetime import datetime
 import heapq
 import re
-from typing import Any, Callable, Dict, List, Optional, Type, TypeVar
+from typing import Any, Callable, Dict, List, Optional, Type, TypeVar, Union
 from httpx import HTTPStatusError
 from loguru import logger
 from pydantic import ConfigDict, computed_field
@@ -27,6 +27,8 @@ from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
 from xpander_sdk.models.shared import LLMModelT, OutputFormat, ThinkMode, XPanderSharedModel
 from xpander_sdk.models.user import User
 from xpander_sdk.modules.agents.models.agent import (
+    AIAgentConnectivityDetailsA2A,
+    AIAgentConnectivityDetailsCurl,
     AgentAccessScope,
     AgentDeploymentType,
     AgentGraphItem,
@@ -153,6 +155,7 @@ class Agent(XPanderSharedModel):
             webhook_url: Optional[str]
             created_at: Optional[datetime]
             type: Optional[AgentType]
+            connectivity_details: Optional[Union[AIAgentConnectivityDetailsA2A,AIAgentConnectivityDetailsCurl, Dict]] = {}
             output_format: Optional[OutputFormat]
             output_schema: Optional[Dict]
             llm_credentials: Optional[LLMCredentials]
@@ -173,6 +176,7 @@ class Agent(XPanderSharedModel):
     environment_id: str = None
     tools: Optional[ToolsRepository] = None
     icon: Optional[str] = "🚀"
+    connectivity_details: Optional[Union[AIAgentConnectivityDetailsA2A,AIAgentConnectivityDetailsCurl, Dict]] = {}
     deployment_type: Optional[AgentDeploymentType] = AgentDeploymentType.Serverless
     source_nodes: Optional[List[AgentSourceNode]] = []
     access_scope: Optional[AgentAccessScope] = AgentAccessScope.Organizational
