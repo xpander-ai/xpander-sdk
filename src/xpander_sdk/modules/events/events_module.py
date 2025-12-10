@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import json as py_json
 import os
 import signal
 import sys
@@ -19,10 +20,12 @@ from typing import Any, Awaitable, Callable, Optional, Set, Union, List
 import httpx
 from httpx_sse import aconnect_sse
 from loguru import logger
+from pydantic import BaseModel
 
 from xpander_sdk.core.module_base import ModuleBase
 from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.configuration import Configuration
+from xpander_sdk.models.shared import OutputFormat
 from xpander_sdk.modules.agents.models.agent import SourceNodeType
 from xpander_sdk.modules.tasks.tasks_module import Tasks
 
@@ -364,6 +367,16 @@ class Events(ModuleBase):
             ):  # let the handler set the status, if not set - mark as completed
                 task.status = AgentExecutionStatus.Completed
 
+            # in case of structured output, return as stringified json
+            try:
+                if task.output_format == OutputFormat.Json:
+                    if isinstance(task.result, BaseModel):
+                        task.result = task.result.model_dump_json()
+                    if isinstance(task.result, dict) or isinstance(task.result, list):
+                        task.result = py_json.dumps(task.result)
+            except Exception:
+                pass
+            
             await task.asave()
             task.tokens = task_used_tokens
             task.used_tools = task_used_tools
