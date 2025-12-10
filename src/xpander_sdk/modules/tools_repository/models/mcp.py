@@ -34,6 +34,7 @@ class MCPServerDetails(BaseModel):
     headers: Optional[Dict] = {}
     env_vars: Optional[Dict] = {}
     allowed_tools: Optional[List[str]] = []
+    additional_scopes: Optional[List[str]] = []
     share_user_token_across_other_agents: Optional[bool] = True
 
 
