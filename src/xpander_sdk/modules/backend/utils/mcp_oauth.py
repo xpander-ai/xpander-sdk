@@ -8,7 +8,7 @@ from xpander_sdk.modules.tasks.sub_modules.task import Task, TaskUpdateEvent
 from xpander_sdk.modules.tools_repository.models.mcp import MCPOAuthGetTokenGenericResponse, MCPOAuthGetTokenResponse, MCPOAuthResponseType, MCPServerDetails
 
 POLLING_INTERVAL = 1 # every 1s
-MAX_WAIT_FOR_LOGIN = 300 # 5 mintutes
+MAX_WAIT_FOR_LOGIN = 600 # 10 mintutes
 
 async def push_event(task: Task, event: TaskUpdateEvent):
     client = APIClient(configuration=task.configuration)
