@@ -16,7 +16,7 @@ from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 from xpander_sdk.utils.event_loop import run_sync
-
+import json
 
 class ToolsRepository(XPanderSharedModel):
     """
@@ -51,7 +51,7 @@ class ToolsRepository(XPanderSharedModel):
     tools: List[Tool] = []
 
     agent_graph: Optional[Any] = None
-    is_async: Optional[bool] = False
+    is_async: Optional[bool] = True
 
     # Immutable registry for tools defined via decorator
     _local_tools: ClassVar[List[Tool]] = []
@@ -158,6 +158,10 @@ class ToolsRepository(XPanderSharedModel):
         fn_list = []
 
         for tool in self.list:
+            
+            # add json schema to the model doc
+            tool.schema.__doc__ = "Pay attention to the schema, dont miss. " + json.dumps(tool.schema.model_json_schema(mode="serialization"))
+            
             schema_cls: Type[BaseModel] = tool.schema
 
             # Create closure to capture tool and schema_cls
