@@ -247,6 +247,11 @@ async for event in task.aevents():
 
 ```python
 from xpander_sdk import Task
+from xpander_sdk.models.activity import (
+    AgentActivityThreadMessage,
+    AgentActivityThreadToolCall,
+    AgentActivityThreadReasoning
+)
 
 # Load a completed task
 task = await Task.aload("task-id")
@@ -256,14 +261,14 @@ activity_log = await task.aget_activity_log()
 
 # Analyze messages between user and agent
 for message in activity_log.messages:
-    if hasattr(message, 'role'):
+    if isinstance(message, AgentActivityThreadMessage):
         print(f"{message.role}: {message.content.text}")
-    elif hasattr(message, 'tool_name'):
+    elif isinstance(message, AgentActivityThreadToolCall):
         # Tool call
         print(f"Tool: {message.tool_name}")
         print(f"Payload: {message.payload}")
         print(f"Result: {message.result}")
-    elif hasattr(message, 'type'):
+    elif isinstance(message, AgentActivityThreadReasoning):
         # Reasoning step
         print(f"Reasoning ({message.type}): {message.thought}")
 
