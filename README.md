@@ -368,6 +368,93 @@ load_dotenv()
 config = Configuration()
 ```
 
+## 🏢 Self-Hosted Deployment
+
+If you're using a self-hosted xpander.ai deployment, configure the SDK to point to your Agent Controller endpoint.
+
+**Important**: Use the **Agent Controller API key** generated during Helm installation, not your xpander.ai cloud API key.
+
+### Configuration
+
+```bash
+# Set environment variables
+export XPANDER_API_KEY="your-agent-controller-api-key"  # From Helm installation
+export XPANDER_ORGANIZATION_ID="your-org-id"
+export XPANDER_BASE_URL="https://agent-controller.my-company.com"
+```
+
+Or configure explicitly:
+
+```python
+from xpander_sdk import Configuration
+
+config = Configuration(
+    api_key="your-agent-controller-api-key",  # From Helm installation
+    organization_id="your-org-id",
+    base_url="https://agent-controller.my-company.com"
+)
+```
+
+### Using with Agno Framework
+
+```python
+from xpander_sdk import Backend, Configuration
+from agno.agent import Agent
+
+# Configure for self-hosted
+config = Configuration(
+    api_key="your-agent-controller-api-key",  # From Helm installation
+    organization_id="your-org-id",
+    base_url="https://agent-controller.my-company.com"
+)
+
+# Initialize Backend with self-hosted config
+backend = Backend(configuration=config)
+
+# Create agent - it will use your self-hosted infrastructure
+agno_agent = Agent(**backend.get_args(agent_id="agent-123"))
+
+# Run agent
+result = await agno_agent.arun(
+    input="What can you help me with?",
+    stream=True
+)
+```
+
+### Complete Self-Hosted Example
+
+```python
+import asyncio
+from xpander_sdk import Configuration, Agent
+
+async def main():
+    # Configure for self-hosted deployment
+    config = Configuration(
+        api_key="your-agent-controller-api-key",  # From Helm installation
+        organization_id="your-org-id",
+        base_url="https://agent-controller.my-company.com"
+    )
+    
+    # Load agent from self-hosted deployment
+    agent = await Agent.aload("agent-123", configuration=config)
+    print(f"Agent: {agent.name}")
+    
+    # Create and execute task
+    task = await agent.acreate_task(
+        prompt="Analyze Q4 sales data",
+        file_urls=["https://example.com/sales-q4.csv"]
+    )
+    print(f"Task created: {task.id}")
+    print(f"Status: {task.status}")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+**Important**: Make sure your `base_url` points to the Agent Controller endpoint (e.g., `https://agent-controller.{your-domain}`), not the root domain.
+
+📖 **Full Guide**: [Self-Hosted Configuration Documentation](https://docs.xpander.ai/api-reference/configuration/self-hosted)
+
 ## 🔄 Error Handling
 
 ```python
