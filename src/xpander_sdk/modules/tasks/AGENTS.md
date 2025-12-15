@@ -114,29 +114,35 @@ reported_task_sync = Task.report_external_task(
 ### Task Activity Log Patterns
 ```python
 from xpander_sdk.modules.tasks.sub_modules.task import Task
-from xpander_sdk.models.activity import AgentActivityThread
+from xpander_sdk.models.activity import (
+    AgentActivityThread,
+    AgentActivityThreadMessage,
+    AgentActivityThreadToolCall,
+    AgentActivityThreadReasoning,
+    AgentActivityThreadSubAgentTrigger
+)
 
 # AI agents should use these patterns for retrieving task activity logs
 # Async activity log retrieval
 task = await Task.aload(task_id="task_123")
 activity_log = await task.aget_activity_log()
 
-# Process different message types in the activity thread
+# Process different message types in the activity thread using isinstance
 for message in activity_log.messages:
-    if hasattr(message, 'role'):
-        # AgentActivityThreadMessage
+    if isinstance(message, AgentActivityThreadMessage):
+        # User/agent conversation message
         print(f"{message.role}: {message.content.text}")
-    elif hasattr(message, 'tool_name'):
-        # AgentActivityThreadToolCall
+    elif isinstance(message, AgentActivityThreadToolCall):
+        # Tool invocation
         print(f"Tool: {message.tool_name}")
         print(f"Payload: {message.payload}")
         if message.result:
             print(f"Result: {message.result}")
-    elif hasattr(message, 'type') and hasattr(message, 'thought'):
-        # AgentActivityThreadReasoning
+    elif isinstance(message, AgentActivityThreadReasoning):
+        # Agent reasoning step
         print(f"Reasoning ({message.type}): {message.thought}")
-    elif hasattr(message, 'agent_id') and hasattr(message, 'query'):
-        # AgentActivityThreadSubAgentTrigger
+    elif isinstance(message, AgentActivityThreadSubAgentTrigger):
+        # Sub-agent trigger
         print(f"Sub-agent triggered: {message.agent_id}")
         print(f"Query: {message.query}")
 
@@ -185,7 +191,7 @@ pytest tests/test_tasks.py::test_task_execution
 
 ### Activity Log Management
 1. **Retrieval**: Only fetch activity logs for completed or stopped tasks
-2. **Processing**: Use type checking (hasattr) to handle different message types
+2. **Processing**: Use `isinstance()` type checking to handle different message types (AgentActivityThreadMessage, AgentActivityThreadToolCall, AgentActivityThreadReasoning, AgentActivityThreadSubAgentTrigger)
 3. **Error Handling**: Wrap activity log retrieval in try-catch blocks
 4. **Performance**: Activity logs can be large; process them efficiently
 
