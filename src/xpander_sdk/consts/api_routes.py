@@ -35,6 +35,7 @@ and deleting resources.
     ListTasks = "/agent-execution/executions/history/{agent_id}"
     ListUserTasks = "/agent-execution/executions/history/user/{user_id}"
     GetTask = "/agent-execution/{task_id}/status"
+    GetTaskActivityLog = "/activity/{agent_id}/{task_id}"
     TaskCrud = "/agent-execution/{agent_or_task_id}"
     UpdateTask = "/agent-execution/{task_id}/update"
     ReportExternalTask = "/agent-execution/{agent_id}/report_task"
