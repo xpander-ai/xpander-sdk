@@ -28,7 +28,17 @@ Typical usage example:
 """
 
 from datetime import datetime
-from typing import Any, AsyncGenerator, Dict, Generator, List, Optional, Type, TypeVar, Union
+from typing import (
+    Any,
+    AsyncGenerator,
+    Dict,
+    Generator,
+    List,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+)
 from httpx import HTTPStatusError
 import httpx
 import json
@@ -37,13 +47,20 @@ from httpx_sse import aconnect_sse
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.exceptions.module_exception import ModuleException
+from xpander_sdk.models.activity import AgentActivityThread
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.events import (
     TaskUpdateEventType,
     ToolCallRequest,
     ToolCallResult,
 )
-from xpander_sdk.models.shared import ExecutionTokens, OutputFormat, ThinkMode, Tokens, XPanderSharedModel
+from xpander_sdk.models.shared import (
+    ExecutionTokens,
+    OutputFormat,
+    ThinkMode,
+    Tokens,
+    XPanderSharedModel,
+)
 from xpander_sdk.modules.events.utils.generic import get_events_base, get_events_headers
 from xpander_sdk.modules.tasks.models.task import (
     AgentExecutionInput,
@@ -51,16 +68,25 @@ from xpander_sdk.modules.tasks.models.task import (
     HumanInTheLoop,
     ExecutionMetricsReport,
     PendingECARequest,
-    TaskReportRequest
+    TaskReportRequest,
 )
-from xpander_sdk.modules.tasks.utils.files import categorize_files, fetch_urls, fetch_file
-from xpander_sdk.modules.tools_repository.models.mcp import MCPOAuthGetTokenResponse, MCPServerDetails
+from xpander_sdk.modules.tasks.utils.files import (
+    categorize_files,
+    fetch_urls,
+    fetch_file,
+)
+from xpander_sdk.modules.tools_repository.models.mcp import (
+    MCPOAuthGetTokenResponse,
+    MCPServerDetails,
+)
 from xpander_sdk.utils.event_loop import run_sync
 
 # Type variable for Task class methods
 T = TypeVar("T", bound="Task")
 
-TaskUpdateEventData = Union[T, ToolCallRequest, ToolCallResult, MCPOAuthGetTokenResponse]
+TaskUpdateEventData = Union[
+    T, ToolCallRequest, ToolCallResult, MCPOAuthGetTokenResponse
+]
 
 
 class TaskUpdateEvent(XPanderSharedModel):
@@ -112,7 +138,7 @@ class Task(XPanderSharedModel):
         >>> task = Task.load(task_id="task_123")
         >>> task.set_status(AgentExecutionStatus.Running)
         >>> task.save()
-        >>> 
+        >>>
         >>> # Get files for Agno integration
         >>> files = task.get_files()  # PDF files as Agno File objects
         >>> images = task.get_images()  # Image files as Agno Image objects
@@ -148,13 +174,13 @@ class Task(XPanderSharedModel):
     output_schema: Optional[Dict] = None
     events_streaming: Optional[bool] = False
     additional_context: Optional[str] = None
-    expected_output: Optional[str] = None,
-    mcp_servers: Optional[List[MCPServerDetails]] = [],
-    triggering_agent_id: Optional[str] = None,
-    title: Optional[str] = None,
+    expected_output: Optional[str] = (None,)
+    mcp_servers: Optional[List[MCPServerDetails]] = ([],)
+    triggering_agent_id: Optional[str] = (None,)
+    title: Optional[str] = (None,)
     think_mode: Optional[ThinkMode] = ThinkMode.Default
     disable_attachment_injection: Optional[bool] = False
-    
+
     # metrics
     tokens: Optional[Tokens] = None
     used_tools: Optional[List[str]] = []
@@ -202,7 +228,6 @@ class Task(XPanderSharedModel):
         self.__dict__.update(new_obj.__dict__)
         return self
 
-
     def reload(self):
         """
         Reload the current object synchronously.
@@ -217,7 +242,6 @@ class Task(XPanderSharedModel):
         """
         run_sync(self.areload())
 
-    
     @classmethod
     async def aload(
         cls: Type[T], task_id: str, configuration: Optional[Configuration] = None
@@ -243,7 +267,9 @@ class Task(XPanderSharedModel):
             response_data = await client.make_request(
                 path=APIRoute.GetTask.format(task_id=task_id)
             )
-            task = cls.model_validate({**response_data, "configuration": configuration or Configuration()})
+            task = cls.model_validate(
+                {**response_data, "configuration": configuration or Configuration()}
+            )
             return task
         except HTTPStatusError as e:
             raise ModuleException(
@@ -382,15 +408,15 @@ class Task(XPanderSharedModel):
     def get_files(self) -> list[Any]:
         """
         Get PDF files from task input, formatted for Agno integration.
-        
+
         Returns PDF files as Agno File objects when the Agno framework is available,
         or as URL strings otherwise. This method is designed for seamless integration
         with Agno agents.
-        
+
         Returns:
             list[Any]: List of File objects (when Agno is available) or URL strings.
                       Returns empty list if no PDF files are present in task input.
-        
+
         Example:
             >>> files = task.get_files()
             >>> result = await agno_agent.arun(
@@ -398,33 +424,34 @@ class Task(XPanderSharedModel):
             ...     files=files
             ... )
         """
-        
+
         if not self.input.files or len(self.input.files) == 0:
             return []
-        
+
         categorized_files = categorize_files(file_urls=self.input.files)
-        
+
         if not categorized_files.pdfs or len(categorized_files.pdfs) == 0:
             return []
 
         try:
-            from agno.media import File # test import
+            from agno.media import File  # test import
+
             return [fetch_file(url=url) for url in categorized_files.pdfs]
         except Exception:
             return categorized_files.pdfs
-    
+
     def get_images(self) -> list[Any]:
         """
         Get image files from task input, formatted for Agno integration.
-        
+
         Returns image files as Agno Image objects when the Agno framework is available,
         or as URL strings otherwise. This method is designed for seamless integration
         with Agno agents that support image processing.
-        
+
         Returns:
             list[Any]: List of Image objects (when Agno is available) or URL strings.
                       Returns empty list if no image files are present in task input.
-        
+
         Example:
             >>> images = task.get_images()
             >>> result = await agno_agent.arun(
@@ -434,30 +461,31 @@ class Task(XPanderSharedModel):
         """
         if not self.input.files or len(self.input.files) == 0:
             return []
-        
+
         categorized_files = categorize_files(file_urls=self.input.files)
-        
+
         if not categorized_files.images or len(categorized_files.images) == 0:
             return []
 
         try:
             from agno.media import Image
+
             return [Image(url=url) for url in categorized_files.images]
         except Exception:
             return categorized_files.images
-    
+
     def get_human_readable_files(self) -> list[Any]:
         """
         Get human-readable files from task input with their content.
-        
+
         Returns text-based files (like .txt, .csv, .json, .py, etc.) with their content
         fetched and parsed. This method is automatically used by to_message() to include
         file contents in the task message.
-        
+
         Returns:
             list[dict[str, str]]: List of dictionaries with 'url' and 'content' keys.
                                  Returns empty list if no human-readable files are present.
-        
+
         Example:
             >>> readable_files = task.get_human_readable_files()
             >>> for file_data in readable_files:
@@ -466,14 +494,19 @@ class Task(XPanderSharedModel):
         """
         if not self.input.files or len(self.input.files) == 0:
             return []
-        
+
         categorized_files = categorize_files(file_urls=self.input.files)
-        
+
         if not categorized_files.files or len(categorized_files.files) == 0:
             return []
 
-        return run_sync(fetch_urls(urls=categorized_files.files, disable_attachment_injection=self.disable_attachment_injection))
-    
+        return run_sync(
+            fetch_urls(
+                urls=categorized_files.files,
+                disable_attachment_injection=self.disable_attachment_injection,
+            )
+        )
+
     def to_message(self) -> str:
         """
         Converts the input data into a formatted message string.
@@ -495,7 +528,7 @@ class Task(XPanderSharedModel):
             if len(message) != 0:
                 message += "\n"
             message += "Files: " + (", ".join(self.input.files))
-        
+
         # append human readable content like csv and such
         readable_files = self.get_human_readable_files()
         if readable_files and len(readable_files) != 0:
@@ -504,6 +537,70 @@ class Task(XPanderSharedModel):
                 message += f"\n{json.dumps(f)}"
 
         return message
+
+    async def aget_activity_log(self) -> AgentActivityThread:
+        """
+        Asynchronously retrieves the activity log for this task.
+
+        Fetches a detailed activity thread containing all messages, tool calls,
+        reasoning steps, sub-agent triggers, and authentication events that
+        occurred during the task execution.
+
+        Returns:
+            AgentActivityThread: Complete activity log including messages,
+                                tool calls, reasoning, and other execution events.
+
+        Raises:
+            ModuleException: If the activity log cannot be retrieved or doesn't exist.
+
+        Example:
+            >>> task = await Task.aload(task_id="task_123")
+            >>> activity_log = await task.aget_activity_log()
+            >>> for message in activity_log.messages:
+            ...     print(f"{message.role}: {message.content.text}")
+        """
+        try:
+            client = APIClient(configuration=self.configuration)
+            activity_log: AgentActivityThread = await client.make_request(
+                path=APIRoute.GetTaskActivityLog.format(
+                    agent_id=self.agent_id, task_id=self.id
+                ),
+                model=AgentActivityThread,
+            )
+            if not activity_log:
+                raise HTTPStatusError(404, "Log not found")
+
+            return activity_log
+        except HTTPStatusError as e:
+            raise ModuleException(
+                status_code=e.response.status_code, description=e.response.text
+            )
+        except Exception as e:
+            raise ModuleException(
+                status_code=500, description=f"Failed to get activity log - {str(e)}"
+            )
+
+    def get_activity_log(self) -> AgentActivityThread:
+        """
+        Retrieves the activity log for this task synchronously.
+
+        This method wraps the asynchronous aget_activity_log method for use
+        in synchronous environments.
+
+        Returns:
+            AgentActivityThread: Complete activity log including messages,
+                                tool calls, reasoning, and other execution events.
+
+        Raises:
+            ModuleException: If the activity log cannot be retrieved or doesn't exist.
+
+        Example:
+            >>> task = Task.load(task_id="task_123")
+            >>> activity_log = task.get_activity_log()
+            >>> for message in activity_log.messages:
+            ...     print(f"{message.role}: {message.content.text}")
+        """
+        return run_sync(self.aget_activity_log())
 
     async def aevents(self) -> AsyncGenerator[TaskUpdateEvent, None]:
         """
@@ -541,10 +638,12 @@ class Task(XPanderSharedModel):
                             json_event_data: dict = json.loads(event.data)
                             if json_event_data.get("type", None).startswith("task"):
                                 task_data = json_event_data.get("data")
-                                json_event_data.pop("data") # delete data
+                                json_event_data.pop("data")  # delete data
                                 yield TaskUpdateEvent(
                                     **json_event_data,
-                                    data=Task(**task_data,configuration=self.configuration)
+                                    data=Task(
+                                        **task_data, configuration=self.configuration
+                                    ),
                                 )
                                 continue
                         except Exception:
@@ -585,16 +684,13 @@ class Task(XPanderSharedModel):
 
         while queue:
             yield queue.pop(0)
-    
-    async def areport_metrics(
-        self,
-        configuration: Optional[Configuration] = None
-    ):
+
+    async def areport_metrics(self, configuration: Optional[Configuration] = None):
         """
         Asynchronously report LLM task metrics to xpander.ai.
 
         Args:
-            configuration (Optional[Configuration], optional): 
+            configuration (Optional[Configuration], optional):
                 API client configuration. If not provided, a new instance is created. Defaults to None.
 
         Raises:
@@ -606,10 +702,10 @@ class Task(XPanderSharedModel):
         try:
             configuration = configuration or Configuration()
             client = APIClient(configuration=configuration)
-            
+
             if not self.tokens:
                 raise ValueError("tokens must be provided. task.tokens = Tokens()")
-            
+
             task_report_request = ExecutionMetricsReport(
                 execution_id=self.id,
                 source=self.source,
@@ -621,38 +717,30 @@ class Task(XPanderSharedModel):
                 ai_model="xpander",
                 api_calls_made=self.used_tools,
                 result=self.result or None,
-                llm_tokens=ExecutionTokens(worker=self.tokens)
+                llm_tokens=ExecutionTokens(worker=self.tokens),
             )
 
             await client.make_request(
-                path=APIRoute.ReportExecutionMetrics.format(
-                    agent_id=self.agent_id
-                ),
+                path=APIRoute.ReportExecutionMetrics.format(agent_id=self.agent_id),
                 method="POST",
                 payload=task_report_request.model_dump_safe(),
             )
 
         except HTTPStatusError as e:
             raise ModuleException(
-                status_code=e.response.status_code,
-                description=e.response.text
+                status_code=e.response.status_code, description=e.response.text
             )
         except Exception as e:
             raise ModuleException(
-                status_code=500,
-                description=f"Failed to report metrics - {str(e)}"
+                status_code=500, description=f"Failed to report metrics - {str(e)}"
             )
 
-
-    def report_metrics(
-        self,
-        configuration: Optional[Configuration] = None
-    ):
+    def report_metrics(self, configuration: Optional[Configuration] = None):
         """
         Report LLM task metrics to xpander.ai.
 
         Args:
-            configuration (Optional[Configuration], optional): 
+            configuration (Optional[Configuration], optional):
                 API client configuration. If not provided, a new instance is created. Defaults to None.
 
         Raises:
@@ -661,15 +749,11 @@ class Task(XPanderSharedModel):
         Returns:
             None
         """
-        return run_sync(
-            self.areport_metrics(
-                configuration=configuration
-            )
-        )
-    
+        return run_sync(self.areport_metrics(configuration=configuration))
+
     @classmethod
     async def areport_external_task(
-        cls: Type[T], 
+        cls: Type[T],
         configuration: Optional[Configuration] = None,
         agent_id: Optional[str] = None,
         id: Optional[str] = None,
@@ -679,7 +763,7 @@ class Task(XPanderSharedModel):
         is_success: Optional[bool] = True,
         result: Optional[str] = None,
         duration: Optional[float] = 0,
-        used_tools: Optional[List[str]] = []
+        used_tools: Optional[List[str]] = [],
     ) -> T:
         """
         Asynchronously reports an external task to the xpander.ai backend.
@@ -687,7 +771,7 @@ class Task(XPanderSharedModel):
         This method is used to report the result of a task that was executed
         externally (outside the xpander.ai platform). It submits execution details,
         including inputs, outputs, success status, and resource usage, to the backend.
-        
+
         Args:
             configuration (Optional[Configuration]): Optional configuration for API calls.
             agent_id (Optional[str]): Identifier of the agent associated with the task.
@@ -699,13 +783,13 @@ class Task(XPanderSharedModel):
             result (Optional[str]): String representation of the final result.
             duration (Optional[float]): Task execution duration, in seconds. Defaults to 0.
             used_tools (Optional[List[str]]): List of tools used during the execution. Defaults to empty list.
-        
+
         Returns:
             T: Instance of the Task class, representing the reported task.
-        
+
         Raises:
             ModuleException: Raised on backend or network errors.
-        
+
         Example:
             >>> task = await Task.areport_external_task(
             ...     agent_id="agent_xyz",
@@ -725,7 +809,7 @@ class Task(XPanderSharedModel):
                 is_success=is_success,
                 result=result,
                 duration=duration,
-                used_tools=used_tools
+                used_tools=used_tools,
             )
             response_data = await client.make_request(
                 path=APIRoute.ReportExternalTask.format(agent_id=agent_id),
@@ -739,12 +823,13 @@ class Task(XPanderSharedModel):
             )
         except Exception as e:
             raise ModuleException(
-                status_code=500, description=f"Failed to report external task - {str(e)}"
+                status_code=500,
+                description=f"Failed to report external task - {str(e)}",
             )
 
     @classmethod
     def report_external_task(
-        cls: Type[T], 
+        cls: Type[T],
         configuration: Optional[Configuration] = None,
         agent_id: Optional[str] = None,
         id: Optional[str] = None,
@@ -754,7 +839,7 @@ class Task(XPanderSharedModel):
         is_success: Optional[bool] = True,
         result: Optional[str] = None,
         duration: Optional[float] = 0,
-        used_tools: Optional[List[str]] = []
+        used_tools: Optional[List[str]] = [],
     ) -> T:
         """
         Synchronously reports an external task to the xpander.ai backend.

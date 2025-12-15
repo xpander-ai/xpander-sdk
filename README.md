@@ -82,6 +82,11 @@ tasks = Tasks(configuration=config)
 task = await tasks.aget("task-id")
 await task.aset_status(AgentExecutionStatus.Running)
 await task.asave()
+
+# Retrieve task activity log
+activity_log = await task.aget_activity_log()
+for message in activity_log.messages:
+    print(f"{message.role}: {message.content.text}")
 ```
 
 ### 4. Tools Integration
@@ -236,6 +241,35 @@ task = await agent.acreate_task(
 async for event in task.aevents():
     print(f"Event Type: {event.type}")
     print(f"Event Data: {event.data}")
+```
+
+### Task Activity Monitoring
+
+```python
+from xpander_sdk import Task
+
+# Load a completed task
+task = await Task.aload("task-id")
+
+# Get detailed activity log
+activity_log = await task.aget_activity_log()
+
+# Analyze messages between user and agent
+for message in activity_log.messages:
+    if hasattr(message, 'role'):
+        print(f"{message.role}: {message.content.text}")
+    elif hasattr(message, 'tool_name'):
+        # Tool call
+        print(f"Tool: {message.tool_name}")
+        print(f"Payload: {message.payload}")
+        print(f"Result: {message.result}")
+    elif hasattr(message, 'type'):
+        # Reasoning step
+        print(f"Reasoning ({message.type}): {message.thought}")
+
+# Synchronous version
+task = Task.load("task-id")
+activity_log = task.get_activity_log()
 ```
 
 ### Local Task Testing

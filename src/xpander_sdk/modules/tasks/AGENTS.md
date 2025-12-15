@@ -111,6 +111,44 @@ reported_task_sync = Task.report_external_task(
 )
 ```
 
+### Task Activity Log Patterns
+```python
+from xpander_sdk.modules.tasks.sub_modules.task import Task
+from xpander_sdk.models.activity import AgentActivityThread
+
+# AI agents should use these patterns for retrieving task activity logs
+# Async activity log retrieval
+task = await Task.aload(task_id="task_123")
+activity_log = await task.aget_activity_log()
+
+# Process different message types in the activity thread
+for message in activity_log.messages:
+    if hasattr(message, 'role'):
+        # AgentActivityThreadMessage
+        print(f"{message.role}: {message.content.text}")
+    elif hasattr(message, 'tool_name'):
+        # AgentActivityThreadToolCall
+        print(f"Tool: {message.tool_name}")
+        print(f"Payload: {message.payload}")
+        if message.result:
+            print(f"Result: {message.result}")
+    elif hasattr(message, 'type') and hasattr(message, 'thought'):
+        # AgentActivityThreadReasoning
+        print(f"Reasoning ({message.type}): {message.thought}")
+    elif hasattr(message, 'agent_id') and hasattr(message, 'query'):
+        # AgentActivityThreadSubAgentTrigger
+        print(f"Sub-agent triggered: {message.agent_id}")
+        print(f"Query: {message.query}")
+
+# Synchronous activity log retrieval
+task = Task.load(task_id="task_123")
+activity_log = task.get_activity_log()
+
+# Access user information if available
+if activity_log.user:
+    print(f"User: {activity_log.user.email}")
+```
+
 ## Data Models and Types for AI Agents
 
 ### Core Task Models
@@ -144,6 +182,12 @@ pytest tests/test_tasks.py::test_task_execution
 2. **Loading**: Handle errors gracefully for non-existent tasks
 3. **Execution**: Implement retries for recoverable errors
 4. **Completion**: Ensure proper task status updates
+
+### Activity Log Management
+1. **Retrieval**: Only fetch activity logs for completed or stopped tasks
+2. **Processing**: Use type checking (hasattr) to handle different message types
+3. **Error Handling**: Wrap activity log retrieval in try-catch blocks
+4. **Performance**: Activity logs can be large; process them efficiently
 
 ### Performance Considerations
 - AI agents should use async methods for task operations
