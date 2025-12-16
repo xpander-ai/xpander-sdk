@@ -622,6 +622,4 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> Lis
                 )
             )
 
-    return agent.tools.functions + await asyncio.gather(
-        *[mcp.__aenter__() for mcp in mcp_tools]
-    )
+    return agent.tools.functions + mcp_tools
