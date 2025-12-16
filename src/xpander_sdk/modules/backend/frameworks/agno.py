@@ -279,7 +279,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
 
     llm_args = {}
     
-    if agent.llm_reasoning_effort and agent.llm_reasoning_effort != LLMReasoningEffort.Medium:
+    if agent.llm_reasoning_effort and agent.llm_reasoning_effort != LLMReasoningEffort.Medium and agent.model_name and "gpt-5" in agent.model_name.lower():
         llm_args = { "reasoning_effort": agent.llm_reasoning_effort.value }
     
     if agent.llm_api_base and len(agent.llm_api_base) != 0:
