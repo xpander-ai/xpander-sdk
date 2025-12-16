@@ -40,6 +40,7 @@ from xpander_sdk.modules.agents.models.agent import (
     AgentType,
     DatabaseConnectionString,
     LLMCredentials,
+    LLMReasoningEffort,
 )
 from xpander_sdk.modules.agents.models.knowledge_bases import AgentKnowledgeBase
 from xpander_sdk.modules.knowledge_bases.knowledge_bases_module import KnowledgeBases
@@ -151,6 +152,7 @@ class Agent(XPanderSharedModel):
             using_nemo: Optional[bool]
             model_provider: str
             model_name: str
+            llm_reasoning_effort: Optional[LLMReasoningEffort] = LLMReasoningEffort.Medium
             llm_api_base: Optional[str]
             webhook_url: Optional[str]
             created_at: Optional[datetime]
@@ -192,6 +194,7 @@ class Agent(XPanderSharedModel):
     using_nemo: Optional[bool] = False
     model_provider: str
     model_name: str
+    llm_reasoning_effort: Optional[LLMReasoningEffort] = LLMReasoningEffort.Medium
     llm_api_base: Optional[str] = None
     webhook_url: Optional[str] = None
     created_at: Optional[datetime] = None
