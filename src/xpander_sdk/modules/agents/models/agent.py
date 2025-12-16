@@ -383,7 +383,10 @@ class AgentGraphItem(BaseModel):
     llm_settings: Optional[List[AgentGraphItemLLMSettings]] = []
     is_first: Optional[bool] = False
 
-
+class LLMReasoningEffort(str, Enum):
+    Low = "low"
+    Medium = "medium"
+    High = "high"
 
 class AIAgentConnectivityDetailsA2AAuthType(str, Enum):
     NoAuth = "none"

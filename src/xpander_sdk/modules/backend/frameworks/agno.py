@@ -8,7 +8,7 @@ from loguru import logger
 from xpander_sdk import Configuration
 from xpander_sdk.models.shared import OutputFormat, ThinkMode
 from xpander_sdk.modules.agents.agents_module import Agents
-from xpander_sdk.modules.agents.models.agent import AgentGraphItemType
+from xpander_sdk.modules.agents.models.agent import AgentGraphItemType, LLMReasoningEffort
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.modules.backend.utils.mcp_oauth import authenticate_mcp_server
 from xpander_sdk.modules.tasks.sub_modules.task import Task
@@ -278,6 +278,10 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
             return env_llm_key or agent.llm_credentials.value
 
     llm_args = {}
+    
+    if agent.llm_reasoning_effort and agent.llm_reasoning_effort != LLMReasoningEffort.Medium:
+        llm_args = { "reasoning_effort": agent.llm_reasoning_effort.value }
+    
     if agent.llm_api_base and len(agent.llm_api_base) != 0:
         llm_args["base_url"] = agent.llm_api_base
     
