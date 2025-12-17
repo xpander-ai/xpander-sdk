@@ -330,6 +330,7 @@ class Events(ModuleBase):
         agent_worker: DeployedAsset,
         task: Task,
         on_execution_request: ExecutionRequestHandler,
+        retry_count: Optional[int] = 0,
     ) -> None:
         """
         Handle an incoming task execution request.
@@ -338,6 +339,7 @@ class Events(ModuleBase):
             agent_worker (DeployedAsset): The deployed asset (agent) to handle the task.
             task (Task): The task object containing execution details.
             on_execution_request (ExecutionRequestHandler): The handler function to process the task.
+            retry_count (Optional[int]): Current retry attempt count. Defaults to 0.
         """
         error = None
         try:
@@ -351,6 +353,24 @@ class Events(ModuleBase):
                     on_execution_request,
                     task,
                 )
+            
+            # Check if plan is complete, retry if not
+            plan_following_status = await task.aget_plan_following_status()
+            if not plan_following_status.can_finish:
+                # Check if we've exceeded max retries
+                if retry_count >= 2:  # 0, 1, 2 = 3 total attempts
+                    raise Exception(f"Failed to complete plan after {retry_count + 1} attempts. Remaining incomplete tasks.")
+                
+                # Recursively call with incremented retry count
+                logger.info(f"Plan not complete, retrying (attempt {retry_count + 2}/3)")
+                await self.handle_task_execution_request(
+                    agent_worker,
+                    task,
+                    on_execution_request,
+                    retry_count=retry_count + 1
+                )
+                return
+            
         except Exception as e:
             logger.exception(f"Execution handler failed - {str(e)}")
             error = str(e)
