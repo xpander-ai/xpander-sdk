@@ -213,8 +213,192 @@ async def build_agent_args(
     if args["model"] and args["model"].id and args["model"].id.startswith("gpt-5"):
         del args["model"].temperature
     
+    # configure deep planning guidance
+    _configure_deep_planning_guidance(args=args, agent=xpander_agent, task=task)
     return args
 
+def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: Optional[Task]) -> None:
+    if args and agent and task and agent.deep_planning and task.deep_planning.enabled == True:
+        # add instructions guidance
+        if not "instructions" in args:
+            args["instructions"] = ""
+        
+        args["instructions"] += """\n
+            <important_planning_instructions>
+            ## **Deep Planning Tools - Essential for Multi-Step Tasks**
+
+            When handling complex tasks with multiple steps, use these planning tools to track progress systematically.
+
+            ### **Core Workflow**
+            1. **CREATE** plan at the start (`xpcreate-agent-plan`)
+            2. **CHECK** plan before each action (`xpget-agent-plan`)
+            3. **COMPLETE** task immediately after finishing it (`xpcomplete-agent-plan-item`)
+            4. Repeat steps 2-3 until all tasks are done
+
+            ---
+
+            ### **Tool Reference**
+
+            #### **1. xpcreate-agent-plan** - Create Initial Plan
+            **When to use**: At the very start of any multi-step task, ONLY if no plan exists yet
+
+            **How to use**:
+            - Pass an array of task objects (NOT strings)
+            - Each task must have a `title` field with short, explanatory description
+            - Example format:
+            ```json
+            {
+            "body_params": {
+                "tasks": [
+                {"title": "Research API requirements"},
+                {"title": "Design data schema"},
+                {"title": "Implement endpoints"},
+                {"title": "Write tests"},
+                {"title": "Deploy to staging"}
+                ]
+            }
+            }
+            ```
+            **Important**: 
+            - Include ALL steps needed from start to finish
+            - Each title should be clear and actionable (3-6 words)
+            - Do NOT pass plain strings like `["Task 1", "Task 2"]` - must be objects!
+
+            ---
+
+            #### **2. xpget-agent-plan** - View Current Plan
+            **When to use**: Before deciding what to do next; to check progress
+
+            **Returns**: 
+            - All tasks with their IDs, titles, and completion status
+            - Use this to know what's done and what remains
+
+            **No parameters needed** - just call the tool
+
+            ---
+
+            #### **3. xpcomplete-agent-plan-item** - Mark Task Complete
+            **When to use**: **IMMEDIATELY** after finishing each task (NOT before!)
+
+            **How to use**:
+            ```json
+            {
+            "body_params": {
+                "id": "task-uuid-from-plan"
+            }
+            }
+            ```
+            **CRITICAL**: 
+            - Only mark complete AFTER work is actually done
+            - This is MANDATORY for progress tracking
+            - Get the task ID from `xpget-agent-plan` results
+
+            ---
+
+            #### **4. xpadd-new-agent-plan-item** - Add Discovered Task
+            **When to use**: When you discover additional work needed during execution
+
+            **How to use**:
+            ```json
+            {
+            "body_params": {
+                "title": "Validate input schemas",
+                "completed": false
+            }
+            }
+            ```
+            ---
+
+            #### **5. xpupdate-agent-plan-item** - Modify Existing Task
+            **When to use**: When task details change or need clarification
+
+            **How to use**:
+            ```json
+            {
+            "body_params": {
+                "id": "task-uuid",
+                "title": "Updated description",
+                "completed": true
+            }
+            }
+            ```
+            (All fields optional except `id`)
+
+            ---
+
+            #### **6. xpdelete-agent-plan-item** - Remove Task
+            **When to use**: When a task becomes unnecessary or redundant
+
+            **How to use**:
+            ```json
+            {
+            "body_params": {
+                "id": "task-uuid"
+            }
+            }
+            ```
+            ---
+
+            ### **Best Practices**
+
+            ✅ **DO:**
+            - Create comprehensive plans with ALL necessary steps
+            - Use descriptive, actionable task titles
+            - Check plan before each action to stay oriented
+            - Mark tasks complete immediately after finishing them
+            - Call plan tools **sequentially** (one at a time, never in parallel)
+
+            ❌ **DON'T:**
+            - Mark tasks complete before they're actually done
+            - Pass plain string arrays - must be objects with `title` field
+            - Call plan tools in parallel with each other
+            - Skip checking the plan between major steps
+            - Forget to mark completed tasks
+
+            ---
+
+            ### **Example Complete Workflow**
+
+            ```
+            1. User: "Build a REST API for user management"
+
+            2. Call: xpcreate-agent-plan
+            tasks: [
+                {"title": "Design user schema"},
+                {"title": "Create database migration"},
+                {"title": "Implement CRUD endpoints"},
+                {"title": "Add authentication"},
+                {"title": "Write integration tests"}
+            ]
+
+            3. Call: xpget-agent-plan
+            → See: Task 1 (ID: abc-123) - Design user schema - Not complete
+
+            4. [Do the work: Design schema]
+
+            5. Call: xpcomplete-agent-plan-item
+            id: "abc-123"
+
+            6. Call: xpget-agent-plan
+            → See: Task 1 ✓ complete, Task 2 next...
+
+            7. [Continue through remaining tasks]
+            ```
+            **Remember**: The plan is your roadmap. Check it often, update it as needed, and always mark tasks complete when done!
+            </important_planning_instructions>
+        """
+        
+        # add the expected output guidance
+        if not "expected_output" in args:
+            args["expected_output"] = ""
+        args["expected_output"] += "\nAll planned tasks completed and marked as done."
+        
+        # add the plan to additional_context
+        if not "additional_context" in args:
+            args["additional_context"] = ""
+        
+        plan_str = task.deep_planning.model_dump_json() if task.deep_planning and task.deep_planning.enabled and len(task.deep_planning.tasks) != 0 else "No execution plan, please generate"
+        args["additional_context"] += f" \n Current execution plan: {plan_str}"
 
 def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
     """

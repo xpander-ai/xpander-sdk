@@ -43,12 +43,14 @@ from httpx import HTTPStatusError
 import httpx
 import json
 from httpx_sse import aconnect_sse
+from pydantic import Field, computed_field
 
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.activity import AgentActivityThread
 from xpander_sdk.models.configuration import Configuration
+from xpander_sdk.models.deep_planning import PlanFollowingStatus, DeepPlanning
 from xpander_sdk.models.events import (
     TaskUpdateEventType,
     ToolCallRequest,
@@ -85,7 +87,7 @@ from xpander_sdk.utils.event_loop import run_sync
 T = TypeVar("T", bound="Task")
 
 TaskUpdateEventData = Union[
-    T, ToolCallRequest, ToolCallResult, MCPOAuthGetTokenResponse
+    T, ToolCallRequest, ToolCallResult, MCPOAuthGetTokenResponse, DeepPlanning
 ]
 
 
@@ -133,6 +135,7 @@ class Task(XPanderSharedModel):
         mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
         triggering_agent_id (Optional[str]): Optional triggering agent id.
         title (Optional[str]): Optional task title.
+        deep_planning: Optional[DeepPlanning] = Field(default_factory=DeepPlanning)
 
     Example:
         >>> task = Task.load(task_id="task_123")
@@ -180,6 +183,7 @@ class Task(XPanderSharedModel):
     title: Optional[str] = (None,)
     think_mode: Optional[ThinkMode] = ThinkMode.Default
     disable_attachment_injection: Optional[bool] = False
+    deep_planning: Optional[DeepPlanning] = Field(default_factory=DeepPlanning)
 
     # metrics
     tokens: Optional[Tokens] = None
@@ -348,7 +352,7 @@ class Task(XPanderSharedModel):
             response = await client.make_request(
                 path=APIRoute.UpdateTask.format(task_id=self.id),
                 method="PATCH",
-                payload=self.model_dump_safe(),
+                payload=self.model_dump_safe(exclude={"configuration","deep_planning"}),
             )
             updated_task = Task(**response, configuration=self.configuration)
             for field, value in updated_task.__dict__.items():
@@ -536,6 +540,17 @@ class Task(XPanderSharedModel):
             for f in readable_files:
                 message += f"\n{json.dumps(f)}"
 
+        if self.deep_planning and self.deep_planning.enabled == True:
+            self.reload()
+            uncompleted_tasks = [task for task in self.deep_planning.tasks if not task.completed]
+            if len(uncompleted_tasks) != 0:
+                message = "\n".join([
+                    "Task not finished, uncompleted tasks detected:",
+                    f"Uncompleted tasks: {[task.model_dump_json() for task in uncompleted_tasks]}",
+                    "You must complete tasks if fulfilled",
+                    f"User's original request: \"{message}\""
+                ])
+        
         return message
 
     async def aget_activity_log(self) -> AgentActivityThread:
@@ -750,6 +765,60 @@ class Task(XPanderSharedModel):
             None
         """
         return run_sync(self.areport_metrics(configuration=configuration))
+    
+    async def aget_plan_following_status(self) -> PlanFollowingStatus:
+        """
+        Asynchronously check if the task's deep planning is complete.
+
+        Reloads the task to get the latest deep planning state and checks for
+        any uncompleted tasks. If deep planning is disabled or all tasks are
+        completed, returns a status indicating the task can finish.
+
+        Returns:
+            PlanFollowingStatus: Status object containing:
+                - can_finish (bool): True if all tasks are completed or deep planning is disabled.
+                - uncompleted_tasks (List[DeepPlanningItem]): List of tasks not yet completed.
+
+        Example:
+            >>> status = await task.aget_plan_following_status()
+            >>> if not status.can_finish:
+            ...     print(f"Remaining tasks: {len(status.uncompleted_tasks)}")
+        """
+        try:
+            if self.deep_planning and self.deep_planning.enabled:
+                await self.areload()
+
+                uncompleted_tasks = [
+                    task for task in self.deep_planning.tasks if not task.completed
+                ]
+                if len(uncompleted_tasks) != 0:
+                    return PlanFollowingStatus(
+                        can_finish=False, uncompleted_tasks=uncompleted_tasks
+                    )
+        except Exception:
+            pass
+
+        return PlanFollowingStatus(can_finish=True)
+
+    def get_plan_following_status(self) -> PlanFollowingStatus:
+        """
+        Check if the task's deep planning is complete synchronously.
+
+        This function wraps the asynchronous aget_plan_following_status method.
+        Reloads the task to get the latest deep planning state and checks for
+        any uncompleted tasks.
+
+        Returns:
+            PlanFollowingStatus: Status object containing:
+                - can_finish (bool): True if all tasks are completed or deep planning is disabled.
+                - uncompleted_tasks (List[DeepPlanningItem]): List of tasks not yet completed.
+
+        Example:
+            >>> status = task.get_plan_following_status()
+            >>> if not status.can_finish:
+            ...     print(f"Remaining tasks: {len(status.uncompleted_tasks)}")
+        """
+        return run_sync(self.aget_plan_following_status())
 
     @classmethod
     async def areport_external_task(
