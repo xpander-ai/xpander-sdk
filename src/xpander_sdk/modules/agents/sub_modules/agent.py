@@ -153,6 +153,7 @@ class Agent(XPanderSharedModel):
             model_provider: str
             model_name: str
             llm_reasoning_effort: Optional[LLMReasoningEffort] = LLMReasoningEffort.Medium
+            deep_plan: Optional[bool] = False
             llm_api_base: Optional[str]
             webhook_url: Optional[str]
             created_at: Optional[datetime]
@@ -195,6 +196,7 @@ class Agent(XPanderSharedModel):
     model_provider: str
     model_name: str
     llm_reasoning_effort: Optional[LLMReasoningEffort] = LLMReasoningEffort.Medium
+    deep_plan: Optional[bool] = False
     llm_api_base: Optional[str] = None
     webhook_url: Optional[str] = None
     created_at: Optional[datetime] = None
