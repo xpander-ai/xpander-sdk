@@ -68,3 +68,6 @@ class TaskUpdateEventType(str, Enum):
     # reasoning
     Think = "think"
     Analyze = "analyze"
+    
+    # deep planning
+    PlanUpdated = "plan_updated"
