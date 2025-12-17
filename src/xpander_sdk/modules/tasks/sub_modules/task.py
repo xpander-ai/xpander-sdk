@@ -767,22 +767,57 @@ class Task(XPanderSharedModel):
         return run_sync(self.areport_metrics(configuration=configuration))
     
     async def aget_plan_following_status(self) -> PlanFollowingStatus:
+        """
+        Asynchronously check if the task's deep planning is complete.
+
+        Reloads the task to get the latest deep planning state and checks for
+        any uncompleted tasks. If deep planning is disabled or all tasks are
+        completed, returns a status indicating the task can finish.
+
+        Returns:
+            PlanFollowingStatus: Status object containing:
+                - can_finish (bool): True if all tasks are completed or deep planning is disabled.
+                - uncompleted_tasks (List[DeepPlanningItem]): List of tasks not yet completed.
+
+        Example:
+            >>> status = await task.aget_plan_following_status()
+            >>> if not status.can_finish:
+            ...     print(f"Remaining tasks: {len(status.uncompleted_tasks)}")
+        """
         try:
             if self.deep_planning and self.deep_planning.enabled:
                 await self.areload()
-                
-                uncompleted_tasks = [task for task in self.deep_planning.tasks if not task.completed]
+
+                uncompleted_tasks = [
+                    task for task in self.deep_planning.tasks if not task.completed
+                ]
                 if len(uncompleted_tasks) != 0:
                     return PlanFollowingStatus(
-                        can_finish=False,
-                        uncompleted_tasks=uncompleted_tasks
+                        can_finish=False, uncompleted_tasks=uncompleted_tasks
                     )
         except Exception:
             pass
-        
+
         return PlanFollowingStatus(can_finish=True)
-    
+
     def get_plan_following_status(self) -> PlanFollowingStatus:
+        """
+        Check if the task's deep planning is complete synchronously.
+
+        This function wraps the asynchronous aget_plan_following_status method.
+        Reloads the task to get the latest deep planning state and checks for
+        any uncompleted tasks.
+
+        Returns:
+            PlanFollowingStatus: Status object containing:
+                - can_finish (bool): True if all tasks are completed or deep planning is disabled.
+                - uncompleted_tasks (List[DeepPlanningItem]): List of tasks not yet completed.
+
+        Example:
+            >>> status = task.get_plan_following_status()
+            >>> if not status.can_finish:
+            ...     print(f"Remaining tasks: {len(status.uncompleted_tasks)}")
+        """
         return run_sync(self.aget_plan_following_status())
 
     @classmethod
