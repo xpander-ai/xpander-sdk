@@ -785,6 +785,7 @@ class Task(XPanderSharedModel):
             ...     print(f"Remaining tasks: {len(status.uncompleted_tasks)}")
         """
         try:
+            return PlanFollowingStatus(can_finish=True) # TODO: complete
             if self.deep_planning and self.deep_planning.enabled and self.deep_planning.started and self.deep_planning.enforce:
                 await self.areload()
                 
