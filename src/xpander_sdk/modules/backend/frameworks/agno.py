@@ -100,7 +100,7 @@ async def build_agent_args(
         # convert to members
         members = await asyncio.gather(
             *[
-                build_agent_args(xpander_agent=sub_agent, override=override, task=task)
+                build_agent_args(xpander_agent=sub_agent, override=override, task=task, is_async=is_async)
                 for sub_agent in sub_agents
             ]
         )

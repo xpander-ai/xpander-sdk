@@ -602,7 +602,6 @@ class Agent(XPanderSharedModel):
             ImportError: If required dependencies are missing.
             ValueError: If the connection string for storage is invalid.
         """
-        async_db = False
         framework = Framework.Agno # will be removed
         if self.framework != framework:
             raise NotImplementedError(
@@ -629,12 +628,12 @@ class Agent(XPanderSharedModel):
         schema = get_db_schema_name(agent_id=self.id)
         
         client_type = AsyncPostgresDb if async_db else PostgresDb
-
+        
         return client_type(
             db_schema=schema,
             db_url=connection_string.connection_uri.uri.replace("postgresql", "postgresql+psycopg"+("_async" if async_db else "")),
         )
-
+    
     def get_db(self) -> Any:
         """
         Synchronously retrieve the db for this agent.
@@ -752,9 +751,9 @@ class Agent(XPanderSharedModel):
         Example:
             >>> sessions = await agent.aget_user_sessions(user_id="user_123")
         """
-        db = await self.aget_db()
+        db = await self.aget_db(async_db=True)
         from agno.db import SessionType
-        sessions = await asyncio.to_thread(db.get_sessions, user_id=user_id, limit=50, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
+        sessions = await db.get_sessions(user_id=user_id, limit=50, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
         return sessions
     
     def get_user_sessions(self, user_id: str):
@@ -798,9 +797,9 @@ class Agent(XPanderSharedModel):
         Example:
             >>> session = await agent.aget_session(session_id="sess_456")
         """
-        db = await self.aget_db()
+        db = await self.aget_db(async_db=True)
         from agno.db import SessionType
-        return await asyncio.to_thread(db.get_session, session_id=session_id, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
+        return await db.get_session(session_id=session_id, session_type = SessionType.TEAM if self.is_a_team else SessionType.AGENT)
 
     def get_session(self, session_id: str):
         """
@@ -841,8 +840,8 @@ class Agent(XPanderSharedModel):
         Example:
             >>> await agent.adelete_session(session_id="sess_456")
         """
-        db = await self.aget_db(async_db=False)
-        await asyncio.to_thread(db.delete_session, session_id=session_id)
+        db = await self.aget_db(async_db=True)
+        await db.delete_session(session_id=session_id)
     
     def delete_session(self, session_id: str):
         """
