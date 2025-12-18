@@ -8,6 +8,9 @@ class DeepPlanningItem(XPanderSharedModel):
 
 class DeepPlanning(XPanderSharedModel):
     enabled: Optional[bool] = False
+    enforce: Optional[bool] = False
+    started: Optional[bool] = False
+    question_raised: Optional[bool] = False
     tasks: Optional[List[DeepPlanningItem]] = []
 
 class PlanFollowingStatus(XPanderSharedModel):

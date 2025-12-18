@@ -231,9 +231,11 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             ### **Core Workflow**
             1. **CREATE** plan at the start (`xpcreate-agent-plan`)
-            2. **CHECK** plan before each action (`xpget-agent-plan`)
-            3. **COMPLETE** task immediately after finishing it (`xpcomplete-agent-plan-item`)
-            4. Repeat steps 2-3 until all tasks are done
+            2. **START** plan execution (`xpstart-execution-plan`) - MANDATORY to enable enforcement
+            3. **CHECK** plan before each action (`xpget-agent-plan`)
+            4. **COMPLETE** task immediately after finishing it (`xpcomplete-agent-plan-item`)
+            5. **ASK** user for info if needed (`xpask-for-information`)
+            6. Repeat steps 3-5 until all tasks are done
 
             ---
 
@@ -241,6 +243,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             #### **1. xpcreate-agent-plan** - Create Initial Plan
             **When to use**: At the very start of any multi-step task, ONLY if no plan exists yet
+            **Note**: After creating a plan, you MUST call `xpstart-execution-plan` to begin enforcement
 
             **How to use**:
             - Pass an array of task objects (NOT strings)
@@ -339,13 +342,55 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             ```
             ---
 
+            #### **7. xpstart-execution-plan** - Start Plan Execution
+            **When to use**: Immediately after creating a plan with `xpcreate-agent-plan`
+            **CRITICAL**: Must be called to enable enforcement mode before executing tasks
+
+            **How to use**:
+            ```json
+            {
+            "body_params": {}
+            }
+            ```
+            **No parameters needed** - just call after plan creation
+
+            **What it does**:
+            - Marks plan as "started" 
+            - Enables enforcement mode if `enforce` flag is true
+            - Allows plan execution to proceed
+
+            ---
+
+            #### **8. xpask-for-information** - Ask User a Question
+            **When to use**: When you need information from the user during plan execution
+            **PREREQUISITE**: Plan must be started (running) first
+
+            **How to use**:
+            ```json
+            {
+            "body_params": {
+                "question": "What is the customer email address?"
+            }
+            }
+            ```
+
+            **What it does**:
+            - Sets `question_raised` flag to true
+            - Prints the question for the user
+            - Keeps enforcement active (does NOT pause execution)
+            - Returns waiting status
+
+            ---
+
             ### **Best Practices**
 
             ✅ **DO:**
             - Create comprehensive plans with ALL necessary steps
+            - **START** the plan with `xpstart-execution-plan` after creating it
             - Use descriptive, actionable task titles
             - Check plan before each action to stay oriented
             - Mark tasks complete immediately after finishing them
+            - Ask for user information when needed with `xpask-for-information`
             - Call plan tools **sequentially** (one at a time, never in parallel)
 
             ❌ **DON'T:**
@@ -371,18 +416,25 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
                 {"title": "Write integration tests"}
             ]
 
-            3. Call: xpget-agent-plan
+            3. Call: xpstart-execution-plan
+            → Plan now started, enforcement enabled (if enforce=true)
+
+            4. Call: xpget-agent-plan
             → See: Task 1 (ID: abc-123) - Design user schema - Not complete
 
-            4. [Do the work: Design schema]
+            5. [Realize need user input] Call: xpask-for-information
+            question: "Which database should we use - PostgreSQL or MySQL?"
+            → question_raised=true, waiting for response
 
-            5. Call: xpcomplete-agent-plan-item
+            6. [After user responds, do the work: Design schema]
+
+            7. Call: xpcomplete-agent-plan-item
             id: "abc-123"
 
-            6. Call: xpget-agent-plan
+            8. Call: xpget-agent-plan
             → See: Task 1 ✓ complete, Task 2 next...
 
-            7. [Continue through remaining tasks]
+            9. [Continue through remaining tasks]
             ```
             **Remember**: The plan is your roadmap. Check it often, update it as needed, and always mark tasks complete when done!
             </important_planning_instructions>
