@@ -359,7 +359,8 @@ class Events(ModuleBase):
             if not plan_following_status.can_finish:
                 # Check if we've exceeded max retries
                 if retry_count >= 2:  # 0, 1, 2 = 3 total attempts
-                    raise Exception(f"Failed to complete plan after {retry_count + 1} attempts. Remaining incomplete tasks.")
+                    logger.warning(f"Failed to complete plan after {retry_count + 1} attempts. Remaining incomplete tasks.")
+                    return
                 
                 # Recursively call with incremented retry count
                 logger.info(f"Plan not complete, retrying (attempt {retry_count + 2}/3)")
