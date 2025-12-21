@@ -71,3 +71,6 @@ class TaskUpdateEventType(str, Enum):
     
     # deep planning
     PlanUpdated = "plan_updated"
+    
+    # task compactization
+    TaskCompactization = "task_compactization"

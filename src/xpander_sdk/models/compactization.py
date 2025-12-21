@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Literal, Union
 
 from pydantic import Field
 from xpander_sdk.models.deep_planning import DeepPlanningItem
@@ -33,6 +33,9 @@ class TaskCompactizationInput(XPanderSharedModel):
             "ALL of these tasks MUST be completed and marked as completed=true in the continuation."
         )
     )
+
+class TaskCompactizationRetryEvent(XPanderSharedModel):
+    is_retry: bool
 
 class TaskCompactizationOutput(XPanderSharedModel):
     new_task_prompt: str = Field(
@@ -99,3 +102,11 @@ class TaskCompactizationOutput(XPanderSharedModel):
             "- Focus on actionable, specific continuation steps.\n"
         ),
     )
+
+
+class TaskCompactizationEvent(XPanderSharedModel):
+    type: Literal["retry", "summarization"]
+    data: Union[
+        TaskCompactizationOutput,
+        TaskCompactizationRetryEvent
+    ]

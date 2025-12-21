@@ -10,7 +10,7 @@ from xpander_sdk.modules.tools_repository.models.mcp import MCPOAuthGetTokenGene
 POLLING_INTERVAL = 1 # every 1s
 MAX_WAIT_FOR_LOGIN = 600 # 10 mintutes
 
-async def push_event(task: Task, event: TaskUpdateEvent):
+async def push_event(task: Task, event: TaskUpdateEvent, event_type: TaskUpdateEventType):
     client = APIClient(configuration=task.configuration)
     await client.make_request(
         path=APIRoute.PushExecutionEventToQueue.format(task_id=task.id),
@@ -20,7 +20,7 @@ async def push_event(task: Task, event: TaskUpdateEvent):
                 task_id=task.id,
                 organization_id=task.organization_id,
                 time=datetime.now(timezone.utc).isoformat(),
-                type=TaskUpdateEventType.AuthEvent,
+                type=event_type,
                 data=event
                 ).model_dump_safe()
             ]
@@ -59,7 +59,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
         if result.type == MCPOAuthResponseType.LOGIN_REQUIRED:
             logger.info(f"Initiating login for MCP Server {mcp_server.url}")
             # Notify user about login requirement
-            await push_event(task=task, event=result)
+            await push_event(task=task, event=result, event_type=TaskUpdateEventType.AuthEvent)
             
             # Poll for token with timeout
             elapsed_time = 0
@@ -73,7 +73,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
                     logger.info(f"Successful login for MCP Server {mcp_server.url}")
                     redacted_token_result = MCPOAuthGetTokenResponse(**token_result.model_dump_safe())
                     redacted_token_result.data.access_token = "REDACTED"
-                    await push_event(task=task, event=redacted_token_result)
+                    await push_event(task=task, event=redacted_token_result, event_type=TaskUpdateEventType.AuthEvent)
                     return token_result
             
             # Timeout reached
@@ -83,7 +83,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
             logger.info(f"Token ready for MCP Server {mcp_server.url}")
             redacted_token_result = MCPOAuthGetTokenResponse(**result.model_dump_safe())
             redacted_token_result.data.access_token = "REDACTED"
-            await push_event(task=task, event=redacted_token_result)
+            await push_event(task=task, event=redacted_token_result, event_type=TaskUpdateEventType.AuthEvent)
         
         return result
     except Exception as e:

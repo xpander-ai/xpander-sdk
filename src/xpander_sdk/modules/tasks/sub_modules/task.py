@@ -82,12 +82,13 @@ from xpander_sdk.modules.tools_repository.models.mcp import (
     MCPServerDetails,
 )
 from xpander_sdk.utils.event_loop import run_sync
+from xpander_sdk.models.compactization import TaskCompactizationEvent
 
 # Type variable for Task class methods
 T = TypeVar("T", bound="Task")
 
 TaskUpdateEventData = Union[
-    T, ToolCallRequest, ToolCallResult, MCPOAuthGetTokenResponse, DeepPlanning
+    TaskCompactizationEvent, T, ToolCallRequest, ToolCallResult, MCPOAuthGetTokenResponse, DeepPlanning
 ]
 
 

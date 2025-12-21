@@ -2,18 +2,36 @@ from typing import TYPE_CHECKING, List, Union
 from agno.agent import Agent as AgnoAgent
 from loguru import logger
 import json
-from xpander_sdk.models.compactization import TaskCompactizationOutput, TaskCompactizationInput
+from xpander_sdk.models.compactization import TaskCompactizationEvent, TaskCompactizationOutput, TaskCompactizationInput, TaskCompactizationRetryEvent
 from xpander_sdk.models.deep_planning import DeepPlanningItem
+from xpander_sdk.models.events import TaskUpdateEventType
 from xpander_sdk.models.frameworks import Framework
 from xpander_sdk.models.shared import Tokens
 from xpander_sdk.modules.agents.agents_module import Agents
 from xpander_sdk.modules.backend.backend_module import Backend
+from xpander_sdk.modules.backend.utils.mcp_oauth import push_event
+from xpander_sdk.modules.tasks.sub_modules.task import TaskUpdateEvent
+from xpander_sdk.utils.event_loop import run_sync
+from xpander_sdk.utils.generic import get_current_timestamp
 
 if TYPE_CHECKING:
     from xpander_sdk.modules.tasks.sub_modules.task import Task
 
 def run_task_compactization(message: str, task: "Task", uncompleted_tasks: List[DeepPlanningItem]) -> Union[str, TaskCompactizationOutput]:
     try:
+        
+        # report retry event
+        try:
+            run_sync(
+                push_event(
+                    task=task,
+                    event=TaskCompactizationEvent(type="retry", data=TaskCompactizationRetryEvent(is_retry=True)),
+                    event_type=TaskUpdateEventType.TaskCompactization
+                )
+            )
+        except Exception as e:
+            pass
+        
         # get agent to identify framework
         agent = Agents(configuration=task.configuration).get(agent_id=task.agent_id,version=task.agent_version)
         
@@ -182,6 +200,18 @@ def run_task_compactization(message: str, task: "Task", uncompleted_tasks: List[
         )
         
         task.report_metrics(configuration=task.configuration)
+        
+        # report compactization event
+        try:
+            run_sync(
+                push_event(
+                    task=task,
+                    event=TaskCompactizationEvent(type="summarization", data=run_result.content),
+                    event_type=TaskUpdateEventType.TaskCompactization
+                )
+            )
+        except Exception as e:
+            pass
         
         return run_result.content
     except Exception as e:
