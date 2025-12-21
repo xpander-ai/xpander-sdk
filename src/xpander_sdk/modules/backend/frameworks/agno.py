@@ -219,6 +219,7 @@ async def build_agent_args(
 
 def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: Optional[Task]) -> None:
     if args and agent and task and agent.deep_planning and task.deep_planning.enabled == True:
+        task.reload() # reload the task - get latest version
         # add instructions guidance
         if not "instructions" in args:
             args["instructions"] = ""
@@ -227,23 +228,49 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             <important_planning_instructions>
             ## **Deep Planning Tools - Essential for Multi-Step Tasks**
 
+            **ABSOLUTE RULE - READ THIS FIRST**:
+            
+            IF YOU ARE ABOUT TO WRITE A QUESTION TO THE USER, STOP AND CHECK:
+            - Did I call xpstart_execution_plan? 
+              - YES → Use xpask_for_information tool (DO NOT write the question in your response)
+              - NO → You can ask directly
+            
+            SIMPLE RULE:
+            - BEFORE calling xpstart_execution_plan: You CAN ask questions directly in your response
+            - AFTER calling xpstart_execution_plan: You are FORBIDDEN from writing questions - use xpask_for_information tool
+            
+            Once execution has started, writing things like "Before I proceed, I need to know..." or "I need clarification on..."
+            or "Please choose one of the following..." in your response text is STRICTLY PROHIBITED and will cause execution failures.
+            
+            MANDATORY CHECK BEFORE ASKING: Have I started the plan? YES = use tool | NO = can ask directly
+
             When handling complex tasks with multiple steps, use these planning tools to track progress systematically.
 
             ### **Core Workflow**
-            1. **CREATE** plan at the start (`xpcreate-agent-plan`)
-            2. **START** plan execution (`xpstart-execution-plan`) - MANDATORY to enable enforcement
-            3. **CHECK** plan before each action (`xpget-agent-plan`)
-            4. **COMPLETE** task immediately after finishing it (`xpcomplete-agent-plan-item`)
-            5. **ASK** user for info if needed (`xpask-for-information`)
-            6. Repeat steps 3-5 until all tasks are done
+            1. **CREATE** plan at the start (`xpcreate_agent_plan`)
+            2. **START** plan execution (`xpstart_execution_plan`) - MANDATORY to enable enforcement
+            3. **CHECK** plan before each action (`xpget_agent_plan`)
+            4. **DO THE WORK** for one task
+            5. **COMPLETE** task IMMEDIATELY - call `xpcomplete_agent_plan_item` RIGHT AFTER finishing work (DO NOT DELAY!)
+            6. **ASK** user for info if needed (`xpask_for_information`) - MANDATORY if you need input or want to pause
+            7. Repeat steps 3-6 until all tasks are done
+            
+            **CRITICAL RULES - ABSOLUTE REQUIREMENTS**: 
+            - Mark each task complete THE MOMENT you finish it - not later, not at the end, RIGHT AWAY!
+            - **CHECK BEFORE ASKING**: Did you call xpstart_execution_plan?
+              - If YES: Use xpask_for_information tool ONLY (never write questions in response)
+              - If NO: Can ask directly
+            - **AFTER plan starts: Writing questions in your response is FORBIDDEN** - violates execution protocol
+            - If you called xpstart_execution_plan and then write "I need clarification" or "Before I proceed" or "Please choose", you are VIOLATING THE PROTOCOL
+            - AFTER xpstart_execution_plan: The ONLY way to ask users questions is through `xpask_for_information` tool - ZERO EXCEPTIONS!
 
             ---
 
             ### **Tool Reference**
 
-            #### **1. xpcreate-agent-plan** - Create Initial Plan
+            #### **1. xpcreate_agent_plan** - Create Initial Plan
             **When to use**: At the very start of any multi-step task, ONLY if no plan exists yet
-            **Note**: After creating a plan, you MUST call `xpstart-execution-plan` to begin enforcement
+            **Note**: After creating a plan, you MUST call `xpstart_execution_plan` to begin enforcement
 
             **How to use**:
             - Pass an array of task objects (NOT strings)
@@ -269,7 +296,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             ---
 
-            #### **2. xpget-agent-plan** - View Current Plan
+            #### **2. xpget_agent_plan** - View Current Plan
             **When to use**: Before deciding what to do next; to check progress
 
             **Returns**: 
@@ -280,8 +307,8 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             ---
 
-            #### **3. xpcomplete-agent-plan-item** - Mark Task Complete
-            **When to use**: **IMMEDIATELY** after finishing each task (NOT before!)
+            #### **3. xpcomplete_agent_plan_item** - Mark Task Complete
+            **When to use**: **IMMEDIATELY** after finishing each task (NOT before, NOT later, RIGHT NOW!)
 
             **How to use**:
             ```json
@@ -291,14 +318,19 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             }
             }
             ```
-            **CRITICAL**: 
-            - Only mark complete AFTER work is actually done
-            - This is MANDATORY for progress tracking
-            - Get the task ID from `xpget-agent-plan` results
+            **🚨 CRITICAL - NON-NEGOTIABLE RULES**: 
+            - Call THIS TOOL the INSTANT you finish a task
+            - DO NOT wait to mark multiple tasks at once
+            - DO NOT postpone marking completion
+            - DO NOT be lazy - mark it complete RIGHT AFTER the work is done
+            - This is MANDATORY for progress tracking and continuation
+            - If you finish a task and don't mark it complete immediately, you are doing it WRONG
+            
+            **Pattern**: Finish work → IMMEDIATELY call xpcomplete_agent_plan_item → Move to next task
 
             ---
 
-            #### **4. xpadd-new-agent-plan-item** - Add Discovered Task
+            #### **4. xpadd_new_agent_plan_item** - Add Discovered Task
             **When to use**: When you discover additional work needed during execution
 
             **How to use**:
@@ -312,7 +344,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             ```
             ---
 
-            #### **5. xpupdate-agent-plan-item** - Modify Existing Task
+            #### **5. xpupdate_agent_plan_item** - Modify Existing Task
             **When to use**: When task details change or need clarification
 
             **How to use**:
@@ -329,7 +361,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             ---
 
-            #### **6. xpdelete-agent-plan-item** - Remove Task
+            #### **6. xpdelete_agent_plan_item** - Remove Task
             **When to use**: When a task becomes unnecessary or redundant
 
             **How to use**:
@@ -342,8 +374,8 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             ```
             ---
 
-            #### **7. xpstart-execution-plan** - Start Plan Execution
-            **When to use**: Immediately after creating a plan with `xpcreate-agent-plan`
+            #### **7. xpstart_execution_plan** - Start Plan Execution
+            **When to use**: Immediately after creating a plan with `xpcreate_agent_plan`
             **CRITICAL**: Must be called to enable enforcement mode before executing tasks
 
             **How to use**:
@@ -361,9 +393,19 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             ---
 
-            #### **8. xpask-for-information** - Ask User a Question
-            **When to use**: When you need information from the user during plan execution
+            #### **8. xpask_for_information** - Ask User a Question
+            **When to use**: **MANDATORY AFTER PLAN STARTS** when you need ANY of the following:
+            - Information from the user
+            - Clarification on requirements
+            - Approval before proceeding
+            - To pause execution for user input
+            
             **PREREQUISITE**: Plan must be started (running) first
+            
+            **CRITICAL RULE**: Once the plan has started, if you need user input or want to pause, you MUST use this tool.
+            DO NOT just respond with questions in your regular output after plan starts - that breaks execution flow!
+            
+            **NOTE**: BEFORE starting the plan (before xpstart_execution_plan), you CAN ask questions directly if needed.
 
             **How to use**:
             ```json
@@ -375,10 +417,13 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             ```
 
             **What it does**:
-            - Sets `question_raised` flag to true
-            - Prints the question for the user
-            - Keeps enforcement active (does NOT pause execution)
-            - Returns waiting status
+            - Properly pauses plan enforcement and sets `question_raised` flag
+            - Delivers question to the user through the correct channel
+            - Manages execution state for proper continuation
+            - Allows resuming execution after user responds
+            
+            **Why this matters**: Using this tool ensures execution can be properly continued with full context.
+            Just responding with a question will NOT pause execution correctly!
 
             ---
 
@@ -386,19 +431,27 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             ✅ **DO:**
             - Create comprehensive plans with ALL necessary steps
-            - **START** the plan with `xpstart-execution-plan` after creating it
+            - **START** the plan with `xpstart_execution_plan` after creating it
             - Use descriptive, actionable task titles
             - Check plan before each action to stay oriented
-            - Mark tasks complete immediately after finishing them
-            - Ask for user information when needed with `xpask-for-information`
+            - **Mark tasks complete THE INSTANT you finish them - NO DELAYS, NO EXCEPTIONS**
+            - **ALWAYS use `xpask_for_information` when you need user input or want to pause**
             - Call plan tools **sequentially** (one at a time, never in parallel)
+            - Follow the pattern: DO WORK → MARK COMPLETE → NEXT TASK
 
-            ❌ **DON'T:**
+            ❌ **DON'T - THESE ARE FORBIDDEN:**
             - Mark tasks complete before they're actually done
+            - **Be lazy and wait to mark tasks complete later** (FORBIDDEN!)
+            - **Batch mark multiple tasks at the end** (WRONG! Mark each immediately!)
+            - **AFTER plan starts: NEVER write questions in your response text** ("Before I proceed...", "I need clarification...", etc.)
+            - **AFTER plan starts: NEVER respond with questions - ONLY use xpask_for_information tool** (ABSOLUTE RULE!)
             - Pass plain string arrays - must be objects with `title` field
             - Call plan tools in parallel with each other
             - Skip checking the plan between major steps
-            - Forget to mark completed tasks
+            - Postpone marking completion "until later" - there is no later, only NOW
+            
+            **REMEMBER**: Once execution started, any text like "I need to know", "Before I proceed", "I need clarification" means you MUST call xpask_for_information instead!
+            **EXCEPTION**: Before starting the plan, you CAN ask questions directly if needed for planning.
 
             ---
 
@@ -407,7 +460,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             ```
             1. User: "Build a REST API for user management"
 
-            2. Call: xpcreate-agent-plan
+            2. Call: xpcreate_agent_plan
             tasks: [
                 {"title": "Design user schema"},
                 {"title": "Create database migration"},
@@ -416,27 +469,52 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
                 {"title": "Write integration tests"}
             ]
 
-            3. Call: xpstart-execution-plan
+            3. Call: xpstart_execution_plan
             → Plan now started, enforcement enabled (if enforce=true)
 
-            4. Call: xpget-agent-plan
+            4. Call: xpget_agent_plan
             → See: Task 1 (ID: abc-123) - Design user schema - Not complete
 
-            5. [Realize need user input] Call: xpask-for-information
+            5. [Realize need user input] Call: xpask_for_information
             question: "Which database should we use - PostgreSQL or MySQL?"
             → question_raised=true, waiting for response
 
-            6. [After user responds, do the work: Design schema]
+            6. [After user responds, DO THE WORK: Design schema]
 
-            7. Call: xpcomplete-agent-plan-item
+            7. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_item
             id: "abc-123"
+            → MARKED COMPLETE RIGHT AFTER FINISHING - NOT DELAYED!
 
-            8. Call: xpget-agent-plan
-            → See: Task 1 ✓ complete, Task 2 next...
+            8. Call: xpget_agent_plan
+            → See: Task 1 ✓ complete, Task 2 (ID: def-456) - Create database migration - Not complete
 
-            9. [Continue through remaining tasks]
+            9. [DO THE WORK: Create migration file]
+
+            10. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_item
+            id: "def-456"
+            → MARKED COMPLETE RIGHT AWAY!
+
+            11. [Continue this pattern: GET PLAN → DO WORK → MARK COMPLETE IMMEDIATELY → REPEAT]
             ```
-            **Remember**: The plan is your roadmap. Check it often, update it as needed, and always mark tasks complete when done!
+            
+            ### **WRONG WAY - ANTI-PATTERN (DO NOT DO THIS)**
+            
+            ```
+            ❌ WRONG:
+            1. Call: xpcreate_agent_plan
+            2. Call: xpstart_execution_plan  ← PLAN IS NOW STARTED!
+            3. Respond: "Before I proceed, I need clarification on..."  ← WRONG! FORBIDDEN!
+            
+            ✅ CORRECT:
+            1. Call: xpcreate_agent_plan
+            2. Call: xpstart_execution_plan  ← PLAN IS NOW STARTED!
+            3. Call: xpask_for_information with question  ← CORRECT! Use the tool!
+            ```
+            
+            **KEY POINT**: Once you call `xpstart_execution_plan`, the execution mode changes.
+            You CANNOT write questions in your response anymore. You MUST use the tool.
+            
+            **Golden Rule**: FINISH TASK → MARK COMPLETE INSTANTLY → MOVE TO NEXT TASK. No delays, no batching, no "I'll do it later"!
             </important_planning_instructions>
         """
         

@@ -43,7 +43,7 @@ from httpx import HTTPStatusError
 import httpx
 import json
 from httpx_sse import aconnect_sse
-from pydantic import Field, computed_field
+from pydantic import Field
 
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
@@ -337,10 +337,13 @@ class Task(XPanderSharedModel):
         """
         return run_sync(self.aset_status(status=status, result=result))
 
-    async def asave(self):
+    async def asave(self, with_deep_plan_update: Optional[bool] = False):
         """
         Asynchronously saves the current task state to the backend.
 
+        Args:
+            with_deep_plan_update (Optional[bool]): should update deep plan as well? default false.
+        
         Raises:
             ModuleException: Error related to HTTP requests or task saving.
 
@@ -349,10 +352,15 @@ class Task(XPanderSharedModel):
         """
         client = APIClient(configuration=self.configuration)
         try:
+            exclude = {"configuration"}
+            
+            if not with_deep_plan_update:
+                exclude.add("deep_planning")
+                
             response = await client.make_request(
                 path=APIRoute.UpdateTask.format(task_id=self.id),
                 method="PATCH",
-                payload=self.model_dump_safe(exclude={"configuration","deep_planning"}),
+                payload=self.model_dump_safe(exclude=exclude),
             )
             updated_task = Task(**response, configuration=self.configuration)
             for field, value in updated_task.__dict__.items():
@@ -362,16 +370,19 @@ class Task(XPanderSharedModel):
         except Exception as e:
             raise ModuleException(500, f"Failed to save task: {str(e)}")
 
-    def save(self):
+    def save(self, with_deep_plan_update: Optional[bool] = False):
         """
         Saves the current task state synchronously.
 
         This function wraps the asynchronous asave method.
+        
+        Args:
+            with_deep_plan_update (Optional[bool]): should update deep plan as well? default false.
 
         Example:
             >>> task.save()
         """
-        return run_sync(self.asave())
+        return run_sync(self.asave(with_deep_plan_update=with_deep_plan_update))
 
     async def astop(self):
         """
@@ -540,16 +551,20 @@ class Task(XPanderSharedModel):
             for f in readable_files:
                 message += f"\n{json.dumps(f)}"
 
-        if self.deep_planning and self.deep_planning.enabled == True:
+        if self.deep_planning and self.deep_planning.enabled == True and self.deep_planning.started:
             self.reload()
-            uncompleted_tasks = [task for task in self.deep_planning.tasks if not task.completed]
-            if len(uncompleted_tasks) != 0:
-                message = "\n".join([
-                    "Task not finished, uncompleted tasks detected:",
-                    f"Uncompleted tasks: {[task.model_dump_json() for task in uncompleted_tasks]}",
-                    "You must complete tasks if fulfilled",
-                    f"User's original request: \"{message}\""
-                ])
+            if not self.deep_planning.question_raised:
+                uncompleted_tasks = [task for task in self.deep_planning.tasks if not task.completed]
+                if len(uncompleted_tasks) != 0: # make a retry with compactization
+                    from xpander_sdk.utils.agents.compactization_agent import run_task_compactization
+                    compactization_result = run_task_compactization(message=message, task=self, uncompleted_tasks=uncompleted_tasks)
+                    if isinstance(compactization_result, str):
+                        message = compactization_result
+                    else:
+                        message = f"<user_input>{compactization_result.new_task_prompt}</user_input><task_context>{compactization_result.task_context}</task_context>"
+            else:
+                self.deep_planning.question_raised = False # reset question raised indicator
+                self.save(with_deep_plan_update=True)
         
         return message
 
@@ -785,9 +800,8 @@ class Task(XPanderSharedModel):
             ...     print(f"Remaining tasks: {len(status.uncompleted_tasks)}")
         """
         try:
-            return PlanFollowingStatus(can_finish=True) # TODO: complete
+            await self.areload()
             if self.deep_planning and self.deep_planning.enabled and self.deep_planning.started and self.deep_planning.enforce:
-                await self.areload()
                 
                 # allow early exit to ask question
                 if self.deep_planning.question_raised:

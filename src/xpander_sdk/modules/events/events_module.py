@@ -358,12 +358,12 @@ class Events(ModuleBase):
             plan_following_status = await task.aget_plan_following_status()
             if not plan_following_status.can_finish:
                 # Check if we've exceeded max retries
-                if retry_count >= 2:  # 0, 1, 2 = 3 total attempts
+                if retry_count >= 50:  # 0, 1, 2 = 50 total attempts
                     logger.warning(f"Failed to complete plan after {retry_count + 1} attempts. Remaining incomplete tasks.")
                     return
                 
                 # Recursively call with incremented retry count
-                logger.info(f"Plan not complete, retrying (attempt {retry_count + 2}/3)")
+                logger.info(f"Plan not complete, retrying (attempt {retry_count + 2})")
                 await self.handle_task_execution_request(
                     agent_worker,
                     task,
