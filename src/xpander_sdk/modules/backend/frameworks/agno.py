@@ -1,10 +1,11 @@
 import asyncio
+import json
 import shlex
 from os import getenv, environ
 from typing import Any, Callable, Dict, List, Optional
 
 from loguru import logger
-
+from toon import encode as toon_encode
 from xpander_sdk import Configuration
 from xpander_sdk.models.shared import OutputFormat, ThinkMode
 from xpander_sdk.modules.agents.agents_module import Agents
@@ -19,6 +20,7 @@ from xpander_sdk.modules.tools_repository.models.mcp import (
     MCPServerTransport,
     MCPServerType,
 )
+from xpander_sdk.modules.tools_repository.models.tool_invocation_result import ToolInvocationResult
 from xpander_sdk.modules.tools_repository.sub_modules.tool import Tool
 from xpander_sdk.modules.tools_repository.utils.schemas import build_model_from_schema
 from agno.agent import Agent as AgnoAgent
@@ -199,6 +201,19 @@ async def build_agent_args(
             except Exception:
                 pass
 
+        # try toon optimization if compression enabled
+        if xpander_agent and xpander_agent and xpander_agent.agno_settings and xpander_agent.agno_settings.tool_calls_compression and xpander_agent.agno_settings.tool_calls_compression.enabled:
+            try:
+                if isinstance(result, ToolInvocationResult):
+                    json_result = json.loads(result.result) if isinstance(result.result, str) else result.result
+                    result.result = toon_encode(json_result)
+                elif hasattr(result, "content"):
+                    json_result = json.loads(result.content)
+                    result.content = toon_encode(json_result)
+            except Exception:
+                pass
+    
+        
         # Return the result
         return result
 

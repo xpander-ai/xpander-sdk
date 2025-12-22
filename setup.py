@@ -24,6 +24,7 @@ setup(
         "nest-asyncio",
         "strands-agents",
         "openai-agents",
+        "python-toon",
     ],
     extras_require={
         "agno": ["agno", "sqlalchemy" ,"psycopg[binary,pool]", "greenlet"],
