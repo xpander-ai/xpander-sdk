@@ -553,7 +553,14 @@ class Task(XPanderSharedModel):
                 message += f"\n{json.dumps(f)}"
 
         if self.deep_planning and self.deep_planning.enabled == True and self.deep_planning.started:
+            task_backup = self.model_copy() # backup result and status
+            
             self.reload()
+            
+            # restore result and status
+            self.result = task_backup.result
+            self.status = task_backup.status
+            
             if not self.deep_planning.question_raised:
                 uncompleted_tasks = [task for task in self.deep_planning.tasks if not task.completed]
                 if len(uncompleted_tasks) != 0: # make a retry with compactization
@@ -801,7 +808,13 @@ class Task(XPanderSharedModel):
             ...     print(f"Remaining tasks: {len(status.uncompleted_tasks)}")
         """
         try:
-            await self.areload()
+            task_backup = self.model_copy() # backup result and status
+            await self.areload() # reload
+            
+            # restore result and status
+            self.result = task_backup.result
+            self.status = task_backup.status
+            
             if self.deep_planning and self.deep_planning.enabled and self.deep_planning.started and self.deep_planning.enforce:
                 
                 # allow early exit to ask question
