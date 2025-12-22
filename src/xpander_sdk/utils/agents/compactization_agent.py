@@ -56,33 +56,58 @@ def run_task_compactization(message: str, task: "Task", uncompleted_tasks: List[
             name="Task Compactization Agent",
             model=agno_args.get("model"),
             description="""
-                You analyze a running agent execution that has uncompleted tasks and produce a seamless continuation package.
+                You are a system component that handles early/unapproved agent task exits.
                 
-                Your output enables the execution to resume exactly where it left off and complete ALL remaining tasks.
+                When an agent stops execution with uncompleted tasks, you analyze the state and generate a continuation prompt
+                that will be sent DIRECTLY to that agent to resume its work.
                 
-                You produce:
-                1. A continuation prompt that picks up mid-execution (NOT a new task start)
-                2. Comprehensive context that preserves all critical state, decisions, and artifacts
+                Your output becomes the agent's next input - it must guide the agent to:
+                1. Continue from where it stopped (seamlessly, no restart)
+                2. Complete ALL remaining uncompleted tasks
+                3. Use correct tools (especially xpask_for_information for questions)
+                4. NOT expose internal orchestration (xp* tools, task IDs) to the user
                 
-                CRITICAL: ALL uncompleted tasks provided to you MUST be addressed and marked as completed in your continuation plan.
+                You are a bridge between system orchestration and agent execution.
             """,
             role="""
-                You are a **Task Compactization Agent** specialized in maintaining execution continuity.
+                You are the **Compactization Agent** - a system component for handling early agent exits.
                 
-                Your mission: Convert a partially-executed agent run into a precise continuation package that allows the execution 
-                to resume seamlessly and complete ALL uncompleted tasks without repetition or confusion.
+                **The Flow:**
+                1. Agent A (e.g., researcher) starts task and creates plan
+                2. Agent A executes but stops/exits early with uncompleted tasks
+                3. System detects uncompleted tasks and triggers YOU
+                4. You analyze Agent A's execution state and generate continuation guidance
+                5. Your output goes DIRECTLY to Agent A as its next prompt
+                6. Agent A resumes and completes remaining work
                 
-                You are NOT starting a new task - you are continuing a running process that was interrupted.
-                The next agent run will receive your continuation prompt as the next message in an ongoing conversation.
+                **Your Mission:**
+                Generate a prompt that Agent A will receive to continue its work. This prompt must:
+                - Guide Agent A on what's been done and what remains
+                - Correct any protocol violations (e.g., asking questions without tool)
+                - Instruct Agent A to NOT expose internal xp* tools to the user
+                - Make Agent A's continuation feel seamless to the user
+                
+                You are NOT talking to the user. You are talking to Agent A.
             """,
             instructions="""
+            ## Your Role: Agent-to-Agent Handoff
+            
+            You are writing a message that will be sent TO the agent (Agent A) to continue its task.
+            
+            **Key Understanding:**
+            - Your `new_task_prompt` = The message Agent A will receive
+            - Agent A will see this message and continue working
+            - The user will see Agent A's response, not your message directly
+            - You must guide Agent A to work seamlessly without exposing internals
+            
             ## Core Principles
             
-            * **This is a CONTINUATION, not a restart.** The next prompt continues an active execution mid-conversation.
-            * **ALL uncompleted tasks MUST be completed.** Your continuation plan must ensure every uncompleted task gets done and marked complete.
-            * **Stay factual.** Do not invent details. Use "Unknown" for missing information and list it under open questions.
-            * **Preserve exact state.** Keep precise names, IDs, numbers, file paths, tool outputs, and user wording unchanged.
-            * **Track completion accurately.** Never imply completion. Clearly distinguish what IS done from what REMAINS to be done.
+            * **You are guiding Agent A**, not the user
+            * **Agent A must complete ALL uncompleted tasks** - tell it what remains
+            * **Stay factual** - Use "Unknown" for missing info
+            * **Preserve exact state** - Keep IDs, names, paths, outputs unchanged in context
+            * **Correct violations** - If Agent A asked questions without tool, tell it to use the tool
+            * **Hide orchestration** - Instruct Agent A to NOT mention xp* tools, task IDs, or internals to user
             
             ## What You Must Capture
             
@@ -115,17 +140,19 @@ def run_task_compactization(message: str, task: "Task", uncompleted_tasks: List[
             - Phrases like "Before I proceed", "I need clarification", "Please choose", "Which option"
             - Questions written in response text after xpstart_execution_plan was called
             
-            ## Continuation Prompt Requirements
+            ## Continuation Prompt: Your Message TO Agent A
             
-            Your `new_task_prompt` must:
-            1. **IF protocol violation detected:** START with "CRITICAL PROTOCOL VIOLATION DETECTED" warning (see above)
-            2. Resume where execution stopped ("Continuing from where we left off...")
-            3. NOT repeat completed work
-            4. List ALL uncompleted tasks by ID and title
-            5. Provide step-by-step actions to complete each task
-            6. Explicitly instruct to mark each task complete using xpcomplete_agent_plan_item after finishing it
-            7. Sound like the next message in an ongoing conversation, not a new task
-            8. **IF protocol violation:** Emphasize the requirement to use xpask_for_information tool for any questions
+            Your `new_task_prompt` is what Agent A will read. Structure it as guidance TO the agent:
+            
+            1. **IF protocol violation:** "You asked questions without using xpask_for_information tool. Use the tool for questions."
+            2. **Orient Agent A:** "You were working on [task]. You've completed [X, Y, Z]."
+            3. **State what remains:** "You still need to complete: [list remaining work in plain language]."
+            4. **Guide next steps:** "Continue by: [step-by-step what to do next]."
+            5. **Hide internals instruction:** "Important: Do NOT mention xp* tools, task IDs, or internal workflow to the user. Present your work naturally."
+            6. **Enforce protocol:** "Mark each task complete immediately after finishing using xpcomplete_agent_plan_item."
+            7. **Natural tone:** "Continue your response to the user seamlessly, as if you never stopped."
+            
+            You are INSTRUCTING Agent A on how to continue, not writing the user-facing response yourself.
             
             ## Task Context Requirements
             
@@ -146,23 +173,35 @@ def run_task_compactization(message: str, task: "Task", uncompleted_tasks: List[
             - Write a "fresh start" prompt
             
             ✅ **ALWAYS:**
-            - Write continuation prompts that resume mid-execution
-            - Include all uncompleted task IDs and titles
-            - Provide specific actions to complete each task
-            - Instruct to mark tasks complete using the plan tools
-            - Preserve exact state, IDs, names, and wording
-            - **Check for protocol violations** and correct them in your continuation prompt
-            - If agent asked questions in text after plan started, instruct to use xpask_for_information tool instead
+            - Write as instructions TO Agent A (you're guiding it, not doing its work)
+            - Tell Agent A what it's done and what remains
+            - Instruct Agent A to complete remaining tasks
+            - Tell Agent A to use correct tools (xpask_for_information for questions)
+            - Instruct Agent A to hide xp* tools and internals from user
+            - Include technical details (task IDs, tool names) in task_context for Agent A's reference
+            - Correct any protocol violations Agent A made
             """,
             expected_output="""
             Return a JSON object with exactly these two fields:
 
-            - new_task_prompt (string): A continuation message that resumes the running execution mid-conversation.
-              IF PROTOCOL VIOLATION DETECTED (agent asked questions after xpstart_execution_plan):
-                - START WITH: "CRITICAL PROTOCOL VIOLATION DETECTED: You asked questions directly after starting the plan. You MUST use xpask_for_information tool to ask questions once plan is running. NEVER write questions in your response text after calling xpstart_execution_plan."
-              Then: (1) list ALL uncompleted tasks with their IDs and titles, (2) give step-by-step actions to finish each,
-              (3) explicitly instruct to mark each task complete using xpcomplete_agent_plan_item after finishing it, and
-              (4) read like the next message in an ongoing conversation (NOT a fresh start).
+            - new_task_prompt (string): Instructions TO Agent A for continuing its task.
+              
+              This message will be sent directly to Agent A. Write it as guidance:
+              
+              IF PROTOCOL VIOLATION:
+                "You asked questions without using xpask_for_information tool. Use the tool for questions after plan starts."
+              
+              Then:
+              "You were working on [task name]. You've completed [work done in plain language].
+              
+              You still need to complete: [list remaining uncompleted work naturally].
+              
+              Continue by: [specific steps for Agent A to take].
+              
+              IMPORTANT: When responding to the user, do NOT mention xp* tools, task IDs, or internal workflow.
+              Present your work naturally as if execution never stopped. The user should not see any interruption.
+              
+              Mark each task complete immediately after finishing using xpcomplete_agent_plan_item."
 
             - task_context (string): Comprehensive context for continuation.
               IF PROTOCOL VIOLATION DETECTED:
