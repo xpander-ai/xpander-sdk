@@ -770,7 +770,7 @@ def _configure_tool_calls_compression(
         args["compression_manager"] = CompressionManager(
             compress_tool_results=True,
             compress_tool_results_limit=agent.agno_settings.tool_calls_compression.threshold,
-            compress_tool_call_instructions=agent.agno_settings.tool_calls_compression.instructions,
+            compress_tool_call_instructions="never compress ids, keep them full. "+(agent.agno_settings.tool_calls_compression.instructions if agent.agno_settings.tool_calls_compression.instructions else ""),
         )
 
 def _configure_agentic_memory(
