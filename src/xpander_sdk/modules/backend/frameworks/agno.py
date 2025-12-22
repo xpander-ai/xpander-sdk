@@ -249,11 +249,13 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             ### **Core Workflow**
             1. **CREATE** plan at the start (`xpcreate_agent_plan`)
             2. **START** plan execution (`xpstart_execution_plan`) - MANDATORY to enable enforcement
-            3. **CHECK** plan before each action (`xpget_agent_plan`)
+            3. **CHECK** plan before each action (`xpget_agent_plan`) - note the FULL UUID of the task you'll work on
             4. **DO THE WORK** for one task
-            5. **COMPLETE** task IMMEDIATELY - call `xpcomplete_agent_plan_items` RIGHT AFTER finishing work (DO NOT DELAY!)
+            5. **COMPLETE** task IMMEDIATELY - call `xpcomplete_agent_plan_items` with the FULL UUID RIGHT AFTER finishing work (DO NOT DELAY!)
             6. **ASK** user for info if needed (`xpask_for_information`) - MANDATORY if you need input or want to pause
             7. Repeat steps 3-6 until all tasks are done
+            
+            **UUID REQUIREMENT**: All task IDs are full UUIDs (e.g., '35f56b8e-1427-4a5e-a1c0-57a4f7ec8e92'). You MUST use the exact complete UUID string from the plan when marking tasks complete.
             
             **CRITICAL RULES - ABSOLUTE REQUIREMENTS**: 
             - Mark each task complete THE MOMENT you finish it - not later, not at the end, RIGHT AWAY!
@@ -315,27 +317,30 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             // Single task
             {
             "body_params": {
-                "ids": ["task-uuid-from-plan"]
+                "ids": ["35f56b8e-1427-4a5e-a1c0-57a4f7ec8e92"]
             }
             }
             
             // Multiple tasks (when finishing related tasks together)
             {
             "body_params": {
-                "ids": ["task-uuid-1", "task-uuid-2", "task-uuid-3"]
+                "ids": ["35f56b8e-1427-4a5e-a1c0-57a4f7ec8e92", "8a3c4f12-9b7e-4d2a-b5c8-1f6e9a0d3b4c", "f2b9d1c7-3e8a-4b6f-9d2c-5a7e1f4b8c3d"]
             }
             }
             ```
             **🚨 CRITICAL - NON-NEGOTIABLE RULES**: 
+            - IDs must be the FULL UUID strings (e.g., '35f56b8e-1427-4a5e-a1c0-57a4f7ec8e92') from the plan's 'id' field
+            - Get these exact UUID strings from xpget_agent_plan before calling this tool
             - Call THIS TOOL the INSTANT you finish task(s)
             - Can mark single or multiple tasks complete in one call
-            - Use multiple IDs when finishing related tasks at the same time
+            - Use multiple FULL UUIDs when finishing related tasks at the same time
+            - DO NOT use shortened IDs, abbreviations, or partial UUIDs - must be complete UUID strings
             - DO NOT postpone marking completion
             - DO NOT be lazy - mark it complete RIGHT AFTER the work is done
             - This is MANDATORY for progress tracking and continuation
             - If you finish a task and don't mark it complete immediately, you are doing it WRONG
             
-            **Pattern**: Finish work → IMMEDIATELY call xpcomplete_agent_plan_items → Move to next task
+            **Pattern**: Finish work → Get task UUID from plan → IMMEDIATELY call xpcomplete_agent_plan_items with FULL UUID → Move to next task
 
             ---
 
@@ -443,14 +448,18 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             - **START** the plan with `xpstart_execution_plan` after creating it
             - Use descriptive, actionable task titles
             - Check plan before each action to stay oriented
+            - **Always use FULL UUID strings when marking tasks complete** (e.g., '35f56b8e-1427-4a5e-a1c0-57a4f7ec8e92')
+            - **Get the exact UUID from xpget_agent_plan** - copy the full 'id' field value
             - **Mark tasks complete THE INSTANT you finish them - NO DELAYS, NO EXCEPTIONS**
             - **Can mark multiple tasks at once if finished together** (e.g., related tasks done simultaneously)
             - **ALWAYS use `xpask_for_information` when you need user input or want to pause**
             - Call plan tools **sequentially** (one at a time, never in parallel)
-            - Follow the pattern: DO WORK → MARK COMPLETE → NEXT TASK
+            - Follow the pattern: DO WORK → GET UUID → MARK COMPLETE WITH FULL UUID → NEXT TASK
 
             ❌ **DON'T - THESE ARE FORBIDDEN:**
             - Mark tasks complete before they're actually done
+            - **Use shortened, partial, or abbreviated task IDs** - MUST use complete UUID strings!
+            - **Use made-up or guessed UUIDs** - MUST get exact UUID from xpget_agent_plan!
             - **Be lazy and wait to mark tasks complete later** (FORBIDDEN!)
             - **Postpone marking completion to batch at the end** (WRONG! Mark immediately when done!)
             - **AFTER plan starts: NEVER write questions in your response text** ("Before I proceed...", "I need clarification...", etc.)
@@ -483,7 +492,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             → Plan now started, enforcement enabled (if enforce=true)
 
             4. Call: xpget_agent_plan
-            → See: Task 1 (ID: abc-123) - Design user schema - Not complete
+            → See: Task 1 (ID: 35f56b8e-1427-4a5e-a1c0-57a4f7ec8e92) - Design user schema - Not complete
 
             5. [Realize need user input] Call: xpask_for_information
             question: "Which database should we use - PostgreSQL or MySQL?"
@@ -492,23 +501,23 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             6. [After user responds, DO THE WORK: Design schema]
 
             7. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_items
-            ids: ["abc-123"]
-            → MARKED COMPLETE RIGHT AFTER FINISHING - NOT DELAYED!
+            ids: ["35f56b8e-1427-4a5e-a1c0-57a4f7ec8e92"]
+            → MARKED COMPLETE RIGHT AFTER FINISHING - NOT DELAYED! Used FULL UUID from plan!
 
             8. Call: xpget_agent_plan
-            → See: Task 1 ✓ complete, Task 2 (ID: def-456) - Create database migration - Not complete
+            → See: Task 1 ✓ complete, Task 2 (ID: 8a3c4f12-9b7e-4d2a-b5c8-1f6e9a0d3b4c) - Create database migration - Not complete
 
             9. [DO THE WORK: Create migration file]
 
             10. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_items
-            ids: ["def-456"]
-            → MARKED COMPLETE RIGHT AWAY!
+            ids: ["8a3c4f12-9b7e-4d2a-b5c8-1f6e9a0d3b4c"]
+            → MARKED COMPLETE RIGHT AWAY! Used FULL UUID from plan!
             
             // Alternative: If tasks 3 and 4 are done together, can batch complete:
             11a. [DO THE WORK: Implement endpoints AND add auth together]
             11b. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_items
-            ids: ["ghi-789", "jkl-012"]
-            → Both marked complete at once!
+            ids: ["f2b9d1c7-3e8a-4b6f-9d2c-5a7e1f4b8c3d", "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d"]
+            → Both marked complete at once! Used FULL UUIDs from plan!
 
             12. [Continue this pattern: GET PLAN → DO WORK → MARK COMPLETE IMMEDIATELY → REPEAT]
             ```
