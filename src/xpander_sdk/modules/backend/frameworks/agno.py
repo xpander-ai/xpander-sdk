@@ -251,7 +251,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             2. **START** plan execution (`xpstart_execution_plan`) - MANDATORY to enable enforcement
             3. **CHECK** plan before each action (`xpget_agent_plan`)
             4. **DO THE WORK** for one task
-            5. **COMPLETE** task IMMEDIATELY - call `xpcomplete_agent_plan_item` RIGHT AFTER finishing work (DO NOT DELAY!)
+            5. **COMPLETE** task IMMEDIATELY - call `xpcomplete_agent_plan_items` RIGHT AFTER finishing work (DO NOT DELAY!)
             6. **ASK** user for info if needed (`xpask_for_information`) - MANDATORY if you need input or want to pause
             7. Repeat steps 3-6 until all tasks are done
             
@@ -307,26 +307,35 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             ---
 
-            #### **3. xpcomplete_agent_plan_item** - Mark Task Complete
-            **When to use**: **IMMEDIATELY** after finishing each task (NOT before, NOT later, RIGHT NOW!)
+            #### **3. xpcomplete_agent_plan_items** - Mark Task(s) Complete
+            **When to use**: **IMMEDIATELY** after finishing one or more tasks (NOT before, NOT later, RIGHT NOW!)
 
             **How to use**:
             ```json
+            // Single task
             {
             "body_params": {
-                "id": "task-uuid-from-plan"
+                "ids": ["task-uuid-from-plan"]
+            }
+            }
+            
+            // Multiple tasks (when finishing related tasks together)
+            {
+            "body_params": {
+                "ids": ["task-uuid-1", "task-uuid-2", "task-uuid-3"]
             }
             }
             ```
             **🚨 CRITICAL - NON-NEGOTIABLE RULES**: 
-            - Call THIS TOOL the INSTANT you finish a task
-            - DO NOT wait to mark multiple tasks at once
+            - Call THIS TOOL the INSTANT you finish task(s)
+            - Can mark single or multiple tasks complete in one call
+            - Use multiple IDs when finishing related tasks at the same time
             - DO NOT postpone marking completion
             - DO NOT be lazy - mark it complete RIGHT AFTER the work is done
             - This is MANDATORY for progress tracking and continuation
             - If you finish a task and don't mark it complete immediately, you are doing it WRONG
             
-            **Pattern**: Finish work → IMMEDIATELY call xpcomplete_agent_plan_item → Move to next task
+            **Pattern**: Finish work → IMMEDIATELY call xpcomplete_agent_plan_items → Move to next task
 
             ---
 
@@ -435,6 +444,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             - Use descriptive, actionable task titles
             - Check plan before each action to stay oriented
             - **Mark tasks complete THE INSTANT you finish them - NO DELAYS, NO EXCEPTIONS**
+            - **Can mark multiple tasks at once if finished together** (e.g., related tasks done simultaneously)
             - **ALWAYS use `xpask_for_information` when you need user input or want to pause**
             - Call plan tools **sequentially** (one at a time, never in parallel)
             - Follow the pattern: DO WORK → MARK COMPLETE → NEXT TASK
@@ -442,7 +452,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
             ❌ **DON'T - THESE ARE FORBIDDEN:**
             - Mark tasks complete before they're actually done
             - **Be lazy and wait to mark tasks complete later** (FORBIDDEN!)
-            - **Batch mark multiple tasks at the end** (WRONG! Mark each immediately!)
+            - **Postpone marking completion to batch at the end** (WRONG! Mark immediately when done!)
             - **AFTER plan starts: NEVER write questions in your response text** ("Before I proceed...", "I need clarification...", etc.)
             - **AFTER plan starts: NEVER respond with questions - ONLY use xpask_for_information tool** (ABSOLUTE RULE!)
             - Pass plain string arrays - must be objects with `title` field
@@ -481,8 +491,8 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             6. [After user responds, DO THE WORK: Design schema]
 
-            7. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_item
-            id: "abc-123"
+            7. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_items
+            ids: ["abc-123"]
             → MARKED COMPLETE RIGHT AFTER FINISHING - NOT DELAYED!
 
             8. Call: xpget_agent_plan
@@ -490,11 +500,17 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
 
             9. [DO THE WORK: Create migration file]
 
-            10. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_item
-            id: "def-456"
+            10. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_items
+            ids: ["def-456"]
             → MARKED COMPLETE RIGHT AWAY!
+            
+            // Alternative: If tasks 3 and 4 are done together, can batch complete:
+            11a. [DO THE WORK: Implement endpoints AND add auth together]
+            11b. ⚠️ IMMEDIATELY Call: xpcomplete_agent_plan_items
+            ids: ["ghi-789", "jkl-012"]
+            → Both marked complete at once!
 
-            11. [Continue this pattern: GET PLAN → DO WORK → MARK COMPLETE IMMEDIATELY → REPEAT]
+            12. [Continue this pattern: GET PLAN → DO WORK → MARK COMPLETE IMMEDIATELY → REPEAT]
             ```
             
             ### **WRONG WAY - ANTI-PATTERN (DO NOT DO THIS)**
