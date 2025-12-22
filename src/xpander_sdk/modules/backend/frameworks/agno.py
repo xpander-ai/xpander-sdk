@@ -202,7 +202,7 @@ async def build_agent_args(
                 pass
 
         # try toon optimization if compression enabled
-        if xpander_agent and xpander_agent and xpander_agent.agno_settings and xpander_agent.agno_settings.tool_calls_compression and xpander_agent.agno_settings.tool_calls_compression.enabled:
+        if xpander_agent and xpander_agent and xpander_agent.agno_settings and xpander_agent.agno_settings.tool_calls_compression and xpander_agent.agno_settings.tool_calls_compression.enabled and not function_name.startswith("xp"):
             try:
                 if isinstance(result, ToolInvocationResult):
                     json_result = json.loads(result.result) if isinstance(result.result, str) else result.result
