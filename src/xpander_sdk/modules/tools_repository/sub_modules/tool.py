@@ -386,19 +386,21 @@ class Tool(XPanderSharedModel):
                     ) from validation_error
 
             if self.is_local:
-                await self.agraph_preflight_check(
-                    agent_id=agent_id,
-                    agent_version=agent_version,
-                    configuration=configuration,
-                    task_id=task_id,
-                )
-
                 if self.fn is None:
                     raise RuntimeError(
                         f"No local function provided for this tool ({self.id})."
                     )
 
                 result = await invoke_local_fn(fn=self.fn, payload=payload)
+                
+                await self.agraph_preflight_check(
+                    agent_id=agent_id,
+                    agent_version=agent_version,
+                    configuration=configuration,
+                    task_id=task_id,
+                    payload={"input": payload, "output": result.model_dump() if isinstance(result, BaseModel) else result}
+                )
+                
                 tool_invocation_result.result = result
                 tool_invocation_result.is_success = True
                 return tool_invocation_result
