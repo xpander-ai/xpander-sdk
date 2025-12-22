@@ -560,6 +560,7 @@ class Task(XPanderSharedModel):
             # restore result and status
             self.result = task_backup.result
             self.status = task_backup.status
+            self.tokens = task_backup.tokens
             
             if not self.deep_planning.question_raised:
                 uncompleted_tasks = [task for task in self.deep_planning.tasks if not task.completed]
@@ -814,6 +815,7 @@ class Task(XPanderSharedModel):
             # restore result and status
             self.result = task_backup.result
             self.status = task_backup.status
+            self.tokens = task_backup.tokens
             
             if self.deep_planning and self.deep_planning.enabled and self.deep_planning.started and self.deep_planning.enforce:
                 
