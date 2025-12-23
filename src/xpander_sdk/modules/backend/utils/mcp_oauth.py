@@ -43,15 +43,16 @@ async def push_event(task: Task, event: TaskUpdateEvent, event_type: TaskUpdateE
     if registry.has_auth_handlers():
         await registry.invoke_auth_handlers(task.configuration.state.agent, task, evt)
 
-async def get_token(mcp_server: MCPServerDetails, task: Task, user_id: str) -> MCPOAuthGetTokenResponse:
+async def get_token(mcp_server: MCPServerDetails, task: Task, user_id: str, return_result: Optional[bool] = False, generate_login_url: Optional[bool] = True) -> MCPOAuthGetTokenResponse:
     client = APIClient(configuration=task.configuration)
     result: MCPOAuthGetTokenResponse = await client.make_request(
         path=APIRoute.GetUserMCPAuthToken.format(agent_id=task.agent_id, user_id=user_id),
         method="POST",
+        query={"generate_login_url": generate_login_url},
         payload=mcp_server.model_dump(),
         model=MCPOAuthGetTokenResponse
     )
-    if result.type == MCPOAuthResponseType.TOKEN_READY:
+    if result.type == MCPOAuthResponseType.TOKEN_READY or return_result:
         return result
     
     return None
@@ -62,13 +63,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
         
         user_identifier = user_id if mcp_server.share_user_token_across_other_agents else f"{task.agent_id}_{user_id}"
         
-        client = APIClient(configuration=task.configuration)
-        result: MCPOAuthGetTokenResponse = await client.make_request(
-            path=APIRoute.GetUserMCPAuthToken.format(agent_id=task.agent_id, user_id=user_identifier),
-            method="POST",
-            payload=mcp_server.model_dump(),
-            model=MCPOAuthGetTokenResponse
-        )
+        result: MCPOAuthGetTokenResponse = await get_token(mcp_server=mcp_server, task=task, user_id=user_identifier, return_result=True)
         
         if not result:
             raise Exception("Invalid response")
@@ -85,7 +80,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
                 elapsed_time += POLLING_INTERVAL
                 
                 # Check for token
-                token_result = await get_token(mcp_server=mcp_server, task=task, user_id=user_identifier)
+                token_result = await get_token(mcp_server=mcp_server, task=task, user_id=user_identifier, generate_login_url=False)
                 if token_result and token_result.type == MCPOAuthResponseType.TOKEN_READY:
                     logger.info(f"Successful login for MCP Server {mcp_server.url}")
                     redacted_token_result = MCPOAuthGetTokenResponse(**token_result.model_dump_safe())
