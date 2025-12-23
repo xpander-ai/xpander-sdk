@@ -41,6 +41,7 @@ from xpander_sdk.modules.tools_repository.utils.schemas import (
     schema_enforcement_block_and_descriptions,
 )
 from xpander_sdk.utils.event_loop import run_sync
+from xpander_sdk.modules.events.decorators.on_tool import ToolHooksRegistry
 
 
 class Tool(XPanderSharedModel):
@@ -376,6 +377,15 @@ class Tool(XPanderSharedModel):
             task_id=task_id,
         )
 
+        # Execute before hooks
+        await ToolHooksRegistry.execute_before_hooks(
+            tool=self,
+            payload=payload,
+            payload_extension=payload_extension,
+            tool_call_id=tool_call_id,
+            agent_version=agent_version
+        )
+
         try:
             if self.schema and payload:
                 try:
@@ -403,17 +413,26 @@ class Tool(XPanderSharedModel):
                 
                 tool_invocation_result.result = result
                 tool_invocation_result.is_success = True
-                return tool_invocation_result
-
-            tool_invocation_result.result = await self.acall_remote_tool(
-                agent_id=agent_id,
-                agent_version=agent_version,
+            else:
+                tool_invocation_result.result = await self.acall_remote_tool(
+                    agent_id=agent_id,
+                    agent_version=agent_version,
+                    payload=payload,
+                    payload_extension=payload_extension,
+                    configuration=configuration,
+                    task_id=task_id,
+                )
+                tool_invocation_result.is_success = True
+            
+            # Execute after hooks on success
+            await ToolHooksRegistry.execute_after_hooks(
+                tool=self,
                 payload=payload,
                 payload_extension=payload_extension,
-                configuration=configuration,
-                task_id=task_id,
+                tool_call_id=tool_call_id,
+                agent_version=agent_version,
+                result=tool_invocation_result.result
             )
-            tool_invocation_result.is_success = True
 
         except Exception as e:
             tool_invocation_result.is_error = True
@@ -423,6 +442,16 @@ class Tool(XPanderSharedModel):
             else:
                 tool_invocation_result.status_code = 500
                 tool_invocation_result.result = str(e)
+            
+            # Execute error hooks on failure
+            await ToolHooksRegistry.execute_error_hooks(
+                tool=self,
+                payload=payload,
+                payload_extension=payload_extension,
+                tool_call_id=tool_call_id,
+                agent_version=agent_version,
+                error=e
+            )
 
         return tool_invocation_result
 

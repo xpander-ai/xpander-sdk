@@ -28,6 +28,7 @@ from .modules.tasks.tasks_module import Tasks, Task, TasksListItem, AgentExecuti
 from xpander_sdk.modules.events.decorators.on_task import on_task
 from xpander_sdk.modules.events.decorators.on_boot import on_boot
 from xpander_sdk.modules.events.decorators.on_shutdown import on_shutdown
+from xpander_sdk.modules.events.decorators.on_tool import on_tool_before, on_tool_after, on_tool_error
 
 # Tools and repository imports
 from .modules.tools_repository.tools_repository_module import ToolsRepository, Tool
@@ -77,6 +78,9 @@ __all__ = [
     "MCPServerAuthType",
     "register_tool",
     "build_model_from_schema",
+    "on_tool_before",
+    "on_tool_after",
+    "on_tool_error",
     # Knowledge bases
     "KnowledgeBases",
     "KnowledgeBase",
