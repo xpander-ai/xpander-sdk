@@ -231,6 +231,7 @@ class Backend(ModuleBase):
         override: Optional[Dict[str, Any]] = None,
         tools: Optional[List[Callable]] = None,
         is_async: Optional[bool] = True,
+        auth_events_callback: Optional[Callable] = None,
     ) -> Dict[str, Any]:
         """
         Asynchronously resolve runtime arguments for the specified agent.
@@ -243,6 +244,27 @@ class Backend(ModuleBase):
             override (Optional[Dict[str, Any]]): Optional overrides for final arguments.
             tools (Optional[List[Callable]]): Optional additional tools to be added to the agent arguments.
             is_async (Optional[bool]): Is in Async Context?.
+            auth_events_callback (Optional[Callable]): Optional callback function (async or sync) that will be called for authentication events only.
+                Used specifically for authentication events (e.g., MCP OAuth flows requiring user login).
+                The callback signature must be: callback(agent: Agent, task: Task, event: TaskUpdateEvent)
+                
+                Can be provided in two ways:
+                1. Direct function: Pass the function directly to this parameter
+                2. Decorator: Use @on_auth_event decorator and pass the decorated function
+                
+                Example (direct function):
+                    async def my_callback(agent, task, event):
+                        print(f"Auth required: {event.data}")
+                    args = await backend.aget_args(agent_id="...", auth_events_callback=my_callback)
+                
+                Example (decorator):
+                    from xpander_sdk import on_auth_event
+                    
+                    @on_auth_event
+                    async def handle_auth(agent, task, event):
+                        print(f"Auth required: {event.data}")
+                    
+                    args = await backend.aget_args(agent_id="...", auth_events_callback=handle_auth)
 
         Returns:
             Dict[str, Any]: Resolved argument dictionary to use with the agent.
@@ -267,7 +289,7 @@ class Backend(ModuleBase):
                 "or set via the 'XPANDER_AGENT_ID' environment variable."
             )
 
-        return await dispatch_get_args(agent=xpander_agent, task=task, override=override, tools=tools, is_async=is_async)
+        return await dispatch_get_args(agent=xpander_agent, task=task, override=override, tools=tools, is_async=is_async, auth_events_callback=auth_events_callback)
 
     def get_args(
         self,
@@ -277,6 +299,7 @@ class Backend(ModuleBase):
         task: Optional[Task] = None,
         override: Optional[Dict[str, Any]] = None,
         tools: Optional[List[Callable]] = None,
+        auth_events_callback: Optional[Callable] = None,
     ) -> Dict[str, Any]:
         """
         Synchronously resolve runtime arguments for the specified agent.
@@ -291,6 +314,27 @@ class Backend(ModuleBase):
             task (Optional[Task]): Optional Task object providing runtime input/output context.
             override (Optional[Dict[str, Any]]): Optional overrides for final arguments.
             tools (Optional[List[Callable]]): Optional additional tools to be added to the agent arguments.
+            auth_events_callback (Optional[Callable]): Optional callback function (async or sync) that will be called for authentication events only.
+                Used specifically for authentication events (e.g., MCP OAuth flows requiring user login).
+                The callback signature must be: callback(agent: Agent, task: Task, event: TaskUpdateEvent)
+                
+                Can be provided in two ways:
+                1. Direct function: Pass the function directly to this parameter
+                2. Decorator: Use @on_auth_event decorator and pass the decorated function
+                
+                Example (direct function):
+                    def my_callback(agent, task, event):
+                        print(f"Auth required: {event.data}")
+                    args = backend.get_args(agent_id="...", auth_events_callback=my_callback)
+                
+                Example (decorator):
+                    from xpander_sdk import on_auth_event
+                    
+                    @on_auth_event
+                    def handle_auth(agent, task, event):
+                        print(f"Auth required: {event.data}")
+                    
+                    args = backend.get_args(agent_id="...", auth_events_callback=handle_auth)
 
         Returns:
             Dict[str, Any]: Resolved argument dictionary to use with the agent.
@@ -306,7 +350,8 @@ class Backend(ModuleBase):
                 task=task,
                 override=override,
                 tools=tools,
-                is_async=False
+                is_async=False,
+                auth_events_callback=auth_events_callback
             )
         )
     

@@ -243,6 +243,89 @@ async for event in task.aevents():
     print(f"Event Data: {event.data}")
 ```
 
+### Authentication Events Callback
+
+Handle authentication events in real-time. This callback is triggered only for authentication flows (e.g., MCP OAuth requiring user login).
+
+**You can use both approaches simultaneously** - decorated handlers will always be invoked, and you can also pass an explicit callback for additional handling.
+
+You can provide the callback in two ways:
+
+#### Option 1: Direct Function
+
+```python
+from xpander_sdk import Backend
+from xpander_sdk.modules.agents.sub_modules.agent import Agent
+from xpander_sdk.modules.tasks.sub_modules.task import Task, TaskUpdateEvent
+from agno.agent import Agent as AgnoAgent
+
+# Define event callback (async or sync)
+async def my_event_callback(agent: Agent, task: Task, event: TaskUpdateEvent):
+    """Called for authentication events only"""
+    # event.type will always be "auth_event"
+    print(f"Authentication required: {event.data}")
+    # Display login URL or handle OAuth flow
+
+# Get args with callback
+backend = Backend(configuration=config)
+args = await backend.aget_args(
+    agent_id="agent-123",
+    task=my_task,
+    auth_events_callback=my_event_callback
+)
+```
+
+#### Option 2: Decorator (Auto-registered)
+
+```python
+from xpander_sdk import Backend, on_auth_event
+from xpander_sdk.modules.agents.sub_modules.agent import Agent
+from xpander_sdk.modules.tasks.sub_modules.task import Task, TaskUpdateEvent
+from agno.agent import Agent as AgnoAgent
+
+# Use decorator - auto-registers globally
+@on_auth_event
+async def handle_auth(agent: Agent, task: Task, event: TaskUpdateEvent):
+    # event.type will always be "auth_event"
+    print(f"Authentication required for {agent.name}")
+    print(f"Auth data: {event.data}")
+
+# Decorated handler is automatically invoked - no need to pass it
+backend = Backend(configuration=config)
+args = await backend.aget_args(
+    agent_id="agent-123",
+    task=my_task
+)
+```
+
+#### Option 3: Combine Both
+
+```python
+from xpander_sdk import Backend, on_auth_event
+
+# Global handler for all auth events
+@on_auth_event
+async def log_auth(agent, task, event):
+    print(f"[GLOBAL] Auth event for {agent.name}")
+
+# Additional one-time handler
+async def custom_handler(agent, task, event):
+    print(f"[CUSTOM] Specific handling for this call")
+
+# Both handlers will be invoked
+args = await backend.aget_args(
+    agent_id="agent-123",
+    auth_events_callback=custom_handler  # Optional additional callback
+)
+
+# Use with Agno
+agno_agent = AgnoAgent(**args)
+result = await agno_agent.arun(
+    input="Process this data",
+    stream=True
+)
+```
+
 ### Task Activity Monitoring
 
 ```python

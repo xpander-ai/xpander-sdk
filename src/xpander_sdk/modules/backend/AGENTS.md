@@ -22,6 +22,7 @@ backend/
 - AI agents should use the `Backend` class for argument retrieval operations
 - Follow the async-first pattern: `aget_args()`, `get_args()` for production code
 - Implement proper error handling and logging for argument retrieval process
+- Use `auth_events_callback` parameter for authentication events (e.g., MCP OAuth flows)
 
 ### Framework Handling
 - AI agents should utilize the framework dispatch mechanism
@@ -54,6 +55,56 @@ from xpander_sdk.modules.backend.frameworks import dispatch_get_args
 # Dispatch arguments for given agent and task
 args = await dispatch_get_args(agent=agent, task=task)
 ```
+
+### Authentication Events Callback Pattern
+
+Handle authentication events only. This callback is triggered exclusively for authentication flows (e.g., MCP OAuth requiring user login).
+
+**Both approaches work together** - decorated handlers are auto-registered globally, and you can also pass explicit callbacks for per-call handling.
+
+```python
+from xpander_sdk.modules.backend import Backend
+from xpander_sdk import Agent, Task
+from xpander_sdk.models.tasks.task_update_event import TaskUpdateEvent
+
+backend = Backend()
+
+# Option 1: Direct callback (per-call)
+async def my_event_callback(agent: Agent, task: Task, event: TaskUpdateEvent):
+    # event.type will always be "auth_event"
+    print(f"Authentication required for {agent.name}")
+    print(f"Auth data: {event.data}")
+
+args = await backend.aget_args(
+    agent_id="agent-id",
+    auth_events_callback=my_event_callback
+)
+
+# Option 2: Decorator (auto-registered globally)
+from xpander_sdk import on_auth_event
+
+@on_auth_event
+async def handle_auth(agent, task, event):
+    print(f"Global auth handler: {event.data}")
+
+# Automatically invoked - no need to pass
+args = await backend.aget_args(agent_id="agent-id")
+
+# Option 3: Combine both
+# Both decorated handler and explicit callback will be invoked
+args = await backend.aget_args(
+    agent_id="agent-id",
+    auth_events_callback=my_event_callback
+)
+```
+
+**Callback Parameters:**
+- `agent`: The Agent object associated with the task
+- `task`: The Task object being executed
+- `event`: A TaskUpdateEvent containing:
+  - `type`: Event type (always "auth_event" for authentication flows)
+  - `time`: Event timestamp
+  - `data`: Authentication-specific data (e.g., OAuth login URL, token status)
 
 ### External Task Reporting Patterns
 ```python
