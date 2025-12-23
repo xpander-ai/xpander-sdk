@@ -1,30 +1,47 @@
 import asyncio
 from datetime import datetime, timezone
+from typing import Callable, Optional
 from loguru import logger
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.models.events import TaskUpdateEventType
+from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.modules.tasks.sub_modules.task import Task, TaskUpdateEvent
 from xpander_sdk.modules.tools_repository.models.mcp import MCPOAuthGetTokenGenericResponse, MCPOAuthGetTokenResponse, MCPOAuthResponseType, MCPServerDetails
+from xpander_sdk.modules.backend.events_registry import EventsRegistry
 
 POLLING_INTERVAL = 1 # every 1s
 MAX_WAIT_FOR_LOGIN = 600 # 10 mintutes
 
-async def push_event(task: Task, event: TaskUpdateEvent, event_type: TaskUpdateEventType):
+async def push_event(task: Task, event: TaskUpdateEvent, event_type: TaskUpdateEventType, auth_events_callback: Optional[Callable] = None):
     client = APIClient(configuration=task.configuration)
+    
+    evt = TaskUpdateEvent(
+        task_id=task.id,
+        organization_id=task.organization_id,
+        time=datetime.now(timezone.utc).isoformat(),
+        type=event_type,
+        data=event
+    )
+    
     await client.make_request(
         path=APIRoute.PushExecutionEventToQueue.format(task_id=task.id),
         method="POST",
-        payload=[
-            TaskUpdateEvent(
-                task_id=task.id,
-                organization_id=task.organization_id,
-                time=datetime.now(timezone.utc).isoformat(),
-                type=event_type,
-                data=event
-                ).model_dump_safe()
-            ]
+        payload=[evt.model_dump_safe()]
     )
+    
+    # Invoke both explicit callback and registered handlers
+    # 1. Call explicit callback if provided
+    if auth_events_callback:
+        if asyncio.iscoroutinefunction(auth_events_callback):
+            await auth_events_callback(task.configuration.state.agent, task, evt)
+        else:
+            auth_events_callback(task.configuration.state.agent, task, evt)
+    
+    # 2. Always invoke registered handlers from EventsRegistry
+    registry = EventsRegistry()
+    if registry.has_auth_handlers():
+        await registry.invoke_auth_handlers(task.configuration.state.agent, task, evt)
 
 async def get_token(mcp_server: MCPServerDetails, task: Task, user_id: str) -> MCPOAuthGetTokenResponse:
     client = APIClient(configuration=task.configuration)
@@ -39,7 +56,7 @@ async def get_token(mcp_server: MCPServerDetails, task: Task, user_id: str) -> M
     
     return None
 
-async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user_id: str) -> MCPOAuthGetTokenResponse:
+async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user_id: str, auth_events_callback: Optional[Callable] = None) -> MCPOAuthGetTokenResponse:
     try:
         logger.info(f"Authenticating MCP Server {mcp_server.url}")
         
@@ -59,7 +76,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
         if result.type == MCPOAuthResponseType.LOGIN_REQUIRED:
             logger.info(f"Initiating login for MCP Server {mcp_server.url}")
             # Notify user about login requirement
-            await push_event(task=task, event=result, event_type=TaskUpdateEventType.AuthEvent)
+            await push_event(task=task, event=result, event_type=TaskUpdateEventType.AuthEvent, auth_events_callback=auth_events_callback)
             
             # Poll for token with timeout
             elapsed_time = 0
@@ -73,7 +90,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
                     logger.info(f"Successful login for MCP Server {mcp_server.url}")
                     redacted_token_result = MCPOAuthGetTokenResponse(**token_result.model_dump_safe())
                     redacted_token_result.data.access_token = "REDACTED"
-                    await push_event(task=task, event=redacted_token_result, event_type=TaskUpdateEventType.AuthEvent)
+                    await push_event(task=task, event=redacted_token_result, event_type=TaskUpdateEventType.AuthEvent, auth_events_callback=auth_events_callback)
                     return token_result
             
             # Timeout reached
@@ -83,7 +100,7 @@ async def authenticate_mcp_server(mcp_server: MCPServerDetails, task: Task, user
             logger.info(f"Token ready for MCP Server {mcp_server.url}")
             redacted_token_result = MCPOAuthGetTokenResponse(**result.model_dump_safe())
             redacted_token_result.data.access_token = "REDACTED"
-            await push_event(task=task, event=redacted_token_result, event_type=TaskUpdateEventType.AuthEvent)
+            await push_event(task=task, event=redacted_token_result, event_type=TaskUpdateEventType.AuthEvent, auth_events_callback=auth_events_callback)
         
         return result
     except Exception as e:

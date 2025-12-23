@@ -11,6 +11,7 @@ The Backend Module allows developers to:
 - Support multiple frameworks, dispatching arguments accordingly
 - Report external task execution results to the xpander.ai platform
 - Provide both asynchronous and synchronous APIs
+- Register real-time event callbacks for task updates and progress monitoring
 
 ## Classes
 
@@ -20,8 +21,8 @@ Handles retrieval of runtime arguments for agents.
 
 #### Key Methods
 
-- **`aget_args(agent_id: Optional[str], agent: Optional[Agent], ...)`**: Asynchronously resolve runtime arguments.
-- **`get_args(agent_id: Optional[str], agent: Optional[Agent], ...)`**: Synchronously resolve runtime arguments.
+- **`aget_args(agent_id: Optional[str], agent: Optional[Agent], auth_events_callback: Optional[Callable], ...)`**: Asynchronously resolve runtime arguments. Accepts an optional `auth_events_callback` for authentication events.
+- **`get_args(agent_id: Optional[str], agent: Optional[Agent], auth_events_callback: Optional[Callable], ...)`**: Synchronously resolve runtime arguments. Accepts an optional `auth_events_callback` for authentication events.
 - **`areport_external_task(agent_id: Optional[str], agent: Optional[Agent], ...)`**: Asynchronously report external task execution results.
 - **`report_external_task(agent_id: Optional[str], agent: Optional[Agent], ...)`**: Synchronously report external task execution results.
 
@@ -73,6 +74,84 @@ async def handle_agent_task(task):
     task.result = "Task processed with Backend arguments"
     return task
 ```
+
+### Authentication Events Callback
+
+Handle authentication events in real-time. This callback is triggered **only** for authentication flows (e.g., MCP OAuth requiring user login).
+
+**You can use both approaches simultaneously** - decorated handlers are auto-registered and always invoked, and you can also pass an explicit callback for additional per-call handling.
+
+You can provide the callback in two ways:
+
+#### Option 1: Direct Function
+
+```python
+from xpander_sdk import Backend, Agent, Task
+from xpander_sdk.models.tasks.task_update_event import TaskUpdateEvent
+
+backend = Backend()
+
+# Async callback - receives agent, task, and event
+async def my_event_callback(agent: Agent, task: Task, event: TaskUpdateEvent):
+    # event.type will always be "auth_event"
+    print(f"Authentication required: {event.data}")
+    # Display login URL or handle OAuth flow
+
+# Pass callback to aget_args
+args = await backend.aget_args(
+    agent_id="agent-123",
+    auth_events_callback=my_event_callback
+)
+```
+
+#### Option 2: Decorator (Auto-registered)
+
+```python
+from xpander_sdk import Backend, on_auth_event, Agent, Task
+from xpander_sdk.models.tasks.task_update_event import TaskUpdateEvent
+
+backend = Backend()
+
+# Use decorator - auto-registers globally
+@on_auth_event
+async def handle_auth(agent: Agent, task: Task, event: TaskUpdateEvent):
+    # event.type will always be "auth_event"
+    print(f"Authentication required: {event.data}")
+
+# Decorated handler is automatically invoked - no need to pass it
+args = await backend.aget_args(
+    agent_id="agent-123"
+)
+```
+
+#### Option 3: Combine Both
+
+```python
+from xpander_sdk import Backend, on_auth_event
+
+# Global handler for all auth events
+@on_auth_event
+async def log_all_auth(agent, task, event):
+    print(f"[GLOBAL] Auth event for {agent.name}")
+
+# Additional one-time handler for specific use case
+async def custom_handler(agent, task, event):
+    print(f"[CUSTOM] Specific handling")
+
+# Both handlers will be invoked
+args = await backend.aget_args(
+    agent_id="agent-123",
+    auth_events_callback=custom_handler  # Optional additional callback
+)
+```
+
+The callback function receives three parameters:
+- **`agent`**: The Agent object associated with the task
+- **`task`**: The Task object being executed
+- **`event`**: A TaskUpdateEvent containing:
+  - `type`: Event type (always "auth_event" for authentication flows)
+  - `time`: Event timestamp
+  - `data`: Authentication-specific data (e.g., OAuth login URL, token status)
 
 ### Report External Task Execution
 

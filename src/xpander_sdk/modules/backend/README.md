@@ -9,6 +9,7 @@ This module handles:
 - Supporting multiple frameworks through dispatching mechanics
 - Reporting external task execution results to the xpander.ai platform
 - Providing asynchronous and synchronous APIs
+- Monitoring task execution in real-time through event callbacks
 
 ## Structure
 
@@ -26,8 +27,8 @@ backend/
 Interface for retrieving agent runtime arguments.
 
 **Methods:**
-- `aget_args()`: Asynchronously resolve runtime arguments
-- `get_args()`: Synchronously resolve runtime arguments
+- `aget_args(auth_events_callback=None)`: Asynchronously resolve runtime arguments with optional auth event callback
+- `get_args(auth_events_callback=None)`: Synchronously resolve runtime arguments with optional auth event callback
 - `areport_external_task()`: Asynchronously report external task execution results
 - `report_external_task()`: Synchronously report external task execution results
 
@@ -52,6 +53,47 @@ args_env = await backend.aget_args()
 from xpander_sdk.modules.backend.frameworks import dispatch_get_args
 
 args = await dispatch_get_args(agent=agent, task=task)
+```
+
+### Authentication Events Callback
+
+Handle authentication events in real-time. This callback is triggered **only** for authentication flows (e.g., MCP OAuth).
+
+**You can use both approaches simultaneously** - decorated handlers are auto-registered globally and always invoked, plus you can pass an explicit callback for additional per-call handling.
+
+```python
+from xpander_sdk.modules.backend import Backend
+from xpander_sdk import Agent, Task
+from xpander_sdk.models.tasks.task_update_event import TaskUpdateEvent
+
+backend = Backend()
+
+# Option 1: Direct callback
+async def event_callback(agent: Agent, task: Task, event: TaskUpdateEvent):
+    # event.type will always be "auth_event"
+    print(f"Authentication required: {event.data}")
+
+args = await backend.aget_args(
+    agent_id="agent-id",
+    auth_events_callback=event_callback
+)
+
+# Option 2: Decorator (auto-registered)
+from xpander_sdk import on_auth_event
+
+@on_auth_event
+async def handle_auth(agent, task, event):
+    print(f"Auth: {event.data}")
+
+# Automatically invoked - no need to pass
+args = await backend.aget_args(agent_id="agent-id")
+
+# Option 3: Both together
+# Both handle_auth (decorated) and custom_callback will be invoked
+args = await backend.aget_args(
+    agent_id="agent-id",
+    auth_events_callback=event_callback
+)
 ```
 
 ### External Task Reporting

@@ -17,6 +17,7 @@ For more information, visit: https://xpander.ai
 
 # Backend-related imports
 from .modules.backend.backend_module import Backend
+from .modules.backend.decorators.on_auth_event import on_auth_event
 
 # Agent-related imports
 from .modules.agents.agents_module import Agents, Agent, AgentsListItem
@@ -53,6 +54,7 @@ from .models.shared import OutputFormat, Tokens
 __all__ = [
     # xpander.ai Backend
     "Backend",
+    "on_auth_event",
     # Agent management
     "Agents",
     "Agent",

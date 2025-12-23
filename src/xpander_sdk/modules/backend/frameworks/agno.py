@@ -36,13 +36,14 @@ async def build_agent_args(
     override: Optional[Dict[str, Any]] = None,
     tools: Optional[List[Callable]] = None,
     is_async: Optional[bool] = True,
+    auth_events_callback: Optional[Callable] = None,
 ) -> Dict[str, Any]:
     model = _load_llm_model(agent=xpander_agent, override=override)
     args: Dict[str, Any] = {
         "id": xpander_agent.id,
         "store_events": True
     }
-
+    
     _configure_output(args=args, agent=xpander_agent, task=task)
     _configure_session_storage(args=args, agent=xpander_agent, task=task)
     _configure_agentic_memory(args=args, agent=xpander_agent, task=task)
@@ -55,7 +56,7 @@ async def build_agent_args(
     # Configure pre-hooks (guardrails, etc.)
     _configure_pre_hooks(args=args, agent=xpander_agent, model=model)
 
-    args["tools"] = await _resolve_agent_tools(agent=xpander_agent, task=task)
+    args["tools"] = await _resolve_agent_tools(agent=xpander_agent, task=task, auth_events_callback=auth_events_callback)
 
     
     if tools and len(tools) != 0:
@@ -102,7 +103,7 @@ async def build_agent_args(
         # convert to members
         members = await asyncio.gather(
             *[
-                build_agent_args(xpander_agent=sub_agent, override=override, task=task, is_async=is_async)
+                build_agent_args(xpander_agent=sub_agent, override=override, task=task, is_async=is_async, auth_events_callback=auth_events_callback)
                 for sub_agent in sub_agents
             ]
         )
@@ -891,7 +892,7 @@ def _configure_pre_hooks(args: Dict[str, Any], agent: Agent, model: Any) -> None
         args["pre_hooks"].append(openai_moderation_guardrail)
 
 
-async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> List[Any]:
+async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_events_callback: Optional[Callable] = None) -> List[Any]:
     mcp_servers = agent.mcp_servers
     
     # combine task mcps and agent mcps
@@ -955,7 +956,7 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None) -> Lis
                 if not task.input.user or not task.input.user.id:
                     raise ValueError("MCP server with OAuth authentication detected but user id not set on the task (task.input.user.id)")
                 
-                auth_result: MCPOAuthGetTokenResponse = await authenticate_mcp_server(mcp_server=mcp,task=task,user_id=task.input.user.id)
+                auth_result: MCPOAuthGetTokenResponse = await authenticate_mcp_server(mcp_server=mcp,task=task,user_id=task.input.user.id, auth_events_callback=auth_events_callback)
                 if not auth_result:
                     raise ValueError("MCP Server authentication failed")
                 if auth_result.type != MCPOAuthResponseType.TOKEN_READY:
