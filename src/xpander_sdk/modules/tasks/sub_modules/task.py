@@ -191,6 +191,68 @@ class Task(XPanderSharedModel):
     used_tools: Optional[List[str]] = []
     duration: Optional[float] = 0
 
+    # Telegram integration (initialized lazily via init_telegram)
+    _telegram: Optional[Any] = None
+    _telegram_initialized: bool = False
+
+    @property
+    def telegram(self) -> Optional[Any]:
+        """
+        Get the Telegram context if this task originated from a Telegram webhook.
+
+        Returns None if not a Telegram message or if init_telegram() hasn't been called.
+        Call init_telegram() first to parse and prepare Telegram data.
+
+        Returns:
+            TelegramContext or None
+        """
+        return self._telegram
+
+    async def init_telegram(self, speech_to_text_fn: Optional[Any] = None) -> Optional[Any]:
+        """
+        Initialize Telegram integration by parsing webhook data.
+
+        This method detects if the task input contains Telegram webhook data,
+        parses it, downloads any files, transcribes voice messages, and sets
+        up the telegram context.
+
+        After calling this method, task.telegram will be available with:
+        - input_text: The parsed message text
+        - files: List of file objects for the agent
+        - images: List of image objects for the agent
+        - auth_callback: For MCP OAuth
+        - send_response: To send the agent response
+        - on_tool_start: For streaming tool status
+
+        Args:
+            speech_to_text_fn: Optional function for voice transcription.
+
+        Returns:
+            TelegramContext if Telegram data was found, None otherwise.
+
+        Example:
+            >>> await task.init_telegram()
+            >>> if task.telegram:
+            ...     result = await agent.arun(
+            ...         input=task.telegram.input_text,
+            ...         files=task.telegram.files,
+            ...         images=task.telegram.images
+            ...     )
+            ...     await task.telegram.send_response(result)
+        """
+        if self._telegram_initialized:
+            return self._telegram
+
+        self._telegram_initialized = True
+
+        try:
+            from xpander_sdk.integrations.telegram import parse_telegram_webhook
+            self._telegram = await parse_telegram_webhook(self, speech_to_text_fn=speech_to_text_fn)
+        except Exception:
+            self._telegram = None
+
+        return self._telegram
+
     def model_post_init(self, context):
         """
         Post-initialization hook for the model.
@@ -429,6 +491,8 @@ class Task(XPanderSharedModel):
         or as URL strings otherwise. This method is designed for seamless integration
         with Agno agents.
 
+        If Telegram integration is initialized and has files, returns those instead.
+
         Returns:
             list[Any]: List of File objects (when Agno is available) or URL strings.
                       Returns empty list if no PDF files are present in task input.
@@ -440,6 +504,9 @@ class Task(XPanderSharedModel):
             ...     files=files
             ... )
         """
+        # Use Telegram files if available (already processed)
+        if self._telegram is not None:
+            return self._telegram.files
 
         if not self.input.files or len(self.input.files) == 0:
             return []
@@ -464,6 +531,8 @@ class Task(XPanderSharedModel):
         or as URL strings otherwise. This method is designed for seamless integration
         with Agno agents that support image processing.
 
+        If Telegram integration is initialized and has images, returns those instead.
+
         Returns:
             list[Any]: List of Image objects (when Agno is available) or URL strings.
                       Returns empty list if no image files are present in task input.
@@ -475,6 +544,10 @@ class Task(XPanderSharedModel):
             ...     images=images
             ... )
         """
+        # Use Telegram images if available (already processed)
+        if self._telegram is not None:
+            return self._telegram.images
+
         if not self.input.files or len(self.input.files) == 0:
             return []
 
@@ -531,11 +604,17 @@ class Task(XPanderSharedModel):
         If text exists, it is included first. If files are present,
         they are appended as a comma-separated list under "Files:".
 
+        If Telegram integration is initialized, returns the parsed message text.
+
         Returns:
             str: A formatted message string including text and/or file names.
 
         Powered by xpander.ai
         """
+        # Use Telegram input text if available (already parsed from webhook)
+        if self._telegram is not None:
+            return self._telegram.input_text
+
         message = ""
         if self.input.text:
             message = self.input.text

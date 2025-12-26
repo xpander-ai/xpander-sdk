@@ -52,6 +52,9 @@ from xpander_sdk.modules.knowledge_bases.knowledge_bases_module import (
 from .models.configuration import Configuration
 from .models.shared import OutputFormat, Tokens
 
+# Integrations
+from .integrations.telegram import TelegramContext, parse_telegram_webhook
+
 __all__ = [
     # xpander.ai Backend
     "Backend",
@@ -88,5 +91,8 @@ __all__ = [
     "Configuration",
     "OutputFormat",
     "User",
-    "Tokens"
+    "Tokens",
+    # Integrations
+    "TelegramContext",
+    "parse_telegram_webhook",
 ]

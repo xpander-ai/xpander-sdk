@@ -344,6 +344,10 @@ class Events(ModuleBase):
         error = None
         try:
             logger.info(f"Handling task {task.id}")
+
+            # Auto-initialize Telegram integration if webhook data is present
+            await task.init_telegram()
+
             await task.aset_status(status=AgentExecutionStatus.Executing)
             if asyncio.iscoroutinefunction(on_execution_request):
                 task = await on_execution_request(task)
