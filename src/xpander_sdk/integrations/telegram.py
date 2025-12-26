@@ -230,21 +230,27 @@ class TelegramContext:
                 except Exception as e:
                     logger.error(f"Failed to send voice: {e}")
             elif voice.endswith((".ogg", ".oga")):
-                await self._get_bot().send_voice(
-                    chat_id=self.chat_id,
-                    voice=voice,
-                    caption=caption,
-                    parse_mode="HTML" if caption else None,
-                    reply_markup=keyboard if not caption else None,
-                )
+                try:
+                    await self._get_bot().send_voice(
+                        chat_id=self.chat_id,
+                        voice=voice,
+                        caption=caption,
+                        parse_mode="HTML" if caption else None,
+                        reply_markup=keyboard if not caption else None,
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to send voice URL: {e}")
             else:
-                await self._get_bot().send_audio(
-                    chat_id=self.chat_id,
-                    audio=voice,
-                    caption=caption,
-                    parse_mode="HTML" if caption else None,
-                    reply_markup=keyboard if not caption else None,
-                )
+                try:
+                    await self._get_bot().send_audio(
+                        chat_id=self.chat_id,
+                        audio=voice,
+                        caption=caption,
+                        parse_mode="HTML" if caption else None,
+                        reply_markup=keyboard if not caption else None,
+                    )
+                except Exception as e:
+                    logger.error(f"Failed to send audio URL: {e}")
 
             if len(text) > 1024:
                 await self._get_bot().send_message(
@@ -322,6 +328,11 @@ async def parse_telegram_webhook(
     chat_id = message.get("chat", {}).get("id")
     user_id = message.get("from", {}).get("id")
 
+    # Validate required fields - chat_id is essential for sending responses
+    if chat_id is None:
+        logger.warning("Telegram webhook missing chat_id, cannot process")
+        return None
+
     input_text = message.get("text") or message.get("caption") or ""
 
     # Collect file IDs from various message types
@@ -386,23 +397,26 @@ async def parse_telegram_webhook(
                                     )
                                     data_url = f"data:{mime_type};base64,{b64_data}"
                                     # Handle both sync and async speech_to_text functions
-                                    if asyncio.iscoroutinefunction(speech_to_text_fn):
-                                        result = await speech_to_text_fn(data_url)
-                                    else:
-                                        result = speech_to_text_fn(data_url)
-                                    if result.get("success") and result.get("result"):
-                                        transcription = result["result"]
-                                        voice_text = (
-                                            f"[Voice message transcription]: {transcription}"
-                                        )
-                                        if input_text:
-                                            input_text = f"{input_text}\n\n{voice_text}"
+                                    try:
+                                        if asyncio.iscoroutinefunction(speech_to_text_fn):
+                                            result = await speech_to_text_fn(data_url)
                                         else:
-                                            input_text = voice_text
-                                    else:
-                                        logger.error(
-                                            f'Failed to transcribe: {result.get("error")}'
-                                        )
+                                            result = speech_to_text_fn(data_url)
+                                        # Validate result is a dict before accessing
+                                        if isinstance(result, dict) and result.get("success") and result.get("result"):
+                                            transcription = result["result"]
+                                            voice_text = (
+                                                f"[Voice message transcription]: {transcription}"
+                                            )
+                                            if input_text:
+                                                input_text = f"{input_text}\n\n{voice_text}"
+                                            else:
+                                                input_text = voice_text
+                                        else:
+                                            error_msg = result.get("error") if isinstance(result, dict) else "Invalid result format"
+                                            logger.error(f"Failed to transcribe: {error_msg}")
+                                    except Exception as e:
+                                        logger.error(f"Speech-to-text error: {e}")
                         else:
                             if task.input.files is None:
                                 task.input.files = []
