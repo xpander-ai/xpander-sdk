@@ -201,7 +201,10 @@ class Task(XPanderSharedModel):
         Get the Telegram context if this task originated from a Telegram webhook.
 
         Returns None if not a Telegram message or if init_telegram() hasn't been called.
-        Call init_telegram() first to parse and prepare Telegram data.
+        You must call `await task.init_telegram()` before accessing this property.
+
+        For voice transcription support, pass a speech_to_text function:
+            await task.init_telegram(speech_to_text_fn=my_transcribe_function)
 
         Returns:
             TelegramContext or None

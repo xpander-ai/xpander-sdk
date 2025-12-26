@@ -6,6 +6,7 @@ including message parsing, file downloads, voice transcription,
 and response sending.
 """
 
+import asyncio
 import os
 import re
 import json
@@ -384,7 +385,11 @@ async def parse_telegram_webhook(
                                         "utf-8"
                                     )
                                     data_url = f"data:{mime_type};base64,{b64_data}"
-                                    result = speech_to_text_fn(data_url)
+                                    # Handle both sync and async speech_to_text functions
+                                    if asyncio.iscoroutinefunction(speech_to_text_fn):
+                                        result = await speech_to_text_fn(data_url)
+                                    else:
+                                        result = speech_to_text_fn(data_url)
                                     if result.get("success") and result.get("result"):
                                         transcription = result["result"]
                                         voice_text = (
