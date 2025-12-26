@@ -217,6 +217,7 @@ class TelegramContext:
 
         if voice:
             caption = text if len(text) <= 1024 else None
+            voice_sent = False
 
             if not voice.startswith("http"):
                 try:
@@ -225,8 +226,9 @@ class TelegramContext:
                         voice=BytesIO(base64.b64decode(voice)),
                         caption=caption,
                         parse_mode="HTML" if caption else None,
-                        reply_markup=keyboard if not caption else None,
+                        reply_markup=keyboard,
                     )
+                    voice_sent = True
                 except Exception as e:
                     logger.error(f"Failed to send voice: {e}")
             elif voice.endswith((".ogg", ".oga")):
@@ -236,8 +238,9 @@ class TelegramContext:
                         voice=voice,
                         caption=caption,
                         parse_mode="HTML" if caption else None,
-                        reply_markup=keyboard if not caption else None,
+                        reply_markup=keyboard,
                     )
+                    voice_sent = True
                 except Exception as e:
                     logger.error(f"Failed to send voice URL: {e}")
             else:
@@ -247,24 +250,26 @@ class TelegramContext:
                         audio=voice,
                         caption=caption,
                         parse_mode="HTML" if caption else None,
-                        reply_markup=keyboard if not caption else None,
+                        reply_markup=keyboard,
                     )
+                    voice_sent = True
                 except Exception as e:
                     logger.error(f"Failed to send audio URL: {e}")
 
-            if len(text) > 1024:
+            # Send text message if: voice failed, or text > 1024 (couldn't fit in caption)
+            if (not voice_sent or len(text) > 1024) and text:
                 try:
                     await self._get_bot().send_message(
                         chat_id=self.chat_id,
                         text=text,
                         parse_mode="HTML",
-                        reply_markup=keyboard,
+                        reply_markup=keyboard if not voice_sent else None,
                     )
                 except Exception:
                     await self._get_bot().send_message(
                         chat_id=self.chat_id,
                         text=re.sub(r"<[^>]+>", "", text),
-                        reply_markup=keyboard,
+                        reply_markup=keyboard if not voice_sent else None,
                     )
         elif text:
             try:
@@ -347,7 +352,15 @@ async def parse_telegram_webhook(
     files_to_process = []
     for key in file_keys:
         if key in message:
-            item = message[key][-1] if key == "photo" else message[key]
+            msg_content = message[key]
+            # For photos, get the largest size (last in array), but check array is non-empty
+            if key == "photo":
+                if isinstance(msg_content, list) and len(msg_content) > 0:
+                    item = msg_content[-1]
+                else:
+                    continue
+            else:
+                item = msg_content
             if fid := (item.get("file_id") if item else None):
                 files_to_process.append((fid, key))
 
@@ -383,11 +396,14 @@ async def parse_telegram_webhook(
                         else:
                             file_url = original_file_url
 
-                        # For voice/audio, download and transcribe automatically
-                        if speech_to_text_fn and (
+                        # For voice/audio, try to transcribe automatically
+                        is_audio = (
                             ext in ("ogg", "oga", "mp3", "wav", "m4a", "opus")
                             or msg_type in ("voice", "audio")
-                        ):
+                        )
+                        transcription_success = False
+
+                        if speech_to_text_fn and is_audio:
                             async with session.get(original_file_url) as file_resp:
                                 if file_resp.status == 200:
                                     audio_content = await file_resp.read()
@@ -419,12 +435,15 @@ async def parse_telegram_webhook(
                                                 input_text = f"{input_text}\n\n{voice_text}"
                                             else:
                                                 input_text = voice_text
+                                            transcription_success = True
                                         else:
                                             error_msg = result.get("error") if isinstance(result, dict) else "Invalid result format"
                                             logger.error(f"Failed to transcribe: {error_msg}")
                                     except Exception as e:
                                         logger.error(f"Speech-to-text error: {e}")
-                        else:
+
+                        # Add file to task if not transcribed (or transcription failed)
+                        if not transcription_success:
                             if task.input.files is None:
                                 task.input.files = []
                             task.input.files.append(file_url)
