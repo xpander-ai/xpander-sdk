@@ -101,9 +101,9 @@ class TelegramContext:
         """Handle tool start event - show status message in chat."""
         tool_name = tool.tool_name or ""
         tool_args = tool.tool_args or {}
-        if "payload" in tool_args:
+        if "payload" in tool_args and isinstance(tool_args["payload"], dict):
             tool_args = tool_args["payload"]
-        tool_title = tool_args.get("headers", {}).get("toolcallreasoningtitle")
+        tool_title = tool_args.get("headers", {}).get("toolcallreasoningtitle") if isinstance(tool_args, dict) else None
 
         if tool_name.startswith("xpstart_"):
             emoji = "📋"
