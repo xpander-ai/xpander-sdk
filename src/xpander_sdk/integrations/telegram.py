@@ -377,7 +377,12 @@ async def parse_telegram_webhook(
                 ) as resp:
                     resp_data = await resp.json()
                     if resp.status == 200 and resp_data.get("ok"):
-                        file_path = resp_data["result"]["file_path"]
+                        # file_path is optional - may be missing for files > 20MB
+                        file_path = resp_data.get("result", {}).get("file_path")
+                        if not file_path:
+                            logger.warning(f"Telegram file {file_id} has no file_path (may exceed 20MB limit)")
+                            continue
+
                         original_file_url = (
                             f"https://api.telegram.org/file/bot{token}/{file_path}"
                         )
@@ -385,19 +390,8 @@ async def parse_telegram_webhook(
                             file_path.split(".")[-1].lower() if "." in file_path else ""
                         )
 
-                        # If photo has no extension, add .jpg so categorize_files recognizes it
-                        if msg_type == "photo" and ext not in (
-                            "jpg",
-                            "jpeg",
-                            "png",
-                            "gif",
-                            "bmp",
-                            "tiff",
-                            "webp",
-                        ):
-                            file_url = f"{original_file_url}.jpg"
-                        else:
-                            file_url = original_file_url
+                        # Always use original URL - don't modify it as Telegram may reject modified paths
+                        file_url = original_file_url
 
                         # For voice/audio, try to transcribe automatically
                         is_audio = (
