@@ -185,6 +185,9 @@ class TelegramContext:
             return
 
         content = result.content
+        if content is None:
+            return
+
         if isinstance(content, str):
             content = {"text": content}
         elif hasattr(content, "model_dump"):
