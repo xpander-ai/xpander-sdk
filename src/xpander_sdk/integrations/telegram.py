@@ -253,12 +253,19 @@ class TelegramContext:
                     logger.error(f"Failed to send audio URL: {e}")
 
             if len(text) > 1024:
-                await self._get_bot().send_message(
-                    chat_id=self.chat_id,
-                    text=text,
-                    parse_mode="HTML",
-                    reply_markup=keyboard,
-                )
+                try:
+                    await self._get_bot().send_message(
+                        chat_id=self.chat_id,
+                        text=text,
+                        parse_mode="HTML",
+                        reply_markup=keyboard,
+                    )
+                except Exception:
+                    await self._get_bot().send_message(
+                        chat_id=self.chat_id,
+                        text=re.sub(r"<[^>]+>", "", text),
+                        reply_markup=keyboard,
+                    )
         elif text:
             try:
                 await self._get_bot().send_message(

@@ -616,16 +616,16 @@ class Task(XPanderSharedModel):
         """
         # Use Telegram input text if available (already parsed from webhook)
         if self._telegram is not None:
-            return self._telegram.input_text
+            message = self._telegram.input_text
+        else:
+            message = ""
+            if self.input.text:
+                message = self.input.text
 
-        message = ""
-        if self.input.text:
-            message = self.input.text
-
-        if self.input.files and len(self.input.files) != 0:
-            if len(message) != 0:
-                message += "\n"
-            message += "Files: " + (", ".join(self.input.files))
+            if self.input.files and len(self.input.files) != 0:
+                if len(message) != 0:
+                    message += "\n"
+                message += "Files: " + (", ".join(self.input.files))
 
         # append human readable content like csv and such
         readable_files = self.get_human_readable_files()
