@@ -12,7 +12,6 @@ from xpander_sdk.modules.backend.backend_module import Backend
 from xpander_sdk.modules.backend.utils.mcp_oauth import push_event
 from xpander_sdk.modules.tasks.sub_modules.task import TaskUpdateEvent
 from xpander_sdk.utils.event_loop import run_sync
-from xpander_sdk.utils.generic import get_current_timestamp
 
 if TYPE_CHECKING:
     from xpander_sdk.modules.tasks.sub_modules.task import Task

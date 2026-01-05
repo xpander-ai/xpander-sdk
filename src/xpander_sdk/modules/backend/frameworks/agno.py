@@ -571,7 +571,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
         plan_str = task.deep_planning.model_dump_json() if task.deep_planning and task.deep_planning.enabled and len(task.deep_planning.tasks) != 0 else "No execution plan, please generate"
         args["additional_context"] += f" \n Current execution plan: {plan_str}"
 
-def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]]) -> Any:
+def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> Any:
     """
     Load and configure the appropriate LLM model based on the agent's provider configuration.
 

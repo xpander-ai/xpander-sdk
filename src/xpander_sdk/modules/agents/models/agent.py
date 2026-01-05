@@ -420,12 +420,14 @@ class AgentType(str, Enum):
         Regular: Standard agent for individual task execution.
         A2A: Agent that is used via A2A protocol.
         Curl: Custom Agent that is used via curl.
+        Orchestration: marks the agent as an Orchestration object.
     """
 
     Manager = "manager"
     Regular = "regular"
     A2A = "a2a"
     Curl = "curl"
+    Orchestration = "orchestration"
 
 
 @dataclass
@@ -470,8 +472,3 @@ class AgentOutput(BaseModel):
     output_schema: Optional[Type[BaseModel]] = None
     is_markdown: Optional[bool] = False
     use_json_mode: Optional[bool] = False
-
-class LLMCredentials(XPanderSharedModel):
-    name: str
-    description: Optional[str] = None
-    value: str

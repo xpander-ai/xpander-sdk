@@ -55,6 +55,8 @@ and deleting resources.
     
     # Tools
     GetOrInvokeToolById = "/tools/{tool_id}"
+    InvokeCustomAgentTool = "/tools/{connector_id}/{tool_id}"
+    ExecuteCodeInSandbox = "/tools/{task_id}/xp-code-executor"
 
     def __str__(self) -> str:
         return str(self.value)

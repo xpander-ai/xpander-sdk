@@ -19,6 +19,8 @@ from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.exceptions.module_exception import ModuleException
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.models.frameworks import AgnoSettings, Framework
+from xpander_sdk.models.notifications import NotificationSettings
+from xpander_sdk.models.orchestrations import OrchestrationNode
 from xpander_sdk.modules.agents.utils.generic import get_db_schema_name
 from xpander_sdk.modules.knowledge_bases.models.knowledge_bases import (
     KnowledgeBaseSearchResult,
@@ -39,9 +41,9 @@ from xpander_sdk.modules.agents.models.agent import (
     AgentStatus,
     AgentType,
     DatabaseConnectionString,
-    LLMCredentials,
     LLMReasoningEffort,
 )
+from xpander_sdk.models.generic import LLMCredentials
 from xpander_sdk.modules.agents.models.knowledge_bases import AgentKnowledgeBase
 from xpander_sdk.modules.knowledge_bases.knowledge_bases_module import KnowledgeBases
 from xpander_sdk.modules.knowledge_bases.sub_modules.knowledge_base import KnowledgeBase
@@ -165,6 +167,8 @@ class Agent(XPanderSharedModel):
             llm_credentials: Optional[LLMCredentials]
             expected_output: Optional[str]
             agno_settings: Optional[AgnoSettings]
+            orchestration_nodes: Optional[List[OrchestrationNode]] = []
+            notification_settings: Optional[NotificationSettings] = {}
 
         Example:
             >>> agent = Agent(id="agent123", name="Example Agent")
@@ -209,6 +213,8 @@ class Agent(XPanderSharedModel):
     llm_credentials: Optional[LLMCredentials] = None
     expected_output: Optional[str] = ""
     agno_settings: Optional[AgnoSettings] = AgnoSettings()
+    orchestration_nodes: Optional[List[OrchestrationNode]] = []
+    notification_settings: Optional[NotificationSettings] = {}
 
     _connection_string: Optional[DatabaseConnectionString] = None
 

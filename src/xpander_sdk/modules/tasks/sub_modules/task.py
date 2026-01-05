@@ -97,7 +97,7 @@ class TaskUpdateEvent(XPanderSharedModel):
     task_id: str
     organization_id: str
     time: datetime
-    data: TaskUpdateEventData
+    data: Any
 
 
 class Task(XPanderSharedModel):
@@ -177,6 +177,7 @@ class Task(XPanderSharedModel):
     output_format: Optional[OutputFormat] = None
     output_schema: Optional[Dict] = None
     events_streaming: Optional[bool] = False
+    is_orchestration: Optional[bool] = False
     additional_context: Optional[str] = None
     expected_output: Optional[str] = (None,)
     mcp_servers: Optional[List[MCPServerDetails]] = ([],)
