@@ -38,6 +38,9 @@ def json_type_to_python(json_type: str, prop_schema: dict = None):
         item_type = json_type_to_python(items.get("type"), items)
         return List[item_type]
     
+    if isinstance(json_type, list) and len(json_type) > 1:
+        json_type = next((t for t in json_type if t != "null"), None)
+    
     return {
         "string": str,
         "integer": int,
