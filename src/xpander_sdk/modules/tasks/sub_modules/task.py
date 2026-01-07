@@ -67,7 +67,7 @@ from xpander_sdk.modules.events.utils.generic import get_events_base, get_events
 from xpander_sdk.modules.tasks.models.task import (
     AgentExecutionInput,
     AgentExecutionStatus,
-    HumanInTheLoop,
+    HumanInTheLoopRequest,
     ExecutionMetricsReport,
     PendingECARequest,
     TaskReportRequest,
@@ -125,7 +125,7 @@ class Task(XPanderSharedModel):
         sub_executions (Optional[List[str]]): List of sub-execution IDs.
         is_manually_stopped (Optional[bool]): Flag indicating if the task was manually stopped.
         payload_extension (Optional[dict]): Additional data for the task.
-        hitl_request (Optional[HumanInTheLoop]): Human-in-the-loop request state.
+        hitl_request (Optional[HumanInTheLoopRequest]): Human-in-the-loop request state.
         pending_eca_request (Optional[PendingECARequest]): Pending ECA request, if any.
         source (Optional[str]): Source information of the task.
         output_format (Optional[OutputFormat]): Desired output format of the task.
@@ -171,7 +171,7 @@ class Task(XPanderSharedModel):
     sub_executions: Optional[List[str]] = []
     is_manually_stopped: Optional[bool] = False
     payload_extension: Optional[dict] = None
-    hitl_request: Optional[HumanInTheLoop] = None
+    hitl_request: Optional[HumanInTheLoopRequest] = None
     pending_eca_request: Optional[PendingECARequest] = None
     source: Optional[str] = None
     output_format: Optional[OutputFormat] = None

@@ -39,26 +39,15 @@ class AgentExecutionStatus(str, Enum):
     Stopped = "stopped"
 
 
-class HumanInTheLoop(BaseModel):
+class HumanInTheLoopRequest(BaseModel):
     """
     Model representing human-in-the-loop approval records for tasks.
     
     Attributes:
-        operation_id (str): Unique identifier of the operation requiring approval.
-        approved_by (Optional[str]): User who approved the operation.
-        rejected_by (Optional[str]): User who rejected the operation.
-        title (Optional[str]): Title/subject of the approval request.
-        description (Optional[str]): Detailed description of the approval.
-        content (str): Content or action that requires approval.
+        wait_node_id (str): The id of the node that triggered this HITL.
     """
     
-    operation_id: str
-    approved_by: Optional[str] = None
-    rejected_by: Optional[str] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-    content: str
-
+    wait_node_id: str
 
 class AgentExecutionInput(BaseModel):
     """
