@@ -81,6 +81,7 @@ class Events(ModuleBase):
 
     worker: Optional[DeployedAsset] = None
     test_task: Optional[LocalTaskTest] = None
+    _heartbeat_task: Optional[asyncio.Task] = None
     
     # Class-level registries for boot and shutdown handlers
     _boot_handlers: List[BootHandler] = []
@@ -500,7 +501,12 @@ class Events(ModuleBase):
                     )
                 )
 
-                self.track(asyncio.create_task(self.heartbeat_loop(agent_worker.id)))
+                # Cancel previous heartbeat task if it exists and start a new one
+                if self._heartbeat_task and not self._heartbeat_task.done():
+                    logger.debug(f"Canceling previous heartbeat task for worker {agent_worker.id}")
+                    self._heartbeat_task.cancel()
+                self._heartbeat_task = asyncio.create_task(self.heartbeat_loop(agent_worker.id))
+                self.track(self._heartbeat_task)
 
             elif event.event == EventType.AgentExecution:
                 task = Task(**json.loads(event.data), configuration=self.configuration)
