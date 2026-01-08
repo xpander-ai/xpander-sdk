@@ -42,6 +42,7 @@ from xpander_sdk.modules.agents.models.agent import (
     AgentType,
     DatabaseConnectionString,
     LLMReasoningEffort,
+    TaskLevelStrategies,
 )
 from xpander_sdk.models.generic import LLMCredentials
 from xpander_sdk.modules.agents.models.knowledge_bases import AgentKnowledgeBase
@@ -169,6 +170,7 @@ class Agent(XPanderSharedModel):
             agno_settings: Optional[AgnoSettings]
             orchestration_nodes: Optional[List[OrchestrationNode]] = []
             notification_settings: Optional[NotificationSettings] = {}
+            task_level_strategies: Optional[TaskLevelStrategies] = None
 
         Example:
             >>> agent = Agent(id="agent123", name="Example Agent")
@@ -215,6 +217,7 @@ class Agent(XPanderSharedModel):
     agno_settings: Optional[AgnoSettings] = AgnoSettings()
     orchestration_nodes: Optional[List[OrchestrationNode]] = []
     notification_settings: Optional[NotificationSettings] = {}
+    task_level_strategies: Optional[TaskLevelStrategies] = None
 
     _connection_string: Optional[DatabaseConnectionString] = None
 

@@ -137,6 +137,7 @@ class Task(XPanderSharedModel):
         triggering_agent_id (Optional[str]): Optional triggering agent id.
         title (Optional[str]): Optional task title.
         deep_planning: Optional[DeepPlanning] = Field(default_factory=DeepPlanning)
+        execution_attempts: Optional[int] = 1
 
     Example:
         >>> task = Task.load(task_id="task_123")
@@ -186,6 +187,7 @@ class Task(XPanderSharedModel):
     think_mode: Optional[ThinkMode] = ThinkMode.Default
     disable_attachment_injection: Optional[bool] = False
     deep_planning: Optional[DeepPlanning] = Field(default_factory=DeepPlanning)
+    execution_attempts: Optional[int] = 1
 
     # metrics
     tokens: Optional[Tokens] = None

@@ -10,6 +10,7 @@ from enum import Enum
 from typing import Dict, List, Literal, Optional, Type
 from pydantic import BaseModel, computed_field
 
+from xpander_sdk.models.orchestrations import OrchestrationIterativeStrategy, OrchestrationRetryStrategy, OrchestrationStopStrategy
 from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
 
@@ -472,3 +473,8 @@ class AgentOutput(BaseModel):
     output_schema: Optional[Type[BaseModel]] = None
     is_markdown: Optional[bool] = False
     use_json_mode: Optional[bool] = False
+
+class TaskLevelStrategies(XPanderSharedModel):
+    retry_strategy: Optional[OrchestrationRetryStrategy] = None
+    iterative_strategy: Optional[OrchestrationIterativeStrategy] = None
+    stop_strategy: Optional[OrchestrationStopStrategy] = None
