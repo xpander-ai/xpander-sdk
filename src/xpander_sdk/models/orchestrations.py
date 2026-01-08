@@ -135,8 +135,6 @@ class OrchestrationPointerNode(XPanderSharedModel):
         type: Type of asset being referenced.
         output_type: Expected output format. Defaults to Text.
         output_schema: JSON schema for structured output validation.
-        input_type: Expected input format. Defaults to Text.
-        input_schema: JSON schema for structured input validation.
     """
 
     asset_id: str
@@ -148,9 +146,6 @@ class OrchestrationPointerNode(XPanderSharedModel):
 
     output_type: Optional[OutputFormat] = OutputFormat.Text
     output_schema: Optional[Dict] = None
-
-    input_type: Optional[OutputFormat] = OutputFormat.Text
-    input_schema: Optional[Dict] = None
 
 class OrchestrationClassifierNode(XPanderSharedModel):
     """Node that uses LLM to classify or transform inputs.
@@ -205,6 +200,9 @@ class OrchestrationNode(XPanderSharedModel):
         iterative_strategy: Strategy for iterative execution.
         stop_strategy: Strategy for stopping the workflow.
         definition: The actual node implementation (code, classifier, pointer, or wait).
+        input_type: Expected input format. Defaults to Text.
+        input_schema: JSON schema for structured input validation.
+        input_instructions: Instructions to use for structured input.
     """
 
     id: str = Field(default_factory=lambda: str(uuid4()))
@@ -227,3 +225,6 @@ class OrchestrationNode(XPanderSharedModel):
         OrchestrationPointerNode,
         OrchestrationWaitNode,
     ]
+    input_type: Optional[OutputFormat] = OutputFormat.Text
+    input_schema: Optional[Dict] = None
+    input_instructions: Optional[str] = None
