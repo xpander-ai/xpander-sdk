@@ -67,7 +67,7 @@ from xpander_sdk.modules.events.utils.generic import get_events_base, get_events
 from xpander_sdk.modules.tasks.models.task import (
     AgentExecutionInput,
     AgentExecutionStatus,
-    HumanInTheLoop,
+    HumanInTheLoopRequest,
     ExecutionMetricsReport,
     PendingECARequest,
     TaskReportRequest,
@@ -97,7 +97,7 @@ class TaskUpdateEvent(XPanderSharedModel):
     task_id: str
     organization_id: str
     time: datetime
-    data: TaskUpdateEventData
+    data: Any
 
 
 class Task(XPanderSharedModel):
@@ -125,7 +125,7 @@ class Task(XPanderSharedModel):
         sub_executions (Optional[List[str]]): List of sub-execution IDs.
         is_manually_stopped (Optional[bool]): Flag indicating if the task was manually stopped.
         payload_extension (Optional[dict]): Additional data for the task.
-        hitl_request (Optional[HumanInTheLoop]): Human-in-the-loop request state.
+        hitl_request (Optional[HumanInTheLoopRequest]): Human-in-the-loop request state.
         pending_eca_request (Optional[PendingECARequest]): Pending ECA request, if any.
         source (Optional[str]): Source information of the task.
         output_format (Optional[OutputFormat]): Desired output format of the task.
@@ -137,6 +137,7 @@ class Task(XPanderSharedModel):
         triggering_agent_id (Optional[str]): Optional triggering agent id.
         title (Optional[str]): Optional task title.
         deep_planning: Optional[DeepPlanning] = Field(default_factory=DeepPlanning)
+        execution_attempts: Optional[int] = 1
 
     Example:
         >>> task = Task.load(task_id="task_123")
@@ -171,12 +172,13 @@ class Task(XPanderSharedModel):
     sub_executions: Optional[List[str]] = []
     is_manually_stopped: Optional[bool] = False
     payload_extension: Optional[dict] = None
-    hitl_request: Optional[HumanInTheLoop] = None
+    hitl_request: Optional[HumanInTheLoopRequest] = None
     pending_eca_request: Optional[PendingECARequest] = None
     source: Optional[str] = None
     output_format: Optional[OutputFormat] = None
     output_schema: Optional[Dict] = None
     events_streaming: Optional[bool] = False
+    is_orchestration: Optional[bool] = False
     additional_context: Optional[str] = None
     expected_output: Optional[str] = (None,)
     mcp_servers: Optional[List[MCPServerDetails]] = ([],)
@@ -185,6 +187,7 @@ class Task(XPanderSharedModel):
     think_mode: Optional[ThinkMode] = ThinkMode.Default
     disable_attachment_injection: Optional[bool] = False
     deep_planning: Optional[DeepPlanning] = Field(default_factory=DeepPlanning)
+    execution_attempts: Optional[int] = 1
 
     # metrics
     tokens: Optional[Tokens] = None

@@ -10,6 +10,7 @@ from enum import Enum
 from typing import Dict, List, Literal, Optional, Type
 from pydantic import BaseModel, computed_field
 
+from xpander_sdk.models.orchestrations import OrchestrationIterativeStrategy, OrchestrationRetryStrategy, OrchestrationStopStrategy
 from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
 
@@ -420,12 +421,14 @@ class AgentType(str, Enum):
         Regular: Standard agent for individual task execution.
         A2A: Agent that is used via A2A protocol.
         Curl: Custom Agent that is used via curl.
+        Orchestration: marks the agent as an Orchestration object.
     """
 
     Manager = "manager"
     Regular = "regular"
     A2A = "a2a"
     Curl = "curl"
+    Orchestration = "orchestration"
 
 
 @dataclass
@@ -471,7 +474,7 @@ class AgentOutput(BaseModel):
     is_markdown: Optional[bool] = False
     use_json_mode: Optional[bool] = False
 
-class LLMCredentials(XPanderSharedModel):
-    name: str
-    description: Optional[str] = None
-    value: str
+class TaskLevelStrategies(XPanderSharedModel):
+    retry_strategy: Optional[OrchestrationRetryStrategy] = None
+    iterative_strategy: Optional[OrchestrationIterativeStrategy] = None
+    stop_strategy: Optional[OrchestrationStopStrategy] = None

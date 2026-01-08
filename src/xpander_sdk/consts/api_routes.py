@@ -55,6 +55,13 @@ and deleting resources.
     
     # Tools
     GetOrInvokeToolById = "/tools/{tool_id}"
+    InvokeCustomAgentTool = "/tools/{connector_id}/{tool_id}"
+    ExecuteCodeInSandbox = "/tools/{task_id}/xp-code-executor"
+    
+    # HITL (Human-in-the-Loop)
+    HITLRequest = "/hitl/request"
+    HITLApprove = "/hitl/{task_id}/approve"
+    HITLReject = "/hitl/{task_id}/reject"
 
     def __str__(self) -> str:
         return str(self.value)
