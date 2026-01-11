@@ -801,7 +801,7 @@ def _configure_agentic_memory(
         args["memory_manager"] = MemoryManager(delete_memories=True,clear_memories=True)
         args["enable_agentic_memory"] = agent.agno_settings.agentic_memory
     
-    if agent_memories_enabled:
+    if agent_memories_enabled and not agent.is_a_team:
         args["add_culture_to_context"] = True
         
         if agent.agno_settings.agentic_culture:
