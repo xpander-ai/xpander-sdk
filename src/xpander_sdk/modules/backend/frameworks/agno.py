@@ -111,7 +111,7 @@ async def build_agent_args(
         args.update(
             {
                 "members": [
-                    AgnoAgent(**member) if "id" in member else AgnoTeam(**member)
+                    AgnoAgent(**member) if "members" not in member else AgnoTeam(**member)
                     for member in members
                 ],
                 "add_member_tools_to_context": True,
