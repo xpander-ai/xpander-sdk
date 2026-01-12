@@ -29,6 +29,7 @@ class OrchestrationNodeType(str, Enum):
         Orchestration: Node that references another orchestration.
         Classifier: Node that classifies inputs using LLM.
         Wait: Node that pauses execution until a condition is met.
+        Action: Node that triggers an action (api).
     """
 
     CustomFunction = "custom_function"
@@ -37,6 +38,7 @@ class OrchestrationNodeType(str, Enum):
     Orchestration = "orchestration"
     Classifier = "classifier"
     Wait = "wait"
+    Action = "action"
 
 class OrchestrationConditionType(str, Enum):
     """Types of conditions for orchestration control flow.
@@ -135,6 +137,8 @@ class OrchestrationPointerNode(XPanderSharedModel):
         type: Type of asset being referenced.
         output_type: Expected output format. Defaults to Text.
         output_schema: JSON schema for structured output validation.
+        instructions: Optional instructions for the pointer node (Action only).
+        ignore_response: Should ignore the node result and proceed with previous result?.
     """
 
     asset_id: str
@@ -142,10 +146,13 @@ class OrchestrationPointerNode(XPanderSharedModel):
         OrchestrationNodeType.Agent,
         OrchestrationNodeType.CustomFunction,
         OrchestrationNodeType.Orchestration,
+        OrchestrationNodeType.Action,
     ]
 
     output_type: Optional[OutputFormat] = OutputFormat.Text
     output_schema: Optional[Dict] = None
+    instructions: Optional[str] = None
+    ignore_response: Optional[bool] = False
 
 class OrchestrationClassifierNode(XPanderSharedModel):
     """Node that uses LLM to classify or transform inputs.
@@ -161,6 +168,38 @@ class OrchestrationClassifierNode(XPanderSharedModel):
     output_type: Optional[OutputFormat] = OutputFormat.Text
     output_schema: Optional[Dict] = None
     instructions: Optional[str] = None
+    examples: Optional[List[str]] = []
+    settings: OrchestrationClassifierNodeLLMSettings
+
+class OrchestrationGuardrailNode(XPanderSharedModel):
+    """Node that uses LLM to evaluate input and enforce guardrails.
+
+    This node can stop execution if the guardrail check fails.
+
+    Attributes:
+        instructions: Evaluation instructions for the LLM to assess the input.
+        examples: Example inputs/outputs to guide the LLM behavior.
+        settings: LLM configuration settings.
+        stop_on_false: Whether to stop execution if the guardrail check fails. Defaults to True.
+    """
+
+    instructions: str
+    examples: Optional[List[str]] = []
+    settings: OrchestrationClassifierNodeLLMSettings
+    stop_on_false: Optional[bool] = True
+
+class OrchestrationSummarizerNode(XPanderSharedModel):
+    """Node that processes large payloads and answers specific questions.
+
+    This node uses an LLM to summarize or extract information from large inputs.
+
+    Attributes:
+        instructions: Summarization or question-answering instructions for the LLM.
+        examples: Example inputs/outputs to guide the LLM behavior.
+        settings: LLM configuration settings.
+    """
+
+    instructions: str
     examples: Optional[List[str]] = []
     settings: OrchestrationClassifierNodeLLMSettings
 
@@ -224,6 +263,8 @@ class OrchestrationNode(XPanderSharedModel):
         OrchestrationClassifierNode,
         OrchestrationPointerNode,
         OrchestrationWaitNode,
+        OrchestrationGuardrailNode,
+        OrchestrationSummarizerNode,
     ]
     input_type: Optional[OutputFormat] = OutputFormat.Text
     input_schema: Optional[Dict] = None
