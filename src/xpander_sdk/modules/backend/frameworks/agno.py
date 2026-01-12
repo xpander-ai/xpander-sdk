@@ -14,6 +14,7 @@ from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.modules.backend.utils.mcp_oauth import authenticate_mcp_server
 from xpander_sdk.modules.tasks.sub_modules.task import Task
 from xpander_sdk.modules.tools_repository.models.mcp import (
+    MCPOAuthGetTokenGenericResponse,
     MCPOAuthGetTokenResponse,
     MCPOAuthResponseType,
     MCPServerAuthType,
@@ -957,6 +958,8 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
                     raise ValueError("MCP server with OAuth authentication detected but user id not set on the task (task.input.user.id)")
                 
                 auth_result: MCPOAuthGetTokenResponse = await authenticate_mcp_server(mcp_server=mcp,task=task,user_id=task.input.user.id, auth_events_callback=auth_events_callback)
+                if auth_result and auth_result.data and isinstance(auth_result.data, MCPOAuthGetTokenGenericResponse) and auth_result.data.message:
+                    raise ValueError(f"MCP authentication failed: {auth_result.data.message}")
                 if not auth_result:
                     raise ValueError("MCP Server authentication failed")
                 if auth_result.type != MCPOAuthResponseType.TOKEN_READY:
