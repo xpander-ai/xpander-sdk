@@ -63,6 +63,9 @@ and deleting resources.
     HITLRequest = "/hitl/request"
     HITLApprove = "/hitl/{task_id}/approve"
     HITLReject = "/hitl/{task_id}/reject"
+    
+    # Metadata
+    GetOrgDefaultLLMExtraHeaders = "/metadata/default_llm_extra_headers"
 
     def __str__(self) -> str:
         return str(self.value)

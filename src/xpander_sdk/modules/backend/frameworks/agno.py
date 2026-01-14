@@ -7,6 +7,8 @@ from typing import Any, Callable, Dict, List, Optional
 from loguru import logger
 from toon import encode as toon_encode
 from xpander_sdk import Configuration
+from xpander_sdk.consts.api_routes import APIRoute
+from xpander_sdk.core.xpander_api_client import APIClient
 from xpander_sdk.models.shared import OutputFormat, ThinkMode
 from xpander_sdk.modules.agents.agents_module import Agents
 from xpander_sdk.modules.agents.models.agent import AgentGraphItemType, LLMReasoningEffort
@@ -30,6 +32,8 @@ from agno.memory import MemoryManager
 from agno.guardrails import PIIDetectionGuardrail
 from agno.guardrails import PromptInjectionGuardrail
 from agno.guardrails import OpenAIModerationGuardrail
+
+from xpander_sdk.utils.event_loop import run_sync
 
 async def build_agent_args(
     xpander_agent: Agent,
@@ -635,6 +639,26 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> An
 
     llm_args = {}
     
+    llm_extra_headers = {}
+    
+    # Get organization default LLM extra headers
+    api_client = APIClient(configuration=agent.configuration)
+    org_default_llm_headers = run_sync(
+        api_client.make_request(
+            path=APIRoute.GetOrgDefaultLLMExtraHeaders,
+        )
+    )
+    
+    # set default headers
+    if org_default_llm_headers:
+        llm_extra_headers = {**llm_extra_headers,**org_default_llm_headers}
+    
+    # set override by agnet
+    if agent.llm_extra_headers and isinstance(agent.llm_extra_headers, dict):
+        llm_extra_headers = {**llm_extra_headers, **agent.llm_extra_headers}
+    
+    llm_args["extra_headers"] = llm_extra_headers
+    
     if agent.llm_reasoning_effort and agent.llm_reasoning_effort != LLMReasoningEffort.Medium and agent.model_name and "gpt-5" in agent.model_name.lower():
         llm_args = { "reasoning_effort": agent.llm_reasoning_effort.value }
     
@@ -687,7 +711,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> An
     # Google AI Studio - supports gemini models
     elif provider == "google_ai_studio":
         from agno.models.google import Gemini
-
+        del llm_args["extra_headers"]
         return Gemini(
             id=agent.model_name,
             # Try xpander.ai-specific key first, fallback to standard OpenAI key
@@ -718,6 +742,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> An
     elif provider == "amazon_bedrock":
         from agno.models.aws.bedrock import AwsBedrock
         environ["AWS_BEARER_TOKEN_BEDROCK"] = get_llm_key("AWS_BEARER_TOKEN_BEDROCK") # set to env
+        del llm_args["extra_headers"]
         return AwsBedrock(
             id=agent.model_name,
             temperature=0.0,
@@ -727,7 +752,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> An
     # Anthropic Provider - supports Claude models
     elif provider == "anthropic":
         from agno.models.anthropic import Claude
-
+        llm_args["default_headers"] = llm_args["extra_headers"]
+        del llm_args["extra_headers"]
         return Claude(
             id=agent.model_name,
             api_key=get_llm_key("ANTHROPIC_API_KEY"),

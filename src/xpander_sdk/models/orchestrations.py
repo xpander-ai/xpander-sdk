@@ -119,6 +119,8 @@ class OrchestrationClassifierNodeLLMSettings(XPanderSharedModel):
         llm_credentials_key: Key identifier for stored credentials.
         llm_credentials_key_type: Type of credential key storage. Defaults to XPander.
         llm_credentials: Direct credential object if not using stored credentials.
+        llm_api_base: Alternative API Base for the LLM.
+        llm_extra_headers: Extra headers to be set to LLM Requests.
     """
 
     model_provider: Optional[LLMModelProvider] = LLMModelProvider.OpenAI
@@ -128,6 +130,8 @@ class OrchestrationClassifierNodeLLMSettings(XPanderSharedModel):
         LLMCredentialsKeyType.XPander
     )
     llm_credentials: Optional[LLMCredentials] = None
+    llm_api_base: Optional[str] = None
+    llm_extra_headers: Optional[Dict[str,str]] = {}
 
 class OrchestrationPointerNode(XPanderSharedModel):
     """Node that references an external asset (agent, function, or orchestration).

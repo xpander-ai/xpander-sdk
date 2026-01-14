@@ -159,6 +159,7 @@ class Agent(XPanderSharedModel):
             deep_planning: Optional[bool] = False
             enforce_deep_planning: Optional[bool] = False
             llm_api_base: Optional[str]
+            llm_extra_headers: Optional[Dict[str,str]]
             webhook_url: Optional[str]
             created_at: Optional[datetime]
             type: Optional[AgentType]
@@ -206,6 +207,7 @@ class Agent(XPanderSharedModel):
     deep_planning: Optional[bool] = False
     enforce_deep_planning: Optional[bool] = False
     llm_api_base: Optional[str] = None
+    llm_extra_headers: Optional[Dict[str,str]] = {}
     webhook_url: Optional[str] = None
     created_at: Optional[datetime] = None
     type: Optional[AgentType] = None
