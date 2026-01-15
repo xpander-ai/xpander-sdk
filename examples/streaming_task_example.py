@@ -154,7 +154,7 @@ async def main():
         data = safe_dump(event.data)
         logger.info(f"Event data: {data}")
 
-        if event.type == "task.finished":
+        if str(event.type).endswith("TaskFinished"):
             logger.success("Task completed successfully!")
             break
 
