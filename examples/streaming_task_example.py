@@ -5,24 +5,33 @@ Demonstrates:
 - Live task streaming
 - Safe logging
 - Redacting secrets
+- Matching events by event.type (reviewer suggestion)
 
 Use cases:
 - Real-time dashboards
 - Debugging long-running agents
 - Monitoring agent execution
+- Observability pipelines
+- Backend alerting systems
 
 ------------------------------------------------
 
-SETUP REQUIRED:
+STEP 1: Activate virtual environment
 
-1) Get API key:
+source venv/bin/activate
+
+------------------------------------------------
+
+STEP 2: Get credentials
+
+1) API Key:
    xpander.ai → Admin Settings → API Keys
 
-2) Get Organization ID:
-   Same page shows "Your organization ID"
+2) Organization ID:
+   Same page → "Your organization ID"
 
-3) Get Agent ID:
-   Run this once:
+3) Agent ID:
+   Run once:
 
    python - <<EOF
    import asyncio
@@ -41,7 +50,7 @@ SETUP REQUIRED:
 
 ------------------------------------------------
 
-EXPORT ENV VARIABLES:
+STEP 3: Export env vars
 
 export XPANDER_API_KEY="your_api_key"
 export XPANDER_ORGANIZATION_ID="your_org_id"
@@ -49,7 +58,7 @@ export XPANDER_AGENT_ID="your_agent_id"
 
 ------------------------------------------------
 
-RUN:
+STEP 4: Run
 
 python examples/streaming_task_example.py
 """
@@ -60,10 +69,9 @@ from xpander_sdk import Agent, Configuration
 from loguru import logger
 
 
-# Read agent ID from env
 AGENT_ID = os.getenv("XPANDER_AGENT_ID")
 
-# Keys that must NEVER be logged
+# Never log these keys
 SENSITIVE_KEYS = {
     "api_key",
     "authorization",
@@ -72,6 +80,8 @@ SENSITIVE_KEYS = {
     "password",
 }
 
+
+# ---------------- SECURITY ---------------- #
 
 def sanitize(data):
     """Recursively redact secrets from dict"""
@@ -99,25 +109,22 @@ def safe_dump(obj):
         return "<unserializable>"
 
 
+# ---------------- MAIN ---------------- #
+
 async def main():
 
-    # Safety checks
     if not os.getenv("XPANDER_API_KEY"):
         logger.error("XPANDER_API_KEY not set")
-        logger.error("Run: export XPANDER_API_KEY=your_api_key")
         return
 
     if not os.getenv("XPANDER_ORGANIZATION_ID"):
         logger.error("XPANDER_ORGANIZATION_ID not set")
-        logger.error("Run: export XPANDER_ORGANIZATION_ID=your_org_id")
         return
 
     if not AGENT_ID:
         logger.error("XPANDER_AGENT_ID not set")
-        logger.error("Run: export XPANDER_AGENT_ID=your_agent_id")
         return
 
-    # Load config
     config = Configuration()
 
     logger.info("Loading agent...")
@@ -140,15 +147,14 @@ async def main():
 
     async for event in task.aevents():
 
-        logger.info("=================================")
+        logger.info("=" * 40)
         logger.info(f"Event type: {event.type}")
 
         # Safe logging
         data = safe_dump(event.data)
         logger.info(f"Event data: {data}")
 
-        # Stop when finished
-        if str(event.type).lower().endswith("finished"):
+        if event.type == "task.finished":
             logger.success("Task completed successfully!")
             break
 
