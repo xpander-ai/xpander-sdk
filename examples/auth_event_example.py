@@ -1,73 +1,107 @@
 """
 Example: Authentication event handling
 
-This example demonstrates:
-- Handling authentication events
-- Using @on_auth_event decorator
-- Displaying login URL to users
-- Production-ready pattern
+Demonstrates:
+✔ Creating real task
+✔ Streaming task events
+✔ Capturing auth events from stream
+✔ Using @on_auth_event hook
+✔ Production pattern
 
-Use case:
-- OAuth login
-- MCP server authentication
-- External API authorization
+Use cases:
+- Handle OAuth login prompts automatically
+- Monitor authentication failures in production
+- Trigger user re-login workflows
+- Debug permission & token issues
+- Secure enterprise integrations
+
+------------------------------------------------
+
+STEP 1: Activate virtual environment
+
+source venv/bin/activate
+
+------------------------------------------------
+
+STEP 2: Set environment variables
+
+export XPANDER_API_KEY="your_api_key"
+export XPANDER_ORGANIZATION_ID="your_org_id"
+export XPANDER_AGENT_ID="your_agent_id"
+
+------------------------------------------------
+
+STEP 3: Run
+
+python examples/auth_event_example.py
+------------------------------------------------
 """
 
-from xpander_sdk import Backend, Configuration, on_auth_event
-from xpander_sdk.modules.agents.sub_modules.agent import Agent
-from xpander_sdk.modules.tasks.sub_modules.task import Task, TaskUpdateEvent
+import os
+import asyncio
 from loguru import logger
 
+from xpander_sdk import (
+    Configuration,
+    Agent,
+    on_auth_event
+)
 
-# Global auth event handler
+AGENT_ID = os.getenv("XPANDER_AGENT_ID")
+
+
+# ---------------- AUTH HOOK ---------------- #
+
 @on_auth_event
-async def handle_auth_event(
-    agent: Agent,
-    task: Task,
-    event: TaskUpdateEvent
-):
+async def handle_auth(agent, task, event):
     """
-    This function runs automatically when authentication is required.
+    Global auth event hook
+    Triggered when login/OAuth required
     """
+    logger.warning("🔐 Authentication required!")
+    logger.info(f"Agent: {agent.name}")
+    logger.info(f"Event data: {event.data}")
 
-    logger.warning("======================================")
-    logger.warning("[AUTH] Authentication required!")
-    logger.warning(f"[AUTH] Agent: {agent.name}")
-    logger.warning(f"[AUTH] Task ID: {task.id}")
 
-    # event.data usually contains login URL or OAuth info
-    auth_data = event.data
-
-    logger.warning(f"[AUTH] Auth Data: {auth_data}")
-
-    # Typical structure:
-    # {
-    #   "login_url": "https://auth.provider.com/..."
-    # }
-
-    if isinstance(auth_data, dict) and "login_url" in auth_data:
-        logger.warning(f"[AUTH] Please login here:")
-        logger.warning(auth_data["login_url"])
-
-    logger.warning("======================================")
-
+# ---------------- MAIN ---------------- #
 
 async def main():
-    """
-    Demo showing how auth handler integrates with Backend
-    """
 
-    config = Configuration()  # uses env vars
+    if not AGENT_ID:
+        logger.error("XPANDER_AGENT_ID not set")
+        logger.error("Run: export XPANDER_AGENT_ID=your_agent_id")
+        return
 
-    backend = Backend(configuration=config)
+    logger.info("Loading agent...")
 
-    # Dummy task object (normally comes from agent execution)
-    task = None  # will be populated by xpander runtime
+    config = Configuration()
+    agent = await Agent.aload(AGENT_ID, configuration=config)
 
-    logger.info("Auth event hook registered successfully!")
-    logger.info("This handler will trigger when login is required.")
+    logger.success(f"Agent loaded: {agent.name}")
+
+    logger.info("Creating task with streaming enabled...")
+
+    task = await agent.acreate_task(
+        prompt="Call any tool that requires authentication",
+        events_streaming=True
+    )
+
+    logger.success(f"Task created: {task.id}")
+    logger.info("Listening for live events...")
+
+    # -------- STREAM EVENTS -------- #
+    async for event in task.aevents():
+
+        logger.info("=" * 40)
+        logger.info(f"Event type: {event.type}")
+
+        # Auth events ALSO come from stream
+        if event.type == "auth_event":
+            logger.warning("🔐 Auth event received from stream!")
+            logger.info(event.data)
+
+    logger.success("Task finished!")
 
 
 if __name__ == "__main__":
-    import asyncio
     asyncio.run(main())
