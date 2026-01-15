@@ -29,6 +29,7 @@ class MCPServerDetails(BaseModel):
     transport: Optional[MCPServerTransport] = MCPServerTransport.HTTP_Transport
     auth_type: Optional[MCPServerAuthType] = MCPServerAuthType._None
     api_key: Optional[str] = None
+    use_secrets_manager: Optional[bool] = False
     client_id: Optional[str] = None
     client_secret: Optional[str] = None
     headers: Optional[Dict] = {}
