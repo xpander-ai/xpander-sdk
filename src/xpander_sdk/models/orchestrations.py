@@ -46,10 +46,12 @@ class OrchestrationConditionType(str, Enum):
     Attributes:
         Regex: Condition based on regular expression matching.
         Contains: Condition based on substring containment.
+        Else: Fallback condition that always matches (executed when no other conditions match).
     """
 
     Regex = "regex"
     Contains = "contains"
+    Else = "else"
 
 class OrchestrationWaitNodeType(str, Enum):
     """Types of wait nodes in orchestration workflows.
@@ -66,12 +68,12 @@ class OrchestrationCondition(XPanderSharedModel):
     """Condition for controlling orchestration flow.
 
     Attributes:
-        type: Type of condition (regex or contains).
-        term: The pattern or string to match against.
+        type: Type of condition (regex, contains, or else).
+        term: The pattern or string to match against. Optional for 'else' type.
     """
 
     type: OrchestrationConditionType
-    term: str
+    term: Optional[str] = None
 
 class OrchestrationRetryStrategy(XPanderSharedModel):
     """Strategy for retrying failed orchestration nodes.
