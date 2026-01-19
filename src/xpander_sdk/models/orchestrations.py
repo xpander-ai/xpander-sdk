@@ -183,11 +183,17 @@ class OrchestrationClassifierNode(XPanderSharedModel):
 
     Attributes:
         groups: List of classification groups to evaluate against.
+        output_type: Expected output format. Defaults to Text.
+        output_schema: JSON schema for structured output validation.
+        instructions: Classification or transformation instructions for the LLM.
         examples: Example inputs/outputs to guide the LLM behavior.
         settings: LLM configuration settings.
     """
 
     groups: List[ClassificationGroup]
+    output_type: Optional[OutputFormat] = OutputFormat.Text
+    output_schema: Optional[Dict] = None
+    instructions: Optional[str] = None
     examples: Optional[List[str]] = []
     settings: OrchestrationClassifierNodeLLMSettings
 
