@@ -160,20 +160,34 @@ class OrchestrationPointerNode(XPanderSharedModel):
     instructions: Optional[str] = None
     ignore_response: Optional[bool] = False
 
-class OrchestrationClassifierNode(XPanderSharedModel):
-    """Node that uses LLM to classify or transform inputs.
+class ClassificationGroup(XPanderSharedModel):
+    """A classification group with evaluation criteria and data extraction settings.
 
     Attributes:
-        output_type: Expected output format. Defaults to Text.
-        output_schema: JSON schema for structured output validation.
-        instructions: Classification or transformation instructions for the LLM.
+        id: Unique identifier for the group (UUID).
+        name: Human-readable name for the group.
+        evaluation_criteria: Instructions for when this group should match.
+        auto_extract_relevant_data: Whether to automatically extract relevant data for this group.
+        data_extraction_keys: Specific JSON paths/keys to extract from input (alternative to auto_extract).
+    """
+
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    name: str
+    evaluation_criteria: str
+    auto_extract_relevant_data: Optional[bool] = False
+    data_extraction_keys: Optional[List[str]] = None
+
+
+class OrchestrationClassifierNode(XPanderSharedModel):
+    """Node that uses LLM to classify inputs into groups.
+
+    Attributes:
+        groups: List of classification groups to evaluate against.
         examples: Example inputs/outputs to guide the LLM behavior.
         settings: LLM configuration settings.
     """
 
-    output_type: Optional[OutputFormat] = OutputFormat.Text
-    output_schema: Optional[Dict] = None
-    instructions: Optional[str] = None
+    groups: List[ClassificationGroup]
     examples: Optional[List[str]] = []
     settings: OrchestrationClassifierNodeLLMSettings
 
