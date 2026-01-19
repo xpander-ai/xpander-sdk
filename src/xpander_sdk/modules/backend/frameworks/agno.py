@@ -999,7 +999,7 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
             mcp_tools.append(
                 MCPTools(
                     transport=transport,
-                    server_params=params_cls(url=mcp.url, headers=mcp.headers),
+                    server_params=params_cls(url=mcp.url, headers=mcp.headers, sse_read_timeout=1200, timeout=1200),
                     include_tools=mcp.allowed_tools or None,
                     timeout_seconds=120,
                     tool_name_prefix="mcp_tool"
