@@ -27,7 +27,7 @@ setup(
         "python-toon>=0.1.3",
     ],
     extras_require={
-        "agno": ["agno==2.3.6", "sqlalchemy" ,"psycopg[binary,pool]", "greenlet"],
+        "agno": ["agno==2.3.26", "sqlalchemy" ,"psycopg[binary,pool]", "greenlet"],
         "dev": ["black", "pre-commit", "pytest", "anthropic", "mcp", "openai", "fireworks-ai", "aioboto3", "google-genai"],
     },
     classifiers=[

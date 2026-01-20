@@ -30,6 +30,8 @@ class OrchestrationNodeType(str, Enum):
         Classifier: Node that classifies inputs using LLM.
         Wait: Node that pauses execution until a condition is met.
         Action: Node that triggers an action (api).
+        Guardrail: Node that enforces guardrails on inputs using LLM.
+        Summarizer: Node that summarizes or extracts information from inputs using LLM.
     """
 
     CustomFunction = "custom_function"
@@ -39,6 +41,8 @@ class OrchestrationNodeType(str, Enum):
     Classifier = "classifier"
     Wait = "wait"
     Action = "action"
+    Guardrail = "guardrail"
+    Summarizer = "summarizer"
 
 class OrchestrationConditionType(str, Enum):
     """Types of conditions for orchestration control flow.
@@ -256,6 +260,7 @@ class OrchestrationNode(XPanderSharedModel):
     execution strategies, and a specific node type definition.
 
     Attributes:
+        type: Type of the node (must match the definition type).
         id: Unique identifier for the node. Auto-generated if not provided.
         next_node_ids: List of IDs of the next nodes to execute in the workflow (supports branching).
         name: Human-readable name for the node.
@@ -270,6 +275,7 @@ class OrchestrationNode(XPanderSharedModel):
         input_instructions: Instructions to use for structured input.
     """
 
+    type: OrchestrationNodeType
     id: str = Field(default_factory=lambda: str(uuid4()))
     next_node_ids: List[str] = Field(default_factory=list)
     name: Optional[str] = None
