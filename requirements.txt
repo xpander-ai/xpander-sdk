@@ -9,7 +9,7 @@ pytest
 black
 pre-commit
 pytest-asyncio
-agno
+agno==2.3.6
 sqlalchemy
 psycopg[binary,pool]
 greenlet
