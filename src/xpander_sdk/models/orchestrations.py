@@ -74,10 +74,13 @@ class OrchestrationCondition(XPanderSharedModel):
     Attributes:
         type: Type of condition (regex, contains, or else).
         term: The pattern or string to match against. Optional for 'else' type.
+        group_id: Optional group ID for group-based classifier routing.
+                 When set, routing matches by group ID instead of term matching.
     """
 
     type: OrchestrationConditionType
     term: Optional[str] = None
+    group_id: Optional[str] = None
 
 class OrchestrationRetryStrategy(XPanderSharedModel):
     """Strategy for retrying failed orchestration nodes.
