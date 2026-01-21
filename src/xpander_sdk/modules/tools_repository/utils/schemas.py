@@ -98,20 +98,24 @@ def build_model_from_schema(
             
             field_args = {}
             
-            # Enhance description to clarify optional vs required status
+            # Enhance description to clarify optional vs required status AND nesting
             enhanced_description = description or f"Parameter: {prop_name}"
+            
+            # Add payload wrapper reminder for top-level params
+            wrapper_note = " (must be inside payload object)"
+            
             if is_empty_param_container:
-                enhanced_description = f"[OPTIONAL - empty container] {enhanced_description} (default: empty object)"
+                enhanced_description = f"[OPTIONAL - empty container] {enhanced_description} (default: empty object){wrapper_note}"
             elif prop_name in required:
                 if default is not None:
-                    enhanced_description = f"[REQUIRED with default] {enhanced_description} (default: {default})"
+                    enhanced_description = f"[REQUIRED with default] {enhanced_description} (default: {default}){wrapper_note}"
                 else:
-                    enhanced_description = f"[REQUIRED] {enhanced_description}"
+                    enhanced_description = f"[REQUIRED] {enhanced_description}{wrapper_note}"
             else:
                 if default is not None:
-                    enhanced_description = f"[OPTIONAL with default] {enhanced_description} (default: {default})"
+                    enhanced_description = f"[OPTIONAL with default] {enhanced_description} (default: {default}){wrapper_note}"
                 else:
-                    enhanced_description = f"[OPTIONAL] {enhanced_description} - can be omitted or set to null"
+                    enhanced_description = f"[OPTIONAL] {enhanced_description} - can be omitted or set to null{wrapper_note}"
             
             field_args["description"] = enhanced_description
 
@@ -169,7 +173,16 @@ def build_model_from_schema(
         strict=False,  # Allow flexibility with types to handle AI agent inputs better
         extra="allow",
         title=model_name,
-        description="IMPORTANT: Required fields must be provided. Optional fields can be omitted entirely or set to null. All parameters with defaults will use those defaults if not provided. Check the 'required' array in the schema to see which fields are mandatory."
+        description="""CRITICAL - This schema must be wrapped in a 'payload' parameter.
+        
+CORRECT: Call function with {"payload": {<this_schema>}}
+INCORRECT: Call function with {<this_schema>} directly
+
+All fields shown below must be nested inside a 'payload' object when calling the function.
+
+Required fields must be provided. Optional fields can be omitted entirely or set to null. 
+All parameters with defaults will use those defaults if not provided. 
+Check the 'required' array in the schema to see which fields are mandatory."""
     )
     return create_model(
         model_name,

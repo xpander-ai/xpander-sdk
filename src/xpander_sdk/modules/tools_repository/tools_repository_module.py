@@ -159,8 +159,33 @@ class ToolsRepository(XPanderSharedModel):
 
         for tool in self.list:
             
-            # add json schema to the model doc
-            tool.schema.__doc__ = "Pay attention to the schema, dont miss. " + json.dumps(tool.schema.model_json_schema(mode="serialization"))
+            # add json schema to the model doc with enhanced guidance
+            schema_json = tool.schema.model_json_schema(mode="serialization")
+            
+            # Build example with actual schema structure
+            example_payload = {}
+            if 'properties' in schema_json:
+                for prop_name, prop_def in schema_json['properties'].items():
+                    if prop_def.get('type') == 'object':
+                        if prop_def.get('properties'):
+                            # Show one example nested field
+                            first_nested = list(prop_def['properties'].keys())[0]
+                            example_payload[prop_name] = {first_nested: "<value>"}
+                        else:
+                            example_payload[prop_name] = {}
+                    else:
+                        example_payload[prop_name] = f"<{prop_def.get('type', 'value')}>"
+            
+            tool.schema.__doc__ = f"""CRITICAL: This entire schema must be wrapped in a 'payload' parameter.
+
+Call this function as: function_name(payload={{...}})
+DO NOT call as: function_name(body_params={{...}}, headers={{...}}, ...)
+
+Example correct call:
+{json.dumps({"payload": example_payload}, indent=2)}
+
+Full schema: {json.dumps(schema_json, indent=2)}
+"""
             
             schema_cls: Type[BaseModel] = tool.schema
 
@@ -208,7 +233,44 @@ class ToolsRepository(XPanderSharedModel):
 
                 # --- Metadata ---
                 tool_function.__name__ = tool_ref.id
-                tool_function.__doc__ = tool_ref.description or tool_ref.name
+                
+                # Build comprehensive docstring with parameter structure guidance
+                base_doc = tool_ref.description or tool_ref.name
+                
+                # Extract schema properties for examples
+                schema_props = schema_ref.model_json_schema().get('properties', {})
+                param_names = list(schema_props.keys())
+                
+                # Create example structure
+                example_parts = []
+                for prop_name in param_names:
+                    prop_info = schema_props.get(prop_name, {})
+                    if prop_info.get('type') == 'object' and prop_info.get('properties'):
+                        # Show nested structure
+                        nested_props = list(prop_info['properties'].keys())
+                        if nested_props:
+                            example_parts.append(f'"{prop_name}": {{"{nested_props[0]}": ...}}')
+                        else:
+                            example_parts.append(f'"{prop_name}": {{}}')
+                    else:
+                        example_parts.append(f'"{prop_name}": ...')
+                
+                example_json = "{" + ", ".join(example_parts) + "}"
+                
+                tool_function.__doc__ = f"""{base_doc}
+
+IMPORTANT - Parameter Structure:
+All parameters must be passed as a single 'payload' object containing the required fields.
+
+Correct usage example:
+{{
+  "payload": {example_json}
+}}
+
+DO NOT pass parameters as separate top-level arguments.
+DO NOT use: {{"{param_names[0] if param_names else 'param'}": ..., "{param_names[1] if len(param_names) > 1 else 'param2'}": ...}}
+USE: {{"payload": {{"{param_names[0] if param_names else 'param'}": ..., "{param_names[1] if len(param_names) > 1 else 'param2'}": ..., ...}}}}
+"""
 
                 # --- Signature ---
                 payload_param = Parameter(
