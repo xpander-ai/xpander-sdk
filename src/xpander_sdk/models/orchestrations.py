@@ -124,7 +124,7 @@ class OrchestrationClassifierNodeLLMSettings(XPanderSharedModel):
 
     Attributes:
         model_provider: The LLM provider to use. Defaults to OpenAI.
-        model_name: Specific model identifier. Defaults to "gpt-5-nano".
+        model_name: Specific model identifier. Defaults to "gpt-4.1-mini".
         llm_credentials_key: Key identifier for stored credentials.
         llm_credentials_key_type: Type of credential key storage. Defaults to XPander.
         llm_credentials: Direct credential object if not using stored credentials.
@@ -133,7 +133,7 @@ class OrchestrationClassifierNodeLLMSettings(XPanderSharedModel):
     """
 
     model_provider: Optional[LLMModelProvider] = LLMModelProvider.OpenAI
-    model_name: Optional[str] = "gpt-5-nano"
+    model_name: Optional[str] = "gpt-4.1-mini"
     llm_credentials_key: Optional[str] = None
     llm_credentials_key_type: Optional[LLMCredentialsKeyType] = (
         LLMCredentialsKeyType.XPander
