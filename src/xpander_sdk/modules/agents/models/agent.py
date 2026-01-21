@@ -475,6 +475,32 @@ class AgentOutput(BaseModel):
     use_json_mode: Optional[bool] = False
 
 class TaskLevelStrategies(XPanderSharedModel):
+    """
+    Configuration object for task-level execution strategies.
+
+    This model groups optional strategy configurations that control how a task is
+    executed and managed over time, including retries, iterative execution,
+    stopping conditions, and daily run limits.
+
+    Attributes:
+        retry_strategy:
+            Optional retry policy configuration that defines how the task should
+            behave when execution fails (e.g., max attempts, backoff rules).
+
+        iterative_strategy:
+            Optional iterative execution configuration for tasks that may run in
+            repeated cycles/steps until completion or a stop condition is met.
+
+        stop_strategy:
+            Optional stopping policy configuration that defines when the task
+            should stop running (e.g., timeout, max iterations, success criteria).
+
+        max_runs_per_day:
+            Optional limit on how many times the task is allowed to run within a
+            24-hour period. If not set, no explicit daily limit is enforced.
+    """
+
     retry_strategy: Optional[OrchestrationRetryStrategy] = None
     iterative_strategy: Optional[OrchestrationIterativeStrategy] = None
     stop_strategy: Optional[OrchestrationStopStrategy] = None
+    max_runs_per_day: Optional[int] = None
