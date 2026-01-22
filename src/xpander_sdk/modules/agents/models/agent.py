@@ -498,9 +498,13 @@ class TaskLevelStrategies(XPanderSharedModel):
         max_runs_per_day:
             Optional limit on how many times the task is allowed to run within a
             24-hour period. If not set, no explicit daily limit is enforced.
+        
+        agentic_context_enabled:
+            if agentic memory is enabled and accesible to the executor.
     """
 
     retry_strategy: Optional[OrchestrationRetryStrategy] = None
     iterative_strategy: Optional[OrchestrationIterativeStrategy] = None
     stop_strategy: Optional[OrchestrationStopStrategy] = None
     max_runs_per_day: Optional[int] = None
+    agentic_context_enabled: Optional[bool] = False
