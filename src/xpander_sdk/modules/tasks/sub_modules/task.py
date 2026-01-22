@@ -186,6 +186,7 @@ class Task(XPanderSharedModel):
     title: Optional[str] = (None,)
     think_mode: Optional[ThinkMode] = ThinkMode.Default
     disable_attachment_injection: Optional[bool] = False
+    user_tokens: Optional[Dict] = None
     deep_planning: Optional[DeepPlanning] = Field(default_factory=DeepPlanning)
     execution_attempts: Optional[int] = 1
 

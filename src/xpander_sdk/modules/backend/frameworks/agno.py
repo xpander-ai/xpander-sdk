@@ -980,19 +980,30 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
                 if not task:
                     raise ValueError("MCP server with OAuth authentication detected but task not sent")
                 
-                if not task.input.user or not task.input.user.id:
-                    raise ValueError("MCP server with OAuth authentication detected but user id not set on the task (task.input.user.id)")
-                
-                auth_result: MCPOAuthGetTokenResponse = await authenticate_mcp_server(mcp_server=mcp,task=task,user_id=task.input.user.id, auth_events_callback=auth_events_callback)
-                if auth_result and auth_result.data and isinstance(auth_result.data, MCPOAuthGetTokenGenericResponse) and auth_result.data.message:
-                    raise ValueError(f"MCP authentication failed: {auth_result.data.message}")
-                if not auth_result:
-                    raise ValueError("MCP Server authentication failed")
-                if auth_result.type != MCPOAuthResponseType.TOKEN_READY:
-                    raise ValueError("MCP Server authentication timeout")
-                mcp.api_key = auth_result.data.access_token
+                # check if we have user tokens for this mcp
+                graph_item = next((gi for gi in agent.graph.items if gi.type == AgentGraphItemType.MCP and gi.settings and gi.settings.mcp_settings and gi.settings.mcp_settings.url and gi.settings.mcp_settings.url == mcp.url), None)
+                if graph_item and task.user_tokens and isinstance(task.user_tokens, dict) and graph_item.id in task.user_tokens:
+                    mcp.api_key = task.user_tokens[graph_item.id]
+                else:
+                    if not task.input.user or not task.input.user.id:
+                        raise ValueError("MCP server with OAuth authentication detected but user id not set on the task (task.input.user.id)")
+                    
+                    auth_result: MCPOAuthGetTokenResponse = await authenticate_mcp_server(mcp_server=mcp,task=task,user_id=task.input.user.id, auth_events_callback=auth_events_callback)
+                    if auth_result and auth_result.data and isinstance(auth_result.data, MCPOAuthGetTokenGenericResponse) and auth_result.data.message:
+                        raise ValueError(f"MCP authentication failed: {auth_result.data.message}")
+                    if not auth_result:
+                        raise ValueError("MCP Server authentication failed")
+                    if auth_result.type != MCPOAuthResponseType.TOKEN_READY:
+                        raise ValueError("MCP Server authentication timeout")
+                    mcp.api_key = auth_result.data.access_token
             
             if mcp.api_key:
+                
+                # check if we have user tokens for this mcp
+                graph_item = next((gi for gi in agent.graph.items if gi.type == AgentGraphItemType.MCP and gi.settings and gi.settings.mcp_settings and gi.settings.mcp_settings.url and gi.settings.mcp_settings.url == mcp.url), None)
+                if graph_item and task.user_tokens and isinstance(task.user_tokens, dict) and graph_item.id in task.user_tokens:
+                    mcp.api_key = task.user_tokens[graph_item.id]
+                
                 if not mcp.headers:
                     mcp.headers = {}
                 mcp.headers["Authorization"] = f"Bearer {mcp.api_key}"
