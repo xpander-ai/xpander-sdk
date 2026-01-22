@@ -37,6 +37,7 @@ from .models.events import (
     WorkerEnvironmentConflict,
     WorkerFinishedEvent,
     WorkerHeartbeat,
+    WorkerCapacityUpdateEvent,
 )
 from ..tasks.sub_modules.task import Task
 from ..tasks.models.task import AgentExecutionStatus, LocalTaskTest
@@ -90,7 +91,7 @@ class Events(ModuleBase):
     def __init__(
         self,
         configuration: Optional[Configuration] = None,
-        max_sync_workers: Optional[int] = 4,
+        max_sync_workers: Optional[int] = 6,
         max_retries: Optional[int] = _MAX_RETRIES,
     ):
         """
@@ -100,7 +101,7 @@ class Events(ModuleBase):
 
         Args:
             configuration (Optional[Configuration]): SDK configuration with credentials and endpoints. Defaults to environment configuration.
-            max_sync_workers (Optional[int]): Maximum number of synchronous worker threads. Defaults to 4.
+            max_sync_workers (Optional[int]): Maximum number of synchronous worker threads. Defaults to 6.
             max_retries (Optional[int]): Maximum retry attempts for network calls. Defaults to 5.
 
         Raises:
@@ -127,6 +128,7 @@ class Events(ModuleBase):
             )
 
         self.max_retries = max_retries
+        self.max_sync_workers = max_sync_workers
 
         # Internal resources
         self._pool: ThreadPoolExecutor = ThreadPoolExecutor(
@@ -134,6 +136,7 @@ class Events(ModuleBase):
             thread_name_prefix="xpander-handler",
         )
         self._bg: Set[asyncio.Task] = set()
+        self._execution_semaphore: Optional[asyncio.Semaphore] = None
 
         logger.debug(
             f"Events initialised (base_url={self.configuration.base_url}, "
@@ -158,6 +161,9 @@ class Events(ModuleBase):
         """
         # Execute boot handlers first, before any event listeners are set up
         await self._execute_boot_handlers()
+        
+        # Initialize semaphore for capacity tracking
+        self._execution_semaphore = asyncio.Semaphore(self.max_sync_workers)
         
         loop = asyncio.get_running_loop()
         for sig in (signal.SIGINT, signal.SIGTERM):
@@ -260,6 +266,22 @@ class Events(ModuleBase):
         assert last_exc is not None
         raise last_exc  # for static checkers
 
+    async def _notify_capacity_status(self, worker_id: str, is_busy: bool) -> None:
+        """
+        Notify the backend of the worker's capacity status.
+
+        Args:
+            worker_id (str): The unique identifier of the worker.
+            is_busy (bool): Whether the worker is at max capacity.
+        """
+        url = f"{get_events_base(configuration=self.configuration)}/{worker_id}?type=worker&agent_id={self.agent_id}"
+        await self._request_with_retries(
+            "POST",
+            url,
+            headers=get_events_headers(configuration=self.configuration),
+            json=WorkerCapacityUpdateEvent(data={"is_busy": is_busy}).model_dump_safe(),
+        )
+
     async def _release_worker(self, worker_id: str) -> None:
         """
         Release the worker resource after task execution completion.
@@ -326,6 +348,31 @@ class Events(ModuleBase):
                 await asyncio.sleep(backoff_delay(attempt))
                 attempt += 1
 
+    async def _handle_task_with_semaphore(
+        self,
+        agent_worker: DeployedAsset,
+        task: Task,
+        on_execution_request: ExecutionRequestHandler,
+    ) -> None:
+        """
+        Wrapper that releases semaphore after task execution.
+        Semaphore is already acquired before calling this method.
+        """
+        try:
+            await self.handle_task_execution_request(
+                agent_worker, task, on_execution_request
+            )
+        finally:
+            # Release execution slot
+            self._execution_semaphore.release()
+            
+            # Check if we now have available capacity and notify backend
+            if self._execution_semaphore._value > 0:
+                try:
+                    await self._notify_capacity_status(agent_worker.id, is_busy=False)
+                except Exception as e:
+                    logger.warning(f"Failed to notify available status: {e}")
+    
     async def handle_task_execution_request(
         self,
         agent_worker: DeployedAsset,
@@ -379,7 +426,6 @@ class Events(ModuleBase):
         finally:
             task_used_tokens = task.tokens
             task_used_tools = task.used_tools
-            await self._release_worker(agent_worker.id)
 
             if error:
                 task.result = error
@@ -510,9 +556,20 @@ class Events(ModuleBase):
 
             elif event.event == EventType.AgentExecution:
                 task = Task(**json.loads(event.data), configuration=self.configuration)
+                
+                # Acquire execution slot immediately (blocks here if at max capacity)
+                await self._execution_semaphore.acquire()
+                
+                # Check if we're now at max capacity and notify backend
+                if self._execution_semaphore._value == 0:
+                    try:
+                        await self._notify_capacity_status(agent_worker.id, is_busy=True)
+                    except Exception as e:
+                        logger.warning(f"Failed to notify busy status: {e}")
+                
                 self.track(
                     asyncio.create_task(
-                        self.handle_task_execution_request(
+                        self._handle_task_with_semaphore(
                             agent_worker, task, on_execution_request
                         )
                     )
