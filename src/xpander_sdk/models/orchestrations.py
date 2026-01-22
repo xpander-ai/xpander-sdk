@@ -276,6 +276,8 @@ class OrchestrationNode(XPanderSharedModel):
         input_type: Expected input format. Defaults to Text.
         input_schema: JSON schema for structured input validation.
         input_instructions: Instructions to use for structured input.
+        agentic_context_input_instructions: Instructions to use for agentic context injection.
+        agentic_context_output_instructions: Instructions to use for agentic context update.
     """
 
     type: OrchestrationNodeType
@@ -304,3 +306,5 @@ class OrchestrationNode(XPanderSharedModel):
     input_type: Optional[OutputFormat] = OutputFormat.Text
     input_schema: Optional[Dict] = None
     input_instructions: Optional[str] = None
+    agentic_context_input_instructions: Optional[str] = None
+    agentic_context_output_instructions: Optional[str] = None
