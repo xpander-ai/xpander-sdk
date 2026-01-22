@@ -14,6 +14,7 @@ class EventType(str, Enum):
     AgentExecution = "agent-execution"
     WorkerHeartbeat = "worker-heartbeat"
     WorkerFinished = "worker-finished"
+    WorkerCapacityUpdate = "worker-capacity-update"
     EnvironmentConflict = "worker-environment-conflict"
 
 
@@ -50,6 +51,11 @@ class WorkerHeartbeat(EventMessageBase):
 class WorkerExecutionRequest(EventMessageBase):
     event: EventType = EventType.AgentExecution
     data: Task
+
+
+class WorkerCapacityUpdateEvent(EventMessageBase):
+    event: EventType = EventType.WorkerCapacityUpdate
+    data: dict = {"is_busy": False}
 
 
 class WorkerEnvironmentConflict(EventMessageBase):
