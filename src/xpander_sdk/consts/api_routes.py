@@ -65,6 +65,9 @@ and deleting resources.
     
     # Metadata
     GetOrgDefaultLLMExtraHeaders = "/metadata/default_llm_extra_headers"
+    
+    # Agentic context
+    GetOrSetAgenticContext = "/agentic_context/{agent_id}"
 
     def __str__(self) -> str:
         return str(self.value)
