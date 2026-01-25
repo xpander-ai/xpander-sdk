@@ -43,6 +43,7 @@ class OrchestrationNodeType(str, Enum):
     Action = "action"
     Guardrail = "guardrail"
     Summarizer = "summarizer"
+    SendToEnd = "send_to_end"
 
 class OrchestrationConditionType(str, Enum):
     """Types of conditions for orchestration control flow.
@@ -245,6 +246,20 @@ class OrchestrationCodeNode(XPanderSharedModel):
 
     code: str
 
+
+class OrchestrationSendToEndNode(XPanderSharedModel):
+    """Node that routes execution to end nodes or finishes the workflow.
+
+    When triggered, this node will:
+    1. Route to end nodes (end-summarizer, end-classifier) if they exist
+    2. Finish workflow execution immediately if no end nodes exist
+
+    Attributes:
+        message: Optional message or reason for finishing the workflow.
+    """
+
+    message: Optional[str] = None
+
 class OrchestrationWaitNode(XPanderSharedModel):
     """Node that pauses execution until an external event occurs.
 
@@ -302,6 +317,7 @@ class OrchestrationNode(XPanderSharedModel):
         OrchestrationWaitNode,
         OrchestrationGuardrailNode,
         OrchestrationSummarizerNode,
+        OrchestrationSendToEndNode,
     ]
     input_type: Optional[OutputFormat] = OutputFormat.Text
     input_schema: Optional[Dict] = None
