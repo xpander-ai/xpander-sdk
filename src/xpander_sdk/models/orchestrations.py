@@ -223,19 +223,25 @@ class OrchestrationClassifierNode(XPanderSharedModel):
 class OrchestrationGuardrailNode(XPanderSharedModel):
     """Node that uses LLM to evaluate input and enforce guardrails.
 
-    This node can stop execution if the guardrail check fails.
+    This node uses group-based classification similar to the Classifier node.
+    It requires exactly 2 groups with IDs "pass" and "fail":
+    - "pass" group: Criteria for when input should pass the guardrail
+    - "fail" group: Criteria for when input should fail the guardrail
+
+    Routing behavior:
+    - If "pass" matches: Routes to downstream nodes connected via "pass" condition
+    - If "fail" matches: Routes to downstream nodes connected via "fail" condition,
+      or falls back to end nodes (end-summarizer/end-classifier) if no fail route exists
 
     Attributes:
-        instructions: Evaluation instructions for the LLM to assess the input.
+        groups: List of 2 ClassificationGroup objects with IDs "pass" and "fail".
         examples: Example inputs/outputs to guide the LLM behavior.
         settings: LLM configuration settings.
-        stop_on_false: Whether to stop execution if the guardrail check fails. Defaults to True.
     """
 
-    instructions: str
+    groups: List[ClassificationGroup]
     examples: Optional[List[str]] = []
     settings: OrchestrationClassifierNodeLLMSettings
-    stop_on_false: Optional[bool] = True
 
 class OrchestrationSummarizerNode(XPanderSharedModel):
     """Node that processes large payloads and answers specific questions.
