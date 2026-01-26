@@ -31,16 +31,29 @@ class SlackCredentials(XPanderSharedModel):
     app_configuration_token: Optional[str] = None
     app_configuration_refresh_token: Optional[str] = None
     
+# Default values for HITL notifications
+DEFAULT_HITL_BODY = "Hello, workflow {title} is waiting for your approval and will not continue until approved. The workflow request is: {content}. By clicking approve, the workflow will auto-execute."
+DEFAULT_LOGO_URL = "https://assets.xpanderai.io/xpander-logo-512.png"
+DEFAULT_APPROVE_BUTTON_TEXT = "Approve"
+DEFAULT_DENY_BUTTON_TEXT = "Deny"
+
+
 class NotificationSettingsBase(XPanderSharedModel):
     """Base class for notification settings with common customization fields.
 
     Attributes:
-        subject_suffix: Optional suffix to append to notification subjects.
-        body_prefix: Optional prefix to prepend to notification bodies.
+        subject: Optional custom subject line for notifications.
+        body: Optional custom body content for notifications.
+        approve_button_text: Text for approval button (HITL only). Defaults to "Approve".
+        deny_button_text: Text for denial button (HITL only). Defaults to "Deny".
+        logo_url: URL for logo image. Defaults to xpander logo.
     """
 
-    subject_suffix: Optional[str] = None
-    body_prefix: Optional[str] = None
+    subject: Optional[str] = None
+    body: Optional[str] = None
+    approve_button_text: Optional[str] = DEFAULT_APPROVE_BUTTON_TEXT
+    deny_button_text: Optional[str] = DEFAULT_DENY_BUTTON_TEXT
+    logo_url: Optional[str] = DEFAULT_LOGO_URL
 
 class EmailNotificationSettings(NotificationSettingsBase):
     """Configuration for email notifications.
