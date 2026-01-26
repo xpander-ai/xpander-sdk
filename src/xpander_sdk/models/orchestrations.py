@@ -143,6 +143,19 @@ class OrchestrationClassifierNodeLLMSettings(XPanderSharedModel):
     llm_api_base: Optional[str] = None
     llm_extra_headers: Optional[Dict[str,str]] = {}
 
+class SchemaOverride(XPanderSharedModel):
+    """Schema override for workflow action nodes.
+    
+    Allows setting permanent (fixed) values for tool input properties.
+    Fields with permanentValue will be removed from the schema sent to the LLM
+    and the permanent values will be applied to the payload before execution.
+    
+    Attributes:
+        input: Input schema with permanentValue fields to override LLM-generated values.
+    """
+    input: Optional[Dict] = None
+
+
 class OrchestrationPointerNode(XPanderSharedModel):
     """Node that references an external asset (agent, function, or orchestration).
 
@@ -153,6 +166,7 @@ class OrchestrationPointerNode(XPanderSharedModel):
         output_schema: JSON schema for structured output validation.
         instructions: Optional instructions for the pointer node (Action only).
         ignore_response: Should ignore the node result and proceed with previous result?.
+        schema_override: Optional schema override with permanentValue fields for fixed values.
     """
 
     asset_id: str
@@ -167,6 +181,7 @@ class OrchestrationPointerNode(XPanderSharedModel):
     output_schema: Optional[Dict] = None
     instructions: Optional[str] = None
     ignore_response: Optional[bool] = False
+    schema_override: Optional[SchemaOverride] = None
 
 class ClassificationGroup(XPanderSharedModel):
     """A classification group with evaluation criteria and data extraction settings.
