@@ -5,7 +5,7 @@ including various node types, execution strategies, and control flow conditions.
 """
 
 from enum import Enum
-from typing import Dict, List, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 from uuid import uuid4
 
 from pydantic import Field
@@ -52,11 +52,26 @@ class OrchestrationConditionType(str, Enum):
         Regex: Condition based on regular expression matching.
         Contains: Condition based on substring containment.
         Else: Fallback condition that always matches (executed when no other conditions match).
+        Equal: Condition based on equality comparison (path == value).
+        NotEqual: Condition based on inequality comparison (path != value).
+        GreaterThan: Condition based on greater than comparison (path > value).
+        LessThan: Condition based on less than comparison (path < value).
+        GreaterThanOrEqual: Condition based on greater than or equal comparison (path >= value).
+        LessThanOrEqual: Condition based on less than or equal comparison (path <= value).
+        NotEmpty: Condition that checks if a path value is not empty/null.
     """
 
     Regex = "regex"
     Contains = "contains"
     Else = "else"
+    # Classic comparison operators
+    Equal = "equal"
+    NotEqual = "not_equal"
+    GreaterThan = "gt"
+    LessThan = "lt"
+    GreaterThanOrEqual = "gte"
+    LessThanOrEqual = "lte"
+    NotEmpty = "not_empty"
 
 class OrchestrationWaitNodeType(str, Enum):
     """Types of wait nodes in orchestration workflows.
@@ -73,15 +88,21 @@ class OrchestrationCondition(XPanderSharedModel):
     """Condition for controlling orchestration flow.
 
     Attributes:
-        type: Type of condition (regex, contains, or else).
-        term: The pattern or string to match against. Optional for 'else' type.
+        type: Type of condition (regex, contains, else, or comparison operators).
+        term: The pattern or string to match against. Used for 'regex' and 'contains' types.
         group_id: Optional group ID for group-based classifier routing.
                  When set, routing matches by group ID instead of term matching.
+        path: Path to extract value from input data (e.g., "input.client_id" or "client_id").
+              Used for comparison operators (equal, not_equal, gt, lt, gte, lte, not_empty).
+        value: Value to compare against. Used with comparison operators.
+               Not required for 'not_empty' type.
     """
 
     type: OrchestrationConditionType
     term: Optional[str] = None
     group_id: Optional[str] = None
+    path: Optional[str] = None
+    value: Optional[Any] = None
 
 class OrchestrationRetryStrategy(XPanderSharedModel):
     """Strategy for retrying failed orchestration nodes.
