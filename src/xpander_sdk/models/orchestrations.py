@@ -45,6 +45,17 @@ class OrchestrationNodeType(str, Enum):
     Summarizer = "summarizer"
     SendToEnd = "send_to_end"
 
+class OrchestrationPointerNodeInstructionsMode(str, Enum):
+    """Modes for instruction usage in pointer node.
+
+    Attributes:
+        Replace: Replaces the traget asset instructions.
+        Append: Appends to the traget asset instructions.
+    """
+
+    Replace = "replace"
+    Append = "append"
+
 class OrchestrationConditionType(str, Enum):
     """Types of conditions for orchestration control flow.
 
@@ -186,6 +197,7 @@ class OrchestrationPointerNode(XPanderSharedModel):
         output_type: Expected output format. Defaults to Text.
         output_schema: JSON schema for structured output validation.
         instructions: Optional instructions for the pointer node (Action only).
+        instructions_mode: Mode to use for pointer node, specifically for agent nodes.
         ignore_response: Should ignore the node result and proceed with previous result?.
         schema_override: Optional schema override with permanentValue fields for fixed values.
     """
@@ -201,6 +213,7 @@ class OrchestrationPointerNode(XPanderSharedModel):
     output_type: Optional[OutputFormat] = OutputFormat.Text
     output_schema: Optional[Dict] = None
     instructions: Optional[str] = None
+    instructions_mode: Optional[OrchestrationPointerNodeInstructionsMode] = OrchestrationPointerNodeInstructionsMode.Append
     ignore_response: Optional[bool] = False
     schema_override: Optional[SchemaOverride] = None
 
