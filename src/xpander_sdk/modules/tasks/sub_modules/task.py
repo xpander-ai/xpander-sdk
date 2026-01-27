@@ -132,6 +132,7 @@ class Task(XPanderSharedModel):
         output_schema (Optional[Dict]): Schema for the task's output.
         events_streaming (Optional[bool]): Flag indicating if the task has events streaming.
         additional_context (Optional[str]): Additional context to be passed to the agent.
+        additional_instructions (Optional[str]): Additional instructions to be appended to the agent's system prompt.
         expected_output (Optional[str]): Expected output of the execution.
         mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
         triggering_agent_id (Optional[str]): Optional triggering agent id.
@@ -180,6 +181,7 @@ class Task(XPanderSharedModel):
     events_streaming: Optional[bool] = False
     is_orchestration: Optional[bool] = False
     additional_context: Optional[str] = None
+    additional_instructions: Optional[str] = None
     expected_output: Optional[str] = (None,)
     mcp_servers: Optional[List[MCPServerDetails]] = ([],)
     triggering_agent_id: Optional[str] = (None,)

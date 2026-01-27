@@ -413,6 +413,7 @@ class Agent(XPanderSharedModel):
         output_schema: Optional[Dict] = None,
         events_streaming: Optional[bool] = False,
         additional_context: Optional[str] = None,
+        additional_instructions: Optional[str] = None,
         expected_output: Optional[str] = None,
         mcp_servers: Optional[List[MCPServerDetails]] = [],
         triggering_agent_id: Optional[str] = None,
@@ -438,6 +439,7 @@ class Agent(XPanderSharedModel):
             output_schema (Optional[Dict]): Schema defining structure of output.
             events_streaming (Optional[bool]): Flag idicating for events are required for this task.
             additional_context (Optional[str]): Additional context to be passed to the agent.
+            additional_instructions (Optional[str]): Additional instructions to be appended to the agent's system prompt.
             expected_output (Optional[str]): Expected output of the execution.
             mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
             triggering_agent_id (Optional[str]): Optional triggering agent id.
@@ -473,6 +475,7 @@ class Agent(XPanderSharedModel):
                     "run_locally": run_locally,
                     "events_streaming": events_streaming,
                     "additional_context": additional_context,
+                    "additional_instructions": additional_instructions,
                     "expected_output": expected_output,
                     "mcp_servers": [server.model_dump() for server in mcp_servers],
                     "triggering_agent_id": triggering_agent_id,

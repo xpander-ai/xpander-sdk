@@ -130,7 +130,7 @@ async def build_agent_args(
             "name": xpander_agent.name,
             "model": model,
             "description": xpander_agent.instructions.description,
-            "instructions": xpander_agent.instructions.instructions,
+            "instructions": xpander_agent.instructions.instructions + (f"\n<additional_instructions>{task.additional_instructions}</additional_instructions>" if task.additional_instructions else ""),
             "expected_output": (
                 task.expected_output
                 if task and task.expected_output
