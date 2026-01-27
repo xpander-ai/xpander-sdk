@@ -133,6 +133,7 @@ class Task(XPanderSharedModel):
         events_streaming (Optional[bool]): Flag indicating if the task has events streaming.
         additional_context (Optional[str]): Additional context to be passed to the agent.
         instructions_override (Optional[str]): Additional instructions to be appended to the agent's system prompt.
+        test_run_node_id (Optional[str]): Internal test purpose workflow node id to execute.
         expected_output (Optional[str]): Expected output of the execution.
         mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
         triggering_agent_id (Optional[str]): Optional triggering agent id.
@@ -182,6 +183,7 @@ class Task(XPanderSharedModel):
     is_orchestration: Optional[bool] = False
     additional_context: Optional[str] = None
     instructions_override: Optional[str] = None
+    test_run_node_id: Optional[str] = None
     expected_output: Optional[str] = (None,)
     mcp_servers: Optional[List[MCPServerDetails]] = ([],)
     triggering_agent_id: Optional[str] = (None,)
