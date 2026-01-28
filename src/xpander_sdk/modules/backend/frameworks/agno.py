@@ -43,7 +43,7 @@ async def build_agent_args(
     is_async: Optional[bool] = True,
     auth_events_callback: Optional[Callable] = None,
 ) -> Dict[str, Any]:
-    model = _load_llm_model(agent=xpander_agent, override=override)
+    model = _load_llm_model(agent=xpander_agent, override=override, task=task)
     args: Dict[str, Any] = {
         "id": xpander_agent.id,
         "store_events": True
@@ -576,7 +576,7 @@ def _configure_deep_planning_guidance(args: Dict[str, Any], agent: Agent, task: 
         plan_str = task.deep_planning.model_dump_json() if task.deep_planning and task.deep_planning.enabled and len(task.deep_planning.tasks) != 0 else "No execution plan, please generate"
         args["additional_context"] += f" \n Current execution plan: {plan_str}"
 
-def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> Any:
+def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task: Optional[Task] = None) -> Any:
     """
     Load and configure the appropriate LLM model based on the agent's provider configuration.
 
@@ -613,6 +613,12 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> An
     has_custom_llm_key = (
         True if agent.llm_credentials and agent.llm_credentials.value else False
     )
+    
+    oidc_llm_token = None
+    
+    # OIDC pre-auth token claim by audience
+    if agent and agent.pre_auth_audiences and agent.use_oidc_pre_auth_token_for_llm and agent.oidc_pre_auth_token_llm_audience and task and task.user_tokens and isinstance(task.user_tokens, dict) and "oidc_tokens" in task.user_tokens and isinstance(task.user_tokens["oidc_tokens"], dict):
+        oidc_llm_token = task.user_tokens["oidc_tokens"].get(agent.oidc_pre_auth_token_llm_audience, None)
 
     def get_llm_key(env_var_name: str) -> Optional[str]:
         """
@@ -624,6 +630,11 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> An
         Returns:
             Optional[str]: The resolved API key or None if not available.
         """
+        
+        # return oidc claimed api key
+        if oidc_llm_token:
+            return oidc_llm_token
+        
         env_llm_key = getenv(env_var_name)
 
         # If no custom key available, use environment variable
@@ -640,6 +651,9 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}) -> An
     llm_args = {}
     
     llm_extra_headers = {}
+    
+    if oidc_llm_token:
+        llm_extra_headers["x-oidc-token"] = oidc_llm_token
     
     # Get organization default LLM extra headers
     api_client = APIClient(configuration=agent.configuration)
@@ -975,27 +989,35 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
                 else StreamableHTTPClientParams
             )
             
-            # handle mcp auth
-            if mcp.auth_type == MCPServerAuthType.OAuth2:
-                if not task:
-                    raise ValueError("MCP server with OAuth authentication detected but task not sent")
-                
-                # check if we have user tokens for this mcp
-                graph_item = next((gi for gi in agent.graph.items if gi.type == AgentGraphItemType.MCP and gi.settings and gi.settings.mcp_settings and gi.settings.mcp_settings.url and gi.settings.mcp_settings.url == mcp.url), None)
-                if graph_item and task.user_tokens and isinstance(task.user_tokens, dict) and graph_item.id in task.user_tokens:
-                    mcp.api_key = task.user_tokens[graph_item.id]
-                else:
-                    if not task.input.user or not task.input.user.id:
-                        raise ValueError("MCP server with OAuth authentication detected but user id not set on the task (task.input.user.id)")
+            oidc_mcp_token = None
+            # OIDC pre-auth token claim by audience
+            if agent and agent.pre_auth_audiences and agent.oidc_pre_auth_token_mcp_audience and task and task.user_tokens and isinstance(task.user_tokens, dict) and "oidc_tokens" in task.user_tokens and isinstance(task.user_tokens["oidc_tokens"], dict):
+                oidc_mcp_token = task.user_tokens["oidc_tokens"].get(agent.oidc_pre_auth_token_mcp_audience, None)
+                if oidc_mcp_token and oidc_mcp_token != "__none__":
+                    mcp.api_key = oidc_mcp_token
+            
+            if not oidc_mcp_token:
+                # handle mcp auth
+                if mcp.auth_type == MCPServerAuthType.OAuth2:
+                    if not task:
+                        raise ValueError("MCP server with OAuth authentication detected but task not sent")
                     
-                    auth_result: MCPOAuthGetTokenResponse = await authenticate_mcp_server(mcp_server=mcp,task=task,user_id=task.input.user.id, auth_events_callback=auth_events_callback)
-                    if auth_result and auth_result.data and isinstance(auth_result.data, MCPOAuthGetTokenGenericResponse) and auth_result.data.message:
-                        raise ValueError(f"MCP authentication failed: {auth_result.data.message}")
-                    if not auth_result:
-                        raise ValueError("MCP Server authentication failed")
-                    if auth_result.type != MCPOAuthResponseType.TOKEN_READY:
-                        raise ValueError("MCP Server authentication timeout")
-                    mcp.api_key = auth_result.data.access_token
+                    # check if we have user tokens for this mcp
+                    graph_item = next((gi for gi in agent.graph.items if gi.type == AgentGraphItemType.MCP and gi.settings and gi.settings.mcp_settings and gi.settings.mcp_settings.url and gi.settings.mcp_settings.url == mcp.url), None)
+                    if graph_item and task.user_tokens and isinstance(task.user_tokens, dict) and graph_item.id in task.user_tokens:
+                        mcp.api_key = task.user_tokens[graph_item.id]
+                    else:
+                        if not task.input.user or not task.input.user.id:
+                            raise ValueError("MCP server with OAuth authentication detected but user id not set on the task (task.input.user.id)")
+                        
+                        auth_result: MCPOAuthGetTokenResponse = await authenticate_mcp_server(mcp_server=mcp,task=task,user_id=task.input.user.id, auth_events_callback=auth_events_callback)
+                        if auth_result and auth_result.data and isinstance(auth_result.data, MCPOAuthGetTokenGenericResponse) and auth_result.data.message:
+                            raise ValueError(f"MCP authentication failed: {auth_result.data.message}")
+                        if not auth_result:
+                            raise ValueError("MCP Server authentication failed")
+                        if auth_result.type != MCPOAuthResponseType.TOKEN_READY:
+                            raise ValueError("MCP Server authentication timeout")
+                        mcp.api_key = auth_result.data.access_token
             
             if mcp.api_key:
                 
@@ -1007,6 +1029,7 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
                 if not mcp.headers:
                     mcp.headers = {}
                 mcp.headers["Authorization"] = f"Bearer {mcp.api_key}"
+            
             mcp_tools.append(
                 MCPTools(
                     transport=transport,

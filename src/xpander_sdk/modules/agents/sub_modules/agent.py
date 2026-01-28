@@ -175,6 +175,8 @@ class Agent(XPanderSharedModel):
             use_oidc_pre_auth: Optional[bool] = False
             pre_auth_audiences: Optional[List[str]] = []
             use_oidc_pre_auth_token_for_llm: Optional[bool] = False
+            oidc_pre_auth_token_mcp_audience: Optional[bool] = False
+            oidc_pre_auth_token_llm_audience: Optional[str] = None
 
         Example:
             >>> agent = Agent(id="agent123", name="Example Agent")
@@ -226,6 +228,8 @@ class Agent(XPanderSharedModel):
     use_oidc_pre_auth: Optional[bool] = False
     pre_auth_audiences: Optional[List[str]] = []
     use_oidc_pre_auth_token_for_llm: Optional[bool] = False
+    oidc_pre_auth_token_llm_audience: Optional[str] = None
+    oidc_pre_auth_token_mcp_audience: Optional[str] = None
 
     _connection_string: Optional[DatabaseConnectionString] = None
 
