@@ -134,6 +134,7 @@ class Task(XPanderSharedModel):
         additional_context (Optional[str]): Additional context to be passed to the agent.
         instructions_override (Optional[str]): Additional instructions to be appended to the agent's system prompt.
         test_run_node_id (Optional[str]): Internal test purpose workflow node id to execute.
+        user_oidc_token (Optional[str]): OIDC Token to be used for pre-auth
         expected_output (Optional[str]): Expected output of the execution.
         mcp_servers (Optional[List[MCPServerDetails]]): Optional list of mcp servers to use.
         triggering_agent_id (Optional[str]): Optional triggering agent id.
@@ -184,6 +185,7 @@ class Task(XPanderSharedModel):
     additional_context: Optional[str] = None
     instructions_override: Optional[str] = None
     test_run_node_id: Optional[str] = None
+    user_oidc_token: Optional[str] = None
     expected_output: Optional[str] = (None,)
     mcp_servers: Optional[List[MCPServerDetails]] = ([],)
     triggering_agent_id: Optional[str] = (None,)
