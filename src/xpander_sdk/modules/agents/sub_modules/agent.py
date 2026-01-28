@@ -172,6 +172,8 @@ class Agent(XPanderSharedModel):
             orchestration_nodes: Optional[List[OrchestrationNode]] = []
             notification_settings: Optional[NotificationSettings] = {}
             task_level_strategies: Optional[TaskLevelStrategies] = None
+            use_oidc_pre_auth: Optional[bool] = False
+            pre_auth_audiences: Optional[List[str]] = []
 
         Example:
             >>> agent = Agent(id="agent123", name="Example Agent")
@@ -220,6 +222,8 @@ class Agent(XPanderSharedModel):
     orchestration_nodes: Optional[List[OrchestrationNode]] = []
     notification_settings: Optional[NotificationSettings] = {}
     task_level_strategies: Optional[TaskLevelStrategies] = None
+    use_oidc_pre_auth: Optional[bool] = False
+    pre_auth_audiences: Optional[List[str]] = []
 
     _connection_string: Optional[DatabaseConnectionString] = None
 
