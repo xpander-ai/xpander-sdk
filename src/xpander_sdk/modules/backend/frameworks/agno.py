@@ -689,6 +689,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             api_key=get_llm_key("AGENTS_OPENAI_API_KEY")
             or get_llm_key("OPENAI_API_KEY"),
             temperature=0.0,
+            retries=3,
+            exponential_backoff=True,
             **llm_args
         )
     # Helicone
@@ -700,6 +702,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             # Try xpander.ai-specific key first, fallback to standard OpenAI key
             api_key=get_llm_key("HELICONE_API_KEY"),
             base_url="https://ai-gateway.helicone.ai/v1",
+            retries=3,
+            exponential_backoff=True,
             **llm_args
         )
     # Nebius
@@ -710,6 +714,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             id=agent.model_name,
             # Try xpander.ai-specific key first, fallback to standard OpenAI key
             api_key=get_llm_key("NEBIUS_API_KEY"),
+            retries=3,
+            exponential_backoff=True,
             **llm_args
         )
     # OpenRouter
@@ -720,6 +726,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             id=agent.model_name,
             # Try xpander.ai-specific key first, fallback to standard OpenAI key
             api_key=get_llm_key("OPENROUTER_API_KEY"),
+            retries=3,
+            exponential_backoff=True,
             **llm_args
         )
     # Google AI Studio - supports gemini models
@@ -730,6 +738,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             id=agent.model_name,
             # Try xpander.ai-specific key first, fallback to standard OpenAI key
             api_key=get_llm_key("GOOGLE_API_KEY"),
+            retries=3,
+            exponential_backoff=True,
             **llm_args
         )
     # Fireworks AI Provider
@@ -740,6 +750,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             id=agent.model_name,
             # Try xpander.ai-specific key first, fallback to standard OpenAI key
             api_key=get_llm_key("FIREWORKS_API_KEY"),
+            retries=3,
+            exponential_backoff=True,
             **llm_args
         )
     # NVIDIA NIM Provider - supports NVIDIA's inference microservices
@@ -750,6 +762,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             id=agent.model_name,
             api_key=get_llm_key("NVIDIA_API_KEY"),
             temperature=0.0,
+            retries=3,
+            exponential_backoff=True,
             **llm_args
         )
     # Amazon Bedrock Provider
@@ -760,6 +774,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
         return AwsBedrock(
             id=agent.model_name,
             temperature=0.0,
+            retries=3,
+            exponential_backoff=True,
             **llm_args
         )
 
@@ -772,6 +788,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             id=agent.model_name,
             api_key=get_llm_key("ANTHROPIC_API_KEY"),
             temperature=0.0,
+            retries=3,
+            exponential_backoff=True,
         )
 
     raise NotImplementedError(
