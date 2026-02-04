@@ -10,7 +10,7 @@ from enum import Enum
 from typing import Dict, List, Literal, Optional, Type
 from pydantic import BaseModel, computed_field
 
-from xpander_sdk.models.orchestrations import OrchestrationIterativeStrategy, OrchestrationRetryStrategy, OrchestrationStopStrategy
+from xpander_sdk.models.orchestrations import DuplicationPreventionSettings, OrchestrationIterativeStrategy, OrchestrationRetryStrategy, OrchestrationStopStrategy
 from xpander_sdk.models.shared import XPanderSharedModel
 from xpander_sdk.modules.tools_repository.models.mcp import MCPServerDetails
 
@@ -508,3 +508,4 @@ class TaskLevelStrategies(XPanderSharedModel):
     stop_strategy: Optional[OrchestrationStopStrategy] = None
     max_runs_per_day: Optional[int] = None
     agentic_context_enabled: Optional[bool] = False
+    duplication_prevention: Optional[DuplicationPreventionSettings] = None
