@@ -432,6 +432,7 @@ class Agent(XPanderSharedModel):
         title: Optional[str] = None,
         think_mode: Optional[ThinkMode] = ThinkMode.Default,
         disable_attachment_injection: Optional[bool] = False,
+        return_metrics: Optional[bool] = False,
         user_tokens: Optional[Dict] = None
     ) -> Task:
         """
@@ -460,6 +461,7 @@ class Agent(XPanderSharedModel):
             title (Optional[str]): Optional task title.
             think_mode (Optional[ThinkMode]): Optional task think mode, defaults to "default".
             disable_attachment_injection (Optional[bool]): Optional selection if to disable attachment injection to the context window.
+            return_metrics (Optional[bool]): Optional selection if to return metrics report. Available only for Workflow -> Agent invocation
             user_tokens: Optional[Dict]: User tokens to be passed and injected for MCP Auth
 
         Returns:
@@ -499,6 +501,7 @@ class Agent(XPanderSharedModel):
                     "think_mode": think_mode.value,
                     "disable_attachment_injection": disable_attachment_injection,
                     "user_tokens": user_tokens,
+                    "return_metrics": return_metrics
                 },
             )
             return Task(**created_task, configuration=self.configuration)
