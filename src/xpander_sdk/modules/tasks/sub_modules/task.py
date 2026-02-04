@@ -195,6 +195,7 @@ class Task(XPanderSharedModel):
     user_tokens: Optional[Dict] = None
     deep_planning: Optional[DeepPlanning] = Field(default_factory=DeepPlanning)
     execution_attempts: Optional[int] = 1
+    return_metrics: Optional[bool] = False
 
     # metrics
     tokens: Optional[Tokens] = None
@@ -764,9 +765,9 @@ class Task(XPanderSharedModel):
                 internal_status=self.internal_status,
                 duration=0.0,
                 ai_model="xpander",
-                api_calls_made=self.used_tools,
+                api_calls_made=[] if self.return_metrics and self.source == "orchestration" else self.used_tools,
                 result=self.result or None,
-                llm_tokens=ExecutionTokens(worker=self.tokens),
+                llm_tokens=ExecutionTokens() if self.return_metrics and self.source == "orchestration" else ExecutionTokens(worker=self.tokens),
             )
 
             await client.make_request(
