@@ -1007,6 +1007,9 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
                 else StreamableHTTPClientParams
             )
             
+            if not mcp.headers:
+                mcp.headers = {}
+            
             oidc_mcp_token = None
             # OIDC pre-auth token claim by audience
             if agent and agent.pre_auth_audiences and agent.oidc_pre_auth_token_mcp_audience and task and task.user_tokens and isinstance(task.user_tokens, dict) and "oidc_tokens" in task.user_tokens and isinstance(task.user_tokens["oidc_tokens"], dict):
@@ -1025,13 +1028,8 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
                     if graph_item and task.user_tokens and isinstance(task.user_tokens, dict) and graph_item.id in task.user_tokens:
                         if isinstance(task.user_tokens[graph_item.id], dict):
                             graph_item_headers = task.user_tokens[graph_item.id]
-                            if "Authorization" in graph_item_headers:
-                                mcp.api_key = graph_item_headers["Authorization"]
-                            for k in graph_item_headers:
-                                if k != "Authorization":
-                                    if not mcp.headers or not isinstance(mcp.headers, dict):
-                                        mcp.headers = {}
-                                    mcp.headers[k] = graph_item_headers[k]
+                            mcp.headers = graph_item_headers
+                            mcp.api_key = "__bypass__"
                         else:
                             mcp.api_key = task.user_tokens[graph_item.id]
                     
@@ -1048,25 +1046,16 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
                             raise ValueError("MCP Server authentication timeout")
                         mcp.api_key = auth_result.data.access_token
             
-            if mcp.api_key:
-                
-                # check if we have user tokens for this mcp
-                graph_item = next((gi for gi in agent.graph.items if gi.type == AgentGraphItemType.MCP and gi.settings and gi.settings.mcp_settings and gi.settings.mcp_settings.url and gi.settings.mcp_settings.url == mcp.url), None)
-                if graph_item and task.user_tokens and isinstance(task.user_tokens, dict) and graph_item.id in task.user_tokens:
-                    if isinstance(task.user_tokens[graph_item.id], dict):
-                        graph_item_headers = task.user_tokens[graph_item.id]
-                        if "Authorization" in graph_item_headers:
-                            mcp.api_key = graph_item_headers["Authorization"]
-                        for k in graph_item_headers:
-                            if k != "Authorization":
-                                if not mcp.headers or not isinstance(mcp.headers, dict):
-                                    mcp.headers = {}
-                                mcp.headers[k] = graph_item_headers[k]
-                    else:
-                        mcp.api_key = task.user_tokens[graph_item.id]
-                
-                if not mcp.headers:
-                    mcp.headers = {}
+            # check if we have user tokens for this mcp
+            graph_item = next((gi for gi in agent.graph.items if gi.type == AgentGraphItemType.MCP and gi.settings and gi.settings.mcp_settings and gi.settings.mcp_settings.url and gi.settings.mcp_settings.url == mcp.url), None)
+            if graph_item and task.user_tokens and isinstance(task.user_tokens, dict) and graph_item.id in task.user_tokens:
+                if isinstance(task.user_tokens[graph_item.id], dict):
+                    graph_item_headers = task.user_tokens[graph_item.id]
+                    mcp.headers = graph_item_headers
+                elif not mcp.api_key:
+                    mcp.api_key = task.user_tokens[graph_item.id]
+            
+            if mcp.api_key and mcp.api_key != "__bypass__":
                 mcp.headers["Authorization"] = f"Bearer {mcp.api_key}"
             
             mcp_tools.append(
