@@ -115,6 +115,29 @@ class OrchestrationCondition(XPanderSharedModel):
     path: Optional[str] = None
     value: Optional[Any] = None
 
+class DuplicationPreventionSettings(XPanderSharedModel):
+    """Settings for preventing duplicate event processing in workflows.
+    
+    When enabled, this prevents the same event from triggering a workflow multiple times
+    within a configured time window. Useful for webhooks from services like Stigg or Cal.com
+    that may fire the same event multiple times.
+    
+    Attributes:
+        enabled: Whether duplication prevention is active.
+        ttl_minutes: Time window to consider events as duplicates (default: 10 minutes).
+        selectors: List of dot-notation paths to extract unique ID components from input.
+                   Multiple selectors are combined to form a composite key.
+                   Examples:
+                   - ["messageId"] - single field
+                   - ["input.event_id", "input.user_id"] - composite key
+                   - ["triggerEvent", "payload.uid"] - Cal.com style
+    """
+    
+    enabled: Optional[bool] = False
+    ttl_minutes: Optional[int] = 10
+    selectors: List[str]  # Required - paths to extract unique identifier components
+
+
 class OrchestrationRetryStrategy(XPanderSharedModel):
     """Strategy for retrying failed orchestration nodes.
 
