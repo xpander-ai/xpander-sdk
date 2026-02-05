@@ -16,6 +16,7 @@ class LLMModelProvider(Enum):
     OpenAI = "openai"
     NvidiaNIM = "nim"
     AmazonBedrock = "amazon_bedrock"
+    AzureAIFoundary = "azure_ai_foundary"
     HuggingFace = "huggingFace"
     FriendliAI = "friendlyAI"
     Anthropic = "anthropic"
