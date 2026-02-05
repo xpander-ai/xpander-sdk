@@ -17,6 +17,8 @@ nest-asyncio
 mcp
 openai
 anthropic
+azure-ai-inference
+aiohttp
 packaging
 fireworks-ai
 google-genai

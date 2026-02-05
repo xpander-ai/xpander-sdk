@@ -608,7 +608,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
         return override["model"]
     
     provider = agent.model_provider.lower()
-
+    
     is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
     has_custom_llm_key = (
         True if agent.llm_credentials and agent.llm_credentials.value else False
@@ -790,6 +790,33 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             temperature=0.0,
             retries=3,
             exponential_backoff=True,
+        )
+    # Azure AI Foundary
+    elif provider == "azure_ai_foundary":
+        # Azure AI Foundary
+        from agno.models.azure import AzureAIFoundry
+        api_key: str = llm_args.get("extra_headers", {}).get("Authorization", None) or llm_args.get("extra_headers", {}).get("authorization", None) or get_llm_key("AZURE_API_KEY")
+        if not api_key:
+            raise ValueError("Azure AI Foundary requires an API Key. via headers (Authorization) or LLM Keys.")
+        
+        if not "base_url" in llm_args:
+            raise ValueError("Azure AI Foundary requires a Base URL.")
+        
+        # remove bearer prefix
+        api_key = api_key.replace("Bearer ","").replace("bearer ","")
+        
+        del llm_args["extra_headers"]
+        
+        llm_args["azure_endpoint"] = llm_args["base_url"]
+        del llm_args["base_url"]
+        
+        return AzureAIFoundry(
+            azure_endpoint=llm_args["azure_endpoint"],
+            id=agent.model_name,
+            api_key=api_key,
+            temperature=0.0,
+            retries=3,
+            exponential_backoff=True
         )
 
     raise NotImplementedError(

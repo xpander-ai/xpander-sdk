@@ -28,7 +28,7 @@ setup(
     ],
     extras_require={
         "agno": ["agno==2.3.26", "sqlalchemy" ,"psycopg[binary,pool]", "greenlet"],
-        "dev": ["black", "pre-commit", "pytest", "anthropic", "mcp", "openai", "fireworks-ai", "aioboto3", "google-genai"],
+        "dev": ["black", "pre-commit", "pytest", "anthropic", "mcp", "openai", "fireworks-ai", "aioboto3", "google-genai", "azure-ai-inference", "aiohttp"],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
