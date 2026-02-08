@@ -267,7 +267,7 @@ class Agent(XPanderSharedModel):
             List[MCPServerDetails]: Details of MCP servers configured for this agent.
         """
         return [
-            gi.settings.mcp_settings
+            MCPServerDetails(**gi.settings.mcp_settings) if isinstance(gi.settings.mcp_settings, dict) else gi.settings.mcp_settings
             for gi in self.graph.items
             if gi.type == AgentGraphItemType.MCP
         ]
