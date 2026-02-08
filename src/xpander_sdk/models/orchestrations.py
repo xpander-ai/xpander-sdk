@@ -115,6 +115,25 @@ class OrchestrationCondition(XPanderSharedModel):
     path: Optional[str] = None
     value: Optional[Any] = None
 
+
+class OrchestrationEdge(XPanderSharedModel):
+    """Edge representing a conditional route from a node to a target.
+    
+    Edges enable node reuse by moving conditions from target nodes
+    to the routing source. Multiple edges can point to the same target
+    with different conditions, enabling complex routing patterns like:
+    - A -> [term1: B->D], else D (D reused as both conditional and else target)
+    - Diamond patterns with convergence
+    - Parallel execution with conditional branches merging
+    
+    Attributes:
+        target_node_id: ID of the target node to route to.
+        condition: Optional condition for this route. None means unconditional.
+    """
+    
+    target_node_id: str
+    condition: Optional[OrchestrationCondition] = None
+
 class DuplicationPreventionSettings(XPanderSharedModel):
     """Settings for preventing duplicate event processing in workflows.
     
@@ -358,10 +377,11 @@ class OrchestrationNode(XPanderSharedModel):
     Attributes:
         type: Type of the node (must match the definition type).
         id: Unique identifier for the node. Auto-generated if not provided.
-        next_node_ids: List of IDs of the next nodes to execute in the workflow (supports branching).
+        next_node_ids: List of IDs of the next nodes to execute (DEPRECATED - use edges).
+        edges: List of edges defining conditional routes to target nodes.
         name: Human-readable name for the node.
         description: Detailed description of the node's purpose.
-        condition: Conditional logic for executing this node.
+        condition: Conditional logic for executing this node (DEPRECATED - use edges on source).
         retry_strategy: Strategy for retrying failed executions.
         iterative_strategy: Strategy for iterative execution.
         stop_strategy: Strategy for stopping the workflow.
@@ -375,10 +395,11 @@ class OrchestrationNode(XPanderSharedModel):
 
     type: OrchestrationNodeType
     id: str = Field(default_factory=lambda: str(uuid4()))
-    next_node_ids: List[str] = Field(default_factory=list)
+    next_node_ids: List[str] = Field(default_factory=list)  # DEPRECATED - use edges
+    edges: List[OrchestrationEdge] = Field(default_factory=list)  # NEW - edge-based routing
     name: Optional[str] = None
     description: Optional[str] = None
-    condition: Optional[OrchestrationCondition] = None
+    condition: Optional[OrchestrationCondition] = None  # DEPRECATED - use edges on source node
     retry_strategy: Optional[OrchestrationRetryStrategy] = Field(
         default_factory=OrchestrationRetryStrategy
     )
