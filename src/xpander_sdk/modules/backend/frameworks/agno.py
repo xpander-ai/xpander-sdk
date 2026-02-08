@@ -20,6 +20,7 @@ from xpander_sdk.modules.tools_repository.models.mcp import (
     MCPOAuthGetTokenResponse,
     MCPOAuthResponseType,
     MCPServerAuthType,
+    MCPServerDetails,
     MCPServerTransport,
     MCPServerType,
 )
@@ -987,7 +988,11 @@ async def _resolve_agent_tools(agent: Agent, task: Optional[Task] = None, auth_e
         
     if not mcp_servers:
         return agent.tools.functions
+    
+    # fix pydantic issue if needed
+    mcp_servers = [MCPServerDetails(**mcp) if isinstance(mcp, dict) else mcp for mcp in mcp_servers]
 
+    
     # Import MCP only if mcp_servers is present
     from agno.tools.mcp import (
         MCPTools,
