@@ -423,3 +423,4 @@ class OrchestrationNode(XPanderSharedModel):
     input_instructions: Optional[str] = None
     agentic_context_input_instructions: Optional[str] = None
     agentic_context_output_instructions: Optional[str] = None
+    return_this: Optional[bool] = False
