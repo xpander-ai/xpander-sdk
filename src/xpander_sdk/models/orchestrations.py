@@ -44,6 +44,7 @@ class OrchestrationNodeType(str, Enum):
     Guardrail = "guardrail"
     Summarizer = "summarizer"
     SendToEnd = "send_to_end"
+    NodePointer = "node_pointer"
 
 class OrchestrationPointerNodeInstructionsMode(str, Enum):
     """Modes for instruction usage in pointer node.
@@ -115,24 +116,6 @@ class OrchestrationCondition(XPanderSharedModel):
     path: Optional[str] = None
     value: Optional[Any] = None
 
-
-class OrchestrationEdge(XPanderSharedModel):
-    """Edge representing a conditional route from a node to a target.
-    
-    Edges enable node reuse by moving conditions from target nodes
-    to the routing source. Multiple edges can point to the same target
-    with different conditions, enabling complex routing patterns like:
-    - A -> [term1: B->D], else D (D reused as both conditional and else target)
-    - Diamond patterns with convergence
-    - Parallel execution with conditional branches merging
-    
-    Attributes:
-        target_node_id: ID of the target node to route to.
-        condition: Optional condition for this route. None means unconditional.
-    """
-    
-    target_node_id: str
-    condition: Optional[OrchestrationCondition] = None
 
 class DuplicationPreventionSettings(XPanderSharedModel):
     """Settings for preventing duplicate event processing in workflows.
@@ -357,6 +340,20 @@ class OrchestrationSendToEndNode(XPanderSharedModel):
 
     message: Optional[str] = None
 
+class OrchestrationNodePointerDefinition(XPanderSharedModel):
+    """Definition for a NodePointer node that reuses another node's definition.
+
+    A NodePointer is a lightweight alias that references another node's definition
+    but has its own id, name, condition, next_node_ids, and strategies.
+    At resolution time, the pointer's definition and type are replaced with
+    the source node's, so the rest of the pipeline works unchanged.
+
+    Attributes:
+        source_node_id: ID of the node whose definition to reuse.
+    """
+
+    source_node_id: str
+
 class OrchestrationWaitNode(XPanderSharedModel):
     """Node that pauses execution until an external event occurs.
 
@@ -377,11 +374,10 @@ class OrchestrationNode(XPanderSharedModel):
     Attributes:
         type: Type of the node (must match the definition type).
         id: Unique identifier for the node. Auto-generated if not provided.
-        next_node_ids: List of IDs of the next nodes to execute (DEPRECATED - use edges).
-        edges: List of edges defining conditional routes to target nodes.
+        next_node_ids: List of IDs of the next nodes to execute.
         name: Human-readable name for the node.
         description: Detailed description of the node's purpose.
-        condition: Conditional logic for executing this node (DEPRECATED - use edges on source).
+        condition: Conditional logic for executing this node.
         retry_strategy: Strategy for retrying failed executions.
         iterative_strategy: Strategy for iterative execution.
         stop_strategy: Strategy for stopping the workflow.
@@ -395,11 +391,10 @@ class OrchestrationNode(XPanderSharedModel):
 
     type: OrchestrationNodeType
     id: str = Field(default_factory=lambda: str(uuid4()))
-    next_node_ids: List[str] = Field(default_factory=list)  # DEPRECATED - use edges
-    edges: List[OrchestrationEdge] = Field(default_factory=list)  # NEW - edge-based routing
+    next_node_ids: List[str] = Field(default_factory=list)
     name: Optional[str] = None
     description: Optional[str] = None
-    condition: Optional[OrchestrationCondition] = None  # DEPRECATED - use edges on source node
+    condition: Optional[OrchestrationCondition] = None
     retry_strategy: Optional[OrchestrationRetryStrategy] = Field(
         default_factory=OrchestrationRetryStrategy
     )
@@ -417,6 +412,7 @@ class OrchestrationNode(XPanderSharedModel):
         OrchestrationGuardrailNode,
         OrchestrationSummarizerNode,
         OrchestrationSendToEndNode,
+        OrchestrationNodePointerDefinition,
     ]
     input_type: Optional[OutputFormat] = OutputFormat.Text
     input_schema: Optional[Dict] = None
