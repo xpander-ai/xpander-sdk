@@ -224,6 +224,7 @@ class OrchestrationPointerNode(XPanderSharedModel):
         instructions: Optional instructions for the pointer node (Action only).
         instructions_mode: Mode to use for pointer node, specifically for agent nodes.
         ignore_response: Should ignore the node result and proceed with previous result?.
+        persist_thread_id: Should persist the thread in agent nodes? default (True).
         schema_override: Optional schema override with permanentValue fields for fixed values.
     """
 
@@ -240,6 +241,7 @@ class OrchestrationPointerNode(XPanderSharedModel):
     instructions: Optional[str] = None
     instructions_mode: Optional[OrchestrationPointerNodeInstructionsMode] = OrchestrationPointerNodeInstructionsMode.Append
     ignore_response: Optional[bool] = False
+    persist_thread_id: Optional[bool] = True
     schema_override: Optional[SchemaOverride] = None
 
 class ClassificationGroup(XPanderSharedModel):
