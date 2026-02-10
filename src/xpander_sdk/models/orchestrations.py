@@ -5,7 +5,7 @@ including various node types, execution strategies, and control flow conditions.
 """
 
 from enum import Enum
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Set, Tuple, Union
 from uuid import uuid4
 
 from pydantic import Field
@@ -343,15 +343,16 @@ class OrchestrationSendToEndNode(XPanderSharedModel):
     message: Optional[str] = None
 
 class OrchestrationNodePointerDefinition(XPanderSharedModel):
-    """Definition for a NodePointer node that reuses another node's definition.
+    """Definition for a NodePointer node that acts as a graph-position jump.
 
-    A NodePointer is a lightweight alias that references another node's definition
-    but has its own id, name, condition, next_node_ids, and strategies.
-    At resolution time, the pointer's definition and type are replaced with
-    the source node's, so the rest of the pipeline works unchanged.
+    A NodePointer jumps execution to another node's position in the graph.
+    At resolution time, the pointer adopts the source node's definition, type,
+    AND next_node_ids — so after executing the source's logic, the flow
+    continues to the source's original downstream targets.
+    The pointer keeps its own id, name, condition, and strategies.
 
     Attributes:
-        source_node_id: ID of the node whose definition to reuse.
+        source_node_id: ID of the node to jump to.
     """
 
     source_node_id: str
@@ -422,3 +423,88 @@ class OrchestrationNode(XPanderSharedModel):
     agentic_context_input_instructions: Optional[str] = None
     agentic_context_output_instructions: Optional[str] = None
     return_this: Optional[bool] = False
+
+
+# ===== DAG VALIDATION UTILITIES =====
+
+def _is_reachable(
+    start_id: str,
+    target_id: str,
+    node_map: Dict[str, "OrchestrationNode"],
+    visited: Optional[Set[str]] = None,
+) -> bool:
+    """Check if target_id is reachable from start_id by following next_node_ids."""
+    if visited is None:
+        visited = set()
+    if start_id == target_id:
+        return True
+    if start_id in visited:
+        return False
+    visited.add(start_id)
+    node = node_map.get(start_id)
+    if not node:
+        return False
+    for next_id in (node.next_node_ids or []):
+        if _is_reachable(next_id, target_id, node_map, visited):
+            return True
+    return False
+
+
+def validate_dag(nodes: List["OrchestrationNode"]) -> List[Tuple[str, str]]:
+    """Validate that the orchestration graph is a valid DAG (no cycles).
+    
+    Uses DFS-based cycle detection with three-color marking.
+    
+    Args:
+        nodes: List of orchestration nodes forming the graph
+    
+    Returns:
+        List of (from_id, to_id) tuples representing back-edges that form cycles.
+        Empty list means the graph is a valid DAG.
+    """
+    WHITE, GRAY, BLACK = 0, 1, 2
+    color: Dict[str, int] = {node.id: WHITE for node in nodes}
+    node_map = {node.id: node for node in nodes}
+    back_edges: List[Tuple[str, str]] = []
+
+    def dfs(node_id: str) -> None:
+        color[node_id] = GRAY
+        node = node_map.get(node_id)
+        if node:
+            for next_id in (node.next_node_ids or []):
+                if next_id not in color:
+                    continue
+                if color[next_id] == GRAY:
+                    back_edges.append((node_id, next_id))
+                elif color[next_id] == WHITE:
+                    dfs(next_id)
+        color[node_id] = BLACK
+
+    for node in nodes:
+        if color[node.id] == WHITE:
+            dfs(node.id)
+
+    return back_edges
+
+
+def can_add_edge(
+    nodes: List["OrchestrationNode"],
+    from_id: str,
+    to_id: str,
+) -> bool:
+    """Check whether adding an edge from_id -> to_id keeps the graph acyclic.
+    
+    An edge creates a cycle iff from_id is already reachable from to_id.
+    
+    Args:
+        nodes: Current list of orchestration nodes
+        from_id: Source node ID for the proposed edge
+        to_id: Target node ID for the proposed edge
+    
+    Returns:
+        True if the edge is safe (forward jump), False if it would create a cycle.
+    """
+    node_map = {node.id: node for node in nodes}
+    if from_id not in node_map or to_id not in node_map:
+        return False
+    return not _is_reachable(to_id, from_id, node_map)
