@@ -9,6 +9,7 @@ from toon import encode as toon_encode
 from xpander_sdk import Configuration
 from xpander_sdk.consts.api_routes import APIRoute
 from xpander_sdk.core.xpander_api_client import APIClient
+from xpander_sdk.models.generic import LLMCredentials
 from xpander_sdk.models.shared import OutputFormat, ThinkMode
 from xpander_sdk.modules.agents.agents_module import Agents
 from xpander_sdk.modules.agents.models.agent import AgentGraphItemType, LLMReasoningEffort
@@ -609,6 +610,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
         return override["model"]
     
     provider = agent.model_provider.lower()
+    if agent.llm_credentials and isinstance(agent.llm_credentials, dict):
+        agent.llm_credentials = LLMCredentials(**agent.llm_credentials)
     
     is_xpander_cloud = getenv("IS_XPANDER_CLOUD", "false") == "true"
     has_custom_llm_key = (
