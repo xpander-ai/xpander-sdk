@@ -181,8 +181,8 @@ class OrchestrationClassifierNodeLLMSettings(XPanderSharedModel):
     """LLM configuration for classifier nodes.
 
     Attributes:
-        model_provider: The LLM provider to use. Defaults to OpenAI.
-        model_name: Specific model identifier. Defaults to "gpt-4.1-mini".
+        model_provider: The LLM provider to use. Defaults to Anthropic.
+        model_name: Specific model identifier. Defaults to "claude-sonnet-4-5-20250929".
         llm_credentials_key: Key identifier for stored credentials.
         llm_credentials_key_type: Type of credential key storage. Defaults to XPander.
         llm_credentials: Direct credential object if not using stored credentials.
@@ -190,8 +190,8 @@ class OrchestrationClassifierNodeLLMSettings(XPanderSharedModel):
         llm_extra_headers: Extra headers to be set to LLM Requests.
     """
 
-    model_provider: Optional[LLMModelProvider] = LLMModelProvider.OpenAI
-    model_name: Optional[str] = "gpt-4.1-mini"
+    model_provider: Optional[LLMModelProvider] = LLMModelProvider.Anthropic
+    model_name: Optional[str] = "claude-sonnet-4-5-20250929"
     llm_credentials_key: Optional[str] = None
     llm_credentials_key_type: Optional[LLMCredentialsKeyType] = (
         LLMCredentialsKeyType.XPander
