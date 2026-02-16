@@ -12,6 +12,7 @@ class User(BaseModel):
         last_name (Optional[str]): The last name of the user. Defaults to None.
         email (str): The email address of the user. This field is required.
         additional_attributes (Optional[dict]): Possible additional parameters for the assistant's service.
+        timezone (Optional[str]): The user's timezone in IANA format (e.g. "America/New_York"). Defaults to None.
     """
 
     id: Optional[str] = None
@@ -19,3 +20,4 @@ class User(BaseModel):
     last_name: Optional[str] = None
     email: str
     additional_attributes: Optional[dict] = None
+    timezone: Optional[str] = None
