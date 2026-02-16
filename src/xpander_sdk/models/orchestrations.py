@@ -45,6 +45,7 @@ class OrchestrationNodeType(str, Enum):
     Summarizer = "summarizer"
     SendToEnd = "send_to_end"
     NodePointer = "node_pointer"
+    Parallel = "parallel"
 
 class OrchestrationPointerNodeInstructionsMode(str, Enum):
     """Modes for instruction usage in pointer node.
@@ -416,6 +417,7 @@ class OrchestrationNode(XPanderSharedModel):
         OrchestrationSummarizerNode,
         OrchestrationSendToEndNode,
         OrchestrationNodePointerDefinition,
+        "OrchestrationParallelNode",
     ]
     input_type: Optional[OutputFormat] = OutputFormat.Text
     input_schema: Optional[Dict] = None
@@ -423,6 +425,25 @@ class OrchestrationNode(XPanderSharedModel):
     agentic_context_input_instructions: Optional[str] = None
     agentic_context_output_instructions: Optional[str] = None
     return_this: Optional[bool] = False
+
+
+class OrchestrationParallelNode(XPanderSharedModel):
+    """Node that executes multiple child nodes in parallel.
+
+    All child nodes receive the same input (the output of the preceding node).
+    When all child nodes complete, their results are combined:
+    - JSON outputs are merged into a single JSON object keyed by node name.
+    - String outputs are concatenated with node name headers.
+
+    Attributes:
+        nodes: List of child OrchestrationNode objects to execute in parallel.
+    """
+
+    nodes: List[OrchestrationNode]
+
+
+# Rebuild OrchestrationNode to resolve the forward reference to OrchestrationParallelNode
+OrchestrationNode.model_rebuild()
 
 
 # ===== DAG VALIDATION UTILITIES =====
