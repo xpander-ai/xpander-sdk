@@ -114,6 +114,11 @@ async def build_agent_args(
                 for sub_agent in sub_agents
             ]
         )
+        
+        # set members to use parent agent model
+        if members and len(members) != 0:
+            for member in members:
+                member['model'] = model
 
         args.update(
             {
