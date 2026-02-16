@@ -437,9 +437,15 @@ class OrchestrationParallelNode(XPanderSharedModel):
 
     Attributes:
         nodes: List of child OrchestrationNode objects to execute in parallel.
+        output_type: Expected output format for the combined result. Defaults to Text.
+        output_schema: JSON schema for structured output validation of the combined result.
+        output_instructions: Instructions for transforming the combined output into the schema.
     """
 
     nodes: List[OrchestrationNode]
+    output_type: Optional[OutputFormat] = OutputFormat.Text
+    output_schema: Optional[Dict] = None
+    output_instructions: Optional[str] = None
 
 
 # Rebuild OrchestrationNode to resolve the forward reference to OrchestrationParallelNode
