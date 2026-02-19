@@ -16,6 +16,7 @@ class Framework(str, Enum):
     LangChain = "langchain"
     OpenAIAgents = "open-ai-agents"
     Strands = "strands-agents"
+    OpenClaw = "open-claw"
 
 class AgnoToolCallsCompressionSettings(BaseModel):
     enabled: Optional[bool] = False
