@@ -26,3 +26,4 @@ class LLMModelProvider(Enum):
     Helicone = "helicone"
     OpenRouter = "open_router"
     Nebius = "nebius"
+    CloudflareAIGateway = "cloudflare_ai_gw"

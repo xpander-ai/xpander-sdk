@@ -827,6 +827,17 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             retries=3,
             exponential_backoff=True
         )
+    # Cloudflare AI Gateway
+    elif provider == "cloudflare_ai_gw":
+        from agno.models.openai.like import OpenAILike
+
+        return OpenAILike(
+            id=agent.model_name,
+            api_key=get_llm_key("CLOUDFLARE_AI_GW_API_KEY"),
+            retries=3,
+            exponential_backoff=True,
+            **llm_args
+        )
 
     raise NotImplementedError(
         f"Provider '{provider}' is not supported for agno agents."
