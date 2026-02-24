@@ -143,6 +143,7 @@ class SourceNodeType(str, Enum):
     WEBHOOK = "webhook"
     MCP = "mcp"
     A2A = "a2a"
+    TELEGRAM = "telegram"
 
 
 class AgentSourceNode(BaseModel):
