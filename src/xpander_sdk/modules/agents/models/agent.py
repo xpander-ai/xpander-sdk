@@ -134,6 +134,8 @@ class SourceNodeType(str, Enum):
         WEBHOOK: Webhook-triggered source node.
         MCP: Model Context Protocol source node.
         A2A: Agent-to-Agent communication source node.
+        TELEGRAM: Telegram bots integration.
+        SLACK: Slackbots integration.
     """
     
     WORKBENCH = "workbench"
@@ -144,6 +146,7 @@ class SourceNodeType(str, Enum):
     MCP = "mcp"
     A2A = "a2a"
     TELEGRAM = "telegram"
+    SLACK = "slack"
 
 
 class AgentSourceNode(BaseModel):
