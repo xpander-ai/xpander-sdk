@@ -11,6 +11,7 @@ from pydantic import BaseModel
 
 from xpander_sdk.models.configuration import Configuration
 from xpander_sdk.modules.agents.models.agent import (
+    AgentAccessScope,
     AgentDeploymentType,
     AgentInstructions,
     AgentStatus,
@@ -36,6 +37,8 @@ class AgentsListItem(BaseModel):
         organization_id (str): ID of the organization that owns the agent.
         created_at (datetime): Timestamp when the agent was created.
         description (Optional[str]): Optional detailed description of the agent.
+        access_scope (Optional[AgentAccessScope]): Optional access scope of the agent, defaults to Personal.
+        created_by (Optional[str]): Optional user id of the creator of the agent, defaults to None.
         
     Methods:
         aload: Asynchronously load the full agent details.
@@ -57,6 +60,8 @@ class AgentsListItem(BaseModel):
     organization_id: str
     created_at: datetime
     description: Optional[str] = None
+    access_scope: Optional[AgentAccessScope] = AgentAccessScope.Personal
+    created_by: Optional[str] = None
 
     async def aload(self, configuration: Optional[Configuration] = None) -> Agent:
         """
