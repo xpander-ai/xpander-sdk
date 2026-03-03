@@ -845,6 +845,10 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
 
 
 def _configure_output(args: Dict[str, Any], agent: Agent, task: Optional[Task]) -> None:
+    if agent.output_format == OutputFormat.Voice:
+        args["use_json_mode"] = False
+        args["markdown"] = False
+        return
     if agent.output.use_json_mode:
         args["use_json_mode"] = True
         args["output_schema"] = agent.output.output_schema
