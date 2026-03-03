@@ -60,6 +60,7 @@ class OutputFormat(str, Enum):
         Text: Plain text format for simple string responses.
         Markdown: Markdown format for rich text with formatting.
         Json: JSON format for structured data responses.
+        Voice: output as voice. mp3 file
         
     Example:
         >>> format_type = OutputFormat.Markdown
@@ -70,6 +71,7 @@ class OutputFormat(str, Enum):
     Text = "text"
     Markdown = "markdown"
     Json = "json"
+    Voice = "voice"
 
 
 # Type alias for Language Model types
