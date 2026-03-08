@@ -27,6 +27,7 @@ and deleting resources.
     # Agents Endpoints
     ListAgent = "/agents/list"
     GetAgent = "/agents/{agent_id}"
+    CheckAgentLLMEligibility = "/agents/{agent_id}/llm_preflight"
     SyncLocalTools = "/agents/{agent_id}/sync_local_tools"
     GetAgentConnectionString = "/agents/{agent_id}/db"
     InvokeTool = "/agents/{agent_id}/operations/{tool_id}"
