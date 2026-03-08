@@ -792,6 +792,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
     elif provider == "anthropic":
         from agno.models.anthropic import Claude
         llm_args["default_headers"] = llm_args["extra_headers"]
+        llm_args["default_headers"]["anthropic-beta"] = "context-1m-2025-08-07"
         del llm_args["extra_headers"]
         return Claude(
             id=agent.model_name,
