@@ -70,9 +70,6 @@ async def build_agent_args(
         args["tools"].extend(tools)
 
     should_use_reasoning_tools = True if xpander_agent.agno_settings.reasoning_tools_enabled else False
-    if task and task.think_mode:
-        if task.think_mode == ThinkMode.Harder:
-            should_use_reasoning_tools = True
 
     if not xpander_agent.is_a_team and should_use_reasoning_tools:
         from agno.tools.reasoning import ReasoningTools
