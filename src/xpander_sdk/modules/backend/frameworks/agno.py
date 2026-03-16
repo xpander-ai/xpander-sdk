@@ -791,13 +791,15 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
         llm_args["default_headers"] = llm_args["extra_headers"]
         llm_args["default_headers"]["anthropic-beta"] = "context-1m-2025-08-07"
         del llm_args["extra_headers"]
-        return Claude(
+        llm = Claude(
             id=agent.model_name,
             api_key=get_llm_key("ANTHROPIC_API_KEY"),
             temperature=0.0,
             retries=3,
             exponential_backoff=True,
         )
+        llm._supports_structured_outputs = lambda: True  # override agno filter
+        return llm
     # Azure AI Foundary
     elif provider == "azure_ai_foundary":
         # Azure AI Foundary
@@ -900,9 +902,13 @@ def _configure_tool_calls_compression(
 def _configure_agentic_memory(
     args: Dict[str, Any], agent: Agent, task: Optional[Task]
 ) -> None:
+    learning_enabled = True if agent.agno_settings.learning else False
     user = task.input.user if task and task.input and task.input.user else None
     user_memories_enabled = True if agent.agno_settings.user_memories and user and user.id else False
     agent_memories_enabled = True if agent.agno_settings.agent_memories else False
+    
+    if learning_enabled:
+        args["learning"] = True
     
     if user_memories_enabled:
         args["enable_user_memories"] = True

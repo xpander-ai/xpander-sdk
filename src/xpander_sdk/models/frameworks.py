@@ -29,6 +29,7 @@ class AgnoSettings(BaseModel):
 
     Attributes:
         session_storage (Optional[bool]): If True, enables session-level storage. Default is True.
+        learning (Optional[bool]): If True, the agent learn and improve with every interaction. Default is False.
         user_memories (Optional[bool]): If True, enables memory of user interactions. Default is True.
         session_summaries (Optional[bool]): If True, enables generation of session summaries. Default is False.
         num_history_runs (Optional[int]): Number of historical runs to retain or consider. Default is 10.
@@ -43,6 +44,8 @@ class AgnoSettings(BaseModel):
     """
 
     session_storage: Optional[bool] = True
+    
+    learning: Optional[bool] = False
     
     user_memories: Optional[bool] = False
     agentic_memory: Optional[bool] = False
