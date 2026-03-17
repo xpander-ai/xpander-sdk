@@ -15,6 +15,7 @@ from xpander_sdk.modules.agents.models.agent import (
     AgentDeploymentType,
     AgentInstructions,
     AgentStatus,
+    AgentType,
 )
 from xpander_sdk.modules.agents.sub_modules.agent import Agent
 from xpander_sdk.utils.event_loop import run_sync
@@ -39,6 +40,7 @@ class AgentsListItem(BaseModel):
         description (Optional[str]): Optional detailed description of the agent.
         access_scope (Optional[AgentAccessScope]): Optional access scope of the agent, defaults to Personal.
         created_by (Optional[str]): Optional user id of the creator of the agent, defaults to None.
+        type: Optional[AgentType]
         
     Methods:
         aload: Asynchronously load the full agent details.
@@ -62,6 +64,7 @@ class AgentsListItem(BaseModel):
     description: Optional[str] = None
     access_scope: Optional[AgentAccessScope] = AgentAccessScope.Personal
     created_by: Optional[str] = None
+    type: Optional[AgentType] = None
 
     async def aload(self, configuration: Optional[Configuration] = None) -> Agent:
         """
