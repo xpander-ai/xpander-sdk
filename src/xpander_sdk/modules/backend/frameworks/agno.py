@@ -835,8 +835,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             api_key=api_key,
             temperature=0.0,
             retries=3,
-            exponential_backoff=True,
-            **llm_args
+            exponential_backoff=True
         )
     # Cloudflare AI Gateway
     elif provider == "cloudflare_ai_gw":
