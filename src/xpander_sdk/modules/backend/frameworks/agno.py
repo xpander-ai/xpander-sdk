@@ -611,6 +611,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
     if override and "model" in override:
         return override["model"]
     
+    llm_usage_identifier = json.dumps({"organization_id": agent.organization_id, "agent_id": agent.id, "user_id": task.input.user.id if task and task.input and task.input.user and task.input.user.id else None})
+    
     provider = agent.model_provider.lower()
     if agent.llm_credentials and isinstance(agent.llm_credentials, dict):
         agent.llm_credentials = LLMCredentials(**agent.llm_credentials)
@@ -697,6 +699,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             temperature=0.0,
             retries=3,
             exponential_backoff=True,
+            user=llm_usage_identifier,
             **llm_args
         )
     # Helicone
@@ -710,6 +713,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             base_url="https://ai-gateway.helicone.ai/v1",
             retries=3,
             exponential_backoff=True,
+            user=llm_usage_identifier,
             **llm_args
         )
     # Nebius
@@ -722,6 +726,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             api_key=get_llm_key("NEBIUS_API_KEY"),
             retries=3,
             exponential_backoff=True,
+            user=llm_usage_identifier,
             **llm_args
         )
     # OpenRouter
@@ -734,6 +739,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             api_key=get_llm_key("OPENROUTER_API_KEY"),
             retries=3,
             exponential_backoff=True,
+            user=llm_usage_identifier,
             **llm_args
         )
     # Google AI Studio - supports gemini models
@@ -758,6 +764,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             api_key=get_llm_key("FIREWORKS_API_KEY"),
             retries=3,
             exponential_backoff=True,
+            user=llm_usage_identifier,
             **llm_args
         )
     # NVIDIA NIM Provider - supports NVIDIA's inference microservices
@@ -770,6 +777,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             temperature=0.0,
             retries=3,
             exponential_backoff=True,
+            user=llm_usage_identifier,
             **llm_args
         )
     # Amazon Bedrock Provider
@@ -790,6 +798,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
         from agno.models.anthropic import Claude
         llm_args["default_headers"] = llm_args["extra_headers"]
         llm_args["default_headers"]["anthropic-beta"] = "context-1m-2025-08-07"
+        llm_args["default_headers"]["User-Agent"] = llm_usage_identifier
         del llm_args["extra_headers"]
         llm = Claude(
             id=agent.model_name,
@@ -797,6 +806,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             temperature=0.0,
             retries=3,
             exponential_backoff=True,
+            **llm_args
         )
         llm._supports_structured_outputs = lambda: True  # override agno filter
         return llm
@@ -825,7 +835,8 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             api_key=api_key,
             temperature=0.0,
             retries=3,
-            exponential_backoff=True
+            exponential_backoff=True,
+            **llm_args
         )
     # Cloudflare AI Gateway
     elif provider == "cloudflare_ai_gw":
