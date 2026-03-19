@@ -178,6 +178,7 @@ class Task(XPanderSharedModel):
     hitl_request: Optional[HumanInTheLoopRequest] = None
     pending_eca_request: Optional[PendingECARequest] = None
     source: Optional[str] = None
+    voice_id: Optional[str] = None
     output_format: Optional[OutputFormat] = None
     output_schema: Optional[Dict] = None
     events_streaming: Optional[bool] = False
