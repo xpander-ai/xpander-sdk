@@ -217,6 +217,7 @@ class Agent(XPanderSharedModel):
     created_at: Optional[datetime] = None
     type: Optional[AgentType] = None
     output_format: Optional[OutputFormat] = OutputFormat.Markdown
+    voice_id: Optional[str] = None
     output_schema: Optional[Dict] = None
 
     llm_credentials: Optional[LLMCredentials] = None
