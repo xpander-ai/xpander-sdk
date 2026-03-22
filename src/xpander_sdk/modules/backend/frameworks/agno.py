@@ -804,6 +804,7 @@ def _load_llm_model(agent: Agent, override: Optional[Dict[str, Any]] = {}, task:
             id=agent.model_name,
             api_key=get_llm_key("ANTHROPIC_API_KEY"),
             temperature=0.0,
+            cache_system_prompt=True,
             retries=3,
             exponential_backoff=True,
             **llm_args
